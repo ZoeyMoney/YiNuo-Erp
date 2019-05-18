@@ -101,11 +101,11 @@
         <form class="mui-input-group">
           <table border="0" cellpadding="1" cellspacing="1">
             <tr>
-                <th colspan="1.5">合同金额</th>
-                <th colspan="1.5">设计费</th>
+                <th colspan="2">合同金额</th>
+                <th colspan="2">设计费</th>
             </tr>
             <tr>
-                <td>123</td>
+                <td rowspan="2">123</td>
                 <td>123</td>
                 <td>123</td>
             </tr>
