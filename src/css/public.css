@@ -1,0 +1,42 @@
+* { touch-action: pan-y; }
+input,select,textarea{font-size: 15px;background-color: transparent;}
+/*top*/
+.header-top{position: relative;}
+/*头部*/
+	.customer{display: flex;padding-top: 7%;padding-left: 13px;}
+	.customer p{margin: 14px 0;}
+/*字体模板*/
+.one-noble{padding-left: 6%;padding-top: 17%;line-height: 8px;}
+/*九宫格*/
+.management{padding-top: 8%;}
+.jiugongge li a img{width: 37px;}
+.mui-grid-view.mui-grid-9:after{position: absolute;}
+.jiugongge{background-color: white!important;}
+.mui-grid-view.mui-grid-9 .mui-table-view-cell{border-right: 1px solid #dadada;border-bottom: 1px solid #dadada;}
+
+/*form表单*/
+.app{padding-top: 0!important;margin-bottom: 100px}
+form{background-color: transparent!important;}
+form input{font-size: 15px;}
+.customer-form div input{font-size: 15px;}
+	.mui-input-row label{width: 30%;font-size: 15px;}
+	.mui-input-row label~input, .mui-input-row label~select, .mui-input-row label~textarea{width: 70%;}
+.mui-input-group:after, .mui-input-row:nth-last-child(1):after{background-color: #c8c7cc!important;}
+
+/*×*/
+	.mui-input-row .mui-input-clear~.mui-icon-clear, .mui-input-row .mui-input-password~.mui-icon-eye{padding-top: 0;}
+/*保存按钮*/
+	.form-btn{padding-bottom: 60px;margin-top: 25px;text-align: center;}
+	.form-btn button{width: 70%!important;float: none!important;}
+
+	/*textarea*/
+.row-textarea{height: 180px!important;}
+.row-textarea label{line-height: 130px;border-right: 1px solid #DADADA;height: 100%;}
+.row-textarea textarea{height: 100%;}
+
+/*form form padding-button*/
+/*按钮*/
+/*按钮*/
+.mui-checkbox input[type=checkbox], .mui-radio input[type=radio]{top: 7px !important;}
+.mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: 25px!important;}
+.mui-checkbox input[type=checkbox]:before, .mui-radio input[type=radio]:before{font-size: 20px!important;}

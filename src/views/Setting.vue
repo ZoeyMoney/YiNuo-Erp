@@ -1,0 +1,52 @@
+<template>
+    <div class="Setting">
+      <!--返回-->
+      <header class="mui-bar mui-bar-nav">
+        <router-link :to="{name:'index'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+        <h1 class="mui-title">设置</h1>
+      </header>
+      <div class="mui-content">
+        <ul class="mui-table-view botton-mar">
+          <li class="mui-table-view-cell" v-for="item in list">
+            <router-link :to="item.href" class="mui-navigate-right">{{item.test}}</router-link>
+          </li>
+        </ul>
+        <div class="form-button">
+          <button type="button" class="mui-btn mui-btn-black" @click="setting">退出登录</button>
+        </div>
+        <div>
+          {{aa}}
+        </div>
+      </div>
+    </div>
+</template>
+
+<script>
+  export default {
+    name: 'Setting',
+    data(){
+      return{
+          list:[
+            {href:'SettingName',test:'设置用户名'},
+            {href:'SettingPwd',test:'设置密码'},
+          ],
+      }
+    },
+    methods:{
+      setting(){
+        this.axios.get('https://formattingclub.com/YiNuoLogin/logout').then(res=>{
+          console.log(res)
+        })
+      }
+    }
+  }
+</script>
+
+<style scoped>
+@import "../css/public.css";
+  .Setting{font-size: 15px}
+.botton-mar{margin-bottom: 22px}
+/*按钮*/
+.mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 70%;}
+.form-button{text-align: center;}
+</style>
