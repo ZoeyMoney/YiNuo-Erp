@@ -164,6 +164,11 @@
           si.push(res.data[index])
         }
         this.cead = si;
+      },error=> {
+        var then = this
+        mui.alert('您无权访问', function () {
+          then.$router.push({ name: 'index' })
+        })
       })
     },
     computed:{

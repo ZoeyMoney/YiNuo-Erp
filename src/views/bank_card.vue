@@ -184,6 +184,10 @@
                 location.reload()
               })
             }
+        },error=>{
+          mui.alert('您无权录入',function () {
+            then.$router.push({name:'index'})
+          })
         })
       }
     }

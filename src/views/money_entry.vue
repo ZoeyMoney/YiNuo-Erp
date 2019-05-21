@@ -205,6 +205,12 @@ export default {
         check = false
         return false
       }
+      //备注
+        if (this.fund_text == '') {
+          mui.toast('备注不能为空')
+          check = false
+          return false
+        }
       // 判断阶段付款、周期付款
       if (this.fund_type === '阶段付款') {
         var data = document.getElementById('fund_details_date').value // 日期

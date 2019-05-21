@@ -58,7 +58,7 @@
         <tr v-for="item in listTable">
           <td><span :style="paLft">{{item.fund_date | data}}</span></td>
           <td><span>{{item.fund_name}}</span></td>
-          <td><span :style="hid" @click="msg(item.customer_id)">{{item.customer_name}}</span></td>
+          <td><span :style="hid" @click="msg(item.fund_details_id)">{{item.customer_name}}</span></td>
           <td><span>{{item.fund_debtor}}</span></td>
           <td><span :style="money">￥{{item.fund_money}}</span></td>
         </tr>
@@ -110,11 +110,16 @@ export default {
     /* table */
     this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?s=-1').then(res => {
       this.listTable = res.data
+    },error=>{
+      var then = this
+      mui.alert('您无权访问',function () {
+        then.$router.push({name:'index'})
+      })
     })
   },
   methods: {
     msg (id) {
-      this.$router.push({ path: 'account_translation', query: { id: id } })
+      this.$router.push({ path: 'payable_entry', query: { id: id } })
     }
   }
 }

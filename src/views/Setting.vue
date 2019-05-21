@@ -14,9 +14,6 @@
         <div class="form-button">
           <button type="button" class="mui-btn mui-btn-black" @click="setting">退出登录</button>
         </div>
-        <div>
-          {{aa}}
-        </div>
       </div>
     </div>
 </template>
@@ -34,8 +31,11 @@
     },
     methods:{
       setting(){
+        var then = this
         this.axios.get('https://formattingclub.com/YiNuoLogin/logout').then(res=>{
-          console.log(res)
+          mui.alert(res.data.msg,function () {
+            then.$router.push({name:'login'})
+          })
         })
       }
     }

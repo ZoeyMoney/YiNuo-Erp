@@ -9,16 +9,19 @@ import money_sale from './views/money_sale' // 售后
 import After_sales_entry from './views/After_sales_entry' // 售后录入
 import After_sales_statistics from './views/After_sales_statistics' // 售后统计
 import Follow_up_after_sale from './views/Follow_up_after_sale' // 售后跟进
+import money_Responsible from './views/money_Responsible' // 责任人录入
 import customer_management from './views/customer_management.vue' // 客户管理
 import customer_entry from './views/customer_entry.vue' // 客户录入
 import customer_statistics from './views/customer_statistics.vue' // 客户统计
 import customer_follow_up from './views/customer_follow_up.vue' // 客户跟进
+import customer_Designer from './views/customer_Designer.vue' // 客户设计师添加
 import site_management from './views/site_management.vue' // 工地管理
 import site_entry from './views/site_entry' // 工地录入
 import customer_details from './views/customer_details' // 客户详细
 import site_details from './views/site_details' // 工地详细
 import site_modify from './views/site_modify' // 修改信息
 import siteModify from './views/siteModify' // 工地修改
+import money_projet from './views/money_projet' // 项目录入
 import money_management from './views/money_management' // 财务管理
 import money_profit from './views/money_profit' // 利润统计
 import money_receivable from './views/money_receivable' // 应收统计
@@ -26,7 +29,9 @@ import money_entry from './views/money_entry' // 应收录入
 import account_translation from './views/account_translation' // 余额
 import account_translation_one from './views/account_translation_one' // 应收余额
 import payable_money from './views/payable_money' // 应付统计
-import accounts_payable from './views/accounts_payable' // 应付统计
+import accounts_payable from './views/accounts_payable' // 应付录入
+import payable_entry from './views/payable_entry' // 应付余额
+import payable_pay from './views/payable_pay' // 应付余额
 import cash_flow from './views/cash_flow' // 现金流水
 import running_money from './views/running_money' // 流水
 import transfer_money from './views/transfer_money' // 转账
@@ -72,11 +77,14 @@ export default new Router({
       path: '/customer_statistics',
       name: 'customer_statistics',
       component: customer_statistics
-    },
-    {
+    }, {
       path: '/customer_follow_up',
       name: 'customer_follow_up',
       component: customer_follow_up
+    }, {
+      path: '/customer_Designer',
+      name: 'customer_Designer',
+      component: customer_Designer
     }, {
       path: '/site_management',
       name: 'site_management',
@@ -135,6 +143,10 @@ export default new Router({
       name: 'Follow_up_after_sale',
       component: Follow_up_after_sale
     }, {
+      path: '/money_Responsible',
+      name: 'money_Responsible',
+      component: money_Responsible
+    }, {
       path: '/payable_money',
       name: 'payable_money',
       component: payable_money
@@ -142,6 +154,14 @@ export default new Router({
       path: '/accounts_payable',
       name: 'accounts_payable',
       component: accounts_payable
+    }, {
+      path: '/payable_entry',
+      name: 'payable_entry',
+      component: payable_entry
+    }, {
+      path: '/payable_pay',
+      name: 'payable_pay',
+      component: payable_pay
     }, {
       path: '/cash_flow',
       name: 'cash_flow',
@@ -182,6 +202,10 @@ export default new Router({
       path: '/siteModify',
       name: 'siteModify',
       component: siteModify
+    }, {
+      path: '/money_projet',
+      name: 'money_projet',
+      component: money_projet
     }
     /* {
       path:'/home',

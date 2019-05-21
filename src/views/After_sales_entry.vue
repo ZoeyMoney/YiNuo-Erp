@@ -15,7 +15,10 @@
         <form class="mui-input-group">
           <div class="mui-input-row">
             <label>项目名称</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入项目名称" v-model="Customer_name">
+            <select name="" v-model="Customer_name">
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in listProjet" :value="item.customer_name">{{item.customer_name}}</option>
+            </select>
           </div>
           <div class="mui-input-row">
             <label>联系人</label>
@@ -69,6 +72,7 @@ export default {
   data () {
     return {
       Customer_name: '', // 项目名称
+      listProjet:'',//项目
       Customer_linkman: '', // 联系人
       Customer_connect: '', // 联系方式
       Customer_stylist: '', // 设计师
@@ -85,6 +89,11 @@ export default {
     }
   },
   created () {
+    //项目名称
+    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer').then(res => {
+      this.listProjet = res.data
+    })
+    /*责任人*/
     this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectStylist').then(customName => {
       this.listName = customName.data
     })

@@ -179,6 +179,11 @@
       /*项目名称*/
       this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer').then(res=>{
         this.projet = res.data
+      },error=>{
+        var then = this
+        mui.alert('您无权访问',function () {
+          then.$router.push({name:'index'})
+        })
       })
       /*交易记录*/
       this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail').then(res=>{

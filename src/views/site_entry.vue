@@ -49,7 +49,7 @@
                 <label>所属类型</label>
                 <input type="text" class="mui-input-clear" name="Customer_type" id="" placeholder="所属类型">
               </div>
-              <div class="mui-input-row mui-radio mui-left mui-chech" name="">
+              <div class="mui-input-row mui-radio mui-left mui-chech">
                 <label>家装</label>
                 <input name="Customer_form" type="radio" value="家装">
               </div>
@@ -99,17 +99,14 @@
         </form>
         <!--第四个form-->
         <form class="mui-input-group">
-          <table border="0" cellpadding="1" cellspacing="1">
-            <tr>
-                <th colspan="2">合同金额</th>
-                <th colspan="2">设计费</th>
-            </tr>
-            <tr>
-                <td rowspan="2">123</td>
-                <td>123</td>
-                <td>123</td>
-            </tr>
-          </table>
+          <div class="two">
+            <div class="mui-input-row">
+              <label>共有</label>
+            </div>
+            <div class="mui-input-row">
+              <label>共有</label>
+            </div>
+          </div>
         </form>
       </div>
     </div>
@@ -148,14 +145,12 @@ export default {
   .mui-chech label{width: 21%;}
   .mui-heck{position: relative;right: 9px;}
   .mui-chech label,.mui-heck label{padding-left: 48px!important;width: 131%}
+  .mui-chech label,.mui-heck label{padding-left: 48px!important;width: 131%}
   .mui-radio{overflow: visible}
-  /*table*/
-  form table{width: 100%;}
-  form table tr{font-size: 15px;}
-  form table td{line-height: 31px;width: 11%;}
-  form table tr td input{padding: 0!important;}
-  form table tr th{background: #DADADA;line-height: 37px;}
-  form table tr th:nth-child(2){text-align: left;}
+  /*two*/
+  .two{display: flex}
+  .two .mui-input-row{flex: 1}
+  .two .mui-input-row label{width: 100%;text-align: center;background-color: #6d6d72}
   /*按钮*/
   .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
   .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}

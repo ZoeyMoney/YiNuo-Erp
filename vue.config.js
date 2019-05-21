@@ -1,6 +1,6 @@
 module.exports = {
   publicPath: './',
-  outputDir: 'dist',
+  outputDir: 'YiNuo',
   lintOnSave: true,
   runtimeCompiler: true, // 关键点在这
   // 调整内部的 webpack 配置。
