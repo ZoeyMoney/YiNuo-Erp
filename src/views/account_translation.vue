@@ -43,7 +43,7 @@
           </div>
           <div class="mui-input-row">
             <label>共有￥</label>
-            <input type="text" class="mui-input-clear" v-model="item.fund_money" disabled="disabled">
+            <input type="text" class="mui-input-clear" v-model="item.fund_details_money" disabled="disabled">
           </div>
           <div class="mui-input-row">
             <label>实际转账￥</label>
@@ -67,12 +67,12 @@ export default {
   data () {
     return {
       projet: '', // 项目
-      checkBox: '',// 复选框
-      money:'',//实际转账
-      funn_data:'',//时间
-      fund_details_id:'',//传参ID
-      fund_bank:'',//银行卡
-      income_y:'',//银行卡
+      checkBox: '', // 复选框
+      money: '', // 实际转账
+      funn_data: '', // 时间
+      fund_details_id: '', // 传参ID
+      fund_bank: '', // 银行卡
+      income_y: ''// 银行卡
     }
   },
   created () {
@@ -85,24 +85,23 @@ export default {
     this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_fund_details?fund_details_id=' + id).then(res => {
       this.projet = res.data.data
     })
-    //银行卡
+    // 银行卡
     this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
       this.income_y = res.data
     })
   },
   methods: {
     add () {
-
       var then = this
       var check = true
       var nuber = /^[0-9]*$/ // 验证数字
-      //银行卡
+      // 银行卡
       if (this.fund_bank == '') {
         mui.toast('银行卡不能为空')
         check = false
         return false
       }
-      //实际转账
+      // 实际转账
       if (this.money == '') {
         mui.toast('实际转账不能为空')
         check = false
@@ -113,25 +112,28 @@ export default {
         check = false
         return false
       }
-      var add = '?fund_details_id='+this.fund_details_id+'&money='+this.money+'&bank_id='+this.fund_bank
+      var add = '?fund_details_id=' + this.fund_details_id + '&money=' + this.money + '&bank_id=' + this.fund_bank
       if (this.checkBox === true) {
         // console.log('点住')
-        var fund_money = this.projet[0].fund_money
+        var fund_money = this.projet[0].fund_details_money
         var money = fund_money - this.money
         var cumoterName = this.projet[0].customer_name
         var person = this.projet[0].fund_debtor
         var text = this.projet[0].fund_details_text
         var data = this.projet[0].fund_details_date
-        var datas = data.split(" ")
-        then.$router.push({path:'account_translation_one',query:{id:this.fund_details_id,moneys:money,cumoterName:cumoterName,person:person,text:text,datas:datas}})
-      }else{
+        var datas = data.split(' ')
+        // then.$router.push({ path: 'account_translation_one', query: { id: this.fund_details_id, money: money, cumoterName: cumoterName, person: person, text: text, datas: datas } })
+        this.axios.get('https://formattingclub.com/YiNuoLogin/fund/update_fund_details' + add).then(res => {
+              then.$router.push({ path: 'account_translation_one', query: { id: then.fund_details_id, money: money, cumoterName: cumoterName, person: person, text: text, datas: datas } })
+        })
+      } else {
         // console.log('没')
-        this.axios.get('https://formattingclub.com/YiNuoLogin/fund/update_fund_details'+add).then(res=>{
+        this.axios.get('https://formattingclub.com/YiNuoLogin/fund/update_fund_details' + add).then(res => {
           if (res.data.msg === '支付成功') {
-            mui.alert('支付成功',function () {
-              then.$router.push({name:'money_receivable'})
+            mui.alert('支付成功', function () {
+              then.$router.push({ name: 'money_receivable' })
             })
-          }else{
+          } else {
             mui.alert('支付失败')
           }
         })

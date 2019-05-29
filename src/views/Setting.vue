@@ -19,27 +19,27 @@
 </template>
 
 <script>
-  export default {
-    name: 'Setting',
-    data(){
-      return{
-          list:[
-            {href:'SettingName',test:'设置用户名'},
-            {href:'SettingPwd',test:'设置密码'},
-          ],
-      }
-    },
-    methods:{
-      setting(){
-        var then = this
-        this.axios.get('https://formattingclub.com/YiNuoLogin/logout').then(res=>{
-          mui.alert(res.data.msg,function () {
-            then.$router.push({name:'login'})
-          })
+export default {
+  name: 'Setting',
+  data () {
+    return {
+      list: [
+        { href: 'SettingName', test: '设置用户名' },
+        { href: 'SettingPwd', test: '设置密码' }
+      ]
+    }
+  },
+  methods: {
+    setting () {
+      var then = this
+      this.axios.get('https://formattingclub.com/YiNuoLogin/logout').then(res => {
+        mui.alert(res.data.msg, function () {
+          then.$router.push({ name: 'login' })
         })
-      }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

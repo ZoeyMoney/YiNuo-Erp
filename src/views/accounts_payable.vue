@@ -18,16 +18,23 @@
         <form class="mui-input-group">
           <div class="mui-input-row">
             <label>类别选择</label>
-            <select name="" id="fund_name" v-model="fund_name">
+            <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
+              <option value="">请选择</option>
+              <option v-for="item in list_fund_names" :value="item.fund_names">{{item.fund_names}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>类别详情</label>
+            <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in lei" :value="item.fund_name">{{item.fund_name}}</option>
+              <option v-for="item in list_fund_name" :value="item.fund_name">{{item.fund_name}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>项目名称</label>
-            <select name="" id="customer_id" v-model="customer_id">
+            <select name="" v-model="customer_name">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in projet" :value="item.customer_id">{{item.customer_name}}</option>
+              <option v-for="item in projet" :value="item.customer_name">{{item.customer_name}}</option>
             </select>
           </div>
           <div class="mui-input-row">
@@ -97,20 +104,23 @@
 </template>
 
 <script>
-import $ from 'jquery'
 export default {
   name: 'accounts_payable',
   data () {
     return {
-      lei: '', // 类别选择
-      fund_name: '', // v类别
+      listTable:'',
+      list_fund_names:'',
+      fund_nameo: '', // v类别
+      list_fund_namea:'',//类别详情
+      list_fund_name:'',//类别详情
+      list_customer_name:'',//项目名称
       fund_money: '', // 总金额
       fund_debtor: '', // 债权人
       projet: '', // 项目名称
       fund_type: '阶段付款', // 项目阶段
-      customer_id: '', // v项目
+      customer_name: '', // v项目
       data_huan: '', // 还款时间
-      fund_text:'',//备注
+      fund_text: '', // 备注
       yue: '', // 还款周期
       qi: '', // 还款期数
       list: [
@@ -120,13 +130,19 @@ export default {
     }
   },
   created () {
-    // 类别选择
-    this.$http.get('https://formattingclub.com/YiNuoLogin/fund/selectEnterFundName').then(res => {
-      this.lei = res.data
-    })
-    // 项目名称
-    this.$http.get('https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer').then(res => {
+    /*项目名称*/
+    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res=>{
       this.projet = res.data
+    })
+    /* table */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=1').then(res => {
+      this.listTable = res.data.list_fund
+      this.list_fund_names = res.data.list_fund_names
+    }, error => {
+      var then = this
+      mui.alert('您无权访问', function () {
+        then.$router.push({ name: 'index' })
+      })
     })
   },
   methods: {
@@ -136,6 +152,33 @@ export default {
       }
       var s = { fund_details_date: '', fund_details_money: '', fund_details_batch: '', fund_details_text: '' }
       this.list.push(s)
+    },
+    // 类别选择
+    fund_namesa (id) {
+      this.fund_nameso = id
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=1&fund_names=' + this.fund_nameso).then(res => {
+        this.listTable = res.data.list_fund
+        this.list_fund_name = res.data.list_fund_name
+      }, error => {
+        var then = this
+        mui.alert('您无权访问', function () {
+          then.$router.push({ name: 'index' })
+        })
+      })
+    },
+    // 类别详情
+    list_fund_nameas (id) {
+      this.fund_name = id
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=1&fund_names=' + this.fund_nameso + '&fund_name=' + id).then(res => {
+        this.listTable = res.data.list_fund
+        this.list_fund_name = res.data.list_fund_name
+        this.list_customer_name = res.data.list_customer_name
+      }, error => {
+        var then = this
+        mui.alert('您无权访问', function () {
+          then.$router.push({ name: 'index' })
+        })
+      })
     },
     stage_one () {
       var otable = document.getElementById('table')
@@ -154,6 +197,7 @@ export default {
       data_time.style.display = 'block'
     },
     add () {
+      var then = this
       var nuber = /^[0-9]*$/ // 验证数字
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
       var check = true
@@ -237,6 +281,16 @@ export default {
           check = false
           return false
         }
+        //阶段金额相加必须跟总金额相等否则无法通过
+        var all_money = 0
+        for (var index in this.list) {
+          all_money += parseInt(this.list[index].fund_details_money)
+        }
+        if (this.fund_money != all_money) {
+          mui.alert('总金额与阶段金额总和不同')
+          check = false
+          return false
+        }
       } else if (this.fund_type === '周期付款') {
         // 还款时间
         if (this.data_huan == '') {
@@ -263,36 +317,27 @@ export default {
         }
       }
       // 正数转负数
-      var s = this.fund_money
-      this.fund_money = ~s + 1
-      // 录入变量
-      var fund_name = this.fund_name
-      var customer_id = this.customer_id
-      var fund_debtor = this.fund_debtor
-      var fund_money = this.fund_money
-      var fund_person = this.fund_person
-      var fund_text = this.fund_text
-      var fund_type = this.fund_type
+      this.fund_money = ~this.fund_money+1
       var data_huan = new Date(this.data_huan)
       var zhouqi = this.yue
       var qishu = this.qi
-      var qishu_money = fund_money / qishu
-      var date = ''
+      var qishu_money = this.fund_money / qishu
+      var date = '';
       if (this.fund_type === '周期付款') {
         this.list = []
         if (zhouqi === '按月') {
           for (var i = 1; i <= qishu; i++) {
             var m = data_huan.getMonth() + 1 + i
             date = data_huan.getFullYear() + '-' + m + '-' + data_huan.getDate()
-            var a = { 'fund_details_date': date, 'fund_details_money': qishu_money, 'fund_details_batch': '第' + i + '批', 'fund_details_text': '' }
-            console.log(a)
+            var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch':i.toString(), 'fund_details_text': '' }
+            console.log("123"+a)
             this.list.push(a)
           }
         } else if (zhouqi === '按年') {
           for (var i = 1; i <= qishu; i++) {
             var y = data_huan.getFullYear() + i
             date = y + '-' + data_huan.getMonth() + '-' + data_huan.getDate()
-            var a = { 'fund_details_date': date, 'fund_details_money': qishu_money, 'fund_details_batch': '第' + i + '批', 'fund_details_text': '' }
+            var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch': i.toString(), 'fund_details_text': '' }
             this.list.push(a)
           }
         } else if (zhouqi === '按周') {
@@ -300,34 +345,37 @@ export default {
             var m = data_huan.getMonth() + 1
             data_huan.setDate(data_huan.getDate() + 7)
             date = data_huan.getFullYear() + '-' + m + '-' + data_huan.getDate()
-            var a = { 'fund_details_date': date, 'fund_details_money': qishu_money, 'fund_details_batch': '第' + i + '批', 'fund_details_text': '' }
+            var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch': i.toString(), 'fund_details_text': '' }
             this.list.push(a)
           }
         }
       }
-      $.ajax({
-        type:"POST",
-        url:"https://formattingclub.com/YiNuoAdmin/fund/Add_Fund",
-        async:true,
+      this.axios({
+        method:'POST',
+        url:'https://formattingclub.com/YiNuoLogin/fund/Add_Fund',
+        headers:{'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'},
         data:{
           listFund:JSON.stringify(this.list),
-          fund_customer_id:customer_id,
+          fund_customer_id:this.customer_name,
           fund_workyard_pact_id:1,
-          fund_debtor:fund_debtor,
-          fund_name:fund_name,
-          fund_money:fund_money,
-          fund_person:fund_person,
-          fund_text:fund_text,
-          fund_type:fund_type,
+          fund_debtor:this.fund_debtor,
+          fund_name:this.fund_name,
+          fund_money:this.fund_money,
+          fund_text:this.fund_text,
+          fund_type:this.fund_type
         },
-        success:function(res){
-          mui.alert('保存成功',function () {
-            location=location
-          });
-        },
-        error:function(){
-          console.log("访问接口失败")
-        }
+        //把json格式编码转为x-www-form-urlencoded
+        transformRequest: [function (data) {
+          let ret = ''
+          for (let it in data) {
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+          }
+          return ret
+        }],
+      }).then(res=>{
+        mui.alert(res.data,function () {
+          then.$router.push({path:'payable_money'})
+        })
       })
     }
   }

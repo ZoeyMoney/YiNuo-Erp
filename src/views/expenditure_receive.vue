@@ -37,49 +37,49 @@
 </template>
 
 <script>
-  export default {
-    name: 'expenditure_receive',
-    data(){
-      return{
+export default {
+  name: 'expenditure_receive',
+  data () {
+    return {
 
+    }
+  },
+  methods: {
+    add () {
+      var pay = document.getElementById('pay').value
+      var money = document.getElementById('money').value
+      var data = document.getElementById('data').value
+      var chkche = true
+      var nuber = /^[0-9]*$/ // 验证数字
+      var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
+      if (pay == '') {
+        mui.toast('债务人不能为空')
+        chkche = false
+        return false
       }
-    },
-    methods:{
-      add(){
-        var pay = document.getElementById('pay').value;
-        var money = document.getElementById('money').value;
-        var data = document.getElementById('data').value;
-        var chkche = true;
-        var nuber = /^[0-9]*$/; //验证数字
-        var nameReg = /^[\u4E00-\u9FA5]{2,4}$/;     //验证人的名字
-        if (pay == '') {
-          mui.toast('债务人不能为空');
-          chkche = false
-          return false
-        }
-        if (!nameReg.test(pay)) {
-          mui.toast('债务人格式错误');
-          chkche = false
-          return false
-        }
-        if (money == '') {
-          mui.toast('金额不能为空');
-          chkche = false
-          return false
-        }
-        if (!nuber.test(money)) {
-          mui.toast('金钱只能填入数字');
-          chkche = false
-          return false
-        }
-        if (data == '') {
-          mui.toast('付款时间不能为空');
-          chkche = false
-          return false
-        }
+      if (!nameReg.test(pay)) {
+        mui.toast('债务人格式错误')
+        chkche = false
+        return false
+      }
+      if (money == '') {
+        mui.toast('金额不能为空')
+        chkche = false
+        return false
+      }
+      if (!nuber.test(money)) {
+        mui.toast('金钱只能填入数字')
+        chkche = false
+        return false
+      }
+      if (data == '') {
+        mui.toast('付款时间不能为空')
+        chkche = false
+        return false
       }
     }
   }
+}
 </script>
 
 <style scoped>

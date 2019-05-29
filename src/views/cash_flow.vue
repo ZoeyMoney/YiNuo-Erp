@@ -26,22 +26,22 @@
 </template>
 
 <script>
-  export default {
-    name: 'cash_flow',
-    data(){
-      return{
-        list:[
-          {href:'running_money',listImg:require('../image/xianjin.png'),text:'流水'},
-          {href:'transfer_money',listImg:require('../image/zhuanzhang.png'),text:'转账'},
-          {href:'income',listImg:require('../image/shouru_1.png'),text:'收入'},
-          {href:'expenditure',listImg:require('../image/zhichu_1.png'),text:'支出'},
-        ]
-      }
-    },
-    methods:{
-
+export default {
+  name: 'cash_flow',
+  data () {
+    return {
+      list: [
+        { href: 'running_money', listImg: require('../image/xianjin.png'), text: '流水' },
+        { href: 'transfer_money', listImg: require('../image/zhuanzhang.png'), text: '转账' },
+        { href: 'income', listImg: require('../image/shouru_1.png'), text: '收入' },
+        { href: 'expenditure', listImg: require('../image/zhichu_1.png'), text: '支出' }
+      ]
     }
+  },
+  methods: {
+
   }
+}
 </script>
 
 <style scoped>

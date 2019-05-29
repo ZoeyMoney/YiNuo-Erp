@@ -35,21 +35,19 @@ export default {
         })
       } else {
         var _this = this
+        const all = {name:this.name,pwd:this.pwd}
         this.axios.post('https://formattingclub.com/YiNuoLogin/Login?name=' + this.name + '&pwd=' + this.pwd).then(res => {
           if (res.data.msg === '登录成功') {
-            /*var ses = window.sessionStorage
-            var d = JSON.stringify(res.data[0])
-            ses.setItem('data', d)*/
-            mui.alert('登录成功', function () {
+            mui.alert(res.data.msg, function () {
               _this.$router.push('index')
             })
-          } else {
-            mui.alert('账号或密码错误')
+          }else{
+            mui.alert('登录失败')
           }
         })
       }
     }
-  }
+  },
 }
 </script>
 

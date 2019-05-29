@@ -103,43 +103,91 @@
 </template>
 
 <script>
-  export default {
-    name: 'transfer_money',
-    data(){
-      return{
-        bank_id:0,
-        time: new Date(),
-        listAdd: '', //银行记录
-        bank_deal_money: '', //共有
-        bank_deal_rate: '', //转账费率
-        bank_enter_id: '', //转出
-        bank_out_id: '', //转入
-        chuxuka: '', //储蓄卡
-        xinyong: '', //信用卡
-        bank_number: '', //尾号
-        bank_money: '', //余额
-        addMoney: '', //储蓄卡总额
-        xinMoney: '', //信用卡总额
-        cead: '', //银行卡
-        bank_limit:'',//额度
-        listD:[
-          {Tnumber:0.6},
-          {Tnumber:0.55}
-        ],
+export default {
+  name: 'transfer_money',
+  data () {
+    return {
+      bank_id: 0,
+      time: new Date(),
+      listAdd: '', // 银行记录
+      bank_deal_money: '', // 共有
+      bank_deal_rate: '', // 转账费率
+      bank_enter_id: '', // 转出
+      bank_out_id: '', // 转入
+      chuxuka: '', // 储蓄卡
+      xinyong: '', // 信用卡
+      bank_number: '', // 尾号
+      bank_money: '', // 余额
+      addMoney: '', // 储蓄卡总额
+      xinMoney: '', // 信用卡总额
+      cead: '', // 银行卡
+      bank_limit: '', // 额度
+      listD: [
+        { Tnumber: 0.6 },
+        { Tnumber: 0.55 }
+      ]
+    }
+  },
+  created () {
+    /* 储蓄卡 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
+      this.select_bank = res.data
+      var chux = []
+      var xin = []
+      var m = 0 // 储蓄卡总额
+      var y = 0 // 信用卡总额
+      for (var index in res.data) {
+        if (res.data[index].bank_type === '储蓄卡') {
+          var n = res.data[index].bank_number.slice(8, 12) // 截取尾号后4位
+          m += res.data[index].bank_money // 算出储蓄卡总额
+          res.data[index].bank_number = n
+          chux.push(res.data[index])
+        } else {
+          var n = res.data[index].bank_number.slice(8, 12)
+          y += res.data[index].bank_money
+          res.data[index].bank_number = n
+          xin.push(res.data[index])
+        }
       }
+      this.chuxuka = chux
+      this.xinyong = xin
+      this.addMoney = m
+      this.xinMoney = y
+    })
+    /* 银行卡 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
+      this.cead_money = res.data
+      var si = []
+      for (var index in res.data) {
+        var n = res.data[index].bank_number.slice(8, 12)
+        res.data[index].bank_number = n
+        si.push(res.data[index])
+      }
+      this.cead = si
+    }, error => {
+      var then = this
+      mui.alert('您无权访问', function () {
+        then.$router.push({ name: 'index' })
+      })
+    })
+  },
+  computed: {
+    /* 自动计算 */
+    addMoneys () {
+      var a = this.bank_deal_money - this.bank_deal_money * this.bank_deal_rate / 100
+      var b = Math.floor(a * 100) / 100
+      return b
     },
-    created(){
-      /*储蓄卡*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
-        this.select_bank = res.data
-        var chux = [];
-        var xin = [];
-        var m = 0; //储蓄卡总额
-        var y = 0; //信用卡总额
-        for(var index in res.data) {
-          if(res.data[index].bank_type === '储蓄卡') {
-            var n = res.data[index].bank_number.slice(8, 12) //截取尾号后4位
-            m += res.data[index].bank_money //算出储蓄卡总额
+    slelect_bank () {
+      this.$http.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
+        var chux = []
+        var xin = []
+        var m = 0 // 储蓄卡总额
+        var y = 0 // 信用卡总额
+        for (var index in res.data) {
+          if (res.data[index].bank_type === '储蓄卡') {
+            var n = res.data[index].bank_number.slice(8, 12) // 截取尾号后4位
+            m += res.data[index].bank_money // 算出储蓄卡总额
             res.data[index].bank_number = n
             chux.push(res.data[index])
           } else {
@@ -149,122 +197,74 @@
             xin.push(res.data[index])
           }
         }
-        this.chuxuka = chux;
-        this.xinyong = xin;
+        this.chuxuka = chux
+        this.xinyong = xin
         this.addMoney = m
         this.xinMoney = y
       })
-      /*银行卡*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
-        this.cead_money = res.data
-        var si = [];
-        for(var index in res.data) {
-          var n = res.data[index].bank_number.slice(8, 12)
-          res.data[index].bank_number = n
-          si.push(res.data[index])
-        }
-        this.cead = si;
-      },error=> {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
-      })
-    },
-    computed:{
-      /*自动计算*/
-      addMoneys(){
-        var a = this.bank_deal_money - this.bank_deal_money * this.bank_deal_rate / 100
-        var b = Math.floor(a*100)/100
-        return b;
-      },
-      slelect_bank(){
-        this.$http.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
-          var chux = [];
-          var xin = [];
-          var m = 0; //储蓄卡总额
-          var y = 0; //信用卡总额
-          for(var index in res.data) {
-            if(res.data[index].bank_type === '储蓄卡') {
-              var n = res.data[index].bank_number.slice(8, 12) //截取尾号后4位
-              m += res.data[index].bank_money //算出储蓄卡总额
-              res.data[index].bank_number = n
-              chux.push(res.data[index])
-            } else {
-              var n = res.data[index].bank_number.slice(8, 12)
-              y += res.data[index].bank_money
-              res.data[index].bank_number = n
-              xin.push(res.data[index])
-            }
-          }
-          this.chuxuka = chux;
-          this.xinyong = xin;
-          this.addMoney = m
-          this.xinMoney = y
-        })
+    }
+  },
+  methods: {
+    go () {
+      var then = this
+      var check = true
+      var nuber = /^[0-9]*$/ // 验证数字
+      // 共有
+      if (this.bank_deal_money == '') {
+        mui.toast('共有不能为空')
+        check = false
+        return false
       }
-    },
-    methods:{
-        go(){
-          var then = this
-          var check = true;
-          var nuber = /^[0-9]*$/; //验证数字
-          //共有
-          if (this.bank_deal_money == '') {
-            mui.toast('共有不能为空');
+      if (!nuber.test(this.bank_deal_money)) {
+        mui.toast('共有有非法格式')
+        check = false
+        return false
+      }
+      //  转出
+      if (this.bank_enter_id == '') {
+        mui.toast('转出银行卡不能为空')
+        check = false
+        return false
+      }
+      //  转入
+      if (this.bank_out_id == '') {
+        mui.toast('转入银行卡不能为空')
+        check = false
+        return false
+      }
+      if (this.bank_enter_id === this.bank_out_id) {
+        mui.toast('转入和转出银行卡不能一致')
+        check = false
+        return false
+      } else {
+        for (var index in this.cead) {
+          if (parseInt(this.cead[index].bank_id) === !this.bank_out_id) {
+            mui.toast('卡内余额不能大于交易余额')
             check = false
             return false
-          }
-          if (!nuber.test(this.bank_deal_money)) {
-            mui.toast('共有有非法格式');
-            check = false
-            return false
-          }
-        //  转出
-          if (this.bank_enter_id == '') {
-            mui.toast('转出银行卡不能为空');
-            check = false
-            return false
-          }
-        //  转入
-          if (this.bank_out_id == '') {
-            mui.toast('转入银行卡不能为空');
-            check = false
-            return false
-          }
-          if (this.bank_enter_id === this.bank_out_id) {
-            mui.toast('转入和转出银行卡不能一致');
-            check = false
-            return false
-          }else{
-            for (var index in this.cead) {
-              if (parseInt(this.cead[index].bank_id) === !this.bank_out_id) {
-                mui.toast('卡内余额不能大于交易余额');
-                check = false;
-                return false;
-              }else{
-                if (parseInt(this.addMoneys) > parseInt(this.cead[index].bank_out_id)){
-                  mui.toast('实际转账不能大于信用卡额度');
-                  check = false;
-                  return false;
-                }
-              }
+          } else {
+            if (parseInt(this.addMoneys) > parseInt(this.cead[index].bank_out_id)) {
+              mui.toast('实际转账不能大于信用卡额度')
+              check = false
+              return false
             }
           }
-          var all = '?bank_deal_money=' + this.bank_deal_money + '&bank_deal_rate=' + parseInt(this.bank_deal_rate*100) + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id
-          this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_bank_deal' + all).then(res => {
-            this.listAdd = res.data
-            if (res.status === 200) {
-              mui.alert('转账成功',function () {
-                then.$router.push({name:'cash_flow'})
-              })
-            }else{
-              alert('转账失败')
-            }
-          })
         }
+      }
+      var all = '?bank_deal_money=' + this.bank_deal_money + '&bank_deal_rate=' + parseInt(this.bank_deal_rate * 100) + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_bank_deal' + all).then(res => {
+        this.listAdd = res.data
+        if (res.status === 200) {
+          mui.alert('转账成功', function () {
+            then.$router.push({ name: 'cash_flow' })
+          })
+        } else {
+          alert('转账失败')
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

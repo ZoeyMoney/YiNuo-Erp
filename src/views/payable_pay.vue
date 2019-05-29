@@ -51,72 +51,72 @@
 </template>
 
 <script>
-  export default {
-    name: 'payable_pay',
-    data () {
-      return {
-        list:'',
-        all_money:'',
-        smoney:'',
-        cumoterName: '',
-        person: '',
-        text:'',
-        date:'',
-        id:''
+export default {
+  name: 'payable_pay',
+  data () {
+    return {
+      list: '',
+      all_money: '',
+      smoney: '',
+      cumoterName: '',
+      person: '',
+      text: '',
+      date: '',
+      id: ''
+    }
+  },
+  created () {
+    var loc = location.href
+    var n1 = loc.length// 地址的总长度
+    var n2 = loc.indexOf('=')// 取得=号的位置
+    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
+    this.fund_details_id = id
+    this.list = id.split('=')
+    var lists = []
+    for (var index in this.list) {
+      var a1 = this.list[index].indexOf('&')
+      var a2 = this.list[index].slice(0, a1)
+      lists.push(a2)
+    }
+    this.id = lists[0]
+    this.all_money = lists[1]
+    this.smoney = lists[1]
+    this.cumoterName = lists[2]
+    this.person = lists[3]
+    this.text = lists[4]
+    this.date = lists[5]
+  },
+  methods: {
+    add () {
+      var then = this
+      var check = true
+      var nuber = /^[0-9]*$/ // 验证数字
+      // data
+      if (this.date == '') {
+        mui.toast('日期不能为空')
+        check = false
+        return false
       }
-    },
-    created(){
-      var loc = location.href
-      var n1 = loc.length// 地址的总长度
-      var n2 = loc.indexOf('=')// 取得=号的位置
-      var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
-      this.fund_details_id = id
-      this.list = id.split('=')
-      var lists = []
-      for (var index in this.list) {
-        var a1 = this.list[index].indexOf('&')
-        var a2 = this.list[index].slice(0,a1)
-        lists.push(a2)
+      // 实际转账
+      if (this.smoney == '') {
+        mui.toast('实际转账不能为空')
+        check = false
+        return false
       }
-      this.id = lists[0]
-      this.all_money = lists[1]
-      this.smoney = lists[1]
-      this.cumoterName = lists[2]
-      this.person = lists[3]
-      this.text = lists[4]
-      this.date = lists[5]
-    },
-    methods: {
-      add () {
-        var then = this
-        var check = true
-        var nuber = /^[0-9]*$/ // 验证数字
-        // data
-        if (this.date == '') {
-          mui.toast('日期不能为空')
-          check = false
-          return false
-        }
-        //实际转账
-        if (this.smoney == '') {
-          mui.toast('实际转账不能为空')
-          check = false
-          return false
-        }
-        if (!nuber.test(this.smoney)) {
-          mui.toast('实际转账只能为纯数字')
-          check = false
-          return false
-        }
-        var add = 'money='+this.smoney+'&fund_details_id='+this.id+'&date='+this.date
-        this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_details?'+add).then(res=>{
-          mui.alert(res.data,function () {
-            then.$router.push({name:'payable_money'})
-          })
+      if (!nuber.test(this.smoney)) {
+        mui.toast('实际转账只能为纯数字')
+        check = false
+        return false
+      }
+      var add = 'money=' + this.smoney + '&fund_details_id=' + this.id + '&date=' + this.date
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_details?' + add).then(res => {
+        mui.alert(res.data, function () {
+          then.$router.push({ name: 'payable_money' })
         })
-      }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

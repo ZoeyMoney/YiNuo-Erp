@@ -70,149 +70,149 @@
 </template>
 
 <script>
-  export default {
-    name: 'site_modify',
-    data () {
-      return {
-        projet: '', // 项目
-        selet_aa: '', // 复制项目
-        listName: '', // 设计师
-        stage_name: '', // 当前阶段
-        customer_linkman: '', // 联系人
-        customer_connect: '', // 联系方式
-        customer_Decorate: '', // 装修面积
-        customer_budget: '', // 项目预算
-        stage_stipulate: '', // 限时
-        vstage_name: [
-          { stage_name: '报价中' },
-          { stage_name: '谈价中' },
-          { stage_name: '未量尺' },
-          { stage_name: '平面图' },
-          { stage_name: '效果图' },
-          { stage_name: '施工图' }
-        ]
+export default {
+  name: 'site_modify',
+  data () {
+    return {
+      projet: '', // 项目
+      selet_aa: '', // 复制项目
+      listName: '', // 设计师
+      stage_name: '', // 当前阶段
+      customer_linkman: '', // 联系人
+      customer_connect: '', // 联系方式
+      customer_Decorate: '', // 装修面积
+      customer_budget: '', // 项目预算
+      stage_stipulate: '', // 限时
+      vstage_name: [
+        { stage_name: '报价中' },
+        { stage_name: '谈价中' },
+        { stage_name: '未量尺' },
+        { stage_name: '平面图' },
+        { stage_name: '效果图' },
+        { stage_name: '施工图' }
+      ]
+    }
+  },
+  created () {
+    var loc = location.href
+    var n1 = loc.length// 地址的总长度
+    var n2 = loc.indexOf('=')// 取得=号的位置
+    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
+    // 查询客户项目信息
+    this.customer_id = id
+    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectCustomer?Customer=' + id).then(res => {
+      this.projet = res.data
+      this.select_aa = JSON.parse(JSON.stringify(res.data))
+    })
+    // 设计师
+    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectStylist').then(customName => {
+      this.listName = customName.data
+    })
+  },
+  methods: {
+    add () {
+      var check = true
+      var nuber = /^[0-9]*$/ // 验证数字
+      var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
+      var pattern = /^1[0-9]{10}$/ // 验证手机号
+      // 判断装修面积是否为数字
+      if (!nuber.test(this.customer_Decorate)) {
+        mui.toast('装修面积格式错误')
+        check = false
+        return false
       }
-    },
-    created () {
-      var loc = location.href
-      var n1 = loc.length// 地址的总长度
-      var n2 = loc.indexOf('=')// 取得=号的位置
-      var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
-      // 查询客户项目信息
-      this.customer_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectCustomer?Customer=' + id).then(res => {
-        this.projet = res.data
-        this.select_aa = JSON.parse(JSON.stringify(res.data))
-      })
-      // 设计师
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectStylist').then(customName => {
-        this.listName = customName.data
-      })
-    },
-    methods: {
-      add () {
-        var check = true
-        var nuber = /^[0-9]*$/ // 验证数字
-        var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
-        var pattern = /^1[0-9]{10}$/ // 验证手机号
-        // 判断装修面积是否为数字
-        if (!nuber.test(this.customer_Decorate)) {
-          mui.toast('装修面积格式错误')
-          check = false
-          return false
-        }
-        // 判断项目预算是否为数字
-        if (!nuber.test(this.customer_budget)) {
-          mui.toast('项目预算格式错误')
-          check = false
-          return false
-        }
-        // 判断限时是否为数字
-        if (!nuber.test(this.stage_stipulate)) {
-          mui.toast('限时格式错误')
-          check = false
-          return false
-        }
-        var then = this
-        var add = '?' + 'Customer_id=' + this.customer_id
-        for (var index in this.select_aa) {
-          // 项目名称
-          if (this.projet[0].customer_name === this.select_aa[index].customer_name) {
-
-          } else {
-            add = add + '&Customer_name=' + this.projet[0].customer_name
-          }
-          // 联系人
-          if (this.projet[0].customer_linkman === this.select_aa[index].customer_linkman) {
-
-          } else {
-            add = add + '&Customer_linkman=' + this.projet[0].customer_linkman
-          }
-          //	联系方式
-          if (this.projet[0].customer_connect === this.select_aa[index].customer_connect) {
-
-          } else {
-            add = add + '&Customer_connect=' + this.projet[0].customer_connect
-          }
-          // 设计师
-          if (this.projet[0].customer_stylist === this.select_aa[index].customer_stylist) {
-
-          } else {
-            add = add + '&Customer_stylist=' + this.projet[0].customer_stylist
-          }
-          //	装修面积
-          if (this.projet[0].customer_Decorate === this.select_aa[index].customer_Decorate) {
-
-          } else {
-            add = add + '&Customer_Decorate=' + this.projet[0].customer_Decorate
-          }
-          //	客户需求
-          if (this.projet[0].customer_demand === this.select_aa[index].customer_demand) {
-
-          } else {
-            add = add + '&Customer_demand=' + this.projet[0].customer_demand
-          }
-          //	项目预算
-          if (this.projet[0].customer_budget === this.select_aa[index].customer_budget) {
-
-          } else {
-            add = add + '&Customer_budget=' + this.projet[0].customer_budget
-          }
-          //	当前阶段
-          if (this.projet[0].stage_name === this.select_aa[index].stage_name) {
-
-          } else {
-            add = add + '&stage_name=' + this.projet[0].stage_name
-          }
-          //	限时
-          if (this.projet[0].stage_stipulate === this.select_aa[index].stage_stipulate) {
-
-          } else {
-            add = add + '&stage_stipulate=' + this.projet[0].stage_stipulate
-          }
-          //	开始时间
-          if (this.projet[0].stage_startdate === this.select_aa[index].stage_startdate) {
-
-          } else {
-            add = add + '&stage_startdate=' + this.projet[0].stage_startdate
-          }
-        }
-        if (this.projet === this.select_aa) {
-          alert('没有修改任何信息')
-        }
-        this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/UpdateCustomer' + add).then(res => {
-          this.list = res.data
-          if (res.status === 200) {
-            mui.alert('修改成功', function () {
-              then.$router.push({ path: 'After_sales_statistics' })
-            })
-          } else {
-            mui.alert('修改失败')
-          }
-        })
+      // 判断项目预算是否为数字
+      if (!nuber.test(this.customer_budget)) {
+        mui.toast('项目预算格式错误')
+        check = false
+        return false
       }
+      // 判断限时是否为数字
+      if (!nuber.test(this.stage_stipulate)) {
+        mui.toast('限时格式错误')
+        check = false
+        return false
+      }
+      var then = this
+      var add = '?' + 'Customer_id=' + this.customer_id
+      for (var index in this.select_aa) {
+        // 项目名称
+        if (this.projet[0].customer_name === this.select_aa[index].customer_name) {
+
+        } else {
+          add = add + '&Customer_name=' + this.projet[0].customer_name
+        }
+        // 联系人
+        if (this.projet[0].customer_linkman === this.select_aa[index].customer_linkman) {
+
+        } else {
+          add = add + '&Customer_linkman=' + this.projet[0].customer_linkman
+        }
+        //	联系方式
+        if (this.projet[0].customer_connect === this.select_aa[index].customer_connect) {
+
+        } else {
+          add = add + '&Customer_connect=' + this.projet[0].customer_connect
+        }
+        // 设计师
+        if (this.projet[0].customer_stylist === this.select_aa[index].customer_stylist) {
+
+        } else {
+          add = add + '&Customer_stylist=' + this.projet[0].customer_stylist
+        }
+        //	装修面积
+        if (this.projet[0].customer_Decorate === this.select_aa[index].customer_Decorate) {
+
+        } else {
+          add = add + '&Customer_Decorate=' + this.projet[0].customer_Decorate
+        }
+        //	客户需求
+        if (this.projet[0].customer_demand === this.select_aa[index].customer_demand) {
+
+        } else {
+          add = add + '&Customer_demand=' + this.projet[0].customer_demand
+        }
+        //	项目预算
+        if (this.projet[0].customer_budget === this.select_aa[index].customer_budget) {
+
+        } else {
+          add = add + '&Customer_budget=' + this.projet[0].customer_budget
+        }
+        //	当前阶段
+        if (this.projet[0].stage_name === this.select_aa[index].stage_name) {
+
+        } else {
+          add = add + '&stage_name=' + this.projet[0].stage_name
+        }
+        //	限时
+        if (this.projet[0].stage_stipulate === this.select_aa[index].stage_stipulate) {
+
+        } else {
+          add = add + '&stage_stipulate=' + this.projet[0].stage_stipulate
+        }
+        //	开始时间
+        if (this.projet[0].stage_startdate === this.select_aa[index].stage_startdate) {
+
+        } else {
+          add = add + '&stage_startdate=' + this.projet[0].stage_startdate
+        }
+      }
+      if (this.projet === this.select_aa) {
+        alert('没有修改任何信息')
+      }
+      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/UpdateCustomer' + add).then(res => {
+        this.list = res.data
+        if (res.status === 200) {
+          mui.alert('修改成功', function () {
+            then.$router.push({ path: 'After_sales_statistics' })
+          })
+        } else {
+          mui.alert('修改失败')
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

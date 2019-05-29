@@ -35,7 +35,7 @@ export default {
         { href: 'After_sales_statistics', ImgArr: require('../image/tongji.png'), text: '售后统计' },
         { href: 'Follow_up_after_sale', ImgArr: require('../image/genjin.png'), text: '售后跟进' },
         { href: 'money_projet', ImgArr: require('../image/shouhou.png'), text: '项目录入' },
-        { href: 'money_Responsible', ImgArr: require('../image/Responsible.png'), text: '责任人录入' },
+        { href: 'money_Responsible', ImgArr: require('../image/Responsible.png'), text: '责任人录入' }
       ]
     }
   }

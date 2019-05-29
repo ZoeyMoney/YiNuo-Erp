@@ -104,10 +104,17 @@ export default {
       var check = true
       var pattern = /^1[0-9]{10}$/ // 验证手机号
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
+      var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
+      var regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
       var nuber = /^[0-9]*$/ // 验证数字
       //  项目名称
       if (this.Customer_name == '') {
         mui.toast('项目名称不能为空')
+        check = false
+        return false
+      }
+      if (regEn.test(this.Customer_name) || regCn.test(this.Customer_name)) {
+        mui.toast('项目名称不能加入特殊字符')
         check = false
         return false
       }
@@ -177,13 +184,9 @@ export default {
             '&Customer_stylist=' + this.Customer_stylist + '&Customer_Decorate=' + this.Customer_Decorate + '&Customer_referrer=' + this.Customer_referrer +
             '&Customer_budget=' + this.Customer_budget + '&Customer_form=' + this.Customer_form + '&Customer_type=' + this.Customer_type + '&Customer_demand=' + this.Customer_demand
       this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/AddCustomer' + add).then(res => {
-        if (res.data === '录入成功') {
-          mui.alert('录入成功', function () {
+          mui.alert(res.data, function () {
             _this.$router.push('customer_management')
           })
-        } else {
-          mui.alert('录入失败 提示：项目名称可能重复')
-        }
       })
     }
   }
@@ -217,8 +220,6 @@ form div select{font-size: 15px!important;}
 .money-input label{flex: 1;width: 30%}
 .money-input input{flex: 1.6;width: 40%}
 .span-money{display: block;line-height: 43px;font-size: 13px;width: 30%;}
-/*客户需求*/
-textarea{overflow: auto;height: 100%;padding-bottom: 0;font-size: 15px;padding-left: 13px!important;}
 /*按钮*/
 .mui-radio{overflow: visible}
 .mui-btn-blue, .mui-btn-primary, input[type=submit]{border: 1px solid #000000;background-color: #000000;}

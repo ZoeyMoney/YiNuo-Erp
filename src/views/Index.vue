@@ -49,11 +49,11 @@ export default {
         { href: 'customer_management', ImgArr: require('../image/admin.png'), text: '客户管理' },
         { href: 'site_management', ImgArr: require('../image/gongdi.png'), text: '工地管理' },
         { href: 'money_management', ImgArr: require('../image/caiwu.png'), text: '财务管理' },
-        { href: '', ImgArr: require('../image/xingzheng.png'), text: '行政管理' },
+        { href: 'administrative', ImgArr: require('../image/xingzheng.png'), text: '行政管理' },
         { href: '', ImgArr: require('../image/cangku.png'), text: '库存管理' },
         { href: '', ImgArr: require('../image/data.png'), text: '数据汇总' },
         { href: 'cash_flow', ImgArr: require('../image/xianjin.png'), text: '现金流水' },
-        { href: '', ImgArr: require('../image/xiangmduiz.png'), text: '项目对账' },
+        { href: 'Project_Reconciliation', ImgArr: require('../image/xiangmduiz.png'), text: '项目对账' },
         { href: 'money_sale', ImgArr: require('../image/souhou.png'), text: '售后信息' }
       ]
     }

@@ -86,126 +86,126 @@
 </template>
 
 <script>
-  export default {
-    name: 'running_money',
-    data(){
-      return{
-        keyword:'',	//关键字
-        bank_person:'', //户主
-        listPerson:'',	//in户主
-        bank_bank:'',	//开户行
-        listBank:'', //in开户行
-        bank_number:'',	//尾号
-        fund_detail_transaction_date:'', //交易时间
-        listNumber:'',		//后四位数
-        listN:'',	//创建、后四位、空数组
-        listDetail:'',	//起始时间
-        listD:'', //过滤
-        listArr:{},//过滤起始时间
-        customer_name:'',
-        projet:'',//项目名称
-        list:[],//总
-        moneyN:'',//正数
-        moneyY:'',//负数
-        moneyNY:'', //正负总
-        leftshi:{
-          paddingLeft:'10px'
-        },
-        hiden:{
-          display:'block',
-          width:'112px',
-          whiteSpace:'nowrap',
-          overflow:'hidden',
-          textOverflow:'ellipsis'
-        },
-        money_aa:{
-          display:'block',
-          whiteSpace:'nowrap',
-          width:'60px',
-          overflow:'hidden',
-          textOverflow:'ellipsis'
-        },
-        red:{
-          color:'red',
-          overflow:'hidden',
-          textOverflow:'ellipsis'
-        },
-        green:{
-          color:'green',
-          overflow:'hidden',
-          textOverflow:'ellipsis'
-        }
-
+export default {
+  name: 'running_money',
+  data () {
+    return {
+      keyword: '',	// 关键字
+      bank_person: '', // 户主
+      listPerson: '',	// in户主
+      bank_bank: '',	// 开户行
+      listBank: '', // in开户行
+      bank_number: '',	// 尾号
+      fund_detail_transaction_date: '', // 交易时间
+      listNumber: '',		// 后四位数
+      listN: '',	// 创建、后四位、空数组
+      listDetail: '',	// 起始时间
+      listD: '', // 过滤
+      listArr: {}, // 过滤起始时间
+      customer_name: '',
+      projet: '', // 项目名称
+      list: [], // 总
+      moneyN: '', // 正数
+      moneyY: '', // 负数
+      moneyNY: '', // 正负总
+      leftshi: {
+        paddingLeft: '10px'
+      },
+      hiden: {
+        display: 'block',
+        width: '112px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      },
+      money_aa: {
+        display: 'block',
+        whiteSpace: 'nowrap',
+        width: '60px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      },
+      red: {
+        color: 'red',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      },
+      green: {
+        color: 'green',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
       }
-    },
-    created(){
-      /*尾号*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank_number').then(res=>{
-        this.listNumber = res.data
-        this.listN = [];
-        for (var index in res.data) {
-          var aa = res.data[index].slice(8,12)
-          this.listN.push(aa)
-        }
-      })
-      /*项目流水户主*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank_person').then(res=>{
-        this.listPerson = res.data
-      })
-      /*开户行*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank_bank').then(res=>{
-        this.listBank = res.data
-      })
-      /*起始时间*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail').then(res=>{
-        this.listDetail = res.data
-        this.listD = [];
-        var  obj ={};
-        var arr = []
-        for (var index in res.data) {
-          var a = res.data[index].fund_detail_transaction_date
-          this.listD.push(a)
-        }
-        for (var index in this.listD){
-          var s = this.listD[index];
-          if (obj[s]) continue;
-          else{
-            obj[s]=s;
-            arr.push(s)
-          }
-        }
-        this.listArr = arr
-      })
-      /*项目名称*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer').then(res=>{
-        this.projet = res.data
-      },error=>{
-        var then = this
-        mui.alert('您无权访问',function () {
-          then.$router.push({name:'index'})
-        })
-      })
-      /*交易记录*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail').then(res=>{
-        this.list = res.data
-        var n = 0;	//转出
-        var y=0//转入
-        for (var index in res.data) {
-          if (res.data[index].fund_detail_transaction_money > 0) {
-            n += res.data[index].fund_detail_transaction_money	//转出
-          }else{
-            y += res.data[index].fund_detail_transaction_money	//转如
-          }
-          this.moneyN = n;	//负
-          this.moneyY = y;	//正
-          this.moneyNY = n+y;		//正负总
-        }
-      })
-    },
-    methods:{
 
     }
+  },
+  created () {
+    /* 尾号 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank_number').then(res => {
+      this.listNumber = res.data
+      this.listN = []
+      for (var index in res.data) {
+        var aa = res.data[index].slice(8, 12)
+        this.listN.push(aa)
+      }
+    })
+    /* 项目流水户主 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank_person').then(res => {
+      this.listPerson = res.data
+    })
+    /* 开户行 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank_bank').then(res => {
+      this.listBank = res.data
+    })
+    /* 起始时间 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail').then(res => {
+      this.listDetail = res.data
+      this.listD = []
+      var obj = {}
+      var arr = []
+      for (var index in res.data) {
+        var a = res.data[index].fund_detail_transaction_date
+        this.listD.push(a)
+      }
+      for (var index in this.listD) {
+        var s = this.listD[index]
+        if (obj[s]) continue
+        else {
+          obj[s] = s
+          arr.push(s)
+        }
+      }
+      this.listArr = arr
+    })
+    /* 项目名称 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer').then(res => {
+      this.projet = res.data
+    }, error => {
+      var then = this
+      mui.alert('您无权访问', function () {
+        then.$router.push({ name: 'index' })
+      })
+    })
+    /* 交易记录 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail').then(res => {
+      this.list = res.data
+      var n = 0	// 转出
+      var y = 0// 转入
+      for (var index in res.data) {
+        if (res.data[index].fund_detail_transaction_money > 0) {
+          n += res.data[index].fund_detail_transaction_money	// 转出
+        } else {
+          y += res.data[index].fund_detail_transaction_money	// 转如
+        }
+        this.moneyN = n	// 负
+        this.moneyY = y	// 正
+        this.moneyNY = n + y		// 正负总
+      }
+    })
+  },
+  methods: {
+
   }
+}
 </script>
 
 <style scoped>

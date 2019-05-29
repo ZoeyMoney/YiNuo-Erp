@@ -26,41 +26,41 @@
 </template>
 
 <script>
-  export default {
-    name: 'SettingName',
-    data(){
-      return{
-        name:'',//新用户名
+export default {
+  name: 'SettingName',
+  data () {
+    return {
+      name: ''// 新用户名
+    }
+  },
+  methods: {
+    setting () {
+      var then = this
+      var check = true
+      var reg = /^[^\s]*$/ // 不能有空格
+      if (this.name == '') {
+        mui.toast('用户名不能为空')
+        check = false
+        return false
       }
-    },
-    methods:{
-      setting(){
-        var then = this
-        var check = true
-        var reg = /^[^\s]*$/; //不能有空格
-        if (this.name == '') {
-          mui.toast('用户名不能为空')
-          check = false
-          return false
-        }
-        if (!reg.test(this.name)) {
-          mui.toast('用户名不能有空格')
-          check = false
-          return false
-        }
-        var add = '?name='+this.name
-        this.axios.get(''+add).then(res=>{
-          if (res.data.msg === '修改成功') {
-            mui.alert('修改成功',function () {
-              then.$router.push({name:'login'})
-            })
-          }else{
-            mui.alert('修改失败')
-          }
-        })
+      if (!reg.test(this.name)) {
+        mui.toast('用户名不能有空格')
+        check = false
+        return false
       }
+      var add = '?name=' + this.name
+      this.axios.get('' + add).then(res => {
+        if (res.data.msg === '修改成功') {
+          mui.alert('修改成功', function () {
+            then.$router.push({ name: 'login' })
+          })
+        } else {
+          mui.alert('修改失败')
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

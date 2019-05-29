@@ -53,79 +53,38 @@
 </template>
 
 <script>
-  export default {
-    name: 'bank_card',
-    data(){
-      return{
-        bank_number:'',//银行卡账户
-        bank_bank:'',//户主
-        bank_money:'',//余额
-        bank_person:'',//开户行
-        bank_limit:'',//额度
-        bank_type:'储蓄卡'
-      }
+export default {
+  name: 'bank_card',
+  data () {
+    return {
+      bank_number: '', // 银行卡账户
+      bank_bank: '', // 户主
+      bank_money: '', // 余额
+      bank_person: '', // 开户行
+      bank_limit: '', // 额度
+      bank_type: '储蓄卡'
+    }
+  },
+  methods: {
+    fund_xin () {
+      var persion = document.getElementById('persion')
+      persion.style.display = 'block'
     },
-    methods:{
-      fund_xin(){
-          var persion = document.getElementById('persion');
-          persion.style.display = 'block'
-      },
-      fund_cu(){
-        var persion = document.getElementById('persion');
-        persion.style.display = 'none'
-      },
-      go(){
-        var then = this
-        var add = '?bank_number='+this.bank_number+'&bank_bank='+this.bank_bank+'&bank_person='+this.bank_person+'&bank_type='+this.bank_type+
-          '&bank_money='+this.bank_money/*'&bank_limit='+this.bank_limit*/
-        var check = true
-        var card = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/ //身份证验证
-        var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
-        var yin =  /^(\d{16}|\d{19})$/; //银行卡验证
-        var nuber = /^[0-9]*$/ // 验证数字
-        if (this.bank_type === '储蓄卡') {
-          //银行卡账户
-          if (this.bank_number == '') {
-            mui.toast('银行卡账户不能为空')
-            check = false
-            return false
-          }
-          if (!yin.test(this.bank_number)) {
-            mui.toast('银行卡格式错误')
-            check = false
-            return false
-          }
-          //户主
-          if (this.bank_bank == '') {
-            mui.toast('户主不能为空')
-            check = false
-            return false
-          }
-          if (!nameReg.test(this.bank_bank)) {
-            mui.toast('户主不能为空')
-            check = false
-            return false
-          }
-          //余额
-          if (this.bank_money == '') {
-            mui.toast('余额不能为空')
-            check = false
-            return false
-          }
-          if (!nuber.test(this.bank_money)) {
-            mui.toast('余额格式错误')
-            check = false
-            return false
-          }
-          //开户行
-          if (this.bank_person == '') {
-            mui.toast('开户行不能为空')
-            check = false
-            return false
-          }
-          add = add+ '&bank_limit=0'
-        }else if (this.bank_type === '信用卡') {
-          //银行卡账户
+    fund_cu () {
+      var persion = document.getElementById('persion')
+      persion.style.display = 'none'
+    },
+    go () {
+      var then = this
+      var add = '?bank_number=' + this.bank_number + '&bank_bank=' + this.bank_bank + '&bank_person=' + this.bank_person + '&bank_type=' + this.bank_type +
+          '&bank_money=' + this.bank_money/* '&bank_limit='+this.bank_limit */
+      var check = true
+      var card = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/ // 身份证验证
+      var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
+      var yin = /^(\d{16}|\d{19})$/ // 银行卡验证
+      var nuber = /^[0-9]*$/ // 验证数字
+      if (this.bank_type === '储蓄卡') {
+        // 银行卡账户
         if (this.bank_number == '') {
           mui.toast('银行卡账户不能为空')
           check = false
@@ -136,7 +95,7 @@
           check = false
           return false
         }
-        //户主
+        // 户主
         if (this.bank_bank == '') {
           mui.toast('户主不能为空')
           check = false
@@ -147,7 +106,7 @@
           check = false
           return false
         }
-        //余额
+        // 余额
         if (this.bank_money == '') {
           mui.toast('余额不能为空')
           check = false
@@ -158,13 +117,54 @@
           check = false
           return false
         }
-        //开户行
+        // 开户行
         if (this.bank_person == '') {
           mui.toast('开户行不能为空')
           check = false
           return false
         }
-        //额度
+        add = add + '&bank_limit=0'
+      } else if (this.bank_type === '信用卡') {
+        // 银行卡账户
+        if (this.bank_number == '') {
+          mui.toast('银行卡账户不能为空')
+          check = false
+          return false
+        }
+        if (!yin.test(this.bank_number)) {
+          mui.toast('银行卡格式错误')
+          check = false
+          return false
+        }
+        // 户主
+        if (this.bank_bank == '') {
+          mui.toast('户主不能为空')
+          check = false
+          return false
+        }
+        if (!nameReg.test(this.bank_bank)) {
+          mui.toast('户主不能为空')
+          check = false
+          return false
+        }
+        // 余额
+        if (this.bank_money == '') {
+          mui.toast('余额不能为空')
+          check = false
+          return false
+        }
+        if (!nuber.test(this.bank_money)) {
+          mui.toast('余额格式错误')
+          check = false
+          return false
+        }
+        // 开户行
+        if (this.bank_person == '') {
+          mui.toast('开户行不能为空')
+          check = false
+          return false
+        }
+        // 额度
         if (this.bank_limit == '') {
           mui.toast('额度不能为空')
           check = false
@@ -175,23 +175,23 @@
           check = false
           return false
         }
-        add = add+'&bank_limit='+this.bank_limit
-        }
-
-        this.axios.get('https://formattingclub.com/YiNuoLogin/fund/AddBank'+add).then(res=>{
-            if (res.data === '添加成功') {
-              mui.alert('添加成功',function () {
-                location.reload()
-              })
-            }
-        },error=>{
-          mui.alert('您无权录入',function () {
-            then.$router.push({name:'index'})
-          })
-        })
+        add = add + '&bank_limit=' + this.bank_limit
       }
+
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/AddBank' + add).then(res => {
+        if (res.data === '添加成功') {
+          mui.alert('添加成功', function () {
+            location.reload()
+          })
+        }
+      }, error => {
+        mui.alert('您无权录入', function () {
+          then.$router.push({ name: 'index' })
+        })
+      })
     }
   }
+}
 </script>
 
 <style scoped>

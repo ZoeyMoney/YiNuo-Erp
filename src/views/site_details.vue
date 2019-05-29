@@ -3,13 +3,13 @@
     <!--返回-->
     <header class="mui-bar mui-bar-nav">
       <router-link :to="{name:'After_sales_statistics'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
-      <h1 class="mui-title">工地详细</h1>
+      <h1 class="mui-title">售后详细</h1>
       <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
     </header>
     <!--客户详情-->
     <div class="mui-content">
       <div class="customer">
-        <h2>工地详细</h2>
+        <h2>售后详细</h2>
         <p>/Client follow-up</p>
       </div>
     </div>
@@ -29,20 +29,34 @@
           <input type="text" class="mui-input-clear" v-model="item.customer_connect" placeholder="input" disabled="disabled">
         </div>
         <div class="mui-input-row">
-          <label>设计师</label>
+          <label>责任人</label>
           <input type="text" class="mui-input-clear" v-model="item.customer_stylist" placeholder="input" disabled="disabled">
         </div>
-        <div class="mui-input-row">
-          <label>装修面积</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_Decorate" placeholder="input" disabled="disabled">
+        <div class="mui-input-row money-input">
+          <label>甲方预算</label>
+          <input type="text" class="mui-input-clear" v-model="item.customer_DecorateJia" disabled="disabled">
+          <span class="span-money">{{Customer_DecorateJia | MoneyFormat}}</span>
+        </div>
+        <div class="mui-input-row money-input">
+          <label>乙方预算</label>
+          <input type="text" class="mui-input-clear" placeholder="请输入预算金额" v-model="item.customer_DecorateYi" disabled="disabled">
+          <span class="span-money">{{Customer_DecorateYi | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row">
-          <label>推荐人</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_referrer" placeholder="input" disabled="disabled">
+          <label>项目时间</label>
+          <input type="text" class="mui-input-clear" :value="item.customer_Date | data" disabled="disabled">
         </div>
         <div class="mui-input-row">
-          <label>项目预算</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_budget" placeholder="input" disabled="disabled">
+          <label>报修时间</label>
+          <input type="text" class="mui-input-clear" :value="item.customer_baoxiushijian | data" disabled="disabled">
+        </div>
+        <div class="mui-input-row">
+          <label>预计完成</label>
+          <input type="text" class="mui-input-clear" :value="item.customer_yujiwanchengshijian | data" disabled="disabled">
+        </div>
+        <div class="mui-input-row">
+          <label>保质期</label>
+          <input type="text" class="mui-input-clear" placeholder="请输入保质期" v-model="item.customer_baozhiqi" disabled="disabled">
         </div>
         <div class="mui-input-row all-row">
           <label>所属类型</label>
@@ -145,117 +159,117 @@
 </template>
 
 <script>
-  export default {
-    name: 'site_details',
-    data () {
-      return {
-        projet: '', // 项目
-        stageName: '', // 第二个form
-        listtime: '', // 倒计时
-        stage: '', // 修改记录
-        undata: ''// 修改记录
-      }
-    },
-    created () {
-      setInterval(() => {
-        var a = new Date()
-        this.listtime = a
-      }, 1000)
+export default {
+  name: 'site_details',
+  data () {
+    return {
+      projet: '', // 项目
+      stageName: '', // 第二个form
+      listtime: '', // 倒计时
+      stage: '', // 修改记录
+      undata: ''// 修改记录
+    }
+  },
+  created () {
+    setInterval(() => {
+      var a = new Date()
+      this.listtime = a
+    }, 1000)
 
-      var loc = location.href
-      var n1 = loc.length// 地址的总长度
-      var n2 = loc.indexOf('=')// 取得=号的位置
-      var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
-      // 查询客户项目信息
-      this.customer_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectCustomer?Customer=' + id).then(res => {
-        this.projet = res.data
-        if (this.projet.Customer_form == '家装') {
-          this.a = true
-          this.b = true
-        } else {
-          this.a = false
-          this.b = true
+    var loc = location.href
+    var n1 = loc.length// 地址的总长度
+    var n2 = loc.indexOf('=')// 取得=号的位置
+    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
+    // 查询客户项目信息
+    this.customer_id = id
+    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectCustomer?Customer=' + id).then(res => {
+      this.projet = res.data
+      if (this.projet.Customer_form == '家装') {
+        this.a = true
+        this.b = true
+      } else {
+        this.a = false
+        this.b = true
+      }
+    })
+    // 客户信息
+    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/selectStage?Customer=' + id).then(res => {
+      this.stageName = res.data
+      if (res.data == '') {
+        var k = [{
+          stage_measure: '',
+          stage_day: '',
+          stage_stipulate: '',
+          stage_name: '',
+          stage_startdate: ''
+        }]
+        this.stageName = k
+      }
+    })
+    // 时间
+    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/selectStage?Customer=' + id).then(info => {
+      if (info.status === 200) {
+        this.list = info.data
+      } else {
+        console.log('获取失败')
+      }
+    })
+    // 查询项目的跟进信息
+    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectFollow?Customer_id=' + id).then(res => {
+      this.stage = res.data
+    })
+    //	修改记录
+    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectUpdate').then(info => {
+      this.undata = info.data.data
+    })
+  },
+  methods: {
+    // 修改
+    UpdateCustomer () {
+      this.$router.push({ path: 'siteModify', query: { id: this.customer_id } })
+    },
+    //  删除
+    dele () {
+      var then = this
+      var va = this.customer_id
+      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/DeleteCustomer?Customer=' + va).then(res => {
+        if (res.status === 200) {
+          if (res.data == '删除成功') {
+            mui.alert('删除成功', function () {
+              then.$router.push({ path: 'After_sales_statistics' })
+            })
+          } else {
+            alert('删除失败')
+          }
         }
-      })
-      // 客户信息
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/selectStage?Customer=' + id).then(res => {
-        this.stageName = res.data
-        if (res.data == '') {
-          var k = [{
-            stage_measure: '',
-            stage_day: '',
-            stage_stipulate: '',
-            stage_name: '',
-            stage_startdate: ''
-          }]
-          this.stageName = k
-        }
-      })
-      // 时间
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/selectStage?Customer=' + id).then(info => {
-        if (info.status === 200) {
-          this.list = info.data
-        } else {
-          console.log('获取失败')
-        }
-      })
-      // 查询项目的跟进信息
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectFollow?Customer_id=' + id).then(res => {
-        this.stage = res.data
-      })
-      //	修改记录
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectUpdate').then(info => {
-        this.undata = info.data.data
       })
     },
-    methods: {
-      // 修改
-      UpdateCustomer () {
-        this.$router.push({ path: 'siteModify', query: { id: this.customer_id } })
-      },
-      //  删除
-      dele () {
-        var then = this
-        var va = this.customer_id
-        this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/DeleteCustomer?Customer=' + va).then(res => {
-          if (res.status === 200) {
-            if (res.data == '删除成功') {
-              mui.alert('删除成功', function () {
-                then.$router.push({ path: 'customer_statistics' })
-              })
-            } else {
-              alert('删除失败')
-            }
-          }
-        })
-      },
-      //  倒计时
-      time: function (date, day) {
-        if (date == null) {
-          return '未开始'
+    //  倒计时
+    time: function (date, day) {
+      if (date == null) {
+        return '未开始'
+      } else {
+        var startDate = new Date(date)
+        startDate.setDate(startDate.getDate() + day)
+        var m = startDate.getMonth() + 1
+        var end = startDate.getFullYear() + '-' + m + '-' + startDate.getDate() + '-' + startDate.getHours() + ':' + startDate.getMinutes() + ':' + startDate.getSeconds()
+        var endDate = new Date(end)
+        var start = new Date()
+        var rightTime = endDate - start // 截止时间减去当前时间
+        if (rightTime > 0) { // 判断剩余倒计时时间如果大于0就执行倒计时否则就结束
+          var dd = Math.floor(rightTime / 1000 / 60 / 60 / 24)
+          var hh = Math.floor((rightTime / 1000 / 60 / 60) % 24)
+          var mm = Math.floor((rightTime / 1000 / 60) % 60)
+          var ss = Math.floor((rightTime / 1000) % 60)
+          var showTime = dd + ':' + hh + ':' + mm + ':' + ss
         } else {
-          var startDate = new Date(date)
-          startDate.setDate(startDate.getDate() + day)
-          var m = startDate.getMonth() + 1
-          var end = startDate.getFullYear() + '-' + m + '-' + startDate.getDate() + '-' + startDate.getHours() + ':' + startDate.getMinutes() + ':' + startDate.getSeconds()
-          var endDate = new Date(end)
-          var start = new Date()
-          var rightTime = endDate - start // 截止时间减去当前时间
-          if (rightTime > 0) { // 判断剩余倒计时时间如果大于0就执行倒计时否则就结束
-            var dd = Math.floor(rightTime / 1000 / 60 / 60 / 24)
-            var hh = Math.floor((rightTime / 1000 / 60 / 60) % 24)
-            var mm = Math.floor((rightTime / 1000 / 60) % 60)
-            var ss = Math.floor((rightTime / 1000) % 60)
-            var showTime = dd + ':' + hh + ':' + mm + ':' + ss
-          } else {
-            var showTime = '已逾期'
-          }
-          return showTime
+          var showTime = '已逾期'
         }
+        return showTime
       }
     }
   }
+}
 </script>
 
 <style scoped>

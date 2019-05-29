@@ -145,7 +145,7 @@ export default {
       this.listtime = a
     }, 1000)
   },
-  computed:{
+  computed: {
 
   },
   methods: {

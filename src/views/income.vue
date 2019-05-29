@@ -128,178 +128,178 @@
 </template>
 
 <script>
-  export default {
-    name: 'income',
-    data(){
-      return{
-        time:new Date,
-        bank_id:0,//id
-        listAdd:[],//保存
-        projet:'',	//项目名称
-        fund_detail_transaction_customer_id:'',	//渲染主
-        selectEnterFundName:'',	//类别选择
-        fund_detail_id:'',		//工程款
-        retrieval:'',	//调取应收
-        retrievalVal:'',
-        debt:'',	//债务人
-        debtVal:'',
-        bank_card:'',//银行卡
-        fund_detail_transaction_type:'',//备注
-        bank_money:'', //实际转账
-        bank_deal_rate:'', //转账费率
-        chuXu:'',	//储蓄卡
-        xinY:'',	//信用卡
-        chuXuKa:'', //储蓄卡总额
-        XinYongKa:'', //储蓄卡总额
-        fund_detail_transaction_bank_id:'',
-        listD:[
-          {Tnumber:0.6},
-          {Tnumber:0.55}
-        ],
-      }
-    },
-    created () {
-      /*项目名称*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer').then(res=>{
-        this.projet = res.data
-      })
-      /*类别选择*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/selectEnterFundName').then(res=>{
-        this.selectEnterFundName = res.data
-      })
-      /*调取应收*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_Enter_Fund_detailsName').then(res=>{
-        this.retrieval = res.data
-      })
-      /*银行卡*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res=>{
-        this.bank_card = res.data
-        var chu = [];
-        var xin = [];
-        var m = 0;
-        var y = 0;
-        for (var index in res.data) {
-          if (res.data[index].bank_type === '储蓄卡') {
-            var n = res.data[index].bank_number.slice(8, 12) //截取尾号后4位
-            m += res.data[index].bank_money //储蓄卡总额
+export default {
+  name: 'income',
+  data () {
+    return {
+      time: new Date(),
+      bank_id: 0, // id
+      listAdd: [], // 保存
+      projet: '',	// 项目名称
+      fund_detail_transaction_customer_id: '',	// 渲染主
+      selectEnterFundName: '',	// 类别选择
+      fund_detail_id: '',		// 工程款
+      retrieval: '',	// 调取应收
+      retrievalVal: '',
+      debt: '',	// 债务人
+      debtVal: '',
+      bank_card: '', // 银行卡
+      fund_detail_transaction_type: '', // 备注
+      bank_money: '', // 实际转账
+      bank_deal_rate: '', // 转账费率
+      chuXu: '',	// 储蓄卡
+      xinY: '',	// 信用卡
+      chuXuKa: '', // 储蓄卡总额
+      XinYongKa: '', // 储蓄卡总额
+      fund_detail_transaction_bank_id: '',
+      listD: [
+        { Tnumber: 0.6 },
+        { Tnumber: 0.55 }
+      ]
+    }
+  },
+  created () {
+    /* 项目名称 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer').then(res => {
+      this.projet = res.data
+    })
+    /* 类别选择 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/selectEnterFundName').then(res => {
+      this.selectEnterFundName = res.data
+    })
+    /* 调取应收 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_Enter_Fund_detailsName').then(res => {
+      this.retrieval = res.data
+    })
+    /* 银行卡 */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
+      this.bank_card = res.data
+      var chu = []
+      var xin = []
+      var m = 0
+      var y = 0
+      for (var index in res.data) {
+        if (res.data[index].bank_type === '储蓄卡') {
+          var n = res.data[index].bank_number.slice(8, 12) // 截取尾号后4位
+          m += res.data[index].bank_money // 储蓄卡总额
+          res.data[index].bank_number = n
+          chu.push(res.data[index])
+        } else {
+          if (res.data[index].bank_type === '信用卡') {
+            var n = res.data[index].bank_number.slice(8, 12)	// 截取尾号后4位
+            y += res.data[index].bank_money
             res.data[index].bank_number = n
-            chu.push(res.data[index])
-          }else{
-            if (res.data[index].bank_type === '信用卡') {
-              var n = res.data[index].bank_number.slice(8,12)	//截取尾号后4位
-              y += res.data[index].bank_money
-              res.data[index].bank_number = n
-              xin.push(res.data[index])
+            xin.push(res.data[index])
+          }
+        }
+      }
+      this.chuXu = chu
+      this.xinY = xin
+      this.chuXuKa = m
+      this.XinYongKa = y
+    }, error => {
+      var then = this
+      mui.alert('您无权访问', function () {
+        then.$router.push({ name: 'index' })
+      })
+    })
+  },
+  computed: {
+    addMoney () {
+      var a = this.bank_money - this.bank_money * this.bank_deal_rate / 100
+      var b = Math.floor(a * 100) / 100
+      return b
+    }
+  },
+  methods: {
+    add () {
+      var then = this
+      var check = true
+      var nuber = /^[0-9]*$/ // 验证数字
+      var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
+      // 类别选择
+      if (this.fund_detail_id == '') {
+        mui.toast('类别选择不能为空')
+        check = false
+        return false
+      }
+      // 项目名称
+      if (this.fund_detail_transaction_customer_id == '') {
+        mui.toast('项目名称不能为空')
+        check = false
+        return false
+      }
+      // 债务人
+      if (this.debtVal == '') {
+        mui.toast('债务人不能为空')
+        check = false
+        return false
+      }
+      if (!nameReg.test(this.debtVal)) {
+        mui.toast('债务人格式错误')
+        check = false
+        return false
+      }
+      // 调取应收
+      if (this.retrievalVal == '') {
+        mui.toast('调取应收不能为空')
+        check = false
+        return false
+      }
+      // 共有
+      if (this.bank_money == '') {
+        mui.toast('共有不能为空')
+        check = false
+        return false
+      }
+      if (!nuber.test(this.bank_money)) {
+        mui.toast('共有只能输入数字')
+        check = false
+        return false
+      }
+      // 转入
+      if (this.bank_id == '') {
+        mui.toast('转出不能为空')
+        check = false
+        return false
+      } else {
+        for (var index in this.chuXu) {
+          if (parseInt(this.chuXu[index].bank_id) === this.bank_out_id) {
+            if (parseInt(this.chuXu[index].bank_money) < parseInt(this.bank_deal_money)) {
+              mui.toast('卡内余额不能大于交易余额')
+              check = false
+              return false
+            }
+          } else {
+            if (parseInt(this.addMoneys) > parseInt(this.chuXu[index].bank_out_id)) {
+              mui.toast('实际转账不能大于信用卡额度')
+              check = false
+              return false
             }
           }
         }
-        this.chuXu = chu;
-        this.xinY = xin;
-        this.chuXuKa = m;
-        this.XinYongKa = y;
-      },error=>{
-        var then = this
-        mui.alert('您无权访问',function () {
-          then.$router.push({name:'index'})
-        })
+      }
+
+      this.fund_detail_transaction_bank_id = this.bank_id
+
+      var add = '?fund_detail_id=' + this.fund_detail_id + '&fund_detail_transaction_bank_id=' + this.fund_detail_transaction_bank_id + '&fund_detail_transaction_customer_id=' + this.fund_detail_transaction_customer_id + '&fund_detail_transaction_type=' +
+          this.fund_detail_transaction_type + '&fund_detail_transaction_money=' + this.bank_money
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_detail_transaction' + add).then(res => {
+        this.listAdd = res.data
+        if (res.status === 200) {
+          mui.alert('保存成功', function () {
+            then.$router.push({ name: 'cash_flow' })
+          })
+        } else {
+          alert('保存失败')
+        }
       })
     },
-    computed:{
-      addMoney(){
-        var a = this.bank_money - this.bank_money * this.bank_deal_rate / 100
-        var b = Math.floor(a*100)/100
-        return b;
-      }
-    },
-    methods:{
-      add(){
-        var then = this
-        var check = true;
-        var nuber = /^[0-9]*$/; //验证数字
-        var nameReg = /^[\u4E00-\u9FA5]{2,4}$/;     //验证人的名字
-        //类别选择
-        if (this.fund_detail_id == '') {
-          mui.toast('类别选择不能为空');
-          check = false
-          return false
-        }
-        //项目名称
-        if (this.fund_detail_transaction_customer_id == '') {
-          mui.toast('项目名称不能为空');
-          check = false
-          return false
-        }
-        //债务人
-        if (this.debtVal == '') {
-          mui.toast('债务人不能为空');
-          check = false
-          return false
-        }
-        if (!nameReg.test(this.debtVal)) {
-          mui.toast('债务人格式错误');
-          check = false
-          return false
-        }
-        //调取应收
-        if (this.retrievalVal == ''){
-          mui.toast('调取应收不能为空');
-          check = false
-          return false
-        }
-        //共有
-        if (this.bank_money == '') {
-          mui.toast('共有不能为空');
-          check = false
-          return false
-        }
-        if (!nuber.test(this.bank_money)) {
-          mui.toast('共有只能输入数字');
-          check = false
-          return false
-        }
-        //转入
-        if (this.bank_id == '') {
-          mui.toast('转出不能为空');
-          check = false
-          return false
-        }else{
-          for (var index in this.chuXu){
-            if (parseInt(this.chuXu[index].bank_id) === this.bank_out_id) {
-              if (parseInt(this.chuXu[index].bank_money) < parseInt(this.bank_deal_money)) {
-                mui.toast('卡内余额不能大于交易余额');
-                check = false;
-                return false;
-              }
-            }else{
-              if (parseInt(this.addMoneys) > parseInt(this.chuXu[index].bank_out_id)){
-                mui.toast('实际转账不能大于信用卡额度');
-                check = false;
-                return false;
-              }
-            }
-          }
-        }
-
-        this.fund_detail_transaction_bank_id = this.bank_id
-
-        var add = '?fund_detail_id='+this.fund_detail_id+ '&fund_detail_transaction_bank_id='+this.fund_detail_transaction_bank_id+'&fund_detail_transaction_customer_id='+this.fund_detail_transaction_customer_id+'&fund_detail_transaction_type='+
-          this.fund_detail_transaction_type+'&fund_detail_transaction_money='+this.bank_money
-        this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_detail_transaction'+add).then(res=>{
-          this.listAdd = res.data
-          if (res.status === 200) {
-            mui.alert('保存成功',function () {
-              then.$router.push({name:'cash_flow'})
-            });
-          }else{
-            alert('保存失败')
-          }
-        })
-      },
-      btnHref(){
-        this.$router.push({name:'income_pay'})
-      }
+    btnHref () {
+      this.$router.push({ name: 'income_pay' })
     }
   }
+}
 </script>
 
 <style scoped>

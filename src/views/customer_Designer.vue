@@ -27,24 +27,24 @@
 </template>
 
 <script>
-  export default {
-    name: 'customer_Designer',
-    data(){
-      return{
-        name:'',
-      }
-    },
-    methods:{
-      add(){
-        var then = this
-        this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/addCustomer_stylist?Customer_stylist='+this.name+'&Customer_aftersale=0').then(res=>{
-          mui.alert(res.data.msg,function () {
-            then.$router.push({name:'customer_management'})
-          })
+export default {
+  name: 'customer_Designer',
+  data () {
+    return {
+      name: ''
+    }
+  },
+  methods: {
+    add () {
+      var then = this
+      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/addCustomer_stylist?Customer_stylist=' + this.name + '&Customer_aftersale=0').then(res => {
+        mui.alert(res.data.msg, function () {
+          then.$router.push({ name: 'customer_management' })
         })
-      }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

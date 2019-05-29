@@ -55,17 +55,17 @@ export default {
   name: 'account_translation_one',
   data () {
     return {
-      list:'',
-      all_money:'',
-      smoney:'',
+      list: '',
+      all_money: '',
+      smoney: '',
       cumoterName: '',
       person: '',
-      text:'',
-      date:'',
-      id:''
+      text: '',
+      date: '',
+      id: ''
     }
   },
-  created(){
+  created () {
     var loc = location.href
     var n1 = loc.length// 地址的总长度
     var n2 = loc.indexOf('=')// 取得=号的位置
@@ -76,16 +76,16 @@ export default {
     var lists = []
     for (var index in this.list) {
       var a1 = this.list[index].indexOf('&')
-      var a2 = this.list[index].slice(0,a1)
+      var a2 = this.list[index].slice(0, a1)
       lists.push(a2)
     }
-      this.id = lists[0]
-      this.all_money = lists[1]
-      this.smoney = lists[1]
-      this.cumoterName = lists[2]
-      this.person = lists[3]
-      this.text = lists[4]
-      this.date = lists[5]
+    this.id = lists[0]
+    this.all_money = lists[1]
+    this.smoney = lists[1]
+    this.cumoterName = lists[2]
+    this.person = lists[3]
+    this.text = lists[4]
+    this.date = lists[5]
   },
   methods: {
     add () {
@@ -98,7 +98,7 @@ export default {
         check = false
         return false
       }
-      //实际转账
+      // 实际转账
       if (this.smoney == '') {
         mui.toast('实际转账不能为空')
         check = false
@@ -109,11 +109,11 @@ export default {
         check = false
         return false
       }
-      var add = 'money='+this.smoney+'&fund_details_id='+this.id+'&date='+this.date
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_details?'+add).then(res=>{
-          mui.alert(res.data,function () {
-            then.$router.push({name:'money_receivable'})
-          })
+      var add = 'money=' + this.smoney + '&fund_details_id=' + this.id + '&date=' + this.date
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_details?' + add).then(res => {
+        mui.alert(res.data, function () {
+          then.$router.push({ name: 'money_receivable' })
+        })
       })
     }
   }

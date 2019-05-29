@@ -30,55 +30,54 @@
 </template>
 
 <script>
-  export default {
-    name: 'SettingPwd',
-    data(){
-      return{
-        user_number:'',//用户名
-        pwd:'',//原密码
-        user_password:'',//新密码
+export default {
+  name: 'SettingPwd',
+  data () {
+    return {
+      user_number: '', // 用户名
+      pwd: '', // 原密码
+      user_password: ''// 新密码
+    }
+  },
+  methods: {
+    go () {
+      var then = this
+      var check = true
+      var reg = /^[^\s]*$/ // 不能有空格
+      if (this.user_number == '') {
+        mui.toast('用户名不能为空')
+        check = false
+        return false
       }
-    },
-    methods:{
-      go(){
-        var then = this
-        var check = true
-        var reg = /^[^\s]*$/; //不能有空格
-        if (this.user_number == '') {
-          mui.toast('用户名不能为空')
-          check = false
-          return false
-        }
-        if (this.pwd == '') {
-          mui.toast('原密码不能为空')
-          check = false
-          return false
-        }
-        if (this.user_password == '') {
-          mui.toast('新密码不能为空')
-          check = false
-          return false
-        }
-        if (!reg.test(this.user_password)) {
-          mui.toast('新密码不能有空格')
-          check = false
-          return false
-        }
-
-
-        var add = '?user_number='+this.user_number+'&pwd='+this.pwd+'&user_password='+this.user_password
-        this.axios.get('https://formattingclub.com/YiNuoLogin/User/update_user'+add).then(res=>{
-          if (res.data.msg === '修改成功') {
-            mui.alert('修改成功',function () {
-              then.$router.push({name:'login'})
-            })
-          }else{
-            mui.alert('修改失败')
-          }
-        })
+      if (this.pwd == '') {
+        mui.toast('原密码不能为空')
+        check = false
+        return false
       }
+      if (this.user_password == '') {
+        mui.toast('新密码不能为空')
+        check = false
+        return false
+      }
+      if (!reg.test(this.user_password)) {
+        mui.toast('新密码不能有空格')
+        check = false
+        return false
+      }
+
+      var add = '?user_number=' + this.user_number + '&pwd=' + this.pwd + '&user_password=' + this.user_password
+      this.axios.get('https://formattingclub.com/YiNuoLogin/User/update_user' + add).then(res => {
+        if (res.data.msg === '修改成功') {
+          mui.alert('修改成功', function () {
+            then.$router.push({ name: 'login' })
+          })
+        } else {
+          mui.alert('修改失败')
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

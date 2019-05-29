@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Login from './views/Login.vue' // 登录界面
 import Index from './views/Index.vue' // 九宫格
 import Setting from './views/Setting' // 设置
@@ -40,6 +41,10 @@ import income_pay from './views/income_pay' // 转为应付
 import expenditure from './views/expenditure' // 支出
 import expenditure_receive from './views/expenditure_receive' // 转为应收
 import bank_card from './views/bank_card' // 银行卡录入
+import administrative from './views/administrative' // 行政管理
+import company_announcement from './views/company_announcement' // 公司公告
+import announcement_entry from './views/announcement_entry' // 公告录入
+import Project_Reconciliation from './views/Project_Reconciliation' // 项目对账
 
 Vue.use(Router)
 export default new Router({
@@ -57,11 +62,11 @@ export default new Router({
       path: '/Setting',
       name: 'Setting',
       component: Setting
-    },{
+    }, {
       path: '/SettingPwd',
       name: 'SettingPwd',
       component: SettingPwd
-    },{
+    }, {
       path: '/SettingName',
       name: 'SettingName',
       component: SettingName
@@ -206,6 +211,22 @@ export default new Router({
       path: '/money_projet',
       name: 'money_projet',
       component: money_projet
+    }, {
+      path: '/administrative',
+      name: 'administrative',
+      component: administrative
+    }, {
+      path: '/company_announcement',
+      name: 'company_announcement',
+      component: company_announcement
+    }, {
+      path: '/announcement_entry',
+      name: 'announcement_entry',
+      component: announcement_entry
+    }, {
+      path: '/Project_Reconciliation',
+      name: 'Project_Reconciliation',
+      component: Project_Reconciliation
     }
     /* {
       path:'/home',
