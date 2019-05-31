@@ -1,14 +1,14 @@
 <template>
-    <div class="money_Responsible">
+    <div class="Follow_up">
       <!--头部-->
       <header class="mui-bar mui-bar-nav header-top">
         <router-link :to="{name:'money_sale'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
-        <h1 class="mui-title">责任人添加</h1>
+        <h1 class="mui-title">跟进人添加</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
       <!--客户管理-->
       <div class="one-noble">
-        <h2>责任人添加</h2>
+        <h2>跟进人添加</h2>
         <p>Customer management</p>
       </div>
       <!--input-->
@@ -27,24 +27,24 @@
 </template>
 
 <script>
-export default {
-  name: 'money_Responsible',
-  data () {
-    return {
-      name:''
-    }
-  },
-  methods: {
-    add () {
-      var then = this
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/addCustomer_stylist?Customer_stylist=' + this.name + '&Customer_aftersale=1').then(res => {
-        mui.alert(res.data.msg, function () {
-          then.$router.push({ name: 'money_sale' })
+  export default {
+    name: 'Follow_up',
+    data(){
+      return{
+        name:''
+      }
+    },
+    methods:{
+      add(){
+        var then = this
+        this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/Add_Follow_person?Follow_person=' + this.name + '&Customer_aftersale=1').then(res => {
+          mui.alert(res.data.msg, function () {
+            then.$router.push({ name: 'money_sale' })
+          })
         })
-      })
+      }
     }
   }
-}
 </script>
 
 <style scoped>

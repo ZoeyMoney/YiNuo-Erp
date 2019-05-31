@@ -270,15 +270,8 @@ export default {
       }
       // 判断阶段付款、周期付款
       if (this.fund_type === '阶段付款') {
-        var data = document.getElementById('fund_details_date').value // 日期
         var data_money = document.getElementById('fund_details_money').value // 金额
         var data_text = document.getElementById('fund_details_batch').value // 批次
-        // 日期
-        if (data == '') {
-          mui.toast('日期不能为空')
-          check = false
-          return false
-        }
         // 金额
         if (data_money == '') {
           mui.toast('金额不能为空')

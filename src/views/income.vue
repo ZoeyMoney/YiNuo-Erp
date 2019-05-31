@@ -17,53 +17,60 @@
       <div class="mui-content app">
         <form class="mui-input-group">
           <div class="mui-input-row">
-            <label>类别选择</label>
-            <select name="" v-model="fund_detail_id" id="dateil">
+            <!--个人公司-->
+            <label>类别名称</label>
+            <select name="" v-model="fund_detail_id" @change="fund_deId(fund_detail_id)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in selectEnterFundName" :value="item.fund_id">{{item.fund_name}}</option>
+              <option v-for="item in projet" :value="item.text">{{item.text}}</option>
             </select>
           </div>
-          <div class="mui-input-row">
-            <label>项目名称</label>
-            <select name="" v-model="fund_detail_transaction_customer_id" id="projet">
+          <!--红包-->
+          <div class="mui-input-row detailed" ref="personal">
+            <label>款项名称</label>
+            <select name="" v-model="detailed">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in projet" :value="item.customer_id">{{item.customer_name}}</option>
+              <option v-for="item in listDetailed" :value="item.Red">{{item.Red}}</option>
             </select>
           </div>
-          <div class="mui-input-row">
-            <label>债务人</label>
-            <input type="text" class="mui-input-clear" v-model="debtVal" id="debtval" placeholder="债务人">
-          </div>
-          <div class="mui-input-row">
-            <label>收款备注</label>
-            <input type="text" class="mui-input-clear" id="clearBei" placeholder="备注" v-model="fund_detail_transaction_type">
-          </div>
-        </form>
-        <form class="mui-input-group form-check">
-          <div class="mui-input-row">
-            <label>调取应付</label>
-            <select name="" v-model="retrievalVal" id="retrieval">
+          <!--工程外借款-->
+          <div class="mui-input-row the_company" ref="the_company">
+            <label>款项名称</label>
+            <select name="" v-model="the_company" @change="the_companyYi(the_company)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in retrieval" :value="item.fund_details_batch">{{item.fund_details_batch}}</option>
+              <option v-for="item in listThe_company" :value="item.text">{{item.text}}</option>
             </select>
           </div>
-        </form>
-        <!--第二个form-->
-        <form class="mui-input-group form-check">
-          <div class="mui-input-row">
-            <label>共有</label>
-            <input type="text" class="mui-input-clear" id="all-money" placeholder="如：900,000" v-model="bank_money">
-          </div>
-          <div class="mui-input-row">
-            <label>转账费率</label>
-            <select name="" id="rate" v-model="bank_deal_rate">
+          <!--设计费工程款-->
+          <div class="mui-input-row slim" ref="slim">
+            <label>款项详细</label>
+            <select name="" v-model="slim">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in listD" :value="item.Tnumber">{{item.Tnumber}}%</option>
+              <option v-for="item in listSlim" :value="item.text">{{item.text}}</option>
             </select>
           </div>
+          <!--外借款-->
+          <div class="mui-input-row slim_wai" ref="slim_wai">
+            <label>款项详细</label>
+            <select name="" v-model="slim">
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in listSlim_wai" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row relevant_people" ref="relevant_people">
+            <label>相关人</label>
+            <input type="text" class="mui-input-clear" v-model="relevant_people_dat" placeholder="请输入相关人">
+          </div>
+          <div class="mui-input-row site_projet" ref="site_projet">
+            <label>工地名称</label>
+            <input type="text" class="mui-input-clear" v-model="site" placeholder="请输入工地名称">
+          </div>
           <div class="mui-input-row">
-            <label>实际转账</label>
-            <input type="text" class="mui-input-clear" placeholder="如：6,000" v-model="addMoney" disabled="disabled">
+            <label>金额</label>
+            <input type="text" class="mui-input-clear" v-model="money" placeholder="请输入金额">
+          </div>
+          <div class="mui-input-row">
+            <label>备注</label>
+            <input type="text" class="mui-input-clear" v-model="clearBei" placeholder="请输入备注">
           </div>
           <div class="mui-input-row row-label">
             <label>转入账户</label>
@@ -77,12 +84,10 @@
               </select>
             </label>
           </div>
-
-          <div class="mui-input-row form-btn">
-            <button type="button" id="btn-href" class="mui-btn mui-btn-blue" @click="btnHref">转为应付</button>
-            <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">Transfers</button>
-          </div>
         </form>
+        <div class="mui-input-row form-btn">
+          <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">Transfers</button>
+        </div>
         <!--table-->
         <div class="mui-content all">
           <div class="saving">储蓄卡</div>
@@ -134,43 +139,55 @@ export default {
     return {
       time: new Date(),
       bank_id: 0, // id
-      listAdd: [], // 保存
-      projet: '',	// 项目名称
-      fund_detail_transaction_customer_id: '',	// 渲染主
-      selectEnterFundName: '',	// 类别选择
+      projet: [// 项目名称
+        {text:'个人'},
+        {text:'公司'},
+      ],
+      detailed:'',  //类别详细
+      listDetailed:[
+        {Red:'红包'},
+        {Red:'工资'},
+        {Red:'还款'},
+      ],
+      the_company:'',
+      listThe_company:[
+        {text:'工程'},
+        {text:'外借款'},
+      ],
+      listTable: '',	// 类别选择
+      slim:'',  //类别详细
+      listSlim:[
+        {text:'设计费'},
+        {text:'工程款'},
+        {text:'售后维修'},
+        {text:'处罚'},
+        {text:'押金'},
+        {text:'物品出售'}
+      ],
+      slim_wai:'',//外借款
+      listSlim_wai:[
+        {text:'银行'},
+        {text:'私人'},
+        {text:'亲戚朋友'},
+        {text:'网络平台'},
+        {text:'利息'},
+        {text:'外部过户'},
+      ],
+      relevant_people_dat:'',//相关人
+      site:'',//工地
+      money:'',//金额
+      account:'',//账户
+      clearBei:'',//备注
       fund_detail_id: '',		// 工程款
-      retrieval: '',	// 调取应收
-      retrievalVal: '',
-      debt: '',	// 债务人
-      debtVal: '',
       bank_card: '', // 银行卡
-      fund_detail_transaction_type: '', // 备注
-      bank_money: '', // 实际转账
-      bank_deal_rate: '', // 转账费率
       chuXu: '',	// 储蓄卡
       xinY: '',	// 信用卡
       chuXuKa: '', // 储蓄卡总额
       XinYongKa: '', // 储蓄卡总额
-      fund_detail_transaction_bank_id: '',
-      listD: [
-        { Tnumber: 0.6 },
-        { Tnumber: 0.55 }
-      ]
+      fund_name:'', //类别详情id
     }
   },
   created () {
-    /* 项目名称 */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer').then(res => {
-      this.projet = res.data
-    })
-    /* 类别选择 */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/selectEnterFundName').then(res => {
-      this.selectEnterFundName = res.data
-    })
-    /* 调取应收 */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_Enter_Fund_detailsName').then(res => {
-      this.retrieval = res.data
-    })
     /* 银行卡 */
     this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
       this.bank_card = res.data
@@ -204,62 +221,122 @@ export default {
       })
     })
   },
-  computed: {
-    addMoney () {
-      var a = this.bank_money - this.bank_money * this.bank_deal_rate / 100
-      var b = Math.floor(a * 100) / 100
-      return b
-    }
-  },
   methods: {
+    fund_deId(){  //类别选择判断
+      if (this.fund_detail_id === '个人') {
+        //红包类型
+        this.$refs['personal'].style.display = 'block'
+        /*工程类型*/
+        this.$refs['the_company'].style.display = 'none'
+        //相关类型
+        this.$refs['relevant_people'].style.display = 'block'
+        //工地名称
+        this.$refs['site_projet'].style.display = 'none'
+        //银行
+        this.$refs['slim'].style.display ='none'
+        this.$refs['slim_wai'].style.display ='none'
+      }else if (this.fund_detail_id === '公司') {
+        this.$refs['the_company'].style.display = 'block'
+        this.$refs['personal'].style.display = 'none'
+        this.$refs['relevant_people'].style.display = 'none'
+        this.$refs['site_projet'].style.display = 'block'
+      }
+    },
+    the_companyYi(){
+      if (this.the_company === '工程') {
+        this.$refs['personal'].style.display ='none'
+        this.$refs['slim'].style.display = 'block'
+        this.$refs['slim_wai'].style.display = 'none'
+      }else if (this.the_company === '外借款') {
+        this.$refs['slim_wai'].style.display ='block'
+        this.$refs['slim'].style.display = 'none'
+        this.$refs['site_projet'].style.display = 'none'
+        //相关类型
+        this.$refs['relevant_people'].style.display = 'block'
+      }
+    },
+    //添加
     add () {
       var then = this
       var check = true
       var nuber = /^[0-9]*$/ // 验证数字
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
-      // 类别选择
       if (this.fund_detail_id == '') {
         mui.toast('类别选择不能为空')
         check = false
         return false
       }
-      // 项目名称
-      if (this.fund_detail_transaction_customer_id == '') {
-        mui.toast('项目名称不能为空')
+      if (this.fund_detail_id === '个人') {
+        /*款项名称*/
+        if (this.detailed == '') {
+          mui.toast('款项名称不能为空')
+          check = false
+          return false
+        }
+        /*相关人*/
+        if (this.relevant_people_dat == '') {
+          mui.toast('相关人不能为空')
+          check = false
+          return false
+        }
+        if (!nameReg.test(this.relevant_people_dat)) {
+          mui.toast('相关人格式错误')
+          check = false
+          return false
+        }
+
+      }else if (this.fund_detail_id === '公司') {
+        //款项名称
+        if (this.the_company == '') {
+          mui.toast('款项名称不能为空')
+          check = false
+          return false
+        }
+      //  款项详细
+        if (this.slim == '') {
+          mui.toast('款项详细不能为空')
+          check = false
+          return false
+        }
+      //  工地
+        if (this.site == '') {
+          mui.toast('工地名称不能为空')
+          check = false
+          return false
+        }
+      }else if (this.the_company === '外借款') {
+        //  款项详细
+        if (this.slim == '') {
+          mui.toast('款项详细不能为空')
+          check = false
+          return false
+        }
+        /*相关人*/
+        if (this.relevant_people_dat == '') {
+          mui.toast('相关人不能为空')
+          check = false
+          return false
+        }
+        if (!nameReg.test(this.relevant_people_dat)) {
+          mui.toast('相关人格式错误')
+          check = false
+          return false
+        }
+      }
+      /*金额*/
+      if (this.money == '') {
+        mui.toast('金额不能为空')
         check = false
         return false
       }
-      // 债务人
-      if (this.debtVal == '') {
-        mui.toast('债务人不能为空')
-        check = false
-        return false
-      }
-      if (!nameReg.test(this.debtVal)) {
-        mui.toast('债务人格式错误')
-        check = false
-        return false
-      }
-      // 调取应收
-      if (this.retrievalVal == '') {
-        mui.toast('调取应收不能为空')
-        check = false
-        return false
-      }
-      // 共有
-      if (this.bank_money == '') {
-        mui.toast('共有不能为空')
-        check = false
-        return false
-      }
-      if (!nuber.test(this.bank_money)) {
-        mui.toast('共有只能输入数字')
+      if (!nuber.test(this.money)) {
+        mui.toast('金额只能为纯数字')
         check = false
         return false
       }
       // 转入
       if (this.bank_id == '') {
-        mui.toast('转出不能为空')
+        mui.toast('转入账户不能为空')
         check = false
         return false
       } else {
@@ -280,23 +357,6 @@ export default {
         }
       }
 
-      this.fund_detail_transaction_bank_id = this.bank_id
-
-      var add = '?fund_detail_id=' + this.fund_detail_id + '&fund_detail_transaction_bank_id=' + this.fund_detail_transaction_bank_id + '&fund_detail_transaction_customer_id=' + this.fund_detail_transaction_customer_id + '&fund_detail_transaction_type=' +
-          this.fund_detail_transaction_type + '&fund_detail_transaction_money=' + this.bank_money
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_detail_transaction' + add).then(res => {
-        this.listAdd = res.data
-        if (res.status === 200) {
-          mui.alert('保存成功', function () {
-            then.$router.push({ name: 'cash_flow' })
-          })
-        } else {
-          alert('保存失败')
-        }
-      })
-    },
-    btnHref () {
-      this.$router.push({ name: 'income_pay' })
     }
   }
 }
@@ -316,22 +376,17 @@ select{font-size: 15px!important;}
   width: 20%;
   flex: 3;
 }
+.detailed,.the_company,.relevant_people,.site_projet,.slim,.slim_wai{display: none}
 .row-label label{width: 20%;}
 .row-label label:nth-child(2)
 ,.row-label label:nth-child(3)
 ,.row-label label:nth-child(4),.row-label label:nth-child(5){padding-top: 0;padding-left: 1px;}
 .row-label label input{padding: 0;}
-/*多选框*/
-.form-btn button{width: 40%!important;float: none!important;}
-.check{flex: 1;text-align: left!important;position: relative;right: 13px;}
-.check label{white-space: nowrap;padding-left: 50px!important;}
-.check input{padding-top: 2px;}
 /*按钮*/
-.form-btn{background-color: #EFEFF4!important;padding-top: 25px;margin-top: 0;padding-bottom: 100px;}
+.mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 37%}
+.form-btn{background-color: #EFEFF4!important;margin-top: 0;}
 .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
 .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}
-/*form底部栏*/
-.check:after,.form-check:after{background-color: transparent!important;}
 /*table*/
 .all{display: flex;margin-bottom: 12px;padding-left: 10px;}
 .saving,.all-money{flex: 1;font-weight: bold}

@@ -8,6 +8,7 @@ import element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import date from './components/date' // 天小时分钟秒
 import data from './components/data' // 年月日
+import NoYes from './components/NoYes' // 待确认
 import MoneyFormat from './components/comma' // 货币逗号分行
 
 Vue.use(element)

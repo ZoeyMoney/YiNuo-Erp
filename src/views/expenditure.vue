@@ -38,18 +38,6 @@
             <label>收款备注</label>
             <input type="text" class="mui-input-clear" id="clearBei" placeholder="备注" v-model="fund_detail_transaction_type">
           </div>
-        </form>
-        <form class="mui-input-group form-check">
-          <div class="mui-input-row">
-            <label>调取应付</label>
-            <select name="" v-model="retrievalVal" id="retrieval">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="item in retrieval" :value="item.fund_details_batch">{{item.fund_details_batch}}</option>
-            </select>
-          </div>
-        </form>
-        <!--第二个form-->
-        <form class="mui-input-group form-check">
           <div class="mui-input-row">
             <label>共有</label>
             <input type="text" class="mui-input-clear" id="all-money" placeholder="如：900,000" v-model="bank_money">

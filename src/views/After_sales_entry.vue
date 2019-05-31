@@ -90,7 +90,7 @@
       return {
         Customer_name: '', // 项目名称
         projet:'',
-        SelectStylistL:'',
+        SelectStylist:'',
         Customer_linkman: '', // 联系人
         Customer_connect: '', // 联系方式
         Customer_stylist: '', // 责任人

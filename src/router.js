@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
 import Login from './views/Login.vue' // 登录界面
 import Index from './views/Index.vue' // 九宫格
 import Setting from './views/Setting' // 设置
@@ -11,6 +10,7 @@ import After_sales_entry from './views/After_sales_entry' // 售后录入
 import After_sales_statistics from './views/After_sales_statistics' // 售后统计
 import Follow_up_after_sale from './views/Follow_up_after_sale' // 售后跟进
 import money_Responsible from './views/money_Responsible' // 责任人录入
+import Follow_up from './views/Follow_up' // 跟进人录入
 import customer_management from './views/customer_management.vue' // 客户管理
 import customer_entry from './views/customer_entry.vue' // 客户录入
 import customer_statistics from './views/customer_statistics.vue' // 客户统计
@@ -37,7 +37,6 @@ import cash_flow from './views/cash_flow' // 现金流水
 import running_money from './views/running_money' // 流水
 import transfer_money from './views/transfer_money' // 转账
 import income from './views/income' // 收入
-import income_pay from './views/income_pay' // 转为应付
 import expenditure from './views/expenditure' // 支出
 import expenditure_receive from './views/expenditure_receive' // 转为应收
 import bank_card from './views/bank_card' // 银行卡录入
@@ -120,6 +119,10 @@ export default new Router({
       name: 'money_receivable',
       component: money_receivable
     }, {
+      path: '/Follow_up',
+      name: 'Follow_up',
+      component: Follow_up
+    }, {
       path: '/money_entry',
       name: 'money_entry',
       component: money_entry
@@ -183,10 +186,6 @@ export default new Router({
       path: '/income',
       name: 'income',
       component: income
-    }, {
-      path: '/income_pay',
-      name: 'income_pay',
-      component: income_pay
     }, {
       path: '/expenditure',
       name: 'expenditure',

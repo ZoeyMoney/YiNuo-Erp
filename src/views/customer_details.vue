@@ -277,6 +277,8 @@ export default {
 /*记录*/
 .jin{display: flex;line-height: 40px;}
 .jin-date{display: flex;width: 100%}
+.gen{flex: 1;text-align: center}
+.jin-date{flex: 4}
 .jin-date p{padding-left: 16px;flex: 1;}
 .jin-date p:nth-child(2){text-align: right;padding-right: 16px;}
 .row-textarea{height: 100px!important;}

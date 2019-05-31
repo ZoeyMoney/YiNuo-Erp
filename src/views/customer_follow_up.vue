@@ -89,13 +89,9 @@ export default {
       //    录入数据
       var add = '?Customer_name=' + this.customer_name + '&follow_person=' + this.follow_person + '&follow_text=' + this.follow_text
       this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/AddFollow' + add).then(res => {
-        if (res.data === '添加成功') {
-          mui.alert('添加成功', function () {
+          mui.alert(res.data, function () {
             then.$router.push('customer_management')
           })
-        } else {
-          mui.alert('添加失败')
-        }
       })
     }
   }

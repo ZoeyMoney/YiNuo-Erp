@@ -34,7 +34,7 @@
         </div>
         <div class="mui-input-row money-input">
           <label>甲方预算</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_DecorateJia" disabled="disabled">
+          <input type="text" class="mui-input-clear" v-model="item.Customer_DecorateJia" disabled="disabled">
           <span class="span-money">{{Customer_DecorateJia | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row money-input">
@@ -167,7 +167,9 @@ export default {
       stageName: '', // 第二个form
       listtime: '', // 倒计时
       stage: '', // 修改记录
-      undata: ''// 修改记录
+      undata: '',// 修改记录
+      Customer_DecorateJia:'',
+      Customer_DecorateYi:'',
     }
   },
   created () {
@@ -291,6 +293,8 @@ export default {
   /*记录*/
   .jin{display: flex;line-height: 40px;}
   .jin-date{display: flex;width: 100%}
+  .gen{flex: 1;text-align: center}
+  .jin-date{flex: 4}
   .jin-date p{padding-left: 16px;flex: 1;}
   .jin-date p:nth-child(2){text-align: right;padding-right: 16px;}
   .row-textarea{height: 100px!important;}
