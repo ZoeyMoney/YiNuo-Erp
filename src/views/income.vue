@@ -20,7 +20,6 @@
             <!--个人公司-->
             <label>类别名称</label>
             <select name="" v-model="fund_detail_id" @change="fund_deId(fund_detail_id)">
-              <option value="" selected="selected">请选择</option>
               <option v-for="item in projet" :value="item.text">{{item.text}}</option>
             </select>
           </div>
@@ -58,11 +57,17 @@
           </div>
           <div class="mui-input-row relevant_people" ref="relevant_people">
             <label>相关人</label>
-            <input type="text" class="mui-input-clear" v-model="relevant_people_dat" placeholder="请输入相关人">
+            <select name="" v-model="relevant_people_dat">
+              <option value="">请选择</option>
+              <option v-for="item in listRelevant" :value="item.text">{{item.text}}</option>
+            </select>
           </div>
           <div class="mui-input-row site_projet" ref="site_projet">
             <label>工地名称</label>
-            <input type="text" class="mui-input-clear" v-model="site" placeholder="请输入工地名称">
+            <select name="" v-model="site">
+              <option value="">请选择</option>
+              <option v-for="item in listProjet" :value="item.customer_id">{{item.customer_name}}</option>
+            </select>
           </div>
           <div class="mui-input-row">
             <label>金额</label>
@@ -85,6 +90,10 @@
             </label>
           </div>
         </form>
+        <div class="mui-input-row mui-checkbox mui-left checkbox">
+          <label>转为应付</label>
+          <input name="checkbox1" value="转为应付" type="checkbox" v-model="checkbox">
+        </div>
         <div class="mui-input-row form-btn">
           <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">Transfers</button>
         </div>
@@ -118,7 +127,6 @@
             <td style="width: 17%">尾号</td>
             <td>余额</td>
             <td>额度</td>
-
           </tr>
           <tr v-for="item in xinY">
             <td>{{item.bank_bank}}</td>
@@ -140,8 +148,8 @@ export default {
       time: new Date(),
       bank_id: 0, // id
       projet: [// 项目名称
-        {text:'个人'},
-        {text:'公司'},
+        {id:'1',text:'个人'},
+        {id:'2',text:'公司'},
       ],
       detailed:'',  //类别详细
       listDetailed:[
@@ -166,28 +174,35 @@ export default {
       ],
       slim_wai:'',//外借款
       listSlim_wai:[
-        {text:'银行'},
-        {text:'私人'},
+        {text:'银行贷款'},
+        {text:'私人贷款'},
         {text:'亲戚朋友'},
         {text:'网络平台'},
         {text:'利息'},
         {text:'外部过户'},
       ],
       relevant_people_dat:'',//相关人
+      listRelevant:[{text:'张三'},{text:'李四'}],
       site:'',//工地
       money:'',//金额
       account:'',//账户
       clearBei:'',//备注
-      fund_detail_id: '',		// 工程款
+      checkbox:'',//复选框
+      fund_detail_id: '公司',		// 工程款
       bank_card: '', // 银行卡
       chuXu: '',	// 储蓄卡
       xinY: '',	// 信用卡
       chuXuKa: '', // 储蓄卡总额
       XinYongKa: '', // 储蓄卡总额
       fund_name:'', //类别详情id
+      listProjet:'',//工地名称
     }
   },
   created () {
+    /*项目名称*/
+    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res=>{
+      this.listProjet = res.data
+    })
     /* 银行卡 */
     this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
       this.bank_card = res.data
@@ -240,6 +255,7 @@ export default {
         this.$refs['personal'].style.display = 'none'
         this.$refs['relevant_people'].style.display = 'none'
         this.$refs['site_projet'].style.display = 'block'
+        this.$refs['site'].style.display = 'none'
       }
     },
     the_companyYi(){
@@ -247,6 +263,8 @@ export default {
         this.$refs['personal'].style.display ='none'
         this.$refs['slim'].style.display = 'block'
         this.$refs['slim_wai'].style.display = 'none'
+        this.$refs['site_projet'].style.display = 'block'
+        this.$refs['relevant_people'].style.display = 'none'
       }else if (this.the_company === '外借款') {
         this.$refs['slim_wai'].style.display ='block'
         this.$refs['slim'].style.display = 'none'
@@ -261,6 +279,7 @@ export default {
       var check = true
       var nuber = /^[0-9]*$/ // 验证数字
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
+      var add = '?fund_name='+this.fund_detail_id
       if (this.fund_detail_id == '') {
         mui.toast('类别选择不能为空')
         check = false
@@ -273,18 +292,8 @@ export default {
           check = false
           return false
         }
-        /*相关人*/
-        if (this.relevant_people_dat == '') {
-          mui.toast('相关人不能为空')
-          check = false
-          return false
-        }
-        if (!nameReg.test(this.relevant_people_dat)) {
-          mui.toast('相关人格式错误')
-          check = false
-          return false
-        }
-
+        add = add+'&fund_names='+this.detailed
+        add = add+'&fund_debtor='+this.relevant_people_dat
       }else if (this.fund_detail_id === '公司') {
         //款项名称
         if (this.the_company == '') {
@@ -292,18 +301,9 @@ export default {
           check = false
           return false
         }
-      //  款项详细
-        if (this.slim == '') {
-          mui.toast('款项详细不能为空')
-          check = false
-          return false
-        }
-      //  工地
-        if (this.site == '') {
-          mui.toast('工地名称不能为空')
-          check = false
-          return false
-        }
+        add = add+'&fund_names='+this.the_company
+        add = add+'&fund_designation='+this.slim
+        add = add+'&customer_id='+this.site
       }else if (this.the_company === '外借款') {
         //  款项详细
         if (this.slim == '') {
@@ -311,17 +311,7 @@ export default {
           check = false
           return false
         }
-        /*相关人*/
-        if (this.relevant_people_dat == '') {
-          mui.toast('相关人不能为空')
-          check = false
-          return false
-        }
-        if (!nameReg.test(this.relevant_people_dat)) {
-          mui.toast('相关人格式错误')
-          check = false
-          return false
-        }
+        add = add+'&customer_id='+this.slim
       }
       /*金额*/
       if (this.money == '') {
@@ -334,6 +324,9 @@ export default {
         check = false
         return false
       }
+
+      add = add+'&money='+this.money
+      add = add+'&fund_text='+this.clearBei
       // 转入
       if (this.bank_id == '') {
         mui.toast('转入账户不能为空')
@@ -355,8 +348,30 @@ export default {
             }
           }
         }
+        add = add+'&bank_id='+this.bank_id
       }
 
+      if (this.checkbox === true) {
+        this.axios.post('https://formattingclub.com/YiNuoLogin/fund/Add_out_enter'+add).then(res=>{
+          var id = ''
+          for (var index in this.listProjet) {
+            if (this.listProjet[index].customer_id === this.site){
+              id = this.listProjet[index].customer_name
+            }
+          }
+          mui.alert(res.data.data,function () {
+              then.$router.push({name:'income_receive',query:{site:id,relevant_people_dat:then.relevant_people_dat,money:then.money,bank_id:then.bank_id}})
+          })
+        })
+      }else{
+        this.axios.post('https://formattingclub.com/YiNuoLogin/fund/Add_out_enter'+add).then(res=>{
+          if (res.data.data === '录入成功') {
+            mui.alert('录入成功', function () {
+              then.$router.push({ name: 'cash_flow' })
+            })
+          }
+        })
+      }
     }
   }
 }
@@ -376,12 +391,15 @@ select{font-size: 15px!important;}
   width: 20%;
   flex: 3;
 }
-.detailed,.the_company,.relevant_people,.site_projet,.slim,.slim_wai{display: none}
+.detailed,.relevant_people,.site_projet,.slim,.slim_wai{display: none}
 .row-label label{width: 20%;}
 .row-label label:nth-child(2)
 ,.row-label label:nth-child(3)
 ,.row-label label:nth-child(4),.row-label label:nth-child(5){padding-top: 0;padding-left: 1px;}
 .row-label label input{padding: 0;}
+/*checkbox*/
+.checkbox label{width: 50%!important;text-align: right}
+.checkbox input{width: 46%;text-align: right}
 /*按钮*/
 .mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 37%}
 .form-btn{background-color: #EFEFF4!important;margin-top: 0;}

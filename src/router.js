@@ -37,10 +37,12 @@ import cash_flow from './views/cash_flow' // 现金流水
 import running_money from './views/running_money' // 流水
 import transfer_money from './views/transfer_money' // 转账
 import income from './views/income' // 收入
+import income_receive from './views/income_receive' // 收入
 import expenditure from './views/expenditure' // 支出
 import expenditure_receive from './views/expenditure_receive' // 转为应收
 import bank_card from './views/bank_card' // 银行卡录入
 import administrative from './views/administrative' // 行政管理
+import adminPunishment from './views/adminPunishment' // 行政处罚
 import company_announcement from './views/company_announcement' // 公司公告
 import announcement_entry from './views/announcement_entry' // 公告录入
 import Project_Reconciliation from './views/Project_Reconciliation' // 项目对账
@@ -187,6 +189,10 @@ export default new Router({
       name: 'income',
       component: income
     }, {
+      path: '/income_receive',
+      name: 'income_receive',
+      component: income_receive
+    }, {
       path: '/expenditure',
       name: 'expenditure',
       component: expenditure
@@ -214,6 +220,10 @@ export default new Router({
       path: '/administrative',
       name: 'administrative',
       component: administrative
+    }, {
+      path: '/adminPunishment',
+      name: 'adminPunishment',
+      component: adminPunishment
     }, {
       path: '/company_announcement',
       name: 'company_announcement',

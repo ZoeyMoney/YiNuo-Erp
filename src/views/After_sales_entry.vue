@@ -111,7 +111,7 @@
     },
     created () {
       /*项目名称*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res=>{
+      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectAllCustomer').then(res=>{
         this.projet = res.data
       })
       /*责任人*/
@@ -120,7 +120,6 @@
       })
     },
     methods: {
-
       go () {
         var _this = this
         var check = true

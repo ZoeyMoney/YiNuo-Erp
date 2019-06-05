@@ -125,7 +125,6 @@ export default {
       qi: '', // 还款期数
       list: [
         { 'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '', 'fund_details_text': '' },
-        { 'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '', 'fund_details_text': '' }
       ]
     }
   },

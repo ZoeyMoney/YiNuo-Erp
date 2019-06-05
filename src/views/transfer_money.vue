@@ -29,7 +29,7 @@
           </div>
           <div class="mui-input-row">
             <label>实际转账</label>
-            <input type="text" class="mui-input-clear" id="transfer" placeholder="如：6,000" v-model="addMoneys" disabled="disabled">
+            <input type="text" class="mui-input-clear" id="transfer" placeholder="如：6,000" v-model="addMoneys">
           </div>
           <div class="mui-input-row row-label">
             <label>转出</label>

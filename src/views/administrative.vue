@@ -37,7 +37,8 @@ export default {
         { href: '', listImg: require('../image/chufa.png'), text: '处罚统计' },
         { href: '', listImg: require('../image/sj.png'), text: '周三事件' },
         { href: '', listImg: require('../image/sp.png'), text: '审批管理' },
-        { href: '', listImg: require('../image/r.png'), text: '个人中心' }
+        { href: '', listImg: require('../image/r.png'), text: '个人中心' },
+        { href: 'adminPunishment', listImg: require('../image/chuaf.png'), text: '行政处罚' },
       ]
     }
   },

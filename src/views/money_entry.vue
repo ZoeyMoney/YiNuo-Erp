@@ -130,7 +130,6 @@ export default {
       qi:'',
       list: [
         { 'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '', 'fund_details_text': '' },
-        { 'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '', 'fund_details_text': '' }
       ]
     }
   },

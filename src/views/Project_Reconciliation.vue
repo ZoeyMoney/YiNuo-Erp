@@ -27,6 +27,18 @@
         <template>
           <el-tabs v-model="activeName" type="card" @tab-click="first_hos" >
             <el-tab-pane label="已付款" name="first" v-model="hos">
+              <tbody ref="activeName">
+              <template>
+                <el-select v-model="value" placeholder="关键字搜索">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </template>
+              </tbody>
               <table>
                 <tr>
                   <th>工地名称</th>
@@ -43,6 +55,18 @@
               </table>
             </el-tab-pane>
             <el-tab-pane label="未付款" name="second" v-model="second">
+              <tbody ref="second">
+              <template>
+                <el-select v-model="value" placeholder="关键字搜索">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </template>
+              </tbody>
               <table>
                 <tr>
                   <th>工地名称</th>
@@ -58,7 +82,19 @@
                 </tr>
               </table>
             </el-tab-pane>
-            <el-tab-pane label="未付款" name="paid_for" v-if="paid_for">
+            <el-tab-pane label="已收款" name="paid_for" v-if="paid_for">
+              <tbody ref="paid_for">
+              <template>
+                <el-select v-model="value" placeholder="关键字搜索">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </template>
+              </tbody>
               <table>
                 <tr>
                   <th>工地名称</th>
@@ -74,7 +110,19 @@
                 </tr>
               </table>
             </el-tab-pane>
-            <el-tab-pane label="已付款" name="Uncollected" v-if="Uncollected">
+            <el-tab-pane label="未收款" name="Uncollected" v-if="Uncollected">
+              <tbody ref="Uncollected">
+              <template>
+                <el-select v-model="value" placeholder="关键字搜索">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </template>
+              </tbody>
               <table>
                 <tr>
                   <th>工地名称</th>
@@ -102,6 +150,23 @@
     data(){
       return{
         activeName: 'first',
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: '',
         name:'',
         list:'',
         first:'',
@@ -159,10 +224,18 @@
             /*有权限则显示*/
             this.paid_for = true
             this.Uncollected = true
+            this.$refs['planone'].style.display = 'block'
+            this.$refs['second'].style.display = 'block'
+            this.$refs['paid_for'].style.display = 'block'
+            this.$refs['Uncollected'].style.display = 'block'
           }else{
             /*无权限则消失*/
             this.paid_for =false
             this.Uncollected = false
+            this.$refs['activeName'].style.display = 'none'
+            this.$refs['second'].style.display = 'none'
+            this.$refs['paid_for'].style.display = 'none'
+            this.$refs['Uncollected'].style.display = 'none'
           }
       })
         this.axios.get('https://formattingclub.com/YiNuoLogin/User/Select_accounting?fund_details_state=1').then(res=>{
@@ -217,6 +290,10 @@
   table{width: 100%;text-align: left;font-size: 15px;}
   table tr {line-height: 29px;border-bottom: 1px solid #DADADA}
   table th{text-align: left;background-color: #DADADA;line-height: 32px;white-space: nowrap}
+  tbody{display: block;}
+  /*搜索*/
+  .el-input--suffix .el-input__inner{margin-bottom: 0}
+  .el-select{width: 100%}
 }
 
 </style>

@@ -39,7 +39,7 @@ export default {
   methods: {
     add () {
       var then = this
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/addCustomer_name?Customr_name=' + this.site_projet).then(res => {
+      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/addCustomer_name?Customr_name=' + this.site_projet).then(res => {
         mui.alert(res.data.msg, function () {
           then.$router.push({ name: 'money_sale' })
         })
