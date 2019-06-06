@@ -201,7 +201,7 @@ export default {
   computed:{
     /*费用共计*/
     allMoney(){
-      var a = parseInt(this.originMoney) + parseInt(this.originOffer)
+      var a = parseInt(this.contractMoney) + parseInt(this.contractOffer)
       return a
     }
   },

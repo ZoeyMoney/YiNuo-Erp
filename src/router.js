@@ -18,6 +18,8 @@ import customer_follow_up from './views/customer_follow_up.vue' // 客户跟进
 import customer_Designer from './views/customer_Designer.vue' // 客户设计师添加
 import site_management from './views/site_management.vue' // 工地管理
 import site_entry from './views/site_entry' // 工地录入
+import site_statistics from './views/site_statistics' // 工地统计
+import site_Inspection from './views/site_Inspection' // 工地巡检
 import customer_details from './views/customer_details' // 客户详细
 import site_details from './views/site_details' // 工地详细
 import site_modify from './views/site_modify' // 修改信息
@@ -212,6 +214,14 @@ export default new Router({
       path: '/siteModify',
       name: 'siteModify',
       component: siteModify
+    }, {
+      path: '/site_statistics',
+      name: 'site_statistics',
+      component: site_statistics
+    }, {
+      path: '/site_Inspection',
+      name: 'site_Inspection',
+      component: site_Inspection
     }, {
       path: '/money_projet',
       name: 'money_projet',

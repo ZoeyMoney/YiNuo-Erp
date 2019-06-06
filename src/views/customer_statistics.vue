@@ -180,9 +180,6 @@ export default {
     }
 
   },
-  computed: {
-
-  }
 }
 </script>
 
