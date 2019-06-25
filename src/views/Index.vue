@@ -54,7 +54,8 @@ export default {
         { href: '', ImgArr: require('../image/data.png'), text: '数据汇总' },
         { href: 'cash_flow', ImgArr: require('../image/xianjin.png'), text: '现金流水' },
         { href: 'Project_Reconciliation', ImgArr: require('../image/xiangmduiz.png'), text: '项目对账' },
-        { href: 'money_sale', ImgArr: require('../image/souhou.png'), text: '售后信息' }
+        { href: 'money_sale', ImgArr: require('../image/souhou.png'), text: '售后信息' },
+        { href: 'summary_entry', ImgArr: require('../image/Summary.png'), text: '数据录入' },
       ]
     }
   }

@@ -18,24 +18,28 @@
         <form class="mui-input-group">
           <div class="mui-input-row">
             <label>类别选择</label>
-            <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
+            <select name="" v-model="fund_detail_id" @change="fund_deId(fund_detail_id)">
               <option value="">请选择</option>
-              <option v-for="item in list_fund_names" :value="item.fund_names">{{item.fund_names}}</option>
+              <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
             </select>
           </div>
           <div class="mui-input-row">
-            <label>类别详情</label>
-            <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)">
+            <label>款项名称</label>
+            <select name="" v-model="detailed" @change="list_fund_nameas(detailed)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_fund_name" :value="item.fund_name">{{item.fund_name}}</option>
+              <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="cotrProjet">{{item.fund_names}}</option>
+              <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row" v-if="category">
+            <label>款项详细</label>
+            <select name="" v-model="slim">
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>项目名称</label>
-            <!--<select name="" v-model="customer_name">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="item in projet" :value="item.customer_name">{{item.customer_name}}</option>
-            </select>-->
             <input type="text" class="mui-input-clear" placeholder="请输入总金额" v-model="id" disabled="disabled">
           </div>
           <div class="mui-input-row" ref="no">
@@ -45,6 +49,17 @@
           <div class="mui-input-row">
             <label>总金额</label>
             <input type="text" class="mui-input-clear" placeholder="请输入总金额" v-model="moneys">
+          </div>
+          <div class="mui-input-row">
+            <label>手续费</label>
+            <select name="" v-model="money_rate">
+              <option value="">请选择</option>
+              <option v-for="item in list_money_rate" :value="item.text">{{item.text}}%</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>实际应收</label>
+            <input type="text" class="mui-input-clear" v-model="money_actual" placeholder="请输入金额">
           </div>
           <div class="mui-input-row">
             <label>备注</label>
@@ -109,16 +124,22 @@ export default {
   name: 'expenditure_receive',
   data () {
     return {
+      category:true,
+      cotrProjet:false,
+      idProjet:true,
       fund_type:'阶段付款',
+      fund_detail_id:'',
+      detailed:'',
       id:'',
       fund_nameo:'',
       fund_text:'',
-      listTable:'',
-      list_fund_names:'',
+      list_fund_name_type:'',
+      slim:'',
       list_fund_namea:'',
       list_fund_name:'',
       customer_name:'',
       list_customer_name:'',
+      list_fund_names:'',
       data_huan:'',
       projet:'',
       yue:'',
@@ -132,6 +153,7 @@ export default {
     }
   },
   created () {
+    //接收数据
     var loc = location.href
     var n1 = loc.length// 地址的总长度
     var n2 = loc.indexOf('=')// 取得=号的位置
@@ -147,14 +169,14 @@ export default {
     this.id = lists[0]
     this.nameo = lists[1]
     this.moneys = lists[2]
+    this.fund_text = lists[3]
     /*项目名称*/
     this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res=>{
       this.projet = res.data
     })
     /* table */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=1').then(res => {
-      this.listTable = res.data.list_fund
-      this.list_fund_names = res.data.list_fund_names
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1').then(res => {
+      this.list_fund_name_type = res.data.fund_name_type
     }, error => {
       var then = this
       mui.alert('您无权访问', function () {
@@ -163,12 +185,24 @@ export default {
     })
   },
   methods: {
-    // 类别选择
-    fund_namesa (id) {
+    //一级查询
+    fund_deId(id){
       this.fund_nameso = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=1&fund_names=' + this.fund_nameso).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name = res.data.list_fund_name
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_name_type=' + this.fund_nameso).then(res => {
+        this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_names = res.data.fund_names
+        this.list_fund_name = res.data.fund_name
+        if (this.fund_detail_id === '个人') {
+          this.category = false
+          this.site_projet = false
+          this.relevant_people = true
+        }else if (this.fund_detail_id === '公司') {
+          this.category = true
+          this.cotrProjet = true
+          this.idProjet = false
+          this.relevant_people = false
+          this.site_projet = true
+        }
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {
@@ -176,13 +210,23 @@ export default {
         })
       })
     },
-    // 类别详情
-    list_fund_nameas (id) {
+    //二级查询
+    list_fund_nameas(id){
       this.fund_name = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=1&fund_names=' + this.fund_nameso + '&fund_name=' + id).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name = res.data.list_fund_name
-        this.list_customer_name = res.data.list_customer_name
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+        this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_names = res.data.fund_names
+        this.list_fund_name = res.data.fund_name
+        if (this.detailed === '现金周转'){
+          this.site_projet = false
+          this.relevant_people = true
+        }else if (this.detailed === '工程') {
+          this.relevant_people = false
+          this.site_projet = true
+        }else if (this.detailed === '营业费') {
+          this.relevant_people = true
+          this.site_projet = false
+        }
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {
@@ -215,19 +259,6 @@ export default {
       var nuber = /^[0-9]*$/ // 验证数字
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
       var check = true
-
-      //  类别选择
-      if (this.fund_nameo == '') {
-        mui.toast('类别选择不能为空')
-        check = false
-        return false
-      }
-      //类别详情
-      if (this.list_fund_namea == '') {
-        mui.toast('类别详情不能为空')
-        check = false
-        return false
-      }
       // 总金额
       if (this.moneys == '') {
         mui.toast('总金额不能为空')
@@ -322,7 +353,6 @@ export default {
           return false
         }
       }
-      var money = ~this.moneys+1
       var data_huan = new Date(this.data_huan)
       var zhouqi = this.yue
       var qishu = this.qi
@@ -384,11 +414,11 @@ export default {
           fund_customer_id: add,
           fund_workyard_pact_id: 1,
           fund_debtor: this.nameo,
-          fund_name: this.fund_name,
-          fund_money: money,
+          fund_name: this.detailed,
+          fund_money: this.moneys,
           fund_person: 5,
           fund_text: this.fund_text,
-          fund_type: this.fund_type
+          fund_type: this.fund_type,
         },
         //把json格式编码转为x-www-form-urlencoded
         transformRequest: [function (data) {

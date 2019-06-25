@@ -1,4 +1,6 @@
 * { touch-action: pan-y; }
+/*select*/
+select{font-size: 15px}
 input,select,textarea{font-size: 15px;background-color: transparent;}
 /*top*/
 .header-top{position: relative;}

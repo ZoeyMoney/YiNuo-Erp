@@ -11,5 +11,7 @@ Vue.filter('data', function (data) {
               var MM =dt.getMinutes();
               var s = dt.getSeconds(); */
     return `${y}-${m}-${d}`
+
   }
+
 })

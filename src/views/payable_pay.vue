@@ -17,7 +17,7 @@
     <div class="mui-content app">
       <form class="mui-input-group">
         <div class="mui-input-row">
-          <label>项目名称</label>
+          <label>工地名称</label>
           <input type="text" class="mui-input-clear" placeholder="请输项目名称" v-model="cumoterName" disabled="disabled">
         </div>
         <div class="mui-input-row">
@@ -44,7 +44,7 @@
         </div>
       </form>
       <div class="form-botton">
-        <button type="button" class="mui-btn mui-btn-black" @click="add">立即支付</button>
+        <button type="button" class="mui-btn mui-btn-black" @click="add">立即保存</button>
       </div>
     </div>
   </div>
@@ -62,6 +62,7 @@ export default {
       person: '',
       text: '',
       date: '',
+      fund_details_id:'',
       id: ''
     }
   },
@@ -108,6 +109,7 @@ export default {
         check = false
         return false
       }
+      this.smoney = ~this.smoney+1
       var add = 'money=' + this.smoney + '&fund_details_id=' + this.id + '&date=' + this.date
       this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_details?' + add).then(res => {
         mui.alert(res.data, function () {

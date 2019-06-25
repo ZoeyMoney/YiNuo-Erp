@@ -24,17 +24,24 @@
             <li>其他费用：￥100000</li>
           </ul>
         </div>
+        <div class="mui-input-row input-top" v-if="AdminName">
+          <label>账号选择：</label>
+          <select name="">
+            <option value="">请选择</option>
+            <option value="1">123123</option>
+          </select>
+        </div>
         <template>
           <el-tabs v-model="activeName" type="card" @tab-click="first_hos" >
             <el-tab-pane label="已付款" name="first" v-model="hos">
               <tbody ref="activeName">
               <template>
-                <el-select v-model="value" placeholder="关键字搜索">
+                <el-select v-model="value" placeholder="关键字搜索" v-if="AdminSearch" @change="Paid(value)">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
                     :label="item.label"
-                    :value="item.value">
+                    :value="item.label">
                   </el-option>
                 </el-select>
               </template>
@@ -57,7 +64,7 @@
             <el-tab-pane label="未付款" name="second" v-model="second">
               <tbody ref="second">
               <template>
-                <el-select v-model="value" placeholder="关键字搜索">
+                <el-select v-model="value" placeholder="关键字搜索" v-if="AdminSearch">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -90,7 +97,7 @@
                     v-for="item in options"
                     :key="item.value"
                     :label="item.label"
-                    :value="item.value">
+                    :value="item.label">
                   </el-option>
                 </el-select>
               </template>
@@ -149,6 +156,8 @@
     name: 'Project_Reconciliation',
     data(){
       return{
+        AdminName:false,
+        AdminSearch:false,
         activeName: 'first',
         options: [{
           value: '选项1',
@@ -214,6 +223,7 @@
       }
     },
     created(){
+      this.name = JSON.parse(localStorage.data)
       //查询
       var then = this
       this.axios.get('https://formattingclub.com/YiNuoLogin/User/Select_accounting').then(res=>{
@@ -224,18 +234,23 @@
             /*有权限则显示*/
             this.paid_for = true
             this.Uncollected = true
-            this.$refs['planone'].style.display = 'block'
+            this.AdminName = true
+            this.AdminSearch = true
             this.$refs['second'].style.display = 'block'
             this.$refs['paid_for'].style.display = 'block'
             this.$refs['Uncollected'].style.display = 'block'
+            this.$refs['number'].style.display = 'none'
           }else{
             /*无权限则消失*/
             this.paid_for =false
             this.Uncollected = false
+            this.number = true
+            this.AdminName = false
             this.$refs['activeName'].style.display = 'none'
             this.$refs['second'].style.display = 'none'
             this.$refs['paid_for'].style.display = 'none'
             this.$refs['Uncollected'].style.display = 'none'
+            this.$refs['number'].style.display = 'none'
           }
       })
         this.axios.get('https://formattingclub.com/YiNuoLogin/User/Select_accounting?fund_details_state=1').then(res=>{
@@ -261,6 +276,9 @@
             this.listUncollected = res.data.data
           })
         }
+      },
+      Paid(id){
+        console.log(id)
       }
     }
   }
@@ -278,7 +296,6 @@
   .all-hot{border-bottom: 1px solid black;display: flex;padding-bottom: 10px;margin-bottom: 10px;}
   .all-hot div{flex: 1;font-size: 15px}
   /*4项金额*/
-  .yes-all{margin-bottom: 20px}
   .yes-all ul{list-style: none;margin: 0;padding: 0 0 10px 0;font-size: 15px;border-bottom: 1px solid black;}
   .el-tabs__header{margin: 0!important;}
   .el-tabs--card>.el-tabs__header .el-tabs__item.is-active{border-bottom-color: #000!important;border-radius:3px}

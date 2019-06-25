@@ -40,10 +40,10 @@
         <!--table-->
         <table border="0">
           <tr>
-            <th :style="projet">项目名称</th>
+            <th :style="projet">工地各项</th>
             <th>设计师</th>
-            <th>预算金额</th>
-            <th>阶段</th>
+            <th>合同金额</th>
+            <th>监理</th>
             <th>倒计时</th>
           </tr>
           <p v-show="false">{{listtime | data}}</p>
@@ -115,7 +115,7 @@
     },
     created () {
       // table数据
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Wokyard/selectAllWorkyard').then(res => {
+      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res => {
         if (res.status === 200) {
           this.list = res.data
         } else {
@@ -147,7 +147,7 @@
     methods: {
       // 页面传参
       mername (id) {
-        this.$router.push({ path: 'customer_details', query: { id: id } })
+        this.$router.push({ path: 'site_after_sale', query: { id: id } })
       },
       // 倒计时
       time: function (date, day) {

@@ -38,6 +38,7 @@ export default {
         const all = {name:this.name,pwd:this.pwd}
         this.axios.post('https://formattingclub.com/YiNuoLogin/Login?name=' + this.name + '&pwd=' + this.pwd).then(res => {
           if (res.data.msg === '登录成功') {
+            localStorage.data = JSON.stringify(res.data.user)
             mui.alert(res.data.msg, function () {
               _this.$router.push('index')
             })

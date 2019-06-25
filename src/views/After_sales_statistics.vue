@@ -40,7 +40,7 @@
         <!--table-->
         <table border="0">
           <tr>
-            <th :style="projet">项目名称</th>
+            <th :style="projet">工地各项</th>
             <th :style="paLift">责任人</th>
             <th>预算金额</th>
             <th>阶段</th>

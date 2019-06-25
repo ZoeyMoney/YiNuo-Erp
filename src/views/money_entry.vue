@@ -16,22 +16,30 @@
       <!--form-->
       <div class="mui-content app">
         <form class="mui-input-group">
-            <div class="mui-input-row">
-                <label>类别选择</label>
-              <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
-                <option value="">请选择</option>
-                <option v-for="item in list_fund_names" :value="item.fund_names">{{item.fund_names}}</option>
-              </select>
-            </div>
           <div class="mui-input-row">
-            <label>类别详情</label>
-            <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_fund_name" :value="item.fund_name">{{item.fund_name}}</option>
+            <label>类别选择</label>
+            <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
+              <option value="">请选择</option>
+              <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
             </select>
           </div>
           <div class="mui-input-row">
-            <label>项目名称</label>
+            <label>类别名称</label>
+            <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)">
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
+              <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row" v-if="category">
+            <label>类别详情</label>
+            <select name="" v-model="all_rate" @change="all_rate_name(all_rate)">
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row" v-if="site_various">
+            <label>工地各项</label>
             <select name="" v-model="customer_name">
               <option value="" selected="selected">请选择</option>
               <option v-for="item in projet" :value="item.customer_name">{{item.customer_name}}</option>
@@ -46,7 +54,7 @@
             <input type="text" class="mui-input-clear" placeholder="请输入总金额" v-model="fund_money">
           </div>
           <div class="mui-input-row">
-            <label>经手人</label>
+            <label>公司人员</label>
             <input type="text" class="mui-input-clear" placeholder="请输入经手人" v-model="fund_person">
           </div>
           <div class="mui-input-row">
@@ -66,14 +74,14 @@
           <table border="0" class="table-all" id="table">
             <tr>
               <th>日期</th>
-              <th>金额</th>
               <th>批次</th>
+              <th :style="padLeft">金额</th>
               <th>备注</th>
             </tr>
             <tr v-for="item in list">
-              <td><input type="date" id="fund_details_date" v-model="item.fund_details_date"></td>
-              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="金额"></td>
+              <td><input type="date" id="fund_details_date" v-model="item.fund_details_date" :style="paRight"></td>
               <td><input type="text" id="fund_details_batch" v-model="item.fund_details_batch" placeholder="批次"></td>
+              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="金额"  :style="padLeft"></td>
               <td><input type="text" id="fund_details_text" v-model="item.fund_details_text" placeholder="备注"></td>
             </tr>
           </table>
@@ -100,6 +108,7 @@
           </form>
         </div>
         <p id="btn-form" @click="formAdd">添加新一行</p>
+        <p id="btn-del" @click="del(user)">删除</p>
         <div class="mui-input-row form-btn">
           <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">保存</button>
         </div>
@@ -112,13 +121,20 @@ export default {
   name: 'money_entry',
   data () {
     return {
+      user:'',
+      all_rate:'',
+      all_id:'',
+      category:true,//隐藏
+      cotrProjet:false,
+      idProjet:true,
+      site_various:true,
       fund_type:'阶段付款',
+      list_fund_name_type:'',
       fund_nameo:'',
       fund_debtor:'',
       fund_money:'',
       fund_person:'',
       fund_text:'',
-      listTable:'',
       list_fund_names:'',
       list_fund_namea:'',
       list_fund_name:'',
@@ -126,12 +142,24 @@ export default {
       list_customer_name:'',
       data_huan:'',
       projet:'',
+      fund_name:'',
       yue:'',
       qi:'',
       list: [
-        { 'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '', 'fund_details_text': '' },
-      ]
+        { 'fund_details_date': '', 'fund_details_batch': '1', 'fund_details_money': '', 'fund_details_text': '' },
+      ],
+      batch_index:1,
+      list_list:[],
+      padLeft:{
+        padding:'0'
+      },
+      paRight:{
+        paddingRight:'0'
+      }
     }
+  },
+  computed:{
+
   },
   created () {
     /*项目名称*/
@@ -139,9 +167,8 @@ export default {
       this.projet = res.data
     })
     /* table */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=1').then(res => {
-      this.listTable = res.data.list_fund
-      this.list_fund_names = res.data.list_fund_names
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1').then(res => {
+      this.list_fund_name_type = res.data.fund_name_type
     }, error => {
       var then = this
       mui.alert('您无权访问', function () {
@@ -150,16 +177,34 @@ export default {
     })
   },
   methods: {
+    formAdd(){
+        this.batch_index++
+        var s = {fund_details_date: '', fund_details_money: '', fund_details_batch: '1', fund_details_text: '' }
+        s.fund_details_batch = this.batch_index
+        this.list.push(s)
+    },
+    del(user){
+      if (this.list.length === 0) {
+        mui.alert('没有可删除的了')
+      }else{
+        this.list.splice(this.list.indexOf(user),1)
+      }
+    },
     // 类别选择
     fund_namesa (id) {
       this.fund_nameso = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=1&fund_names=' + this.fund_nameso).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name = res.data.list_fund_name
-        if (this.fund_nameso === '工程支出') {
-          this.$refs['no'].style.display = 'none'
-        }else{
-          this.$refs['no'].style.display = 'block'
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
+        this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_names = res.data.fund_names
+        this.list_fund_name = res.data.fund_name
+        if (this.fund_nameo === '个人') {
+          this.category = false
+          this.site_various = false
+        }else if (this.fund_nameo === '公司') {
+          this.category = true
+          this.cotrProjet = true
+          this.idProjet = false
+          this.site_various = true
         }
       }, error => {
         var then = this
@@ -168,13 +213,13 @@ export default {
         })
       })
     },
-    // 类别详情
+    // 类别名称
     list_fund_nameas (id) {
       this.fund_name = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=1&fund_names=' + this.fund_nameso + '&fund_name=' + id).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name = res.data.list_fund_name
-        this.list_customer_name = res.data.list_customer_name
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+        this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_names = res.data.fund_names
+        this.list_fund_name = res.data.fund_name
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {
@@ -182,26 +227,36 @@ export default {
         })
       })
     },
+    //类别详细
+    all_rate_name(id){
+      this.all_id = id
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name).then(res => {
+        this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_names = res.data.fund_names
+        this.list_fund_name = res.data.fund_name
+      })
+    },
     stage_one () {
       var otable = document.getElementById('table')
       var data_time = document.getElementById('data-time')
       var btn_form = document.getElementById('btn-form')
+      var del = document.getElementById('btn-del')
       btn_form.style.display = 'block'
       otable.style.display = 'block'
+      del.style.display = 'block'
       data_time.style.display = 'none'
     },
     week () {
       var otable = document.getElementById('table')
       var data_time = document.getElementById('data-time')
       var btn_form = document.getElementById('btn-form')
+      var del = document.getElementById('btn-del')
+      del.style.display = 'none'
       otable.style.display = 'none'
       btn_form.style.display = 'none'
       data_time.style.display = 'block'
     },
-    formAdd(){
-      var s = { fund_details_date: '', fund_details_money: '', fund_details_batch: '', fund_details_text: '' }
-      this.list.push(s)
-    },
+
     add() {
       var then = this
       var nuber = /^[0-9]*$/ // 验证数字
@@ -220,19 +275,7 @@ export default {
         check = false
         return false
       }
-      //  项目名称
-      if (this.customer_name == '') {
-        mui.toast('项目名称不能为空')
-        check = false
-        return false
-      }
       if (this.$refs['no'].style.display === 'block') {
-        // 债权人
-        if (this.fund_debtor == '') {
-          mui.toast('债权人不能为空')
-          check = false
-          return false
-        }
         if (!nameReg.test(this.fund_debtor)) {
           mui.toast('债权人名称格式错误')
           check = false
@@ -258,12 +301,6 @@ export default {
       }
       if (!nameReg.test(this.fund_person)) {
         mui.toast('经手人格式错误')
-        check = false
-        return false
-      }
-      // 备注
-      if (this.fund_text == '') {
-        mui.toast('备注不能为空')
         check = false
         return false
       }
@@ -390,20 +427,30 @@ export default {
           }
         }
       }
+      var add = ''
+      var list_customer = ''
+      if (this.fund_nameo === '个人') {
+        add = this.list_fund_namea
+        list_customer += '0'
+      }else if (this.fund_nameo === '公司') {
+        add = this.all_rate
+        list_customer += this.customer_name
+      }
       this.axios({
         method: 'POST',
         url: 'https://formattingclub.com/YiNuoLogin/fund/Add_Fund',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
         data: {
           listFund: JSON.stringify(this.list),
-          fund_customer_id: this.customer_name,
+          fund_customer_id: list_customer,
           fund_workyard_pact_id: 1,
           fund_debtor: this.fund_debtor,
-          fund_name: this.fund_name,
+          fund_name: add,
           fund_money: this.fund_money,
           fund_person: this.fund_person,
           fund_text: this.fund_text,
-          fund_type: this.fund_type
+          fund_type: this.fund_type,
+
         },
         //把json格式编码转为x-www-form-urlencoded
         transformRequest: [function (data) {
@@ -434,10 +481,10 @@ export default {
 /*table表格*/
 select{background-color: transparent;font-size: 15px!important;}
 table{margin-bottom: 16px;width: 100%}
-table tr td input[type=date]{width: 124px}
+table tr td input[type=date]{width: 129px}
 .table-all tr th{line-height: 33px;background-color: #DADADA;text-align: left;padding: 0 16px;}
 .table-all tr{line-height: 30px;font-size: 14px;}
-#btn-form{text-align: right;padding-right: 20px;color: #00679b;font-weight: bold}
+#btn-form,#btn-del{text-align: right;padding-right: 20px;color: #00679b;font-weight: bold}
 .data-time{display: none;}
 /*按钮*/
 .mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: 16px!important;}

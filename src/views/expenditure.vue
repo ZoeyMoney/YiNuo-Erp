@@ -17,60 +17,35 @@
       <div class="mui-content app">
         <form class="mui-input-group">
           <div class="mui-input-row">
-            <!--个人公司-->
-            <label>类别名称</label>
+            <label>类别选择</label>
             <select name="" v-model="fund_detail_id" @change="fund_deId(fund_detail_id)">
-              <option v-for="item in projet" :value="item.text">{{item.text}}</option>
+              <option value="">请选择</option>
+              <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
             </select>
           </div>
-          <!--个人私人-->
-          <div class="mui-input-row detailed" ref="detailed">
+          <div class="mui-input-row">
             <label>款项名称</label>
-            <select name="" v-model="detailed">
+            <select name="" v-model="detailed" @change="list_fund_nameas(detailed)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in listDetailed" :value="item.text">{{item.text}}</option>
+              <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
+              <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
             </select>
           </div>
-          <!--公司详情二级菜单-->
-          <div class="mui-input-row the_company" ref="the_company">
-            <label>款项名称</label>
-            <select name="" v-model="the_company" @change="the_companyGe(the_company)">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="item in listThe_company" :value="item.text">{{item.text}}</option>
-            </select>
-          </div>
-          <!--工程三级菜单-->
-          <div class="mui-input-row detailed" ref="slim">
+          <div class="mui-input-row" v-if="category">
             <label>款项详细</label>
             <select name="" v-model="slim">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in listSlim" :value="item.text">{{item.text}}</option>
+              <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
           </div>
-          <!--现金周转三级菜单-->
-          <div class="mui-input-row detailed" ref="engineering">
-            <label>款项详细</label>
-            <select name="" v-model="engineering">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="item in listEngineering" :value="item.text">{{item.text}}</option>
-            </select>
-          </div>
-          <!--YY营业费详情-->
-          <div class="mui-input-row detailed" ref="YYgo">
-            <label>款项详细</label>
-            <select name="" v-model="YYgo">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="item in listYYgo" :value="item.text">{{item.text}}</option>
-            </select>
-          </div>
-          <div class="mui-input-row detailed" ref="relevant">
+          <div class="mui-input-row relevant_people" v-if="relevant_people">
             <label>相关人</label>
-            <select name="" v-model="relevant_people_dat">
-              <option value="">请选择</option>
-              <option v-for="item in listRelevant" :value="item.text">{{item.text}}</option>
+            <select name="" v-model="listRelevant">
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in list_bank_card_person" :value="item.text">{{item.text}}</option>
             </select>
           </div>
-          <div class="mui-input-row detailed" ref="site">
+          <div class="mui-input-row site_projet" v-if="site_projet">
             <label>工地名称</label>
             <select name="" v-model="site">
               <option value="">请选择</option>
@@ -82,18 +57,28 @@
             <input type="text" class="mui-input-clear" placeholder="请输入金额" v-model="bank_money">
           </div>
           <div class="mui-input-row">
+            <label>手续费</label>
+            <select name="" v-model="money_rate">
+              <option value="">请选择</option>
+              <option v-for="item in list_money_rate" :value="item.text">{{item.text}}%</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>实际支出</label>
+            <input type="text" class="mui-input-clear" placeholder="请输入金额" v-model="money_actual">
+          </div>
+          <div class="mui-input-row">
             <label>备注</label>
             <input type="text" class="mui-input-clear" v-model="clearBei" placeholder="请输入备注">
           </div>
           <div class="mui-input-row row-label">
             <label>转出账户</label>
             <label style="padding: 0;width: 70%">
-              <select name="" v-model="bank_id">
-                <option value="" selected="selected">请选择</option>
+              <select  v-model="bank_id" name="" id="card">
+                <option value="0" selected="selected">请选择</option>
                 <option v-for="item in bank_card" :value="item.bank_id">
                   <div>{{item.bank_bank}}</div>
                   <div>{{item.bank_person}}</div>
-                  <div>{{item.bank_number}}</div>
                   <div>￥{{item.bank_money}}</div>
                 </option>
               </select>
@@ -155,43 +140,60 @@ export default {
   name: 'expenditure',
   data () {
     return {
-      projet:[{text:'个人'}, {text:'公司'},], //类别名称
-      detailed:'',
-      listDetailed:[
-        {text:'洗衣'}, {text:'父母'}, {text:'孩子'}, {text:'吃饭'}, {text:'卫生'}, {text:'烟酒'}, {text:'会员'}, {text:'电话费'}, {text:'礼金'},
-        {text:'娱乐'}, {text:'红包'}, {text:'健康医疗'}, {text:'化妆品'}, {text:'家庭聚餐'}, {text:'请客'}, {text:'保险'}, {text:'衣服'}, {text:'住宿'},
-        {text:'住房公积金'}, {text:'加油'}, {text:'车辆维修'}, {text:'洗车'}, {text:'停车'}, {text:'车贷'}, {text:'电费'}, {text:'煤气费'}, {text:'装修'}, {text:'其他'},
-        ],  //个人私人
-      fund_detail_id: '公司', // 类别选择 model
-      the_company:'',//公司详情
-      listThe_company:[{text:'工程'},{text:'现金周转'},{text:'YY营业费'}], //二级菜单
-      slim:'',//三级菜单
-      listSlim:[{text:'打包费'}, {text:'人工费'}, {text:'材料费'}, {text:'招待费'}, {text:'返点'}, {text:'税款'}, {text:'招标'}, {text:'押金'}, {text:'交通'}, {text:'奖励'}, {text:'其他'},],//工程选择
-      engineering:'',//现金周转
-      listEngineering:[{text:'外部过户'},{text:'利息'},{text:'暂支'},{text:'还款'}],//现金周转菜单
-      YYgo:'',//YY营业费
-      listYYgo:[{text:'工资'}, {text:'招待费'}, {text:'福利'}, {text:'物业费'}, {text:'交通'}, {text:'加油'}, {text:'红包'}, {text:'住宿费'}, {text:'餐费'}, {text:'店面维护'},
-        {text:'学习'}, {text:'物料采购'}, {text:'日常招待'}, {text:'押金'}, {text:'广告宣传'}, {text:'办公用品'}, {text:'房租'}, {text:'电费'}, {text:'电话费'}, {text:'水费'},
-        {text:'养老险'}, {text:'公积金'}, {text:'保险'}, {text:'税款'}, {text:'捐款'}, {text:'其他'},],//YY详情
-      relevant_people_dat:'',//相关人
-      listRelevant:[{text:'张三'},{text:'李四'}],
-      site:'',//工地
-      clearBei:'',//备注
-      bank_money: '', // 余额
-      checkbox:'',//复选框
-      bank_id: '', // 转出model
-      bank_card: '', // 数据转出
+      category:true,
+      cotrProjet:false,
+      idProjet:true,
+      relevant_people:true, //相关人
+      site_projet:true,//工地名称
+      bank_id: 0, // id
+      list_fund_name_type: [],//个人公司
+      detailed: '',  //类别详细
+      list_fund_names: [],//红包工资
+      slim: '',  //类别详细
+      list_fund_name: [],  //设计费
+      listRelevant: '',//相关人下拉
+      site: '',//工地
+      bank_money: '',//金额
+      money_rate:'',
+      list_money_rate:[
+        {text:0.6},
+        {text:0.55},
+        {text:0.38},
+      ],
+      money_get:'',
+      account: '',//账户
+      clearBei: '',//备注
+      checkbox: '',//复选框
+      fund_detail_id: '',		// 工程款
+      bank_card: '', // 银行卡
+      chuXu: '',	// 储蓄卡
+      xinY: '',	// 信用卡
       chuXuKa: '', // 储蓄卡总额
-      chuXu: '', // 数据储蓄卡
-      XinYongKa: '', // 信用卡总额
-      xinY: '', // 数据信用卡
-      listProjet:'',//工地名称
+      XinYongKa: '', // 储蓄卡总额
+      fund_name_id: '', //类别详情id
+      listProjet: '',//工地名称
+      list_fund_name_type:'',//一级查询
+      list_fund_names:'', //二级查询
+      list_fund_name:'',  //三级查询
+      list_bank_card_person:[
+        {text:'胡永生'},
+        {text:'邱梅'},
+      ],
     }
   },
   created () {
     /*项目名称*/
     this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res=>{
       this.listProjet = res.data
+    })
+    /* table */
+    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_stale=0').then(res => {
+      this.list_fund_name_type = res.data.fund_name_type
+    }, error => {
+      var then = this
+      mui.alert('您无权访问', function () {
+        then.$router.push({ name: 'index' })
+      })
     })
     /* 银行卡 */
     this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
@@ -202,13 +204,13 @@ export default {
       var y = 0
       for (var index in res.data) {
         if (res.data[index].bank_type === '储蓄卡') {
-          var n = res.data[index].bank_number.slice(8, 12) // 截取尾号后4位
+          var n = res.data[index].bank_number.slice(15, 19) // 截取尾号后4位
           m += res.data[index].bank_money // 储蓄卡总额
           res.data[index].bank_number = n
           chu.push(res.data[index])
         } else {
           if (res.data[index].bank_type === '信用卡') {
-            var n = res.data[index].bank_number.slice(8, 12)	// 截取尾号后4位
+            var n = res.data[index].bank_number.slice(12, 16)	// 截取尾号后4位
             y += res.data[index].bank_money
             res.data[index].bank_number = n
             xin.push(res.data[index])
@@ -227,54 +229,71 @@ export default {
     })
   },
   computed: {
-
+    money_actual:{
+      get:function () {
+        var a = this.bank_money - this.bank_money * this.money_rate / 100
+        var b = Math.floor(a * 100) /100
+        this.money_get = b
+        return b
+      },
+      set:function (value) {
+        this.money_get = value
+      }
+    }
   },
   methods: {
-    fund_deId(){
-      if (this.fund_detail_id === '个人') {
-        /*红包类型*/
-        this.$refs['detailed'].style.display = 'block'
-        this.$refs['the_company'].style.display = 'none'
-        this.$refs['slim'].style.display = 'none'
-        this.$refs['YYgo'].style.display = 'none'
-        this.$refs['relevant'].style.display = 'block'
-        this.$refs['engineering'].style.display = 'none'
-      }else if (this.fund_detail_id === '公司') {
-        /*公司*/
-        this.$refs['detailed'].style.display = 'none'
-        this.$refs['the_company'].style.display = 'block'
-        this.$refs['relevant'].style.display = 'none'
-        this.$refs['site'].style.display = 'block'
-      }
+    //一级查询
+    fund_deId(id){
+      this.fund_nameso = id
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
+        this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_names = res.data.fund_names
+        this.list_fund_name = res.data.fund_name
+        if (this.fund_detail_id === '个人') {
+          this.category = false
+          this.site_projet = false
+          this.relevant_people = true
+        }else if (this.fund_detail_id === '公司') {
+          this.category = true
+          this.cotrProjet = true
+          this.idProjet = false
+          this.relevant_people = false
+          this.site_projet = true
+        }
+      }, error => {
+        var then = this
+        mui.alert('您无权访问', function () {
+          then.$router.push({ name: 'index' })
+        })
+      })
     },
-    the_companyGe(){
-      if (this.the_company === '工程') {
-        this.$refs['slim'].style.display = 'block'
-        this.$refs['engineering'].style.display = 'none'
-        this.$refs['YYgo'].style.display = 'none'
-        this.$refs['site'].style.display = 'block'
-        this.$refs['relevant'].style.display = 'none'
-      }else if (this.the_company === '现金周转') {
-        this.$refs['engineering'].style.display = 'block'
-        this.$refs['slim'].style.display = 'none'
-        this.$refs['relevant'].style.display = 'block'
-        this.$refs['YYgo'].style.display = 'none'
-        this.$refs['site'].style.display = 'none'
-      }else if (this.the_company === 'YY营业费') {
-        this.$refs['engineering'].style.display = 'none'
-        this.$refs['YYgo'].style.display = 'block'
-        this.$refs['slim'].style.display = 'none'
-        this.$refs['site'].style.display ='none'
-        this.$refs['relevant'].style.display='block'
-      }
+    //二级查询
+    list_fund_nameas(id){
+      this.fund_name_id = id
+      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+        this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_names = res.data.fund_names
+        this.list_fund_name = res.data.fund_name
+        if (this.detailed === '现金周转') {
+          this.site_projet = false
+          this.relevant_people = true
+        }else if (this.detailed === '工程') {
+          this.site_projet = true
+          this.relevant_people = false
+        }
+      }, error => {
+        var then = this
+        mui.alert('您无权访问', function () {
+          then.$router.push({ name: 'index' })
+        })
+      })
     },
     /* 保存 */
     add () {
       var then = this
       var check = true
       var nuber = /^[0-9]*$/ // 验证数字
-      var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
-      var add = '?fund_name='+this.fund_detail_id+'&fund_names='+this.the_company
+      var add = '?'
       //第一选择
       if (this.fund_detail_id == '') {
         mui.toast('类别名称不能为空')
@@ -282,53 +301,10 @@ export default {
         return false
       }
       if (this.fund_detail_id === '个人') {
-        //红包
-        if (this.detailed == '') {
-          mui.toast('款项名称不能为空')
-          check = false
-          return false
-        }
-        add = add+'&fund_debtor='+this.relevant_people_dat
-        add = add+'&fund_names='+this.detailed
+        add+='fund_name='+this.detailed+'&fund_debtor='+this.listRelevant
       }else if (this.fund_detail_id === '公司') {
-        if (this.the_company == '') {
-          mui.toast('款项名称不能为空')
-          check = false
-          return false
-        }else if (this.the_company === '工程') {
-          if (this.slim == '') {
-            mui.toast('款项详细不能为空')
-            check = false
-            return false
-          }
-          if (this.site == '') {
-            mui.toast('工地名称不能为空')
-            check = false
-            return false
-          }
-
-          add = add+'&customer_id='+this.site
-          add = add+'&fund_designation='+this.slim
-        }else if (this.the_company === '现金周转') {
-          if (this.engineering == '') {
-            mui.toast('款项纤细不能为空')
-            check = false
-            return false
-          }
-          add = add+'&fund_designation='+this.engineering
-          add = add+'&fund_debtor='+this.relevant_people_dat
-        }else if (this.the_company === 'YY营业费') {
-          if (this.YYgo == '') {
-            mui.toast('款项名称不能为空')
-            check = false
-            return false
-          }
-          add = add+'&fund_designation='+this.YYgo
-          add = add+'&fund_debtor='+this.relevant_people_dat
-        }
+        add+='fund_name='+this.slim+'&customer_id='+this.site
       }
-
-
       //金额
       if (this.bank_money == '') {
         mui.toast('金额不能为空')
@@ -340,8 +316,6 @@ export default {
         check = false
         return false
       }
-      add = add+'&money='+~this.bank_money
-      add = add+'&fund_text='+this.clearBei
       //转账费率
       if (this.bank_deal_rate == '') {
         mui.toast('转账费率不能为空')
@@ -364,7 +338,7 @@ export default {
           }
         }
       }
-      add = add+'&bank_id='+this.bank_id
+      add+='&money='+parseInt(~this.bank_money+1)+'&fund_text='+this.clearBei+'&bank_id='+this.bank_id+'&shiji_money='+parseInt(~this.money_get+1)
       if (this.checkbox === true) {
         this.axios.post('https://formattingclub.com/YiNuoLogin/fund/Add_out_enter'+add).then(res=>{
           var id = ''
@@ -374,14 +348,14 @@ export default {
             }
           }
           mui.alert(res.data.data,function () {
-            then.$router.push({name:'expenditure_receive',query:{site:id,relevant_people_dat:then.relevant_people_dat,money:then.bank_money,bank_id:then.bank_id}})
+            then.$router.push({name:'expenditure_receive',query:{site:id,listRelevant:then.listRelevant,money:then.bank_money,bank_id:then.bank_id,clearBei:then.clearBei}})
           })
         })
       }else {
         this.axios.post('https://formattingclub.com/YiNuoLogin/fund/Add_out_enter'+add).then(res=>{
           if (res.data.data === '录入成功') {
             mui.alert('录入成功', function () {
-              then.$router.push({ name: 'cash_flow' })
+              then.$router.go(0)
             })
           }
         })

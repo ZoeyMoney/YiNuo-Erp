@@ -14,8 +14,12 @@
       <!--录入form-->
       <div class="mui-content app">
         <form class="mui-input-group">
+          <div class="mui-input-row">
+            <label>开户行</label>
+            <input type="text" class="mui-input-clear" v-model="bank_bank" placeholder="请输入开户行">
+          </div>
             <div class="mui-input-row">
-                <label>银行卡账户</label>
+                <label>卡号</label>
                 <input type="text" class="mui-input-clear" v-model="bank_number" placeholder="请输入银行卡账户">
             </div>
           <div class="mui-input-row">
@@ -25,10 +29,6 @@
           <div class="mui-input-row">
             <label>余额</label>
             <input type="text" class="mui-input-clear" v-model="bank_money" placeholder="请输入余额">
-          </div>
-          <div class="mui-input-row">
-            <label>开户行</label>
-            <input type="text" class="mui-input-clear" v-model="bank_bank" placeholder="请输入银行卡类型">
           </div>
           <div class="mui-input-row" id="persion">
             <label>额度</label>
@@ -82,7 +82,7 @@ export default {
       var card = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/ // 身份证验证
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
       var yin = /^(\d{16}|\d{19})$/ // 银行卡验证
-      var nuber = /^[0-9]*$/ // 验证数字
+      var nuber = /^\d+(\.\d+)?$/ // 验证数字
       if (this.bank_type === '储蓄卡') {
         // 银行卡账户
         if (this.bank_number == '') {

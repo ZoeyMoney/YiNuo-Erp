@@ -46,7 +46,7 @@
             </div>
             <div class="mui-input-row all-row">
               <label>所属类型</label>
-              <input type="text" class="mui-input-clear row-input" v-model="item.customer_type" disabled="disabled">
+              <input type="text" class="mui-input-clear row-input" v-model="item.Customer_type" disabled="disabled">
               <div class="mui-input-row mui-radio mui-left mui-chech" name="">
                 <label>家装</label>
                 <input name="Customer_form" type="radio" value="家装" checked="a" disabled="disabled">
@@ -153,7 +153,7 @@ export default {
       stageName: '', // 第二个form
       listtime: '', // 倒计时
       stage: '', // 修改记录
-      undata: ''// 修改记录
+      undata: '',// 修改记录
     }
   },
   created () {

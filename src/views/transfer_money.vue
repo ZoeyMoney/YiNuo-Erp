@@ -16,21 +16,6 @@
       <!--form-->
       <div class="mui-content app">
         <form class="mui-input-group">
-          <div class="mui-input-row">
-            <label>共有</label>
-            <input type="text" class="mui-input-clear" id="total" placeholder="如：900,000" v-model="bank_deal_money">
-          </div>
-          <div class="mui-input-row">
-            <label>转账费率</label>
-            <select name="" id="rate" v-model="bank_deal_rate">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="item in listD" :value="item.Tnumber">{{item.Tnumber}}%</option>
-            </select>
-          </div>
-          <div class="mui-input-row">
-            <label>实际转账</label>
-            <input type="text" class="mui-input-clear" id="transfer" placeholder="如：6,000" v-model="addMoneys">
-          </div>
           <div class="mui-input-row row-label">
             <label>转出</label>
             <label>
@@ -39,6 +24,7 @@
                 <option v-for="item in cead"  :value="item.bank_id">
                   <div>{{item.bank_bank}}</div>
                   <div>{{item.bank_person}}</div>
+                  <div>￥{{item.bank_money}}</div>
                 </option>
               </select>
             </label>
@@ -51,9 +37,25 @@
                 <option v-for="item in cead"  :value="item.bank_id">
                   <div>{{item.bank_bank}}</div>
                   <div>{{item.bank_person}}</div>
+                  <div>￥{{item.bank_money}}</div>
                 </option>
               </select>
             </label>
+          </div>
+          <div class="mui-input-row">
+            <label>金额</label>
+            <input type="text" class="mui-input-clear" id="total" placeholder="如：900,000" v-model="bank_deal_money">
+          </div>
+          <div class="mui-input-row">
+            <label>转账费率</label>
+            <select name="" id="rate" v-model="bank_deal_rate">
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in listD" :value="item.Tnumber">{{item.Tnumber}}%</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>实际转账</label>
+            <input type="text" class="mui-input-clear" id="transfer" placeholder="如：6,000" v-model="addMoneys">
           </div>
         </form>
         <div class="mui-input-row form-btn">
@@ -110,7 +112,7 @@ export default {
       bank_id: 0,
       time: new Date(),
       listAdd: '', // 银行记录
-      bank_deal_money: '', // 共有
+      bank_deal_money: '', // 金额
       bank_deal_rate: '', // 转账费率
       bank_enter_id: '', // 转出
       bank_out_id: '', // 转入
@@ -120,11 +122,13 @@ export default {
       bank_money: '', // 余额
       addMoney: '', // 储蓄卡总额
       xinMoney: '', // 信用卡总额
+      all_money:'',
       cead: '', // 银行卡
       bank_limit: '', // 额度
       listD: [
         { Tnumber: 0.6 },
-        { Tnumber: 0.55 }
+        { Tnumber: 0.55 },
+        { Tnumber: 0.38 },
       ]
     }
   },
@@ -138,12 +142,12 @@ export default {
       var y = 0 // 信用卡总额
       for (var index in res.data) {
         if (res.data[index].bank_type === '储蓄卡') {
-          var n = res.data[index].bank_number.slice(8, 12) // 截取尾号后4位
+            var n = res.data[index].bank_number.slice(15, 19) // 截取尾号后4位
           m += res.data[index].bank_money // 算出储蓄卡总额
           res.data[index].bank_number = n
           chux.push(res.data[index])
         } else {
-          var n = res.data[index].bank_number.slice(8, 12)
+          var n = res.data[index].bank_number.slice(12, 16)
           y += res.data[index].bank_money
           res.data[index].bank_number = n
           xin.push(res.data[index])
@@ -156,14 +160,7 @@ export default {
     })
     /* 银行卡 */
     this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
-      this.cead_money = res.data
-      var si = []
-      for (var index in res.data) {
-        var n = res.data[index].bank_number.slice(8, 12)
-        res.data[index].bank_number = n
-        si.push(res.data[index])
-      }
-      this.cead = si
+      this.cead = res.data
     }, error => {
       var then = this
       mui.alert('您无权访问', function () {
@@ -171,52 +168,34 @@ export default {
       })
     })
   },
+
   computed: {
     /* 自动计算 */
-    addMoneys () {
-      var a = this.bank_deal_money - this.bank_deal_money * this.bank_deal_rate / 100
-      var b = Math.floor(a * 100) / 100
-      return b
+    addMoneys:{
+      get:function (){
+        var a = this.bank_deal_money - this.bank_deal_money * this.bank_deal_rate / 100
+        var b = Math.floor(a * 100) / 100
+        this.all_money = b
+        return b
+      },
+      set:function (value) {
+        this.all_money = value
+      },
     },
-    slelect_bank () {
-      this.$http.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
-        var chux = []
-        var xin = []
-        var m = 0 // 储蓄卡总额
-        var y = 0 // 信用卡总额
-        for (var index in res.data) {
-          if (res.data[index].bank_type === '储蓄卡') {
-            var n = res.data[index].bank_number.slice(8, 12) // 截取尾号后4位
-            m += res.data[index].bank_money // 算出储蓄卡总额
-            res.data[index].bank_number = n
-            chux.push(res.data[index])
-          } else {
-            var n = res.data[index].bank_number.slice(8, 12)
-            y += res.data[index].bank_money
-            res.data[index].bank_number = n
-            xin.push(res.data[index])
-          }
-        }
-        this.chuxuka = chux
-        this.xinyong = xin
-        this.addMoney = m
-        this.xinMoney = y
-      })
-    }
   },
   methods: {
     go () {
       var then = this
       var check = true
       var nuber = /^[0-9]*$/ // 验证数字
-      // 共有
+      // 金额
       if (this.bank_deal_money == '') {
-        mui.toast('共有不能为空')
+        mui.toast('金额不能为空')
         check = false
         return false
       }
       if (!nuber.test(this.bank_deal_money)) {
-        mui.toast('共有有非法格式')
+        mui.toast('金额有非法格式')
         check = false
         return false
       }
@@ -251,12 +230,13 @@ export default {
           }
         }
       }
-      var all = '?bank_deal_money=' + this.bank_deal_money + '&bank_deal_rate=' + parseInt(this.bank_deal_rate * 100) + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id
+
+      var all = '?bank_deal_money=' + this.bank_deal_money + '&money=' + this.all_money + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id
       this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_bank_deal' + all).then(res => {
         this.listAdd = res.data
         if (res.status === 200) {
           mui.alert('转账成功', function () {
-            then.$router.push({ name: 'cash_flow' })
+            then.$router.go(0)
           })
         } else {
           alert('转账失败')

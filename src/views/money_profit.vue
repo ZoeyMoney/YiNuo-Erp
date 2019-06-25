@@ -21,7 +21,7 @@
         </div>
         <table border="0">
           <tr>
-            <th>项目名称</th>
+            <th>工地各项</th>
             <th>支出合计</th>
             <th>收入合计</th>
             <th>预计利润</th>

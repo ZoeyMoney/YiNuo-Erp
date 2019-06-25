@@ -32,8 +32,8 @@ export default {
     return {
       list: [
         { href: 'company_announcement', listImg: require('../image/gg.png'), text: '公司公告' },
-        { href: '../', listImg: require('../image/jd.png'), text: '任务管理' },
-        { href: '', listImg: require('../image/jb.png'), text: '奖励统计' },
+        { href: 'admin_task', listImg: require('../image/jd.png'), text: '任务管理' },
+        { href: 'reward_statistics', listImg: require('../image/jb.png'), text: '奖励统计' },
         { href: '', listImg: require('../image/chufa.png'), text: '处罚统计' },
         { href: '', listImg: require('../image/sj.png'), text: '周三事件' },
         { href: '', listImg: require('../image/sp.png'), text: '审批管理' },

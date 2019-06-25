@@ -17,7 +17,7 @@
     <div class="mui-content app">
       <form class="mui-input-group" v-for="item in projet">
         <div class="mui-input-row">
-          <label>项目名称</label>
+          <label>工地名称</label>
           <input type="text" class="mui-input-clear" v-model="item.customer_name" disabled="disabled">
         </div>
         <div class="mui-input-row">
@@ -112,6 +112,7 @@ export default {
         check = false
         return false
       }
+      this.money = ~this.money+1
       var add = '?fund_details_id=' + this.fund_details_id + '&money=' + this.money + '&bank_id=' + this.fund_bank
       if (this.checkBox === true) {
         // console.log('点住')

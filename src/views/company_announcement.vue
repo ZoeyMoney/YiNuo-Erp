@@ -60,7 +60,6 @@ export default {
     // 公告
     this.axios.get('https://formattingclub.com/YiNuoLogin/notice/select_notice').then(res => {
       this.listNotice = res.data
-      console.log(res.data)
     })
   },
   methods: {

@@ -34,7 +34,7 @@ export default {
       var then = this
       this.axios.get('https://formattingclub.com/YiNuoLogin/logout').then(res => {
         mui.alert(res.data.msg, function () {
-          then.$router.push({ name: 'login' })
+          then.$router.push({ name: 'Login' })
         })
       })
     }

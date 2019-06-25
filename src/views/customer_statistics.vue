@@ -40,7 +40,7 @@
         <!--table-->
         <table border="0">
             <tr>
-              <th :style="projet">项目名称</th>
+              <th :style="projet">工地各项</th>
               <th>设计师</th>
               <th>预算金额</th>
               <th>阶段</th>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-
+import url from '../components/config.js'
 export default {
   name: 'customer_statistics',
   data () {
@@ -115,6 +115,10 @@ export default {
     }
   },
   created () {
+   /* var a = url.projet
+    this.axios.get(a+'?dawdaw=0').then(res=>{
+      console.log(res.data)
+    })*/
     // table数据
     this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res => {
       if (res.status === 200) {
@@ -144,9 +148,6 @@ export default {
       var a = new Date()
       this.listtime = a
     }, 1000)
-  },
-  computed: {
-
   },
   methods: {
     // 页面传参

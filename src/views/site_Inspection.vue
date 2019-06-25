@@ -17,7 +17,7 @@
       <div class="mui-content app">
         <form class="mui-input-group">
           <div class="mui-input-row">
-            <label>项目名称</label>
+            <label>工地各项</label>
             <select name="">
               <option value="">请选择</option>
               <option value="0">123</option>
@@ -48,6 +48,7 @@
           <el-checkbox label="选中且禁用" disabled></el-checkbox>
         </el-checkbox-group>
       </template>
+      <div @click="ac">123456789</div>
     </div>
 </template>
 
@@ -65,6 +66,10 @@
     methods:{
       axcc(id){
         console.log(id)
+      },
+      ac(){
+
+        console.log(x)
       }
     }
   }

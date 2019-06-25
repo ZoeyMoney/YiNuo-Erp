@@ -1,5 +1,5 @@
 import Vue from 'vue'
-Vue.filter('data', function (data) {
+Vue.filter('date', function (data) {
   if (typeof data === 'undefined') {
     return ''
   } else {

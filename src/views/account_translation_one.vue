@@ -17,7 +17,7 @@
       <div class="mui-content app">
         <form class="mui-input-group">
           <div class="mui-input-row">
-            <label>项目名称</label>
+            <label>工地名称</label>
             <input type="text" class="mui-input-clear" placeholder="请输项目名称" v-model="cumoterName" disabled="disabled">
           </div>
           <div class="mui-input-row">
@@ -44,7 +44,7 @@
           </div>
         </form>
         <div class="form-botton">
-          <button type="button" class="mui-btn mui-btn-black" @click="add">立即支付</button>
+          <button type="button" class="mui-btn mui-btn-black" @click="add">立即保存</button>
         </div>
       </div>
     </div>
