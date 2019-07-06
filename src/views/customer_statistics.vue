@@ -115,16 +115,10 @@ export default {
     }
   },
   created () {
-   /* var a = url.projet
-    this.axios.get(a+'?dawdaw=0').then(res=>{
-      console.log(res.data)
-    })*/
     // table数据
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res => {
+    this.axios.get(url.list).then(res => {
       if (res.status === 200) {
         this.list = res.data
-      } else {
-        console.log('获取失败')
       }
       // 求钱的总和
       var a = 0
@@ -134,13 +128,12 @@ export default {
       }
       this.add = b
     })
-
     // 设计师
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStylist').then(res => {
+    this.axios.get(url.listName).then(res => {
       this.listName = res.data
     })
     //  阶段
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageName').then(res => {
+    this.axios.get(url.stageName).then(res => {
       this.stageName = res.data
     })
     //  倒计时

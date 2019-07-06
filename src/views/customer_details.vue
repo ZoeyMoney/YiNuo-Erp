@@ -6,6 +6,7 @@
         <h1 class="mui-title">客户详情</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户详情-->
       <div class="mui-content">
         <div class="customer">
@@ -145,10 +146,12 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'customer_details',
   data () {
     return {
+      imgUrl_loading:false,
       projet: '', // 项目
       stageName: '', // 第二个form
       listtime: '', // 倒计时
@@ -168,7 +171,8 @@ export default {
     var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
     // 查询客户项目信息
     this.customer_id = id
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectCustomer?Customer=' + id).then(res => {
+
+    this.axios.get(url.modify_projet+'?Customer=' + id).then(res => {
       this.projet = res.data
       if (this.projet.Customer_form == '家装') {
         this.a = true
@@ -179,7 +183,7 @@ export default {
       }
     })
     // 客户信息
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/selectStage?Customer=' + id).then(res => {
+    this.axios.get(url.modify_stage+'?Customer=' + id).then(res => {
       this.stageName = res.data
       if (res.data == '') {
         var k = [{
@@ -192,20 +196,12 @@ export default {
         this.stageName = k
       }
     })
-    // 时间
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/selectStage?Customer=' + id).then(info => {
-      if (info.status === 200) {
-        this.list = info.data
-      } else {
-        console.log('获取失败')
-      }
-    })
     // 查询项目的跟进信息
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectFollow?Customer_id=' + id).then(res => {
+    this.axios.get(url.projet_follow+'?Customer_id=' + id).then(res => {
       this.stage = res.data
     })
     //	修改记录
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectUpdate').then(info => {
+    this.axios.get(url.clientUndata).then(info => {
       this.undata = info.data.data
     })
   },
@@ -218,8 +214,10 @@ export default {
     dele () {
       var then = this
       var va = this.customer_id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/DeleteCustomer?Customer=' + va).then(res => {
+      this.imgUrl_loading = true
+      this.axios.get(url.clientDelect+'?Customer=' + va).then(res => {
         if (res.status === 200) {
+          this.imgUrl_loading = false
           if (res.data == '删除成功') {
             mui.alert('删除成功', function () {
               then.$router.push({ path: 'customer_statistics' })

@@ -59,14 +59,14 @@
           <tr>
             <th :style="lefta">日期</th>
             <th>类别</th>
-            <th>工地</th>
-            <th>债务人</th>
+            <th>项目</th>
+            <th>相关人</th>
             <th>金额</th>
           </tr>
           <tr v-for="item in listTable">
             <td><span :style="paLft">{{item.fund_details_date | data}}</span></td>
-            <td><span :style="fund_name">{{item.fund_name}}</span></td>
-            <td><span :style="hid" @click="msg(item.fund_details_id)">{{item.customer_name}}</span></td>
+            <td><span :style="fund_name"  @click="msg(item.fund_details_id)">{{item.fund_name}}</span></td>
+            <td><span :style="hid">{{item.customer_name}}</span></td>
             <td><span>{{item.fund_debtor}}</span></td>
             <td><span :style="money">￥{{item.fund_details_money}}</span></td>
           </tr>
@@ -76,6 +76,7 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'money_receivable',
   data () {
@@ -133,7 +134,7 @@ export default {
   },
   created () {
     /* table */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=0').then(res => {
+    this.axios.get(url.moneyReceivable+'?fund_type=1').then(res => {
       this.listTable = res.data.list_fund
       this.list_fund_name_type = res.data.list_fund_name_type
       this.list_fund_names = res.data.list_fund_names
@@ -153,7 +154,7 @@ export default {
     // 类别选择
     fund_namesa (id) {
       this.fund_nameso = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
         this.listTable = res.data.list_fund
         this.list_fund_name_type = res.data.list_fund_name_type
         this.list_fund_names = res.data.list_fund_names
@@ -178,7 +179,7 @@ export default {
           this.fund_name = this.list_fund_names[index].fund_name_id
         }
       }
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=0&fund_name_type=' + this.fund_nameso +'&fund_name='+this.fund_name+ '&fund_names=' + id).then(res => {
+      this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso +'&fund_name='+this.fund_name+ '&fund_names=' + id).then(res => {
         this.listTable = res.data.list_fund
         this.list_fund_name_type = res.data.list_fund_name_type
         this.list_fund_names = res.data.list_fund_names
@@ -194,7 +195,7 @@ export default {
     // 类别详细
     list_slim_name(id){
       this.list_fund_slim_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name='+id).then(res=>{
+      this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name='+id).then(res=>{
         this.listTable = res.data.list_fund
         this.list_fund_name_type = res.data.list_fund_name_type
         this.list_fund_names = res.data.list_fund_names
@@ -205,7 +206,7 @@ export default {
     //  项目名称
     customer_name_list (id) {
       this.customer_name_list_one = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_name=' + this.fund_name +'&fund_names=' + this.list_fund_namea + '&Customer_name=' + id).then(res => {
+      this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_name=' + this.fund_name +'&fund_names=' + this.list_fund_namea + '&Customer_name=' + id).then(res => {
         this.listTable = res.data.list_fund
         this.list_fund_name_type = res.data.list_fund_name_type
         this.list_fund_names = res.data.list_fund_names
@@ -221,7 +222,7 @@ export default {
     //  时间
     dateList (id) {
       this.deteList = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' +this.fund_name  + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + id + '&dateB=' + this.dateB).then(res => {
+      this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' +this.fund_name  + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + id + '&dateB=' + this.dateB).then(res => {
         this.listTable = res.data.list_fund
         this.list_fund_name_type = res.data.list_fund_name_type
         this.list_fund_names = res.data.list_fund_names
@@ -236,7 +237,7 @@ export default {
     },
     date_list_two_change (id) {
       this.dateB = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_fund_sum?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea  + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + this.deteList + '&dateB=' + id).then(res => {
+      this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea  + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + this.deteList + '&dateB=' + id).then(res => {
         this.listTable = res.data.list_fund
         this.list_fund_name_type = res.data.list_fund_name_type
         this.list_fund_names = res.data.list_fund_names

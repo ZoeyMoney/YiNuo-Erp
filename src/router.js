@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './views/Login.vue' // 登录界面
+// import Login from './views/Login.vue' // 登录界面
 // import Index from './views/Index.vue' // 九宫格
 // import summary_entry from './views/summary_entry.vue' // 九宫格
 // import Setting from './views/Setting' // 设置
@@ -53,14 +53,18 @@ import Login from './views/Login.vue' // 登录界面
 // import announcement_entry from './views/announcement_entry' // 公告录入
 // import Project_Reconciliation from './views/Project_Reconciliation' // 项目对账
 
+
 Vue.use(Router)
 export default new Router({
   // mode:'history',
   routes: [
     {
       path: '/',
+      redirect: '/login'
+    },{
+      path: '/Login',
       name: 'Login',
-      component: Login
+     component:resolve=>require(['@/views/Login'],resolve)
     }, {
       path: '/Index',
       name: 'index',
@@ -116,7 +120,6 @@ export default new Router({
     }, {
       path: '/site_project_inspection',
       name: 'site_project_inspection',
-      // component: site_entry
       component: resolve=>require(['@/views/site_project_inspection'],resolve)
     }, {
       path: '/customer_details',
@@ -286,11 +289,15 @@ export default new Router({
       path: '/reward_statistics',
       name: 'reward_statistics',
       component:resolve=>require(['@/views/reward_statistics'],resolve)
+    }, {
+      path: '/projet_modify',
+      name: 'projet_modify',
+      component:resolve=>require(['@/views/projet_modify'],resolve)
     }
     /* {
       path:'/home',
       name:'home',
-      component:Home,
+      componentVue:Home,
       children:[
         {
           path:''
@@ -303,7 +310,7 @@ export default new Router({
     //   // route level code-splitting
     //   // this generates a separate chunk (about.[hash].js) for this route
     //   // which is lazy-loaded when the route is visited.
-    //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+    //   componentVue: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     // }
-  ]
+  ],
 })

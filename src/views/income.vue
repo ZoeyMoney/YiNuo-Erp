@@ -6,6 +6,7 @@
         <h1 class="mui-title">收入</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--收入-->
       <div class="mui-content">
         <div class="customer">
@@ -52,21 +53,7 @@
               <option v-for="item in listProjet" :value="item.customer_id">{{item.customer_name}}</option>
             </select>
           </div>
-          <div class="mui-input-row">
-            <label>金额</label>
-            <input type="text" class="mui-input-clear" v-model="money" placeholder="请输入金额">
-          </div>
-          <div class="mui-input-row">
-            <label>手续费</label>
-            <select name="" v-model="money_rate">
-              <option value="">请选择</option>
-              <option v-for="item in list_money_rate" :value="item.text">{{item.text}}%</option>
-            </select>
-          </div>
-          <div class="mui-input-row">
-            <label>实际收入</label>
-            <input type="text" class="mui-input-clear" v-model="money_actual" placeholder="请输入金额">
-          </div>
+          <data-value v-model="dataValue1"></data-value>
           <div class="mui-input-row">
             <label>备注</label>
             <input type="text" class="mui-input-clear" v-model="clearBei" placeholder="请输入备注">
@@ -83,6 +70,21 @@
                 </option>
               </select>
             </label>
+          </div>
+          <div class="mui-input-row">
+            <label>金额</label>
+            <input type="text" class="mui-input-clear" v-model="money" placeholder="请输入金额">
+          </div>
+          <div class="mui-input-row">
+            <label>手续费</label>
+            <select name="" v-model="money_rate">
+              <option value="">请选择</option>
+              <option v-for="item in list_money_rate" :value="item.text">{{item.text}}%</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>实际收入</label>
+            <input type="text" class="mui-input-clear" v-model="money_actual" placeholder="请输入金额">
           </div>
         </form>
         <div class="mui-input-row mui-checkbox mui-left checkbox">
@@ -136,15 +138,18 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'income',
   data () {
     return {
+      imgUrl_loading:false,
       category:true,
       cotrProjet:false,
       idProjet:true,
       relevant_people:true, //相关人
       site_projet:true,//工地名称
+      dataValue1:new Date().toString(),
       bank_id: 0, // id
       list_fund_name_type: [],//个人公司
       detailed: '',  //类别详细
@@ -182,11 +187,11 @@ export default {
   created () {
 
     /*项目名称*/
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res => {
+    this.axios.get(url.list).then(res => {
       this.listProjet = res.data
     })
     /* table */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=0&fund_stale=1').then(res => {
+    this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=1').then(res => {
       this.list_fund_name_type = res.data.fund_name_type
     }, error => {
       var then = this
@@ -195,7 +200,7 @@ export default {
       })
     })
     /* 银行卡 */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
+    this.axios.get(url.bankCard).then(res => {
       this.bank_card = res.data
       var chu = []
       var xin = []
@@ -244,7 +249,7 @@ export default {
     //一级查询
     fund_deId(id){
       this.fund_nameso = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -269,7 +274,7 @@ export default {
     //二级查询
     list_fund_nameas(id){
       this.fund_name = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -289,7 +294,7 @@ export default {
     },
     //三级查询
     list_fund_namea(id){
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name+'&fund_name'+id).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name+'&fund_name'+id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -332,16 +337,16 @@ export default {
         mui.toast('转入账户不能为空')
         check = false
         return false
-      } else {
+      }else {
         for (var index in this.chuXu) {
-          if (parseInt(this.chuXu[index].bank_id) === this.bank_out_id) {
-            if (parseInt(this.chuXu[index].bank_money) < parseInt(this.bank_deal_money)) {
+          if (parseInt(this.chuXu[index].bank_id) === this.bank_id) {
+            if (parseInt(this.chuXu[index].bank_money) < parseInt(this.money_actual)) {
               mui.toast('卡内余额不能大于交易余额')
               check = false
               return false
             }
           } else {
-            if (parseInt(this.addMoneys) > parseInt(this.chuXu[index].bank_out_id)) {
+            if (parseFloat(this.money_actual) > parseFloat(this.chuXu[index].bank_id)) {
               mui.toast('实际转账不能大于信用卡额度')
               check = false
               return false
@@ -349,34 +354,40 @@ export default {
           }
         }
       }
-      add+='&money='+this.money+'&fund_text='+this.clearBei+'&bank_id='+this.bank_id+'&shiji_money='+this.money_get
+      var dt = new Date(this.dataValue1)
+      var y = dt.getFullYear()
+      var m = dt.getMonth() + 1
+      var d = dt.getDate()
+      var t = dt.getHours();
+      var MM =dt.getMinutes();
+      var s = dt.getSeconds();
+      var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
+      this.imgUrl_loading = true
+      add+='&money='+this.money+'&fund_text='+this.clearBei+'&bank_id='+this.bank_id+'&shiji_money='+this.money_get+'&date='+dd
       if (this.checkbox === true) {
-        this.axios.post('https://formattingclub.com/YiNuoLogin/fund/Add_out_enter' + add).then(res => {
+        this.axios.post(url.moneyOutEnter + add).then(res => {
           var id = ''
           for (var index in this.listProjet) {
             if (this.listProjet[index].customer_id === this.site) {
               id = this.listProjet[index].customer_name
             }
           }
-          mui.alert(res.data.data, function () {
-            then.$router.push({
-              name: 'income_receive',
-              query: {
-                site: id,
-                listRelevant: then.listRelevant,
-                money: then.money_get,
-                bank_id: then.bank_id,
-                clearBei:then.clearBei
-              }
+          if (res.status === 200) {
+            this.imgUrl_loading = false
+            mui.alert(res.data.data, function () {
+              then.$router.push({ name: 'income_receive', query: { money: then.money_get } })
             })
-          })
+          }
         })
       } else {
-        this.axios.post('https://formattingclub.com/YiNuoLogin/fund/Add_out_enter' + add).then(res => {
+        this.axios.post(url.moneyOutEnter + add).then(res => {
+          if (res.status === 200) {
+            this.imgUrl_loading = false
           if (res.data.data === '录入成功') {
             mui.alert('录入成功', function () {
               then.$router.go(0)
             })
+          }
           }
         })
       }

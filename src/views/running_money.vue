@@ -78,52 +78,37 @@
         </form>
       </div>
       <div class="table_list">
-        <div class="leftt">
+        <div class="div-th">
           <div>户主</div>
           <div>开户行</div>
           <div>交易金额</div>
           <div>交易时间</div>
           <div>项目名称</div>
         </div>
-      <table border="0">
-          <!--<tr>
-            <td :style="leftshi">户主</td>
-            <td>开户行</td>
-            <td>交易金额</td>
-            <td>交易时间</td>
-            <td>项目名称</td>
-          </tr>-->
-        <tr v-for="item in list_moey">
-          <td><span :style="leftshi" @click="person(item.bank_deal_id)">{{item.bank_person}}</span></td>
-          <td><span>{{item.bank_bank}}</span></td>
-          <td>
-            <span
-              :style="money_aa"
-              :class="{money_green:item.fund_detail_transaction_money>0,
+        <div class="div-table">
+        <div class="div-tr" v-for="item in list_moey">
+          <div>{{item.bank_person}}</div>
+          <div>{{item.bank_bank}}</div>
+          <div>
+            <span @click="person(item.fund_detail_id)"
+                  :class="{money_green:item.fund_detail_transaction_money>0,
                money_red: item.fund_detail_transaction_money<0}"
-              v-if="item.fund_detail_transaction_money">
-              ￥{{item.fund_detail_transaction_money | negative}}
-            </span>
-            <span
-              :style="money_aa"
-              :class="{money_green:item.bank_deal_money>0,
+                  v-if="item.fund_detail_transaction_money">￥{{item.fund_detail_transaction_money | negative}}</span>
+            <span @click="person(item.bank_deal_id)"
+                  :class="{money_green:item.bank_deal_money>0,
               money_red:item.bank_deal_money<0}"
-              v-if="item.bank_deal_money">
-              ￥{{item.bank_deal_money | negative}}
-            </span>
-          </td>
-          <td>
-            <span v-if="item.fund_detail_transaction_date">{{item.fund_detail_transaction_date | tosDate}}</span>
-          </td>
-          <td>
-            <span v-if="item.customer_name && item.fund_name != '手续费'" :style="hiden">{{item.customer_name}}</span>
-            <span v-if="item.bank_deal_money" :style="hiden">转账</span>
-            <span v-if="item.bank_deal_money===0 && !item.customer_name && item.fund_details_money>0 && item.fund_name != '手续费'" :style="hiden">收入</span>
-            <span v-if="item.bank_deal_money===0 && !item.customer_name && item.fund_details_money<0 && item.fund_name != '手续费'" :style="hiden">支出</span>
-            <span v-if="item.fund_name ==='手续费'" :style="hiden">手续费</span>
-          </td>
-        </tr>
-      </table>
+                  v-if="item.bank_deal_money">￥{{item.bank_deal_money | negative}}</span>
+          </div>
+          <div v-if="item.fund_detail_transaction_date">{{item.fund_detail_transaction_date | tosDate}}</div>
+          <div>
+            <span v-if="item.customer_name && item.fund_name != '手续费'">{{item.customer_name}}</span>
+            <span v-if="item.bank_deal_money">转账</span>
+            <span v-if="item.bank_deal_money===0 && !item.customer_name && item.fund_details_money>0 && item.fund_name != '手续费'">收入</span>
+            <span v-if="item.bank_deal_money===0 && !item.customer_name && item.fund_details_money<0 && item.fund_name != '手续费'">支出</span>
+            <span v-if="item.fund_name ==='手续费'">手续费</span>
+          </div>
+          </div>
+        </div>
       </div>
       <footer>
         <div>TOTAL</div>
@@ -135,6 +120,7 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'running_money',
   data () {
@@ -182,21 +168,6 @@ export default {
       leftshi: {
         paddingLeft: '10px'
       },
-      hiden: {
-        display: 'block',
-        width: '107px',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        paddingLeft:'12px'
-      },
-      money_aa: {
-        display: 'block',
-        whiteSpace: 'nowrap',
-        width: '77px',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-      },
       red: {
         color: 'red',
         overflow: 'hidden',
@@ -207,11 +178,11 @@ export default {
         overflow: 'hidden',
         textOverflow: 'ellipsis'
       },
-
     }
   },
   created () {
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail').then(res => {
+
+    this.axios.get(url.moneyRunning).then(res => {
       this.list_moey = res.data.list_moey //户主
       this.menu_bank_person = res.data.menu_bank_person
       this.menu_bank_bank = res.data.menu_bank_bank
@@ -250,10 +221,11 @@ export default {
          }
        }
       green_money += parseFloat(bankDealMoney)+parseFloat(fund_transaction_money)
-      red_all_money += parseInt(zero_money)+parseInt(red_money)
-      allMoney += parseInt(green_money)+parseInt(red_all_money)
+      red_all_money += parseFloat(zero_money)+parseFloat(red_money)
+      allMoney += parseFloat(green_money)+parseFloat(red_all_money)
        this.moneyN = green_money  //绿色
         this.moneyY = red_all_money //红色
+        var allMoney = Math.floor(allMoney * 100) /100
         this.moneyNY = allMoney
     })
     var loc = location.href
@@ -266,13 +238,20 @@ export default {
   methods: {
     //户主点击
     person(id){
-      this.$router.push({path:'running_details',query:{id:id}})
+      var list = {}
+      for (var index in this.list_moey) {
+        if (id === this.list_moey[index].bank_deal_id || id === this.list_moey[index].fund_detail_id) {
+          list = this.list_moey[index]
+        }
+      }
+      localStorage.msg = JSON.stringify(list)
+      this.$router.push({path:'running_details',query:{list:list}})
       // this.$router.push({path:'running_details',query:{id:then.fund_details_id,person:person,bank_bank:bank_bank,bank_deal_date:bank_deal_date,bank_deal_moneya:bank_deal_money,bank_number:bank_number,bank_type:bank_type}})
     },
     //开户行
     bankPerson(id){
       this.bankPerson_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail?bank_person='+id).then(res => {
+      this.axios.get(url.moneyRunning+'?bank_person='+id).then(res => {
         this.list_moey = res.data.list_moey //户主
         this.menu_bank_person = res.data.menu_bank_person
         this.menu_bank_bank = res.data.menu_bank_bank
@@ -289,7 +268,7 @@ export default {
     //开户行
     bankBank(id){
       this.bankBank_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail?bank_person='+this.bankPerson_id + '&bank_bank='+id).then(res => {
+      this.axios.get(url.moneyRunning+'?bank_person='+this.bankPerson_id + '&bank_bank='+id).then(res => {
         this.list_moey = res.data.list_moey //户主
         this.menu_bank_person = res.data.menu_bank_person
         this.menu_bank_bank = res.data.menu_bank_bank
@@ -306,7 +285,7 @@ export default {
     //  尾号
     bankNumber(id){
       this.bankNumber_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail?bank_person='+this.bankPerson_id + '&bank_bank='+this.bankBank_id + '&bank_number='+ id).then(res => {
+      this.axios.get(url.moneyRunning+'?bank_person='+this.bankPerson_id + '&bank_bank='+this.bankBank_id + '&bank_number='+ id).then(res => {
           this.list_moey = res.data.list_moey //户主
           this.menu_bank_person = res.data.menu_bank_person
           this.menu_bank_bank = res.data.menu_bank_bank
@@ -323,7 +302,7 @@ export default {
     //类别选择
     fund_namesa(id){
       this.fundNamesa_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail' + '?fund_name_type=' + id).then(res => {
+      this.axios.get(url.moneyRunning + '?fund_name_type=' + id).then(res => {
         this.list_moey = res.data.list_moey //户主
         this.menu_bank_person = res.data.menu_bank_person
         this.menu_bank_bank = res.data.menu_bank_bank
@@ -340,7 +319,7 @@ export default {
     //类别名称
     list_fund_nameas(id){
       this.listFund_name_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail'+ '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+id).then(res => {
+      this.axios.get(url.moneyRunning + '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+id).then(res => {
         this.list_moey = res.data.list_moey //户主
         this.menu_bank_person = res.data.menu_bank_person
         this.menu_bank_bank = res.data.menu_bank_bank
@@ -357,7 +336,7 @@ export default {
     //工地
     customer_name_list(id){
       this.customerName_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail'+'?fund_name_type=' + this.fundNamesa_id + '&fund_names='+this.listFund_name_id+'&Customer_id='+id).then(res => {
+      this.axios.get(url.moneyRunning +'?fund_name_type=' + this.fundNamesa_id + '&fund_names='+this.listFund_name_id+'&Customer_id='+id).then(res => {
         this.list_moey = res.data.list_moey //户主
         this.menu_bank_person = res.data.menu_bank_person
         this.menu_bank_bank = res.data.menu_bank_bank
@@ -374,7 +353,7 @@ export default {
     //开始时间
     dateList(id){
       this.dataA = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail'+ '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+this.listFund_name_id+'&Customer_id='+this.customerName_id + '&DateStart='+id).then(res => {
+      this.axios.get(url.moneyRunning + '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+this.listFund_name_id+'&Customer_id='+this.customerName_id + '&DateStart='+id).then(res => {
         this.list_moey = res.data.list_moey //户主
         this.menu_bank_person = res.data.menu_bank_person
         this.menu_bank_bank = res.data.menu_bank_bank
@@ -391,7 +370,7 @@ export default {
     //结束时间
     date_list_two_change(id){
       this.dataB = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_detail'+ '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+this.listFund_name_id+'&Customer_id='+this.customerName_id + '&DateStart='+this.dataA+'&DateEnd='+id).then(res => {
+      this.axios.get(url.moneyRunning + '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+this.listFund_name_id+'&Customer_id='+this.customerName_id + '&DateStart='+this.dataA+'&DateEnd='+id).then(res => {
         this.list_moey = res.data.list_moey //户主
         this.menu_bank_person = res.data.menu_bank_person
         this.menu_bank_bank = res.data.menu_bank_bank
@@ -411,7 +390,7 @@ export default {
 
 <style scoped>
 @import "../css/public.css";
-input{font-size: 15px;}
+input,div{font-size: 15px;}
 .mui-input-group{background-color: transparent}
 form div select{background: transparent;font-size: 15px!important;}
 .select-row{display: flex;}
@@ -424,19 +403,17 @@ form div select{background: transparent;font-size: 15px!important;}
 .money_red{color: red;}
 .black_mui{margin-top: 5px;padding-bottom: 5px;border: 1px solid white;}
 /*table*/
-.leftt{display: flex;font-size: 15px;position: fixed;background-color: #DADADA;width: 100%;line-height: 31px}
-.leftt div:nth-child(1){padding-left: 10px}
-.leftt div:nth-child(3){padding-left: 18px}
-.leftt div:nth-child(4){padding-left: 30px}
-.leftt div:nth-child(5){padding-left: 10px}
-.table_list{height: 301px;overflow: auto}
-.goOver{display: flex;}
-.goOver label{flex: 0.8;}
-.goOver .go-span{width: 20px;height: 2px;background-color: black;position: relative;top: 50%;right: 23px;}
-.goOver input{flex: 1;}
-table{width: 100%;text-align: left;margin-top: 31px}
-table tr{font-size: 14px;line-height: 27px;}
-/*table tr:nth-child(1){background-color: #DADADA;line-height: 35px;}*/
+.div-th,.div-tr{display: flex;}
+.div-th{background-color: #DADADA;line-height: 26px;padding-left: 17px;position: absolute;width: 100%;}
+.div-table{position: relative;top: 28px;height: 275px;overflow: auto}
+.div-tr{padding-left: 17px;border-bottom: 1px solid #DADADA}
+.div-th div,.div-tr div{width: 20%}
+.div-th div:nth-child(1),.div-tr div:nth-child(1){width: 14%}
+.div-tr div:nth-child(3){width: 73px;overflow: hidden;text-overflow: ellipsis}
+.div-tr div:nth-child(5){width: 94px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis}
+.goOver{display: flex}
+.goOver span{width: 67px;height: 1px;background-color: black;position: relative;right: 24px;top: 50%}
+.goOver label{width: 45%}
 /*底部*/
 footer{position: fixed;bottom: 0;display: flex;width: 100%;background-color: #a7a7a7;line-height: 30px;font-size: 14px;}
 footer div,footer em{flex: 1;}

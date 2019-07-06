@@ -6,6 +6,7 @@
       <h1 class="mui-title">售后录入</h1>
       <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
     </header>
+    <login-loading v-show="imgUrl_loading"></login-loading>
     <!--客户录入-->
     <div class="customer">
       <h2>售后录入</h2>
@@ -84,10 +85,12 @@
 </template>
 
 <script>
+  import url from '../components/config'
   export default {
     name: 'After_sales_entry',
     data () {
       return {
+        imgUrl_loading:false,
         Customer_name: '', // 项目名称
         projet:'',
         SelectStylist:'',
@@ -111,11 +114,11 @@
     },
     created () {
       /*项目名称*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectAllCustomer').then(res=>{
+      this.axios.get(url.listProjet).then(res=>{
         this.projet = res.data
       })
       /*责任人*/
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectStylist').then(res=>{
+      this.axios.get(url.AfterListName).then(res=>{
         this.SelectStylist = res.data
       })
     },
@@ -197,15 +200,19 @@
           check = false
           return false
         }
+        this.imgUrl_loading = true
         /* 录入数据 */
         var add = '?Customer_name=' + this.Customer_name + '&Customer_linkman=' + this.Customer_linkman + '&Customer_connect=' + this.Customer_connect + '&Customer_stylist=' + this.Customer_stylist +
           '&Customer_form=' + this.Customer_form + '&Customer_type=' + this.Customer_type + '&Customer_demand=' + this.Customer_demand+
           '&Customer_DecorateJia='+this.Customer_DecorateJia+'&Customer_DecorateYi='+this.Customer_DecorateYi+'&Customer_baozhiqi='+this.Customer_baozhiqi+
           '&Customer_Date='+this.Customer_Date+'&Customer_baoxiushijian='+this.Customer_baoxiushijian+'&Customer_yujiwanchengshijian='+this.Customer_yujiwanchengshijian
-        this.axios.post('https://formattingclub.com/YiNuoLogin/AfterSale/AddCustomer' + add).then(res => {
+        this.axios.post(url.AfterSaleAdd + add).then(res => {
+          if (res.status === 200) {
+            this.imgUrl_loading = false
           mui.alert(res.data, function () {
             _this.$router.push('money_sale')
           })
+          }
         })
       }
     }

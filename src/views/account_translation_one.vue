@@ -6,6 +6,7 @@
         <h1 class="mui-title">应收余额</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户详情-->
       <div class="mui-content">
         <div class="customer">
@@ -55,6 +56,7 @@ export default {
   name: 'account_translation_one',
   data () {
     return {
+      imgUrl_loading:false,
       list: '',
       all_money: '',
       smoney: '',
@@ -109,11 +111,15 @@ export default {
         check = false
         return false
       }
+      this.imgUrl_loading = true
       var add = 'money=' + this.smoney + '&fund_details_id=' + this.id + '&date=' + this.date
       this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_details?' + add).then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
         mui.alert(res.data, function () {
           then.$router.push({ name: 'money_receivable' })
         })
+        }
       })
     }
   }

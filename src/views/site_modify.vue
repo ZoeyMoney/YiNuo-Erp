@@ -6,6 +6,7 @@
       <h1 class="mui-title">修改信息</h1>
       <router-link :to="{name:'index'}" class="mui-action-back mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
     </header>
+    <login-loading v-show="imgUrl_loading"></login-loading>
     <!--客户详情-->
     <div class="mui-content">
       <div class="customer">
@@ -62,18 +63,18 @@
           <input type="date" class="mui-input-clear" v-model="item.stage_startdate">
         </div>
     	</form>
-      <div class="form-botton">
-        <button type="button" class="mui-btn mui-btn-black" @click="add">保存</button>
-      </div>
+      <button-save @click.native="add"></button-save>
     </div>
   </div>
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'site_modify',
   data () {
     return {
+      imgUrl_loading:false,
       projet: '', // 项目
       selet_aa: '', // 复制项目
       listName: '', // 设计师
@@ -100,12 +101,12 @@ export default {
     var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
     // 查询客户项目信息
     this.customer_id = id
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectCustomer?Customer=' + id).then(res => {
+    this.axios.get(url.modify_projet+'?Customer=' + id).then(res => {
       this.projet = res.data
       this.select_aa = JSON.parse(JSON.stringify(res.data))
     })
     // 设计师
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStylist').then(customName => {
+    this.axios.get(url.listName).then(customName => {
       this.listName = customName.data
     })
   },
@@ -200,9 +201,11 @@ export default {
       if (this.projet === this.select_aa) {
         alert('没有修改任何信息')
       }
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/UpdateCustomer' + add).then(res => {
+      this.imgUrl_loading = true
+      this.axios.get(url.clinetModify + add).then(res => {
         this.list = res.data
         if (res.status === 200) {
+          this.imgUrl_loading = false
           mui.alert('修改成功', function () {
             then.$router.push({ path: 'customer_statistics' })
           })
@@ -217,9 +220,6 @@ export default {
 
 <style scoped>
   @import "../css/public.css";
-  /*按钮*/
-  .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 70%;}
-  .form-botton{text-align: center;}
   form{
     margin-bottom: 20px;
   }

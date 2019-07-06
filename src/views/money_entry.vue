@@ -6,6 +6,7 @@
         <h1 class="mui-title">应收款录入</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户详情-->
       <div class="mui-content">
         <div class="customer">
@@ -45,10 +46,18 @@
               <option v-for="item in projet" :value="item.customer_name">{{item.customer_name}}</option>
             </select>
           </div>
-          <div class="mui-input-row" ref="no">
-            <label>债务人</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入债务人" v-model="fund_debtor">
+          <div class="mui-input-row" v-if="relevant_people">
+            <label>相关人</label>
+<!--            <input type="text" class="mui-input-clear" placeholder="请输入债务人" v-model="fund_debtor">-->
+            <select name="" v-model="fund_debtor">
+              <option value="">请选择</option>
+              <option v-for="item in list_fund_debtor" :value="item.text">{{item.text}}</option>
+            </select>
           </div>
+          <!--<div class="mui-input-row" ref="no">
+            <label>债务人</label>0
+            <input type="text" class="mui-input-clear" placeholder="请输入债务人" v-model="fund_debtor">
+          </div>-->
           <div class="mui-input-row">
             <label>总金额</label>
             <input type="text" class="mui-input-clear" placeholder="请输入总金额" v-model="fund_money">
@@ -109,22 +118,23 @@
         </div>
         <p id="btn-form" @click="formAdd">添加新一行</p>
         <p id="btn-del" @click="del(user)">删除</p>
-        <div class="mui-input-row form-btn">
-          <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">保存</button>
-        </div>
+        <button-save @click.native="add"></button-save>
       </div>
     </div>
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'money_entry',
   data () {
     return {
+      imgUrl_loading:false,
       user:'',
       all_rate:'',
       all_id:'',
       category:true,//隐藏
+      relevant_people:true,//相关人
       cotrProjet:false,
       idProjet:true,
       site_various:true,
@@ -133,6 +143,10 @@ export default {
       fund_nameo:'',
       fund_debtor:'',
       fund_money:'',
+      list_fund_debtor:[
+        {text:'胡永生'},
+        {text:'邱梅'},
+      ],
       fund_person:'',
       fund_text:'',
       list_fund_names:'',
@@ -158,16 +172,13 @@ export default {
       }
     }
   },
-  computed:{
-
-  },
   created () {
     /*项目名称*/
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res=>{
+    this.axios.get(url.list).then(res=>{
       this.projet = res.data
     })
     /* table */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1').then(res => {
+    this.axios.get(url.ClassSelect+'?fund_type=1').then(res => {
       this.list_fund_name_type = res.data.fund_name_type
     }, error => {
       var then = this
@@ -193,7 +204,7 @@ export default {
     // 类别选择
     fund_namesa (id) {
       this.fund_nameso = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -216,10 +227,17 @@ export default {
     // 类别名称
     list_fund_nameas (id) {
       this.fund_name = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
+        if (this.fund_name === '外借款'){
+          this.site_various = false
+          this.relevant_people = true
+        }else if (this.fund_name === '工程') {
+          this.relevant_people = false
+          this.site_various = true
+        }
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {
@@ -230,7 +248,7 @@ export default {
     //类别详细
     all_rate_name(id){
       this.all_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -274,13 +292,6 @@ export default {
         mui.toast('类别详情不能为空')
         check = false
         return false
-      }
-      if (this.$refs['no'].style.display === 'block') {
-        if (!nameReg.test(this.fund_debtor)) {
-          mui.toast('债权人名称格式错误')
-          check = false
-          return false
-        }
       }
       // 总金额
       if (this.fund_money == '') {
@@ -436,9 +447,10 @@ export default {
         add = this.all_rate
         list_customer += this.customer_name
       }
+      this.imgUrl_loading = true
       this.axios({
         method: 'POST',
-        url: 'https://formattingclub.com/YiNuoLogin/fund/Add_Fund',
+        url: url.moneyAddFund,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
         data: {
           listFund: JSON.stringify(this.list),
@@ -450,7 +462,6 @@ export default {
           fund_person: this.fund_person,
           fund_text: this.fund_text,
           fund_type: this.fund_type,
-
         },
         //把json格式编码转为x-www-form-urlencoded
         transformRequest: [function (data) {
@@ -461,9 +472,12 @@ export default {
           return ret
         }],
       }).then(res => {
+        if (res.status === 200){
+          this.imgUrl_loading = false
         mui.alert(res.data, function () {
           then.$router.push({ path: 'money_receivable' })
         })
+        }
       })
     }
   }
@@ -493,4 +507,5 @@ table tr td input[type=date]{width: 129px}
 .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}
 /*    x */
 .mui-input-row .mui-input-clear~.mui-icon-clear, .mui-input-row .mui-input-password~.mui-icon-eye, .mui-input-row .mui-input-speech~.mui-icon-speech{display: none!important;}
+
 </style>

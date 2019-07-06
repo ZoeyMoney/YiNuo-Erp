@@ -6,6 +6,7 @@
         <h1 class="mui-title">余额</h1>
         <router-link :to="{name:'index'}" class="mui-action-back mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户详情-->
       <div class="mui-content">
         <div class="customer">
@@ -54,9 +55,7 @@
           <label>转为应收</label>
           <input name="checkbox1" type="checkbox" v-model="checkBox">
         </div>
-        <div class="form-botton">
-          <button type="button" class="mui-btn mui-btn-black" @click="add">立即支付</button>
-        </div>
+        <button-save @click.native="add"></button-save>
       </div>
     </div>
 </template>
@@ -66,6 +65,7 @@ export default {
   name: 'account_translation',
   data () {
     return {
+      imgUrl_loading:false,
       projet: '', // 项目
       checkBox: '', // 复选框
       money: '', // 实际转账
@@ -112,6 +112,7 @@ export default {
         check = false
         return false
       }
+      this.imgUrl_loading = true
       var add = '?fund_details_id=' + this.fund_details_id + '&money=' + this.money + '&bank_id=' + this.fund_bank
       if (this.checkBox === true) {
         // console.log('点住')
@@ -124,15 +125,21 @@ export default {
         var datas = data.split(' ')
         // then.$router.push({ path: 'account_translation_one', query: { id: this.fund_details_id, money: money, cumoterName: cumoterName, person: person, text: text, datas: datas } })
         this.axios.get('https://formattingclub.com/YiNuoLogin/fund/update_fund_details' + add).then(res => {
+          if (res.status === 200) {
+            this.imgUrl_loading = false
               then.$router.push({ path: 'account_translation_one', query: { id: then.fund_details_id, money: money, cumoterName: cumoterName, person: person, text: text, datas: datas } })
+          }
         })
       } else {
         // console.log('没')
         this.axios.get('https://formattingclub.com/YiNuoLogin/fund/update_fund_details' + add).then(res => {
+          if (res.status === 200) {
+            this.imgUrl_loading = false
           if (res.data.msg === '支付成功') {
             mui.alert('支付成功', function () {
               then.$router.push({ name: 'money_receivable' })
             })
+          }
           } else {
             mui.alert('支付失败')
           }
@@ -147,8 +154,5 @@ export default {
 @import "../css/public.css";
 select{font-size: 15px}
 .mui-input-group{margin-bottom: 10px;}
-/*按钮*/
-.mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 70%;}
-.form-botton{text-align: center;}
-.radio-one label{width: 100%;}
+  .radio-one label{width: 50%}
 </style>

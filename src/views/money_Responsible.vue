@@ -2,10 +2,11 @@
     <div class="money_Responsible">
       <!--头部-->
       <header class="mui-bar mui-bar-nav header-top">
-        <router-link :to="{name:'money_sale'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+        <router-link :to="{name:'summary_entry'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
         <h1 class="mui-title">责任人添加</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户管理-->
       <div class="one-noble">
         <h2>责任人添加</h2>
@@ -27,20 +28,26 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'money_Responsible',
   data () {
     return {
+      imgUrl_loading:false,
       name:''
     }
   },
   methods: {
     add () {
       var then = this
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/addCustomer_stylist?Customer_stylist=' + this.name + '&Customer_aftersale=1').then(res => {
+      this.imgUrl_loading = true
+      this.axios.get(url.AfterlistAdd+'?Customer_stylist=' + this.name + '&Customer_aftersale=1').then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
         mui.alert(res.data.msg, function () {
           then.$router.push({ name: 'money_sale' })
         })
+        }
       })
     }
   }

@@ -6,6 +6,7 @@
         <h1 class="mui-title">转为应收</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--收入-->
       <div class="mui-content">
         <div class="customer">
@@ -27,7 +28,7 @@
             <label>款项名称</label>
             <select name="" v-model="detailed" @change="list_fund_nameas(detailed)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="cotrProjet">{{item.fund_names}}</option>
+              <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
               <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
             </select>
           </div>
@@ -38,32 +39,27 @@
               <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
           </div>
-          <div class="mui-input-row">
-            <label>项目名称</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入总金额" v-model="id" disabled="disabled">
-          </div>
-          <div class="mui-input-row" ref="no">
+          <div class="mui-input-row relevant_people" v-if="relevant_people">
             <label>相关人</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入债务人" v-model="nameo">
+            <select name="" v-model="nameo">
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in list_bank_card_person" :value="item.text">{{item.text}}</option>
+            </select>
           </div>
-          <div class="mui-input-row">
-            <label>总金额</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入总金额" v-model="moneys">
-          </div>
-          <div class="mui-input-row">
-            <label>手续费</label>
-            <select name="" v-model="money_rate">
+          <div class="mui-input-row site_projet" v-if="site_projet">
+            <label>工地名称</label>
+            <select name="" v-model="site">
               <option value="">请选择</option>
-              <option v-for="item in list_money_rate" :value="item.text">{{item.text}}%</option>
+              <option v-for="item in projet" :value="item.customer_id">{{item.customer_name}}</option>
             </select>
           </div>
           <div class="mui-input-row">
-            <label>实际应收</label>
-            <input type="text" class="mui-input-clear" v-model="money_actual" placeholder="请输入金额">
+            <label>金额</label>
+            <input type="text" class="mui-input-clear" v-model="moneys" placeholder="请输入金额">
           </div>
           <div class="mui-input-row">
             <label>备注</label>
-            <input type="text" class="mui-input-clear" placeholder="备注" v-model="fund_text">
+            <input type="text" class="mui-input-clear" v-model="fund_text" placeholder="请输入备注">
           </div>
           <div class="mui-input-row input-radio">
             <div class="mui-input-row mui-left mui-radio">
@@ -112,6 +108,7 @@
           </form>
         </div>
         <p id="btn-form" @click="formAdd">添加新一行</p>
+        <p id="btn-del" @click="del(user)">删除</p>
         <div class="mui-input-row form-btn">
           <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">保存</button>
         </div>
@@ -120,17 +117,23 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'expenditure_receive',
   data () {
     return {
+      imgUrl_loading:false,
+      user:'',
       category:true,
       cotrProjet:false,
       idProjet:true,
+      relevant_people:true, //相关人
+      site_projet:true,
       fund_type:'阶段付款',
       fund_detail_id:'',
       detailed:'',
       id:'',
+      site:'',
       fund_nameo:'',
       fund_text:'',
       list_fund_name_type:'',
@@ -147,8 +150,12 @@ export default {
       fund_details_id:'',
       nameo:'',
       moneys:'',
+      list_bank_card_person:[
+        {text:'胡永生'},
+        {text:'邱梅'},
+      ],
       list: [
-        { 'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '', 'fund_details_text': '' },
+        { 'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '1', 'fund_details_text': '' },
       ]
     }
   },
@@ -162,20 +169,17 @@ export default {
     this.lista = id.split('=')
     var lists = []
     for (var index in this.lista) {
-      var a1 = this.lista[index].indexOf('&')
-      var a2 = this.lista[index].slice(0, a1)
+      // var a1 = this.lista[index].indexOf('&')
+      var a2 = this.lista[index].slice(0)
       lists.push(a2)
     }
-    this.id = lists[0]
-    this.nameo = lists[1]
-    this.moneys = lists[2]
-    this.fund_text = lists[3]
+    this.moneys = lists[0]
     /*项目名称*/
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res=>{
+    this.axios.get(url.list).then(res=>{
       this.projet = res.data
     })
     /* table */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1').then(res => {
+    this.axios.get(url.ClassSelect+'?fund_type=1').then(res => {
       this.list_fund_name_type = res.data.fund_name_type
     }, error => {
       var then = this
@@ -184,11 +188,12 @@ export default {
       })
     })
   },
+
   methods: {
     //一级查询
     fund_deId(id){
       this.fund_nameso = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=1&fund_name_type=' + this.fund_nameso).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -213,7 +218,7 @@ export default {
     //二级查询
     list_fund_nameas(id){
       this.fund_name = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -238,6 +243,8 @@ export default {
       var otable = document.getElementById('table')
       var data_time = document.getElementById('data-time')
       var btn_form = document.getElementById('btn-form')
+      var del = document.getElementById('btn-del')
+      del.style.display = 'block'
       btn_form.style.display = 'block'
       otable.style.display = 'block'
       data_time.style.display = 'none'
@@ -246,17 +253,28 @@ export default {
       var otable = document.getElementById('table')
       var data_time = document.getElementById('data-time')
       var btn_form = document.getElementById('btn-form')
+      var del = document.getElementById('btn-del')
+      del.style.display = 'none'
       otable.style.display = 'none'
       btn_form.style.display = 'none'
       data_time.style.display = 'block'
     },
     formAdd(){
-      var s = { fund_details_date: '', fund_details_money: '', fund_details_batch: '', fund_details_text: '' }
+      this.batch_index++
+      var s = {fund_details_date: '', fund_details_money: '', fund_details_batch: '1', fund_details_text: '' }
+      s.fund_details_batch = this.batch_index
       this.list.push(s)
+    },
+    del(user){
+      if (this.list.length === 0) {
+        mui.alert('没有可删除的了')
+      }else{
+        this.list.splice(this.list.indexOf(user),1)
+      }
     },
     add() {
       var then = this
-      var nuber = /^[0-9]*$/ // 验证数字
+      var nuber = /^\d+(\.\d+)?$/ // 验证数字
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
       var check = true
       // 总金额
@@ -267,12 +285,6 @@ export default {
       }
       if (!nuber.test(this.moneys)) {
         mui.toast('总金额只能填入数字')
-        check = false
-        return false
-      }
-      // 备注
-      if (this.fund_text == '') {
-        mui.toast('备注不能为空')
         check = false
         return false
       }
@@ -318,7 +330,7 @@ export default {
         //阶段金额相加必须跟总金额相等否则无法通过
         var all_money = 0
         for (var index in this.list) {
-          all_money += parseInt(this.list[index].fund_details_money)
+          all_money += parseFloat(this.list[index].fund_details_money)
         }
         if (this.moneys != all_money) {
           mui.alert('总金额与阶段金额总和不同')
@@ -400,21 +412,28 @@ export default {
         }
       }
       var add = ''
+      var add_id = ''
       if (this.id === '') {
         add+='0'
       }else{
         add = add+=this.id
       }
+      if (this.fund_detail_id === '个人') {
+        add_id+=this.detailed
+      }else if (this.fund_detail_id === '公司') {
+        add_id+=this.slim
+      }
+      this.imgUrl_loading = true
       this.axios({
         method: 'POST',
-        url: 'https://formattingclub.com/YiNuoLogin/fund/Add_Fund',
+        url: url.moneyAddFund,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
         data: {
           listFund: JSON.stringify(this.list),
           fund_customer_id: add,
           fund_workyard_pact_id: 1,
           fund_debtor: this.nameo,
-          fund_name: this.detailed,
+          fund_name:add_id,
           fund_money: this.moneys,
           fund_person: 5,
           fund_text: this.fund_text,
@@ -429,9 +448,12 @@ export default {
           return ret
         }],
       }).then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
         mui.alert(res.data, function () {
           then.$router.push({ path: 'expenditure' })
         })
+        }
       })
     }
   }
@@ -452,7 +474,7 @@ export default {
   table tr td input[type=date]{width: 124px}
   .table-all tr th{line-height: 33px;background-color: #DADADA;text-align: left;padding: 0 16px;}
   .table-all tr{line-height: 30px;font-size: 14px;}
-  #btn-form{text-align: right;padding-right: 20px;color: #00679b;font-weight: bold}
+  #btn-form,#btn-del{text-align: right;padding-right: 20px;color: #00679b;font-weight: bold}
   .data-time{display: none;}
   /*按钮*/
   .mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: 16px!important;}

@@ -6,6 +6,7 @@
         <h1 class="mui-title">转账</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--转账-->
       <div class="mui-content">
         <div class="customer">
@@ -42,6 +43,7 @@
               </select>
             </label>
           </div>
+          <data-value v-model="dataValue1"></data-value>
           <div class="mui-input-row">
             <label>金额</label>
             <input type="text" class="mui-input-clear" id="total" placeholder="如：900,000" v-model="bank_deal_money">
@@ -105,13 +107,16 @@
 </template>
 
 <script>
+  import url from '../components/config'
+  import Login from './Login'
 export default {
   name: 'transfer_money',
+  components: { Login },
   data () {
     return {
       bank_id: 0,
-      time: new Date(),
-      listAdd: '', // 银行记录
+      dataValue1:new Date(),
+      imgUrl_loading:false,
       bank_deal_money: '', // 金额
       bank_deal_rate: '', // 转账费率
       bank_enter_id: '', // 转出
@@ -134,7 +139,7 @@ export default {
   },
   created () {
     /* 储蓄卡 */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
+    this.axios.get(url.bankCard).then(res => {
       this.select_bank = res.data
       var chux = []
       var xin = []
@@ -159,7 +164,7 @@ export default {
       this.xinMoney = y
     })
     /* 银行卡 */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
+    this.axios.get(url.bankCard).then(res => {
       this.cead = res.data
     }, error => {
       var then = this
@@ -230,11 +235,19 @@ export default {
           }
         }
       }
-
-      var all = '?bank_deal_money=' + this.bank_deal_money + '&money=' + this.all_money + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_bank_deal' + all).then(res => {
-        this.listAdd = res.data
+    var dt = new Date(this.dataValue1)
+      var y = dt.getFullYear()
+      var m = dt.getMonth() + 1
+      var d = dt.getDate()
+      var t = dt.getHours();
+      var MM =dt.getMinutes();
+      var s = dt.getSeconds();
+      var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
+      this.imgUrl_loading = true
+      var all = '?bank_deal_money=' + this.bank_deal_money + '&money=' + this.all_money + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id+'&date='+dd
+      this.axios.get(url.moneyTransfer + all).then(res => {
         if (res.status === 200) {
+          this.imgUrl_loading = false
           mui.alert('转账成功', function () {
             then.$router.go(0)
           })
@@ -351,4 +364,5 @@ export default {
   .saving,.all-money{font-weight: bold}
   select{font-size: 15px!important;}
   #enter,#out{font-size: 16px!important;}
+
 </style>

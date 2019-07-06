@@ -6,6 +6,7 @@
         <h1 class="mui-title">售后跟进</h1>
         <router-link :to="{name:'index'}" class="mui-action-back mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户跟进-->
       <div class="mui-content">
         <div class="customer">
@@ -43,10 +44,12 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'customer_follow_up',
   data () {
     return {
+      imgUrl_loading:false,
       customer_name: '', // 项目名称
       follow_person: '', // 跟进人
       follow_text: '', // 跟进信息
@@ -56,11 +59,11 @@ export default {
   },
   created () {
     // 项目名称
-    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectAllCustomer').then(res => {
+    this.axios.get(url.listProjet).then(res => {
       this.listName = res.data
     })
     //  跟进人
-    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/select_follow_person').then(res => {
+    this.axios.get(url.AfterPerson).then(res => {
       this.profetName = res.data
     })
   },
@@ -86,12 +89,14 @@ export default {
         check = false
         return false
       }
+      this.imgUrl_loading = true
       //    录入数据
       var add = '?Customer_name=' + this.customer_name + '&follow_person=' + this.follow_person + '&follow_text=' + this.follow_text
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/AddFollow' + add).then(res => {
-        if (res.data === '添加成功') {
-          mui.alert('添加成功', function () {
-            then.$router.push('customer_management')
+      this.axios.get(url.AfterAdd + add).then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
+          mui.alert(res.data, function () {
+            then.$router.push('money_sale')
           })
         } else {
           mui.alert('添加失败')

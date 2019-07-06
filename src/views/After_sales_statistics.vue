@@ -71,7 +71,7 @@
 </template>
 
 <script>
-
+  import url from '../components/config'
 export default {
   name: 'customer_statistics',
   data () {
@@ -113,7 +113,7 @@ export default {
   },
   created () {
     // table数据
-    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectStageCustomer').then(res => {
+    this.axios.get(url.AfterStatistics).then(res => {
       if (res.status === 200) {
         this.list = res.data
       } else {
@@ -129,11 +129,11 @@ export default {
     })
 
     // 设计师
-    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectStylist').then(res => {
+    this.axios.get(url.AfterListName).then(res => {
       this.listName = res.data
     })
     //  阶段
-    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectStageName').then(res => {
+    this.axios.get(url.AfterStage).then(res => {
       this.stageName = res.data
     })
     //  倒计时

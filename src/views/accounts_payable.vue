@@ -6,6 +6,7 @@
         <h1 class="mui-title">应付款录入</h1>
         <router-link :to="{name:'index'}" href="souye.html" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户详情-->
       <div class="mui-content">
         <div class="customer">
@@ -57,6 +58,7 @@
             <label>备注</label>
             <input type="text" class="mui-input-clear" id="fund_text" v-model="fund_text" placeholder="备注">
           </div>
+          <data-value v-model="dataValue1"></data-value>
           <div class="mui-input-row input-radio">
             <div class="mui-input-row mui-left mui-radio">
               <label>阶段付款</label>
@@ -74,11 +76,11 @@
               <th :style="padLeft">金额</th>
               <th>备注</th>
             </tr>
-            <tr v-for="item in list" :key="item.id">
-              <td><input type="date" id="data" v-model="item.fund_details_date" placeholder="日期" :style="paRight"></td>
-              <td><input type="text" id="data_text" v-model="item.fund_details_batch" placeholder="批次"></td>
-              <td><input type="text" id="data_money" v-model="item.fund_details_money" placeholder="金额" :style="padLeft"></td>
-              <td><input type="text" id="data_bei" v-model="item.fund_details_text" placeholder="备注"></td>
+            <tr v-for="item in list">
+              <td><input type="date" id="fund_details_date" v-model="item.fund_details_date" :style="paRight"></td>
+              <td><input type="text" id="fund_details_batch" v-model="item.fund_details_batch" placeholder="批次"></td>
+              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="金额"  :style="padLeft"></td>
+              <td><input type="text" id="fund_details_text" v-model="item.fund_details_text" placeholder="备注"></td>
             </tr>
           </table>
           <div class="mui-content data-time" id="data-time">
@@ -113,12 +115,15 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'accounts_payable',
   data () {
     return {
+      imgUrl_loading:false,
       user:'',
       all_rate:'',
+      dataValue1:new Date().toString(),
       all_id:'',
       list_fund_names:'',
       category:true,//隐藏
@@ -139,6 +144,7 @@ export default {
       yue: '', // 还款周期
       qi: '', // 还款期数
       list_fund_name_type:'',
+      batch_index:1,
       list: [
         {'fund_details_date': '', 'fund_details_batch': '1', 'fund_details_money': '', 'fund_details_text': '' },
       ],
@@ -152,11 +158,11 @@ export default {
   },
   created () {
     /*项目名称*/
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res=>{
+    this.axios.get(url.list).then(res=>{
       this.projet = res.data
     })
     /* table */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1').then(res => {
+    this.axios.get(url.ClassSelect+'?fund_type=1').then(res => {
       this.list_fund_name_type = res.data.fund_name_type
     }, error => {
       var then = this
@@ -175,7 +181,7 @@ export default {
     // 类别选择
     fund_namesa (id) {
       this.fund_nameso = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=1&fund_name_type=' + this.fund_nameso).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -198,7 +204,7 @@ export default {
     // 类别名称
     list_fund_nameas (id) {
       this.fund_name = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -212,7 +218,7 @@ export default {
     //类别详细
     all_rate_name(id){
       this.all_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -275,8 +281,8 @@ export default {
       }
       // 判断阶段付款、周期付款
       if (this.fund_type === '阶段付款') {
-        var data_money = document.getElementById('data_money').value // 金额
-        var data_text = document.getElementById('data_text').value // 批次
+        var data_money = document.getElementById('fund_details_money').value // 金额
+        var data_text = document.getElementById('fund_details_batch').value // 批次
         // 金额
         if (data_money == '') {
           mui.toast('金额不能为空')
@@ -390,9 +396,10 @@ export default {
         add = this.all_rate
         list_customer += this.customer_name
       }
+      this.imgUrl_loading = true
       this.axios({
         method:'POST',
-        url:'https://formattingclub.com/YiNuoLogin/fund/Add_Fund',
+        url:url.moneyAddFund,
         headers:{'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'},
         data:{
           listFund:JSON.stringify(this.list),
@@ -413,9 +420,12 @@ export default {
           return ret
         }],
       }).then(res=>{
+        if (res.status === 200) {
+          this.imgUrl_loading = false
         mui.alert(res.data,function () {
           then.$router.push({path:'payable_money'})
         })
+        }
       })
     }
   }

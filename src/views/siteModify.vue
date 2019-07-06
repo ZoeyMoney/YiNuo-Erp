@@ -6,6 +6,7 @@
       <h1 class="mui-title">修改信息</h1>
       <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
     </header>
+    <login-loading v-show="imgUrl_loading"></login-loading>
     <!--客户详情-->
     <div class="mui-content">
       <div class="customer">
@@ -70,10 +71,12 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'site_modify',
   data () {
     return {
+      imgUrl_loading:false,
       projet: '', // 项目
       selet_aa: '', // 复制项目
       listName: '', // 设计师
@@ -100,12 +103,12 @@ export default {
     var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
     // 查询客户项目信息
     this.customer_id = id
-    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectCustomer?Customer=' + id).then(res => {
+    this.axios.get(url.AfterSiteDetails+'?Customer=' + id).then(res => {
       this.projet = res.data
       this.select_aa = JSON.parse(JSON.stringify(res.data))
     })
     // 设计师
-    this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/SelectStylist').then(customName => {
+    this.axios.get(url.AfterListName).then(customName => {
       this.listName = customName.data
     })
   },
@@ -200,7 +203,8 @@ export default {
       if (this.projet === this.select_aa) {
         alert('没有修改任何信息')
       }
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/UpdateCustomer' + add).then(res => {
+      this.imgUrl_loading = true
+      this.axios.get(url.AfterUpdata + add).then(res => {
         this.list = res.data
         if (res.status === 200) {
           mui.alert('修改成功', function () {

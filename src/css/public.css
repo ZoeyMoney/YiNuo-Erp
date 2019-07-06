@@ -6,7 +6,7 @@ input,select,textarea{font-size: 15px;background-color: transparent;}
 .header-top{position: relative;}
 /*头部*/
 	.customer{display: flex;padding-top: 7%;padding-left: 13px;}
-	.customer p{margin: 14px 0;}
+	.customer p{margin: 14px 0;white-space: nowrap;overflow: hidden;text-overflow: ellipsis}
 /*字体模板*/
 .one-noble{padding-left: 6%;padding-top: 17%;line-height: 8px;}
 /*九宫格*/

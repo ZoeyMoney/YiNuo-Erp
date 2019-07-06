@@ -152,6 +152,7 @@
 </template>
 
 <script>
+  import url from '../components/config'
   export default {
     name: 'Project_Reconciliation',
     data(){
@@ -226,7 +227,7 @@
       this.name = JSON.parse(localStorage.data)
       //查询
       var then = this
-      this.axios.get('https://formattingclub.com/YiNuoLogin/User/Select_accounting').then(res=>{
+      this.axios.get(url.selectSerch).then(res=>{
         this.list = res.data.user[0]
         var name = this.list.user_name
         this.name = name
@@ -253,26 +254,26 @@
             this.$refs['number'].style.display = 'none'
           }
       })
-        this.axios.get('https://formattingclub.com/YiNuoLogin/User/Select_accounting?fund_details_state=1').then(res=>{
+        this.axios.get(url.selectSerch+'?fund_details_state=1').then(res=>{
           this.listHos = res.data.data
         })
     },
     methods:{
       first_hos(tab){
         if (tab.index === '0') {
-          this.axios.get('https://formattingclub.com/YiNuoLogin/User/Select_accounting?fund_details_state=1').then(res=>{
+          this.axios.get(url.selectSerch+'?fund_details_state=1').then(res=>{
             this.listHos = res.data.data
           })
         }else if (tab.index === '1') {
-          this.axios.get('https://formattingclub.com/YiNuoLogin/User/Select_accounting?fund_details_state=0').then(res=>{
+          this.axios.get(url.selectSerch+'?fund_details_state=0').then(res=>{
             this.listSecond = res.data.data
           })
         }else if (tab.index === '2') {
-          this.axios.get('https://formattingclub.com/YiNuoLogin/User/Select_accounting?fund_details_state=1&fund_details_money=1').then(res=>{
+          this.axios.get(url.selectSerch+'?fund_details_state=1&fund_details_money=1').then(res=>{
             this.listPaid_for = res.data.data
           })
         }else if (tab.index === '3') {
-          this.axios.get('https://formattingclub.com/YiNuoLogin/User/Select_accounting?fund_details_state=1&fund_details_money=0').then(res=>{
+          this.axios.get(url.selectSerch+'?fund_details_state=1&fund_details_money=0').then(res=>{
             this.listUncollected = res.data.data
           })
         }

@@ -6,6 +6,7 @@
         <h1 class="mui-title">公告录入</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--菜单-->
       <div class="one-noble">
         <h2>公告录入</h2>
@@ -39,10 +40,12 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'announcement_entry',
   data () {
     return {
+      imgUrl_loading:false,
       notice_title: '', // 标题
       notice_number: '', // 公告编号
       notice_person: '', // 下达人群
@@ -77,11 +80,15 @@ export default {
         check = false
         return false
       }
-      this.axios.get('https://formattingclub.com/YiNuoLogin/notice/addNotice?notice_title=' + this.notice_title + '&notice_number=' + this.notice_number +
+      this.imgUrl_loading = true
+      this.axios.get(url.AnnouncementAdd+'?notice_title=' + this.notice_title + '&notice_number=' + this.notice_number +
         '&notice_person=' + this.notice_person + '&notice_text=' + this.notice_text).then(res => {
-        mui.alert(res.data, function () {
-          then.$router.push({ name: 'company_announcement' })
-        })
+          if (res.status === 200) {
+            this.imgUrl_loading = false
+              mui.alert(res.data, function () {
+              then.$router.push({ name: 'company_announcement' })
+            })
+          }
       })
     }
   }

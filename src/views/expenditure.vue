@@ -6,6 +6,7 @@
         <h1 class="mui-title">支出</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--收入-->
       <div class="mui-content">
         <div class="customer">
@@ -52,20 +53,10 @@
               <option v-for="item in listProjet" :value="item.customer_id">{{item.customer_name}}</option>
             </select>
           </div>
+          <data-value v-model="dataValue"></data-value>
           <div class="mui-input-row">
             <label>金额</label>
             <input type="text" class="mui-input-clear" placeholder="请输入金额" v-model="bank_money">
-          </div>
-          <div class="mui-input-row">
-            <label>手续费</label>
-            <select name="" v-model="money_rate">
-              <option value="">请选择</option>
-              <option v-for="item in list_money_rate" :value="item.text">{{item.text}}%</option>
-            </select>
-          </div>
-          <div class="mui-input-row">
-            <label>实际支出</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入金额" v-model="money_actual">
           </div>
           <div class="mui-input-row">
             <label>备注</label>
@@ -136,15 +127,18 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'expenditure',
   data () {
     return {
+      imgUrl_loading:false,
       category:true,
       cotrProjet:false,
       idProjet:true,
       relevant_people:true, //相关人
       site_projet:true,//工地名称
+      dataValue:new Date().toString(),
       bank_id: 0, // id
       list_fund_name_type: [],//个人公司
       detailed: '',  //类别详细
@@ -154,13 +148,6 @@ export default {
       listRelevant: '',//相关人下拉
       site: '',//工地
       bank_money: '',//金额
-      money_rate:'',
-      list_money_rate:[
-        {text:0.6},
-        {text:0.55},
-        {text:0.38},
-      ],
-      money_get:'',
       account: '',//账户
       clearBei: '',//备注
       checkbox: '',//复选框
@@ -183,11 +170,11 @@ export default {
   },
   created () {
     /*项目名称*/
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res=>{
+    this.axios.get(url.list).then(res=>{
       this.listProjet = res.data
     })
     /* table */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_stale=0').then(res => {
+    this.axios.get(url.ClassSelect+'?fund_type=1&fund_stale=0').then(res => {
       this.list_fund_name_type = res.data.fund_name_type
     }, error => {
       var then = this
@@ -196,7 +183,7 @@ export default {
       })
     })
     /* 银行卡 */
-    this.axios.get('https://formattingclub.com/YiNuoLogin/fund/select_bank').then(res => {
+    this.axios.get(url.bankCard).then(res => {
       this.bank_card = res.data
       var chu = []
       var xin = []
@@ -228,24 +215,11 @@ export default {
       })
     })
   },
-  computed: {
-    money_actual:{
-      get:function () {
-        var a = this.bank_money - this.bank_money * this.money_rate / 100
-        var b = Math.floor(a * 100) /100
-        this.money_get = b
-        return b
-      },
-      set:function (value) {
-        this.money_get = value
-      }
-    }
-  },
   methods: {
     //一级查询
     fund_deId(id){
       this.fund_nameso = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=1&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -270,7 +244,7 @@ export default {
     //二级查询
     list_fund_nameas(id){
       this.fund_name_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/Select_three_fund_name?fund_type=1&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=1&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -327,36 +301,57 @@ export default {
         mui.toast('转出不能为空')
         check = false
         return false
-      } else {
-        for (var index in this.cead) {
-          if (parseInt(this.cead[index].bank_id) === this.bank_out_id) {
-            if (parseInt(this.cead[index].bank_money) < parseInt(this.bank_deal_money)) {
+      }else {
+        for (var index in this.chuXu) {
+          if (parseInt(this.chuXu[index].bank_id) === this.bank_id) {
+            if (parseInt(this.chuXu[index].bank_money) < parseInt(this.bank_money)) {
               mui.toast('卡内余额不能大于交易余额')
+              check = false
+              return false
+            }
+          } else {
+            if (parseInt(this.bank_money) > parseInt(this.chuXu[index].bank_id)) {
+              mui.toast('实际转账不能大于信用卡额度')
               check = false
               return false
             }
           }
         }
       }
-      add+='&money='+parseInt(~this.bank_money+1)+'&fund_text='+this.clearBei+'&bank_id='+this.bank_id+'&shiji_money='+parseInt(~this.money_get+1)
+      var dt = new Date(this.dataValue)
+      var y = dt.getFullYear()
+      var m = dt.getMonth() + 1
+      var d = dt.getDate()
+      var t = dt.getHours();
+      var MM =dt.getMinutes();
+      var s = dt.getSeconds();
+      var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
+      this.imgUrl_loading = true
+      add+='&money='+parseInt(~this.bank_money+1)+'&fund_text='+this.clearBei+'&bank_id='+this.bank_id+'&shiji_money='+parseInt(~this.bank_money+1)+'&date='+dd
       if (this.checkbox === true) {
-        this.axios.post('https://formattingclub.com/YiNuoLogin/fund/Add_out_enter'+add).then(res=>{
+        this.axios.post(url.moneyOutEnter+add).then(res=>{
           var id = ''
           for (var index in this.listProjet) {
             if (this.listProjet[index].customer_id === this.site){
               id = this.listProjet[index].customer_name
             }
           }
+          if (res.status === 200) {
+            this.imgUrl_loading = false
           mui.alert(res.data.data,function () {
-            then.$router.push({name:'expenditure_receive',query:{site:id,listRelevant:then.listRelevant,money:then.bank_money,bank_id:then.bank_id,clearBei:then.clearBei}})
+            then.$router.push({name:'expenditure_receive',query:{money:then.bank_money}})
           })
+          }
         })
       }else {
-        this.axios.post('https://formattingclub.com/YiNuoLogin/fund/Add_out_enter'+add).then(res=>{
+        this.axios.post(url.moneyOutEnter+add).then(res=>{
+          if (res.status === 200) {
+            this.imgUrl_loading = false
           if (res.data.data === '录入成功') {
             mui.alert('录入成功', function () {
               then.$router.go(0)
             })
+          }
           }
         })
       }

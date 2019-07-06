@@ -6,6 +6,7 @@
         <h1 class="mui-title">客户跟进</h1>
         <router-link :to="{name:'index'}" class="mui-action-back mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户跟进-->
       <div class="mui-content">
         <div class="customer">
@@ -35,18 +36,18 @@
               <textarea name="" rows="" cols="" id="textarea" placeholder="请输入跟进内容" v-model="follow_text"></textarea>
             </div>
           </form>
-        <div class="mui-input-row form-btn">
-          <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="go">保存</button>
-        </div>
+        <button-save @click.native="go"></button-save>
       </div>
     </div>
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'customer_follow_up',
   data () {
     return {
+      imgUrl_loading:false,
       customer_name: '', // 项目名称
       follow_person: '', // 跟进人
       follow_text: '', // 跟进信息
@@ -56,11 +57,11 @@ export default {
   },
   created () {
     // 项目名称
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer').then(res => {
+    this.axios.get(url.clientProjet).then(res => {
       this.listName = res.data
     })
     //  跟进人
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/select_follow_person').then(res => {
+    this.axios.get(url.clientFollowPerson).then(res => {
       this.profetName = res.data
     })
   },
@@ -86,12 +87,16 @@ export default {
         check = false
         return false
       }
+      this.imgUrl_loading = true
       //    录入数据
       var add = '?Customer_name=' + this.customer_name + '&follow_person=' + this.follow_person + '&follow_text=' + this.follow_text
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/AddFollow' + add).then(res => {
+      this.axios.get(url.clientAddFollow + add).then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
           mui.alert(res.data, function () {
             then.$router.push('customer_management')
           })
+        }
       })
     }
   }
@@ -109,8 +114,4 @@ export default {
 
   form div select{background-color: transparent!important;}
   select{font-size: 15px!important;}
-  /*按钮*/
-  .mui-input-group:after,.mui-input-row:nth-last-child(1):after{background-color: transparent;}
-  .mui-btn-blue, .mui-btn-primary, input[type=submit]{border: 1px solid #000000;background-color: #000000;}
-  .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}
 </style>

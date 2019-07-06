@@ -38,6 +38,7 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'company_announcement',
   data () {
@@ -58,7 +59,7 @@ export default {
   },
   created () {
     // 公告
-    this.axios.get('https://formattingclub.com/YiNuoLogin/notice/select_notice').then(res => {
+    this.axios.get(url.AdminAnnouncement).then(res => {
       this.listNotice = res.data
     })
   },

@@ -6,6 +6,7 @@
       <h1 class="mui-title">余额</h1>
       <router-link :to="{name:'index'}" class="mui-action-back mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
     </header>
+    <login-loading v-show="imgUrl_loading"></login-loading>
     <!--客户详情-->
     <div class="mui-content">
       <div class="customer">
@@ -66,6 +67,7 @@ export default {
   name: 'payable_entry',
   data () {
     return {
+      imgUrl_loading:false,
       projet: '', // 项目
       checkBox: '', // 复选框
       money: '', // 实际转账
@@ -112,6 +114,7 @@ export default {
         check = false
         return false
       }
+      this.imgUrl_loading = true
       this.money = ~this.money+1
       var add = '?fund_details_id=' + this.fund_details_id + '&money=' + this.money + '&bank_id=' + this.fund_bank
       if (this.checkBox === true) {
@@ -123,19 +126,24 @@ export default {
         var text = this.projet[0].fund_details_text
         var data = this.projet[0].fund_details_date
         var datas = data.split(' ')
-        // then.$router.push({ path: 'payable_pay', query: { id: this.fund_details_id, money: money, cumoterName: cumoterName, person: person, text: text, datas: datas } })
         this.axios.get('https://formattingclub.com/YiNuoLogin/fund/update_fund_details' + add).then(res => {
-          then.$router.push({ path: 'payable_pay', query: { id: then.fund_details_id, money: money, cumoterName: cumoterName, person: person, text: text, datas: datas } })
+          if (res.status === 200) {
+            this.imgUrl_loading = false
+            then.$router.push({ path: 'payable_pay', query: { id: then.fund_details_id, money: money, cumoterName: cumoterName, person: person, text: text, datas: datas } })
+          }
         })
       } else {
         // console.log('没')
         this.axios.get('https://formattingclub.com/YiNuoLogin/fund/update_fund_details' + add).then(res => {
+          if (res.status === 200) {
+            this.imgUrl_loading = false
           if (res.data.msg === '支付成功') {
             mui.alert('支付成功', function () {
               then.$router.push({ name: 'payable_money' })
             })
           } else {
             mui.alert('支付失败')
+          }
           }
         })
       }

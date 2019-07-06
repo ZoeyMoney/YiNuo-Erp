@@ -2,10 +2,11 @@
     <div class="money_projet">
       <!--返回-->
       <header class="mui-bar mui-bar-nav">
-        <router-link :to="{name:'money_sale'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+        <router-link :to="{name:'summary_entry'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
         <h1 class="mui-title">项目录入</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户详情-->
       <div class="mui-content">
         <div class="customer">
@@ -29,20 +30,26 @@
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'money_projet',
   data () {
     return {
+      imgUrl_loading:false,
       site_projet: ''// 项目名称录入
     }
   },
   methods: {
     add () {
       var then = this
-      this.axios.get('https://formattingclub.com/YiNuoLogin/AfterSale/addCustomer_name?Customr_name=' + this.site_projet).then(res => {
+      this.imgUrl_loading = true
+      this.axios.get(url.projetAdd+'?Customr_name=' + this.site_projet).then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
         mui.alert(res.data.msg, function () {
           then.$router.push({ name: 'money_sale' })
         })
+        }
       })
     }
   }

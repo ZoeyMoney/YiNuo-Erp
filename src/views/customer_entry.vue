@@ -6,6 +6,7 @@
         <h1 class="mui-title">客户录入</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户录入-->
       <div class="customer">
         <h2>客户录入</h2>
@@ -60,18 +61,18 @@
               <textarea name="Customer_demand" rows="" cols="" v-model="Customer_demand" id="Customer_demand" placeholder="请填写需求"></textarea>
             </div>
           </form>
-        <div class="mui-input-row form-btn">
-          <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="go">保存</button>
-        </div>
+        <button-save @click.native="go"></button-save>
       </div>
     </div>
 </template>
 
 <script>
+  import url from '../components/config'
 export default {
   name: 'customer_entry',
   data () {
     return {
+      imgUrl_loading:false,
       Customer_name: '', // 项目名称
       Customer_linkman: '', // 联系人
       Customer_connect: '', // 联系方式
@@ -90,7 +91,7 @@ export default {
     }
   },
   created () {
-    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStylist').then(customName => {
+    this.axios.get(url.listName).then(customName => {
       this.listName = customName.data
     })
   },
@@ -98,7 +99,6 @@ export default {
 
   },
   methods: {
-
     go () {
       var _this = this
       var check = true
@@ -179,14 +179,18 @@ export default {
         check = false
         return false
       }
+      this.imgUrl_loading = true
       /* 录入数据 */
       var add = '?Customer_name=' + this.Customer_name + '&Customer_linkman=' + this.Customer_linkman + '&Customer_connect=' + this.Customer_connect +
             '&Customer_stylist=' + this.Customer_stylist + '&Customer_Decorate=' + this.Customer_Decorate + '&Customer_referrer=' + this.Customer_referrer +
             '&Customer_budget=' + this.Customer_budget + '&Customer_form=' + this.Customer_form + '&Customer_type=' + this.Customer_type + '&Customer_demand=' + this.Customer_demand
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/AddCustomer' + add).then(res => {
+      this.axios.get(url.clientAdd + add).then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
           mui.alert(res.data, function () {
             _this.$router.push('customer_management')
           })
+        }
       })
     }
   }
@@ -220,10 +224,6 @@ form div select{font-size: 15px!important;}
 .money-input label{flex: 1;width: 30%}
 .money-input input{flex: 1.6;width: 40%}
 .span-money{display: block;line-height: 43px;font-size: 13px;width: 30%;}
-/*按钮*/
-.mui-radio{overflow: visible}
-.mui-btn-blue, .mui-btn-primary, input[type=submit]{border: 1px solid #000000;background-color: #000000;}
-.mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}
 .mui-select:before{display: none}
 .mui-input-group:after,.mui-input-row:nth-last-child(1):after{background-color: transparent;}
 </style>

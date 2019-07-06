@@ -114,11 +114,6 @@
                 <td :style="inClerar"><span><input type="text" class="mui-input-clear allmoney" v-model="originOffer" placeholder="请输入金额"></span></td>
               </tr>
               <tr>
-                <td :style="Ywith"><span>合同价</span></td>
-                <td :style="inClerar"><span><input type="text" class="mui-input-clear allmoney" v-model="contractMoney" placeholder="请输入金额"></span></td>
-                <td :style="inClerar"><span><input type="text" class="mui-input-clear allmoney" v-model="contractOffer" placeholder="请输入金额"></span></td>
-              </tr>
-              <tr>
                 <td :style="Ywith"><span>优惠率</span></td>
                 <td :style="inClerar"><span><input type="text" class="mui-input-clear allmoney" v-model="OfferMoney" placeholder="请输入金额"></span></td>
                 <td :style="inClerar"><span><input type="text" class="mui-input-clear allmoney" v-model="Offer" placeholder="请输入金额"></span></td>
