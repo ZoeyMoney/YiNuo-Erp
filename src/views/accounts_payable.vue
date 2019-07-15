@@ -17,6 +17,14 @@
       <!--form-->
       <div class="mui-content app">
         <form class="mui-input-group">
+          <div class="mui-input-row site_projet" v-if="site_various">
+            <label>工地名称</label>
+            <input type="text" v-model="customer_name" @click="siteChange" placeholder="请选择">
+          </div>
+          <div class="mui-input-row">
+            <label>债权人</label>
+            <input type="text" id="all" class="mui-input-clear" v-model="fund_person" @click="relecantProsen" placeholder="请输入债务人">
+          </div>
           <div class="mui-input-row">
             <label>类别选择</label>
             <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
@@ -39,17 +47,7 @@
               <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
           </div>
-          <div class="mui-input-row" v-if="site_various">
-            <label>工地各项</label>
-            <select name="" v-model="customer_name">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="item in projet" :value="item.customer_name">{{item.customer_name}}</option>
-            </select>
-          </div>
-          <div class="mui-input-row">
-            <label>债权人</label>
-            <input type="text" id="all" class="mui-input-clear" v-model="fund_debtor" placeholder="请输入债务人">
-          </div>
+
           <div class="mui-input-row">
             <label>总金额</label>
             <input type="text" class="mui-input-clear" id="fund_money" v-model="fund_money" placeholder="请输入总金额">
@@ -135,10 +133,11 @@ export default {
       list_fund_name:'',//类别详情
       list_customer_name:'',//项目名称
       fund_money: '', // 总金额
-      fund_debtor: '', // 债权人
-      projet: '', // 项目名称
+      fund_person: '', // 债权人
+      fund_person_id:'',//债权人Id
       fund_type: '阶段付款', // 项目阶段
       customer_name: '', // v项目
+      customer_name_id:'',
       data_huan: '', // 还款时间
       fund_text: '', // 备注
       yue: '', // 还款周期
@@ -157,10 +156,6 @@ export default {
     }
   },
   created () {
-    /*项目名称*/
-    this.axios.get(url.list).then(res=>{
-      this.projet = res.data
-    })
     /* table */
     this.axios.get(url.ClassSelect+'?fund_type=1').then(res => {
       this.list_fund_name_type = res.data.fund_name_type
@@ -170,8 +165,25 @@ export default {
         then.$router.push({ name: 'index' })
       })
     })
+    this.customer_name = window.test
+    this.customer_name_id = window.test_id
+    this.fund_person = window.fund_people
+    this.fund_person_id = window.fund_people_name
   },
   methods: {
+    //工地传参
+    siteChange(){
+      var expenditure = 'accounts_payable'
+      this.$router.push({path:'siteList',})
+      window.expenditure = expenditure
+    },
+    //债权人
+    relecantProsen(){
+      var prosen = 'accounts_payable'
+      this.$router.push({path:'relevant_people'})
+      window.prosen = prosen
+    },
+    //阶段付款每次点击+1批次
     formAdd(){
       this.batch_index++
       var s = {fund_details_date: '', fund_details_money: '', fund_details_batch: '1', fund_details_text: '' }
@@ -367,7 +379,6 @@ export default {
             var m = data_huan.getMonth() + 1 + i
             date = data_huan.getFullYear() + '-' + m + '-' + data_huan.getDate()
             var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch':i.toString(), 'fund_details_text': '' }
-            console.log("123"+a)
             this.list.push(a)
           }
         } else if (zhouqi === '按年') {
@@ -405,7 +416,7 @@ export default {
           listFund:JSON.stringify(this.list),
           fund_customer_id:list_customer,
           fund_workyard_pact_id:1,
-          fund_debtor:this.fund_debtor,
+          fund_debtor:this.fund_person_id,
           fund_name:add,
           fund_money:this.fund_money,
           fund_text:this.fund_text,

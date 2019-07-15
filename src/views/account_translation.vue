@@ -39,7 +39,11 @@
             <label>银行卡</label>
             <select name="" v-model="fund_bank">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in income_y" :value="item.bank_id">{{item.bank_bank}}</option>
+              <option v-for="item in income_y" :value="item.bank_id">
+                <div>{{item.bank_bank}}</div>
+                <div>{{item.bank_person}}</div>
+                <div>￥{{item.bank_money}}</div>
+              </option>
             </select>
           </div>
           <div class="mui-input-row">

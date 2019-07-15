@@ -9,7 +9,7 @@ import element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import date from './components/date' // 天小时分钟秒
 import data from './components/data' // 年月日
-import tosDate from './components/tosDate' // 年月日
+import tosDate from './components/tosDate' // 年月日-1天
 import NoYes from './components/NoYes' // 待确认
 import MoneyFormat from './components/comma' // 货币逗号分行
 import negative from './components/negative'  //过滤减号特殊字符

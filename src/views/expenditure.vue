@@ -17,6 +17,14 @@
       <!--收入记录-->
       <div class="mui-content app">
         <form class="mui-input-group">
+          <div class="mui-input-row site_projet" v-if="site_projet">
+            <label>工地名称</label>
+            <input type="text" v-model="site" @click="siteChange" placeholder="请选择">
+          </div>
+          <div class="mui-input-row">
+            <label>收款人</label>
+            <input type="text" class="mui-input-clear" v-model="fund_person" @click="relecant" placeholder="请输入收款人">
+          </div>
           <div class="mui-input-row">
             <label>类别选择</label>
             <select name="" v-model="fund_detail_id" @change="fund_deId(fund_detail_id)">
@@ -39,20 +47,13 @@
               <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
           </div>
-          <div class="mui-input-row relevant_people" v-if="relevant_people">
+          <!--<div class="mui-input-row relevant_people" v-if="relevant_people">
             <label>相关人</label>
             <select name="" v-model="listRelevant">
               <option value="" selected="selected">请选择</option>
               <option v-for="item in list_bank_card_person" :value="item.text">{{item.text}}</option>
             </select>
-          </div>
-          <div class="mui-input-row site_projet" v-if="site_projet">
-            <label>工地名称</label>
-            <select name="" v-model="site">
-              <option value="">请选择</option>
-              <option v-for="item in listProjet" :value="item.customer_id">{{item.customer_name}}</option>
-            </select>
-          </div>
+          </div>-->
           <data-value v-model="dataValue"></data-value>
           <div class="mui-input-row">
             <label>金额</label>
@@ -65,12 +66,11 @@
           <div class="mui-input-row row-label">
             <label>转出账户</label>
             <label style="padding: 0;width: 70%">
-              <select  v-model="bank_id" name="" id="card">
-                <option value="0" selected="selected">请选择</option>
+              <select  v-model="mongey_bank_id" name="" id="card">
+                <option value="" selected="selected">请选择</option>
                 <option v-for="item in bank_card" :value="item.bank_id">
+                  <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
                   <div>{{item.bank_bank}}</div>
-                  <div>{{item.bank_person}}</div>
-                  <div>￥{{item.bank_money}}</div>
                 </option>
               </select>
             </label>
@@ -140,6 +140,7 @@ export default {
       site_projet:true,//工地名称
       dataValue:new Date().toString(),
       bank_id: 0, // id
+      mongey_bank_id:'',
       list_fund_name_type: [],//个人公司
       detailed: '',  //类别详细
       list_fund_names: [],//红包工资
@@ -151,6 +152,7 @@ export default {
       account: '',//账户
       clearBei: '',//备注
       checkbox: '',//复选框
+      fund_person:'',//收款人
       fund_detail_id: '',		// 工程款
       bank_card: '', // 银行卡
       chuXu: '',	// 储蓄卡
@@ -158,10 +160,11 @@ export default {
       chuXuKa: '', // 储蓄卡总额
       XinYongKa: '', // 储蓄卡总额
       fund_name_id: '', //类别详情id
-      listProjet: '',//工地名称
       list_fund_name_type:'',//一级查询
       list_fund_names:'', //二级查询
       list_fund_name:'',  //三级查询
+      test_id:'',
+      fund_people_name:'',//id
       list_bank_card_person:[
         {text:'胡永生'},
         {text:'邱梅'},
@@ -169,13 +172,13 @@ export default {
     }
   },
   created () {
-    /*项目名称*/
-    this.axios.get(url.list).then(res=>{
-      this.listProjet = res.data
-    })
+    this.imgUrl_loading = true
     /* table */
     this.axios.get(url.ClassSelect+'?fund_type=1&fund_stale=0').then(res => {
+      if (res.status === 200) {
+        this.imgUrl_loading = false
       this.list_fund_name_type = res.data.fund_name_type
+      }
     }, error => {
       var then = this
       mui.alert('您无权访问', function () {
@@ -206,14 +209,19 @@ export default {
       }
       this.chuXu = chu
       this.xinY = xin
-      this.chuXuKa = m
-      this.XinYongKa = y
+
+      this.chuXuKa = Math.floor(m * 100)/100
+      this.XinYongKa = Math.floor(y*100)/100
     }, error => {
       var then = this
       mui.alert('您无权访问', function () {
         then.$router.push({ name: 'index' })
       })
     })
+    this.site = window.test
+    this.test_id = window.test_id
+    this.fund_person = window.fund_people
+    this.fund_people_name = window.fund_people_name
   },
   methods: {
     //一级查询
@@ -262,11 +270,22 @@ export default {
         })
       })
     },
+    siteChange(){
+      var expenditure = 'expenditure'
+      this.$router.push({path:'siteList',})
+      window.expenditure = expenditure
+    },
+    relecant(){
+      // this.$router.push({path:'relevant_people'})
+      var expenditure = 'expenditure_people'
+      this.$router.push({path:'relevant_people',})
+      window.prosen = expenditure
+    },
     /* 保存 */
     add () {
       var then = this
       var check = true
-      var nuber = /^[0-9]*$/ // 验证数字
+      var nuber = /^\d+(\.\d+)?$/ // 验证数字
       var add = '?'
       //第一选择
       if (this.fund_detail_id == '') {
@@ -274,10 +293,16 @@ export default {
         check = false
         return false
       }
+      if (this.site !== undefined && this.test_id !==undefined) {
+        add+='customer_id='+this.test_id
+      }
+      if (this.fund_person !== undefined && this.fund_people_name !== undefined){
+        add+='&fund_person='+this.fund_people_name
+      }
       if (this.fund_detail_id === '个人') {
-        add+='fund_name='+this.detailed+'&fund_debtor='+this.listRelevant
+        add+='fund_name='+this.detailed/*+'&fund_debtor='+this.listRelevant*/
       }else if (this.fund_detail_id === '公司') {
-        add+='fund_name='+this.slim+'&customer_id='+this.site
+        add+='&fund_name='+this.slim
       }
       //金额
       if (this.bank_money == '') {
@@ -297,27 +322,28 @@ export default {
         return false
       }
       // 转出
-      if (this.bank_id == '') {
+      if (this.mongey_bank_id == '') {
         mui.toast('转出不能为空')
         check = false
         return false
-      }else {
-        for (var index in this.chuXu) {
-          if (parseInt(this.chuXu[index].bank_id) === this.bank_id) {
-            if (parseInt(this.chuXu[index].bank_money) < parseInt(this.bank_money)) {
-              mui.toast('卡内余额不能大于交易余额')
-              check = false
-              return false
-            }
-          } else {
-            if (parseInt(this.bank_money) > parseInt(this.chuXu[index].bank_id)) {
-              mui.toast('实际转账不能大于信用卡额度')
-              check = false
-              return false
+      }
+      /*for (var index in this.bank_card) {
+        if (this.bank_card[index].bank_id === this.mongey_bank_id) {
+          if (this.bank_money > this.bank_card[index].bank_money) {
+            mui.toast('支出金额不能大于卡内余额')
+            check = false
+            return false
+          }else{
+            if (this.bank_card[index].limit === '0') {
+              if (this.bank_money > this.bank_card[index].bank_limit) {
+                mui.toast('金额不能大于储蓄卡余额或信用卡额度')
+                check = false
+                return false
+              }
             }
           }
         }
-      }
+      }*/
       var dt = new Date(this.dataValue)
       var y = dt.getFullYear()
       var m = dt.getMonth() + 1
@@ -327,7 +353,7 @@ export default {
       var s = dt.getSeconds();
       var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
       this.imgUrl_loading = true
-      add+='&money='+parseInt(~this.bank_money+1)+'&fund_text='+this.clearBei+'&bank_id='+this.bank_id+'&shiji_money='+parseInt(~this.bank_money+1)+'&date='+dd
+      add+='&money='+(-this.bank_money)+'&fund_text='+this.clearBei+'&bank_id='+this.mongey_bank_id+'&shiji_money='+(-this.bank_money)+'&date='+dd
       if (this.checkbox === true) {
         this.axios.post(url.moneyOutEnter+add).then(res=>{
           var id = ''
@@ -363,6 +389,7 @@ export default {
 <style scoped>
 @import "../css/public.css";
 form{margin-bottom: 12px;}
+input::-webkit-input-placeholder{color: black}
 /*form字体*/
 form div select{font-size: 15px!important;}
 /*第二个form*/

@@ -44,5 +44,6 @@ const url = {
   AfterlistAdd:'https://formattingclub.com/YiNuoLogin/AfterSale/addCustomer_stylist',//责任人添加
   AfterPersonAdd:'https://formattingclub.com/YiNuoLogin/AfterSale/Add_Follow_person',//跟进人添加
   ringNingDelect:'https://formattingclub.com/YiNuoLogin/fund/Deleter_flowing',//流水删除
+  Select_fund_person:'https://formattingclub.com/YiNuoLogin/fund/Select_fund_person'//收款人
 }
 module.exports = url

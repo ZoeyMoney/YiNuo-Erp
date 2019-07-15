@@ -23,9 +23,8 @@
               <select  v-model="bank_out_id" name="" id="enter">
                 <option value="" selected="selected">请选择</option>
                 <option v-for="item in cead"  :value="item.bank_id">
+                  <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
                   <div>{{item.bank_bank}}</div>
-                  <div>{{item.bank_person}}</div>
-                  <div>￥{{item.bank_money}}</div>
                 </option>
               </select>
             </label>
@@ -36,9 +35,8 @@
               <select  v-model="bank_enter_id" id="out">
                 <option value="" selected="selected">请选择</option>
                 <option v-for="item in cead"  :value="item.bank_id">
+                  <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
                   <div>{{item.bank_bank}}</div>
-                  <div>{{item.bank_person}}</div>
-                  <div>￥{{item.bank_money}}</div>
                 </option>
               </select>
             </label>
@@ -77,7 +75,7 @@
           <td>余额</td>
         </tr>
         <tr v-for="item in chuxuka">
-          <td>{{item.bank_bank}}</td>
+          <td @click="bankBank(item.bank_bank)">{{item.bank_bank}}</td>
           <td>{{item.bank_person}}</td>
           <td>{{item.bank_number}}</td>
           <td>￥{{item.bank_money}}</td>
@@ -96,7 +94,7 @@
           <td>额度</td>
         </tr>
         <tr v-for="item in xinyong">
-          <td>{{item.bank_bank}}</td>
+          <td @click="bankBank(item.bank_bank)">{{item.bank_bank}}</td>
           <td>{{item.bank_person}}</td>
           <td>{{item.bank_number}}</td>
           <td>￥{{item.bank_money}}</td>
@@ -130,6 +128,7 @@ export default {
       all_money:'',
       cead: '', // 银行卡
       bank_limit: '', // 额度
+      bank:'',
       listD: [
         { Tnumber: 0.6 },
         { Tnumber: 0.55 },
@@ -138,30 +137,36 @@ export default {
     }
   },
   created () {
+    this.imgUrl_loading = true
     /* 储蓄卡 */
     this.axios.get(url.bankCard).then(res => {
-      this.select_bank = res.data
+      if (res.status === 200) {
+        this.imgUrl_loading = false
+        this.bank = res.data
       var chux = []
       var xin = []
       var m = 0 // 储蓄卡总额
       var y = 0 // 信用卡总额
-      for (var index in res.data) {
-        if (res.data[index].bank_type === '储蓄卡') {
-            var n = res.data[index].bank_number.slice(15, 19) // 截取尾号后4位
-          m += res.data[index].bank_money // 算出储蓄卡总额
-          res.data[index].bank_number = n
-          chux.push(res.data[index])
+      for (var index in this.bank) {
+        if (this.bank[index].bank_type === '储蓄卡') {
+          var n = this.bank[index].bank_number.slice(15, 19) // 截取尾号后4位
+          m+= this.bank[index].bank_money // 算出储蓄卡总额
+          this.bank[index].bank_number = n
+          chux.push(this.bank[index])
         } else {
-          var n = res.data[index].bank_number.slice(12, 16)
-          y += res.data[index].bank_money
-          res.data[index].bank_number = n
-          xin.push(res.data[index])
+          if (this.bank[index].bank_type === '信用卡') {
+          var n = this.bank[index].bank_number.slice(12, 16)
+          y += this.bank[index].bank_money
+            this.bank[index].bank_number = n
+          xin.push(this.bank[index])
+          }
         }
       }
       this.chuxuka = chux
       this.xinyong = xin
-      this.addMoney = m
-      this.xinMoney = y
+      this.addMoney = Math.floor(m*100) / 100
+      this.xinMoney = Math.floor(y*100) / 100
+      }
     })
     /* 银行卡 */
     this.axios.get(url.bankCard).then(res => {
@@ -189,10 +194,20 @@ export default {
     },
   },
   methods: {
+    bankBank(id){
+      var bank_bank={}
+      for (var index in this.bank) {
+        if (id === this.bank[index].bank_bank) {
+        bank_bank = this.bank[index]
+        }
+      }
+     localStorage.bank_bank = JSON.stringify(bank_bank)
+      this.$router.push({name:'edit_bank',query:{bank_bank:bank_bank}})
+    },
     go () {
       var then = this
       var check = true
-      var nuber = /^[0-9]*$/ // 验证数字
+      var nuber = /^\d+(\.\d+)?$/ // 验证数字
       // 金额
       if (this.bank_deal_money == '') {
         mui.toast('金额不能为空')
@@ -220,21 +235,27 @@ export default {
         mui.toast('转入和转出银行卡不能一致')
         check = false
         return false
-      } else {
-        for (var index in this.cead) {
-          if (parseInt(this.cead[index].bank_id) === !this.bank_out_id) {
-            mui.toast('卡内余额不能大于交易余额')
-            check = false
-            return false
-          } else {
-            if (parseInt(this.addMoneys) > parseInt(this.cead[index].bank_out_id)) {
-              mui.toast('实际转账不能大于信用卡额度')
+      }
+      /*//金额不能大于储蓄卡金额
+      for (var index in this.cead) {
+        if (this.cead[index].bank_id === this.bank_out_id) {
+          if (this.cead[index].bank_limit <= '0') {
+            if (this.addMoneys > this.cead[index].bank_money) {
+              mui.toast('金额不能大于卡内余额')
+              check = false
+              return false
+            }
+          }else{
+            //金额不能大于信用卡额度
+            if (this.addMoneys > this.cead[index].bank_limit) {
+              mui.toast('金额不能大于信用卡额度')
               check = false
               return false
             }
           }
         }
-      }
+      }*/
+
     var dt = new Date(this.dataValue1)
       var y = dt.getFullYear()
       var m = dt.getMonth() + 1
@@ -335,7 +356,6 @@ export default {
   .all-saving{
     width: 100%;
     font-size: 15px;
-    margin-bottom: 50px;
   }
   .blaner{width: 100%}
   .all-saving tr {
@@ -345,6 +365,7 @@ export default {
   .all-saving tr td{
     padding-left: 11px;
     border-bottom: 1px solid #dadada;
+    white-space: nowrap;
   }
   .all-saving tr td input,
   .blaner tr td input {

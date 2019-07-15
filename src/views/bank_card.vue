@@ -20,8 +20,8 @@
             <input type="text" class="mui-input-clear" v-model="bank_bank" placeholder="请输入开户行">
           </div>
             <div class="mui-input-row">
-                <label>卡号</label>
-                <input type="text" class="mui-input-clear" v-model="bank_number" placeholder="请输入银行卡账户">
+              <label>卡号</label>
+              <input type="text" class="mui-input-clear" v-model="bank_number" placeholder="请输入银行卡账户">
             </div>
           <div class="mui-input-row">
             <label>户主</label>
@@ -89,11 +89,11 @@ export default {
       var nuber = /^\d+(\.\d+)?$/ // 验证数字
       if (this.bank_type === '储蓄卡') {
         // 银行卡账户
-        if (this.bank_number == '') {
+        /*if (this.bank_number == '') {
           mui.toast('银行卡账户不能为空')
           check = false
           return false
-        }
+        }*/
         /*if (!yin.test(this.bank_number)) {
           mui.toast('银行卡格式错误')
           check = false
@@ -130,11 +130,11 @@ export default {
         add = add + '&bank_limit=0'
       } else if (this.bank_type === '信用卡') {
         // 银行卡账户
-        if (this.bank_number == '') {
+        /*if (this.bank_number == '') {
           mui.toast('银行卡账户不能为空')
           check = false
           return false
-        }
+        }*/
         /*if (!yin.test(this.bank_number)) {
           mui.toast('银行卡格式错误')
           check = false

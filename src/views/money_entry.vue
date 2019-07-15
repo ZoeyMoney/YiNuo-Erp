@@ -17,6 +17,18 @@
       <!--form-->
       <div class="mui-content app">
         <form class="mui-input-group">
+          <div class="mui-input-row site_projet" v-if="site_various">
+            <label>工地名称</label>
+            <input type="text" v-model="customer_name" @click="siteChange" placeholder="请选择">
+          </div>
+          <div class="mui-input-row" v-if="relevant_people">
+            <label>相关人</label>
+            <input type="text" class="mui-input-clear" placeholder="请输入债务人" v-model="fund_debtor" @click="relecantProsen">
+            <!--<select name="" v-model="fund_debtor">
+              <option value="">请选择</option>
+              <option v-for="item in list_fund_debtor" :value="item.text">{{item.text}}</option>
+            </select>-->
+          </div>
           <div class="mui-input-row">
             <label>类别选择</label>
             <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
@@ -39,33 +51,15 @@
               <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
           </div>
-          <div class="mui-input-row" v-if="site_various">
-            <label>工地各项</label>
-            <select name="" v-model="customer_name">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="item in projet" :value="item.customer_name">{{item.customer_name}}</option>
-            </select>
-          </div>
-          <div class="mui-input-row" v-if="relevant_people">
-            <label>相关人</label>
-<!--            <input type="text" class="mui-input-clear" placeholder="请输入债务人" v-model="fund_debtor">-->
-            <select name="" v-model="fund_debtor">
-              <option value="">请选择</option>
-              <option v-for="item in list_fund_debtor" :value="item.text">{{item.text}}</option>
-            </select>
-          </div>
-          <!--<div class="mui-input-row" ref="no">
-            <label>债务人</label>0
-            <input type="text" class="mui-input-clear" placeholder="请输入债务人" v-model="fund_debtor">
-          </div>-->
+
           <div class="mui-input-row">
             <label>总金额</label>
             <input type="text" class="mui-input-clear" placeholder="请输入总金额" v-model="fund_money">
           </div>
-          <div class="mui-input-row">
+          <!--<div class="mui-input-row">
             <label>公司人员</label>
             <input type="text" class="mui-input-clear" placeholder="请输入经手人" v-model="fund_person">
-          </div>
+          </div>-->
           <div class="mui-input-row">
             <label>备注</label>
             <input type="text" class="mui-input-clear" placeholder="备注" v-model="fund_text">
@@ -142,6 +136,7 @@ export default {
       list_fund_name_type:'',
       fund_nameo:'',
       fund_debtor:'',
+      fund_debtor_id:'',
       fund_money:'',
       list_fund_debtor:[
         {text:'胡永生'},
@@ -153,9 +148,9 @@ export default {
       list_fund_namea:'',
       list_fund_name:'',
       customer_name:'',
+      customer_name_id:'',
       list_customer_name:'',
       data_huan:'',
-      projet:'',
       fund_name:'',
       yue:'',
       qi:'',
@@ -173,10 +168,6 @@ export default {
     }
   },
   created () {
-    /*项目名称*/
-    this.axios.get(url.list).then(res=>{
-      this.projet = res.data
-    })
     /* table */
     this.axios.get(url.ClassSelect+'?fund_type=1').then(res => {
       this.list_fund_name_type = res.data.fund_name_type
@@ -186,6 +177,10 @@ export default {
         then.$router.push({ name: 'index' })
       })
     })
+    this.customer_name = window.test
+    this.customer_name_id = window.test_id
+    this.fund_debtor = window.fund_people
+    this.fund_debtor_id = window.fund_people_name
   },
   methods: {
     formAdd(){
@@ -235,7 +230,7 @@ export default {
           this.site_various = false
           this.relevant_people = true
         }else if (this.fund_name === '工程') {
-          this.relevant_people = false
+          this.relevant_people = true
           this.site_various = true
         }
       }, error => {
@@ -274,7 +269,18 @@ export default {
       btn_form.style.display = 'none'
       data_time.style.display = 'block'
     },
-
+    //工地
+    siteChange(){
+      var expenditure = 'money_entry'
+      this.$router.push({path:'siteList',})
+      window.expenditure = expenditure
+    },
+    //相关人
+    relecantProsen(){
+      var prosen = 'money_entry'
+      this.$router.push({path:'relevant_people'})
+      window.prosen = prosen
+    },
     add() {
       var then = this
       var nuber = /^[0-9]*$/ // 验证数字
@@ -305,7 +311,7 @@ export default {
         return false
       }
       // 经手人
-      if (this.fund_person == '') {
+      /*if (this.fund_person == '') {
         mui.toast('经手人不能为空')
         check = false
         return false
@@ -314,7 +320,7 @@ export default {
         mui.toast('经手人格式错误')
         check = false
         return false
-      }
+      }*/
       // 判断阶段付款、周期付款
       if (this.fund_type === '阶段付款') {
         var data_money = document.getElementById('fund_details_money').value // 金额
@@ -445,7 +451,7 @@ export default {
         list_customer += '0'
       }else if (this.fund_nameo === '公司') {
         add = this.all_rate
-        list_customer += this.customer_name
+        list_customer += this.customer_name_id
       }
       this.imgUrl_loading = true
       this.axios({
@@ -456,10 +462,10 @@ export default {
           listFund: JSON.stringify(this.list),
           fund_customer_id: list_customer,
           fund_workyard_pact_id: 1,
-          fund_debtor: this.fund_debtor,
+          fund_debtor: this.fund_debtor_id,
           fund_name: add,
           fund_money: this.fund_money,
-          fund_person: this.fund_person,
+          fund_person: 0,
           fund_text: this.fund_text,
           fund_type: this.fund_type,
         },

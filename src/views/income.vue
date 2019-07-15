@@ -17,6 +17,14 @@
       <!--收入记录-->
       <div class="mui-content app">
         <form class="mui-input-group">
+          <div class="mui-input-row site_projet" v-if="site_projet">
+            <label>工地名称</label>
+            <input type="text" v-model="site" @click="siteChange" placeholder="请选择">
+          </div>
+          <div class="mui-input-row relevant_people" v-if="relevant_people">
+            <label>相关人</label>
+            <input type="text" class="mui-input-clear" v-model="listRelevant" @click="relecantProsen" placeholder="请选择相关人">
+          </div>
           <div class="mui-input-row">
             <label>类别选择</label>
             <select name="" v-model="fund_detail_id" @change="fund_deId(fund_detail_id)">
@@ -39,20 +47,6 @@
               <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
           </div>
-          <div class="mui-input-row relevant_people" v-if="relevant_people">
-            <label>相关人</label>
-            <select name="" v-model="listRelevant">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_bank_card_person" :value="item.text">{{item.text}}</option>
-            </select>
-          </div>
-          <div class="mui-input-row site_projet" v-if="site_projet">
-            <label>工地名称</label>
-            <select name="" v-model="site">
-              <option value="">请选择</option>
-              <option v-for="item in listProjet" :value="item.customer_id">{{item.customer_name}}</option>
-            </select>
-          </div>
           <data-value v-model="dataValue1"></data-value>
           <div class="mui-input-row">
             <label>备注</label>
@@ -61,12 +55,11 @@
           <div class="mui-input-row row-label">
             <label>转入账户</label>
             <label>
-              <select  v-model="bank_id" name="" id="card">
-                <option value="0" selected="selected">请选择</option>
+              <select v-model="mongey_bank_id" name="" id="card">
+                <option value="" selected="selected">请选择</option>
                 <option v-for="item in bank_card" :value="item.bank_id">
+                  <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
                   <div>{{item.bank_bank}}</div>
-                  <div>{{item.bank_person}}</div>
-                  <div>￥{{item.bank_money}}</div>
                 </option>
               </select>
             </label>
@@ -151,16 +144,20 @@ export default {
       site_projet:true,//工地名称
       dataValue1:new Date().toString(),
       bank_id: 0, // id
+      sitePrihet:'',
+      mongey_bank_id:'',
       list_fund_name_type: [],//个人公司
       detailed: '',  //类别详细
       list_fund_names: [],//红包工资
       slim: '',  //类别详细
       list_fund_name: [],  //设计费
       listRelevant: '',//相关人下拉
+      listRelevant_id: '',//相关人ID
       list_bank_card_person:[
         {text:'胡永生'},
         {text:'邱梅'},
       ],
+      // fund_person:'',//收款人
       site: '',//工地
       money: '',//金额
       money_rate:'',//手续费
@@ -179,20 +176,19 @@ export default {
       xinY: '',	// 信用卡
       chuXuKa: '', // 储蓄卡总额
       XinYongKa: '', // 储蓄卡总额
-      listProjet: '',//工地名称
       list_fund_names:'', //二级查询
       list_fund_name:'',  //三级查询
+      test_id:'',
     }
   },
   created () {
-
-    /*项目名称*/
-    this.axios.get(url.list).then(res => {
-      this.listProjet = res.data
-    })
+    this.imgUrl_loading = true
     /* table */
     this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=1').then(res => {
+      if (res.status === 200) {
+        this.imgUrl_loading = false
       this.list_fund_name_type = res.data.fund_name_type
+      }
     }, error => {
       var then = this
       mui.alert('您无权访问', function () {
@@ -223,14 +219,34 @@ export default {
       }
       this.chuXu = chu
       this.xinY = xin
-      this.chuXuKa = m
-      this.XinYongKa = y
+      this.chuXuKa = Math.floor(m*100)/100
+      this.XinYongKa = Math.floor(y*100)/100
     }, error => {
       var then = this
       mui.alert('您无权访问', function () {
         then.$router.push({ name: 'index' })
       })
-    })
+    });
+    /*var loc = location.href
+    var n1 = loc.length// 地址的总长度
+    var n2 = loc.indexOf('=')// 取得=号的位置
+    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
+    this.list = id.split('=')
+    var lists = []
+    for (var index in this.list) {
+      var a1 = this.list[index].indexOf('&')
+      var a2 = this.list[index].slice(0, a1)
+      lists.push(a2)
+    }
+    this.site = lists[1]
+    this.fund_person = lists[2]*/
+    /*this.site = window.test
+    this.fund_person = window.fund_people*/
+    this.site = window.test
+    this.test_id = window.test_id
+    this.listRelevant = window.fund_people
+    this.listRelevant_id = window.fund_people_name
+
   },
   computed:{
     money_actual:{
@@ -261,7 +277,7 @@ export default {
           this.category = true
           this.cotrProjet = true
           this.idProjet = false
-          this.relevant_people = false
+          this.relevant_people = true
           this.site_projet = true
         }
       }, error => {
@@ -282,7 +298,7 @@ export default {
           this.site_projet = false
           this.relevant_people = true
         }else if (this.detailed === '工程') {
-          this.relevant_people = false
+          this.relevant_people = true
           this.site_projet = true
         }
       }, error => {
@@ -305,21 +321,37 @@ export default {
         })
       })
     },
+    siteChange(){
+      var expenditure = 'income'
+      this.$router.push({path:'siteList'})
+      window.expenditure = expenditure
+    },
+    relecantProsen(){
+      var prosen = 'income'
+      this.$router.push({path:'relevant_people'})
+      window.prosen = prosen
+    },
     //添加
     add () {
       var then = this
       var check = true
-      var nuber = /^[0-9]*$/ // 验证数字
+      var nuber = /^\d+(\.\d+)?$/ // 验证数字
       var add = '?'
       if (this.fund_detail_id == '') {
         mui.toast('类别选择不能为空')
         check = false
         return false
       }
+      if (this.site !== undefined && this.test_id !==undefined) {
+        add+='customer_id='+this.test_id
+      }
+      if (this.listRelevant !== undefined && this.listRelevant_id !== undefined){
+        add+='fund_person='+this.listRelevant_id
+      }
       if (this.fund_detail_id === '个人') {
-        add+='fund_name='+this.detailed+'&fund_debtor='+this.listRelevant
+        add+='fund_name='+this.detailed
       }else if (this.fund_detail_id === '公司') {
-        add+='fund_name='+this.slim+'&customer_id='+this.site
+        add+='&fund_name='+this.slim
       }
       /*金额*/
       if (this.money == '') {
@@ -333,27 +365,28 @@ export default {
         return false
       }
       // 转入
-      if (this.bank_id == '') {
+      if (this.mongey_bank_id == '') {
         mui.toast('转入账户不能为空')
         check = false
         return false
-      }else {
-        for (var index in this.chuXu) {
-          if (parseInt(this.chuXu[index].bank_id) === this.bank_id) {
-            if (parseInt(this.chuXu[index].bank_money) < parseInt(this.money_actual)) {
-              mui.toast('卡内余额不能大于交易余额')
-              check = false
-              return false
-            }
-          } else {
-            if (parseFloat(this.money_actual) > parseFloat(this.chuXu[index].bank_id)) {
-              mui.toast('实际转账不能大于信用卡额度')
-              check = false
-              return false
+      }
+      /*for (var index in this.bank_card) {
+        if (this.bank_card[index].bank_id === this.mongey_bank_id) {
+          if (this.money_actual > this.bank_card[index].bank_money) {
+            mui.toast('卡内余额不能大于交易余额')
+            check = false
+            return false
+          }else{
+            if (this.bank_card[index].limit === '0') {
+              if (this.money_actual > this.bank_card[index].bank_limit) {
+                mui.toast('金额不能大于储蓄卡余额或信用卡额度')
+                check = false
+                return false
+              }
             }
           }
         }
-      }
+      }*/
       var dt = new Date(this.dataValue1)
       var y = dt.getFullYear()
       var m = dt.getMonth() + 1
@@ -363,7 +396,7 @@ export default {
       var s = dt.getSeconds();
       var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
       this.imgUrl_loading = true
-      add+='&money='+this.money+'&fund_text='+this.clearBei+'&bank_id='+this.bank_id+'&shiji_money='+this.money_get+'&date='+dd
+      add+='&money='+this.money+'&fund_text='+this.clearBei+'&bank_id='+this.mongey_bank_id+'&shiji_money='+this.money_get+'&date='+dd
       if (this.checkbox === true) {
         this.axios.post(url.moneyOutEnter + add).then(res => {
           var id = ''
@@ -386,8 +419,8 @@ export default {
           if (res.data.data === '录入成功') {
             mui.alert('录入成功', function () {
               then.$router.go(0)
-            })
-          }
+              })
+            }
           }
         })
       }

@@ -6,6 +6,7 @@
         <h1 class="mui-title">利润统计</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--收入-->
       <div class="mui-content">
         <div class="customer">
@@ -19,13 +20,14 @@
           <label>关键字</label>
           <input type="text" class="mui-input-clear" placeholder="请输入用户名">
         </div>
+        <div class="input-x">
         <table border="0">
           <tr>
-            <th><span :style="siteSlect">工地各项</span></th>
+            <th><span :style="siteSlect">工地名称</span></th>
             <th><span>支出合计</span></th>
             <th><span>收入合计</span></th>
             <th><span>预计利润</span></th>
-            <th><span>利润比</span></th>
+<!--            <th><span>利润比</span></th>-->
           </tr>
           <tr v-for="item in list">
             <td @click="projet_modify(item.customer_id)"><span :style="lefProjet">{{item.customer_name}}</span></td>
@@ -35,12 +37,13 @@
               <span v-if="item.pre_profit">￥{{item.pre_profit}}</span>
               <span v-if="item.pre_profit === 0">￥0</span>
             </td>
-            <td>
+            <!--<td>
               <span :style="widCate" v-if="item.pre_profit_proportion">￥{{item.pre_profit_proportion}}%</span>
               <span :style="widCate" v-if="item.pre_profit_proportion === 0">￥0%</span>
-            </td>
+            </td>-->
           </tr>
         </table>
+        </div>
       </div>
       <footer>
         <div>TOTAL</div>
@@ -56,6 +59,7 @@ export default {
   name: 'money_profit',
   data () {
     return {
+      imgUrl_loading:false,
       moneyNY:'',
       list: '',
 
@@ -65,10 +69,9 @@ export default {
       },
       lefProjet:{
         display:'block',
-        width:'107px',
+        width:'122px',
         whiteSpace:'nowrap',
         overflow:'hidden',
-        textOverflow:'ellipsis',
         paddingLeft:'10px'
       },
       widCate:{
@@ -79,8 +82,12 @@ export default {
     }
   },
   created(){
+    this.imgUrl_loading = true
     this.axios.get(url.moneyProfit).then(res=>{
+      if (res.status === 200) {
+        this.imgUrl_loading = false
       this.list = res.data.data
+      }
     })
   },
   methods: {
@@ -108,6 +115,7 @@ export default {
   table span{display: block;}
   table tr{line-height: 29px;border-bottom: 1px solid #DADADA;}
   table tr th{background-color: #DADADA;line-height:32px;}
+  .input-x{width: 100%;overflow-x: auto}
   /*bottom*/
   footer{position: fixed;bottom: 0;display: flex;width: 100%;background-color: #a7a7a7;line-height: 30px;font-size: 14px;}
   footer div{flex: 1;text-align: right;padding-right: 20px}

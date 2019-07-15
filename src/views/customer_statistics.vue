@@ -6,6 +6,7 @@
         <h1 class="mui-title">客户统计</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
       <!--客户统计-->
       <div class="mui-content">
         <div class="customer">
@@ -77,6 +78,7 @@ export default {
   name: 'customer_statistics',
   data () {
     return {
+      imgUrl_loading:false,
       customer_name: '', // 关键字
       customer_stylist: '', // 设计师
       stage_name: '', // 阶段
@@ -115,9 +117,11 @@ export default {
     }
   },
   created () {
+    this.imgUrl_loading = true
     // table数据
     this.axios.get(url.list).then(res => {
       if (res.status === 200) {
+        this.imgUrl_loading = false
         this.list = res.data
       }
       // 求钱的总和

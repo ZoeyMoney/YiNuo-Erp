@@ -293,6 +293,30 @@ export default new Router({
       path: '/projet_modify',
       name: 'projet_modify',
       component:resolve=>require(['@/views/projet_modify'],resolve)
+    }, {
+      path: '/admin_nameUpdate',
+      name: 'admin_nameUpdate',
+      component:resolve=>require(['@/views/admin_nameUpdate'],resolve)
+    }, {
+      path: '/userNameUpdate',
+      name: 'userNameUpdate',
+      component:resolve=>require(['@/views/userNameUpdate'],resolve)
+    }, {
+      path: '/siteList',
+      name: 'siteList',
+      component:resolve=>require(['@/views/siteList'],resolve)
+    }, {
+      path: '/relevant_people',
+      name: 'relevant_people',
+      component:resolve=>require(['@/views/relevant_people'],resolve)
+    }, {
+      path: '/edit_bank',
+      name: 'edit_bank',
+      component:resolve=>require(['@/views/edit_bank'],resolve)
+    }, {
+      path: '/profit_edit',
+      name: 'profit_edit',
+      component:resolve=>require(['@/views/profit_edit'],resolve)
     }
     /* {
       path:'/home',

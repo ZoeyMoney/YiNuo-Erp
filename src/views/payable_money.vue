@@ -6,6 +6,7 @@
       <h1 class="mui-title">应付款汇总</h1>
       <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
     </header>
+    <login-loading v-show="imgUrl_loading"></login-loading>
     <!--客户录入-->
     <div class="mui-content one-img">
       <div class="customer">
@@ -81,6 +82,7 @@ export default {
   name: 'payable_money',
   data () {
     return {
+      imgUrl_loading:false,
       fund_nameo: '', // 类别选择
       customer_name: '',
       list_fund_names: '', // table
@@ -126,13 +128,17 @@ export default {
     }
   },
   created () {
+    this.imgUrl_loading = true
     /* table */
     this.axios.get(url.moneyReceivable+'?fund_type=0').then(res => {
+      if (res.status === 200) {
+        this.imgUrl_loading = false
       this.listTable = res.data.list_fund
       this.list_fund_name_type = res.data.list_fund_name_type
       this.list_fund_names = res.data.list_fund_names
       this.list_customer_name = res.data.list_customer_name
       this.list_fund_name = res.data.list_fund_name
+      }
     }, error => {
       var then = this
       mui.alert('您无权访问', function () {

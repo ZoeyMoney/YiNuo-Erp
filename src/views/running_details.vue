@@ -26,6 +26,10 @@
             <input type="text" class="mui-input-clear" :value="bank_deal_money" placeholder="无" disabled="disabled">
           </div>
           <div class="mui-input-row">
+            <label>余额</label>
+            <input type="text" class="mui-input-clear" :value="balance" placeholder="无" disabled="disabled">
+          </div>
+          <div class="mui-input-row">
             <label>交易时间</label>
             <input type="text" class="mui-input-clear" :value="bank_deal_date | tosDate" placeholder="无" disabled="disabled">
           </div>
@@ -52,6 +56,10 @@
           <div class="mui-input-row">
             <label>款项详细</label>
             <input type="text" class="mui-input-clear" :value="fund_type" placeholder="无" disabled="disabled">
+          </div>
+          <div class="mui-input-row">
+            <label>相关人</label>
+            <input type="text" class="mui-input-clear" :value="fund_person" placeholder="无" disabled="disabled">
           </div>
         </form>
         <div class="mui-input-row form-btn">
@@ -80,6 +88,9 @@
         fund_name_type:'',//款项类别
         fund_names:'',  //款项详情
         fund_type:'',//款项详细
+        balance:'',//余额
+        fund_person:'',//债权人
+        fund_debtor:'',//相关人
       }
     },
     created () {
@@ -97,7 +108,7 @@
       }else if (this.list.fund_detail_transaction_money === 0) {
         this.bank_deal_money = this.list.bank_deal_money
       }
-      console.log(JSON.parse(localStorage.msg))
+      // console.log(JSON.parse(localStorage.msg))
       this.bank_deal_date = this.list.fund_detail_transaction_date
       this.bank_number = this.list.bank_number.replace(reg, "$1 **** **** $2")
       this.bank_projet = this.list.customer_name
@@ -105,7 +116,11 @@
       this.bank_type = this.list.bank_type
       this.fund_name_type = this.list.fund_name_type
       this.fund_names = this.list.fund_names
-      this.fund_type = this.list.fund_type
+      this.fund_type = this.list.fund_details_text
+      this.balance = this.list.balance
+      this.fund_person = this.list.fund_person
+      this.fund_debtor = this.list.fund_debtor
+
     },
     methods:{
       dele(){
@@ -127,12 +142,12 @@
           })
         }
 
-        console.log(allfund_detail_id)
-       /* this.axios.get(url.ringNingDelect+'?fund_detail_id='+allfund_detail_id).then(res=>{
+        // console.log(allfund_detail_id)
+        this.axios.get(url.ringNingDelect+'?fund_detail_id='+allfund_detail_id).then(res=>{
           mui.alert(res.data,function () {
             then.$router.push({path:'running_money'})
           })
-        })*/
+        })
       }
     }
   }

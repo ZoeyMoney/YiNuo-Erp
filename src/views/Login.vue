@@ -70,7 +70,7 @@ export default {
 <style scoped>
   @import "../css/public.css";
   input::-webkit-input-placeholder{color: #464646}
-  .bcg{position: fixed;z-index: 1000;background: url("../image/507839882.png") no-repeat;background-size: cover;width: 100%;height: 100%;}
+  /*.bcg{position: fixed;z-index: 1000;background: url("../image/507839882.png") no-repeat;background-size: cover;width: 100%;height: 100%;}*/
   .logo{position: relative;z-index: 1000;width: 100%;margin: 0 auto;top: 11%;text-align: center;}
   .logo .logo-bcg{width: 100%}
   .logo .logo-bcg img{width: 80px}

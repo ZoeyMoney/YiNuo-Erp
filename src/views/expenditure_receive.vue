@@ -226,7 +226,7 @@ export default {
           this.site_projet = false
           this.relevant_people = true
         }else if (this.detailed === '工程') {
-          this.relevant_people = false
+          this.relevant_people = true
           this.site_projet = true
         }else if (this.detailed === '营业费') {
           this.relevant_people = true
