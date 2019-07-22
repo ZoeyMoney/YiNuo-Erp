@@ -18,7 +18,7 @@
       <div class="mui-content">
         <!--关键字-->
         <div class="mui-input-row input-top">
-          <label>输入关键字</label>
+          <label>工地搜索</label>
           <input type="text" class="mui-input-clear" placeholder="请输入关键字" v-model="customer_name">
         </div>
         <!--表格-->
@@ -31,7 +31,7 @@
             </select>
           </div>
           <div class="mui-row row-flex">
-            <label>阶段</label>
+            <label>设计阶段</label>
             <select v-model="stage_name">
               <option value="" selected="selected">请选择</option>
               <option v-for="index in stageName" :value="index">{{index}}</option>
@@ -39,15 +39,29 @@
           </div>
         </div>
         <!--table-->
-        <table border="0">
+        <p v-show="false">{{listtime | data}}</p>
+        <template>
+          <el-table :data="list" style="width: 100%;color: black" height="65vh" @row-click="mername">
+            <el-table-column fixed prop="customer_name" label="工地名称" width="150"></el-table-column>
+            <el-table-column prop="customer_stylist" label="设计师" width="120"></el-table-column>
+            <el-table-column prop="customer_budget" label="预算" width="120"></el-table-column>
+            <el-table-column prop="stage_name" label="阶段" width="120"></el-table-column>
+            <el-table-column :key="Math.random()" label="倒计时" width="120">
+              <span :style="listRad" v-if="time(list.stage_startdate,list.stage_stipulate) === '已逾期'">{{time(list.stage_startdate,list.stage_stipulate)}}</span>
+              <span :style="listStyle" v-else-if="time(list.stage_startdate,list.stage_stipulate) === '未开始'">{{time(list.stage_startdate,list.stage_stipulate)}}</span>
+              <span :style="listBlue" v-else-if="time(list.stage_startdate,list.stage_stipulate)">{{time(list.stage_startdate,list.stage_stipulate)}}</span>
+            </el-table-column>
+          </el-table>
+        </template>
+        <!--<table border="0">
             <tr>
-              <th :style="projet">工地各项</th>
+              <th :style="projet">工地名称</th>
               <th>设计师</th>
-              <th>预算金额</th>
+              <th>预算</th>
               <th>阶段</th>
               <th>倒计时</th>
             </tr>
-          <p v-show="false">{{listtime | data}}</p>
+
           <tr v-for="item in list" :style="ostyle">
               <td @click="mername(item.customer_id)" :value="item.customer_id"><span :style="projet">{{item.customer_name}}</span></td>
               <td :style="paLift"><span>{{item.customer_stylist}}</span></td>
@@ -57,7 +71,7 @@
             <td :style="listStyle" v-else-if="time(item.stage_startdate,item.stage_stipulate) === '未开始'">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
             <td :style="listBlue" v-else-if="time(item.stage_startdate,item.stage_stipulate)">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
           </tr>
-        </table>
+        </table>-->
       </div>
       <!--底部-->
       <div class="footer">
@@ -84,8 +98,15 @@ export default {
       stage_name: '', // 阶段
       listName: '',
       stageName: '',
-      list: '', // table
-      stage_stipulate: '',
+      list: [{
+        customer_name:'',
+        customer_stylist:'',
+        customer_budget:'',
+        stage_name:'',
+        stage_startdate:'',
+        stage_stipulate:'',
+        customer_id:''
+      }], // table
       add: '', // 钱总
       listtime: '', // 倒计时
       /* table */
@@ -149,7 +170,8 @@ export default {
   methods: {
     // 页面传参
     mername (id) {
-      this.$router.push({ path: 'customer_details', query: { id: id } })
+      console.log(id.customer_id)
+      this.$router.push({ path: 'customer_details', query: { id: id.customer_id } })
     },
     // 倒计时
     time: function (date, day) {
@@ -204,8 +226,13 @@ export default {
   table tr th{text-align: left;width: 20%;}
   table tr td span{display: block;;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
   .mui-content table tr:nth-child(1){font-size: 12px;background-color: #DADADA;line-height: 30px;}
+  /deep/.el-table .cell{white-space: nowrap}
+  /deep/.el-table__header th, .el-table__header tr{background-color: #dadada;color: black;padding: 4px 0;}
+  /deep/.el-table td, .el-table th.is-leaf{border-bottom: 1px solid #dadada;padding: 4px 0;background-color: #efeff4}
+  .element::-webkit-scrollbar {display:none}
+  /deep/.el-radio{padding-left: 9px;line-height: 36px}
   /*底部*/
-  .footer{background-color: #dedcdc;position: fixed;width: 100%;bottom: 0;display: flex;padding-top: 10px;}
+  .footer{background-color: #dedcdc;position: fixed;width: 100%;bottom: 0;display: flex;padding-top: 10px;z-index: 1000}
   .footer .footer-botton:nth-child(1){flex: 1;padding-left: 8px;}
   .footer .footer-botton:nth-child(2){flex: 1;display: flex;}
   .footer .footer-botton p{color: black;font-weight: bold;font-size: 15px}

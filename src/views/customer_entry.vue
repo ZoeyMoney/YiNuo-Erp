@@ -43,7 +43,7 @@
             </div>
             <div class="mui-input-row money-input">
               <label>项目预算</label>
-              <input type="text" class="mui-input-clear" id="budgedt" v-model="Customer_budget" name="Customer_budget" placeholder="请输入预算金额">
+              <input type="text" class="mui-input-clear" id="budgedt" v-model="Customer_budget" name="Customer_budget" placeholder="￥">
               <span class="span-money">{{Customer_budget | MoneyFormat}}</span>
             </div>
             <div class="mui-input-row radio-form">

@@ -20,7 +20,7 @@
           <input type="text" class="mui-input-clear" placeholder="请输入关键字">
         </div>
           <ul class="mui-table-view">
-            <li class="mui-table-view-cell mui-collapse">
+            <li class="mui-table-view-cell mui-collapse" @click="search_fa">
               <a class="mui-navigate-right" href="#">查询</a>
               <div class="mui-collapse-content">
                 <div class="mui-input-row">
@@ -94,7 +94,7 @@
           <div>日期</div>
         </div>
         <div class="div-table">
-        <div class="div-tr" v-for="item in list_moey">
+        <div class="div-tr" v-for="item in list_moey" v-if="al_projet">
           <div>{{item.bank_person}}</div>
           <div>{{item.bank_bank}}</div>
           <!--<div>
@@ -117,7 +117,31 @@
           <div :style="floorNumber">￥{{item.balance}}</div>
           <div v-if="item.date">{{item.date}}</div>
           </div>
+          <!--er-->
+          <div class="div-tr" v-for="item in list_moey_two" v-if="al_projet_two">
+            <div>{{item.bank_person}}</div>
+            <div>{{item.bank_bank}}</div>
+            <!--<div>
+              <span v-if="item.customer_name && item.fund_name != '手续费'" :style="nameWidth">{{item.customer_name}}</span>
+              <span v-if="item.bank_deal_money" :style="nameWidth">转账</span>
+              <span v-if="item.bank_deal_money===0 && !item.customer_name && item.fund_details_money>0 && item.fund_name != '手续费'" :style="nameWidth">收入</span>
+              <span v-if="item.bank_deal_money===0 && !item.customer_name && item.fund_details_money<0 && item.fund_name != '手续费'" :style="nameWidth">支出</span>
+              <span v-if="item.fund_name ==='手续费'">手续费</span>
+            </div>-->
+            <div>
+            <span @click="person(item.fund_detail_id)"
+                  :class="{money_green:item.fund_detail_transaction_money>0,
+               money_red: item.fund_detail_transaction_money<0}"
+                  v-if="item.fund_detail_transaction_money">￥{{item.fund_detail_transaction_money | negative}}</span>
+              <span @click="person(item.bank_deal_id)"
+                    :class="{money_green:item.bank_deal_money>0,
+              money_red:item.bank_deal_money<0}"
+                    v-if="item.bank_deal_money">￥{{item.bank_deal_money | negative}}</span>
+            </div>
+            <div :style="floorNumber">￥{{item.balance}}</div>
+            <div v-if="item.date">{{item.date}}</div>
         </div>
+      </div>
       </div>
       <footer>
         <div>TOTAL</div>
@@ -144,6 +168,8 @@ export default {
       list_slime_all:'',
       bank_person: '', // 户主
       menu_bank_person: '',	// in户主
+      al_projet:true,
+      al_projet_two:false,
       bank_bank: '',	// 开户行
       menu_bank_bank: '', // in开户行
       bank_number: '',	// 尾号
@@ -156,6 +182,7 @@ export default {
       menu_Customer_name:'',//工地各项
       date_list: '',	// 起始时间
       date_list_two:'',//结束时间
+      list_moey_two:'',
       dateStart:'',
       dateEnter:'',
       list_moey:'',
@@ -175,6 +202,7 @@ export default {
       dataB:'',
       menuBankNumber:'',
       fund_details_id:'',//传参id
+      all_all:'',
       leftshi: {
         paddingLeft: '10px'
       },
@@ -194,24 +222,19 @@ export default {
       }
     }
   },
+  component:{
+
+  },
   created () {
     this.imgUrl_loading = true
-    this.axios.get(url.moneyRunning).then(res => {
+    //获取前两天时间
+    var sh_data = this.GetDateStr(-2)
+    //传给后台时间
+    this.axios.get(url.moneyRunning+'?DateStart='+sh_data).then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
       }
-      this.list_moey = res.data.list_moey //户主
-      this.menu_bank_person = res.data.menu_bank_person
-      this.menu_bank_bank = res.data.menu_bank_bank
-      //尾号
-      this.menu_bank_number = res.data.menu_bank_number
-      this.list_fund_name_type = res.data.list_fund_name_type
-      this.list_fund_names = res.data.list_fund_names
-      this.list_customer_name = res.data.list_customer_name
-      this.list_fund_name = res.data.list_fund_name
-      this.menu_fund_name_type = res.data.menu_fund_name_type
-      this.menu_fund_names = res.data.menu_fund_names
-      this.menu_Customer_name = res.data.menu_Customer_name
+      this.package(res)
       //去掉-
       var green_money = 0 //绿色
       var zero_money = 0  //红色
@@ -250,154 +273,172 @@ export default {
     var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
     // 查询客户项目信息
     this.fund_details_id = id
+    this.list = id.split('=')
+    this.all_all = this.list[0]
+    //  接收收入支出转账银行卡信息
+    if (this.all_all === 'transfer') {
+      this.al_projet = false
+      this.al_projet_two = true
+      this.list_moey_two = window.transfer
+      console.log(this.list_moey_two)
+    }
   },
   methods: {
+    //查询
+    search_fa(){
+      this.al_projet_two = false
+      this.al_projet = true
+    },
+    //封装前两天时间
+    GetDateStr(AddDayCount) {
+    var dd = new Date();
+    dd.setDate(dd.getDate()+AddDayCount);//获取AddDayCount天后的日期
+    var y = dd.getFullYear();
+    var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0
+    var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0
+    return y+"-"+m+"-"+d;
+    },
     //金额点击
     person(id){
       var list = {}
-      for (var index in this.list_moey) {
+      if (this.all_all === 'transfer') {
+      for (var index in this.list_moey_two) {
+        if (id === this.list_moey_two[index].bank_deal_id || id === this.list_moey_two[index].fund_detail_id) {
+          list = this.list_moey_two[index]
+        }
+      }
+      }else{
+        for (var index in this.list_moey) {
         if (id === this.list_moey[index].bank_deal_id || id === this.list_moey[index].fund_detail_id) {
           list = this.list_moey[index]
         }
+      }
       }
       localStorage.msg = JSON.stringify(list)
       this.$router.push({path:'running_details',query:{list:list}})
       // this.$router.push({path:'running_details',query:{id:then.fund_details_id,person:person,bank_bank:bank_bank,bank_deal_date:bank_deal_date,bank_deal_moneya:bank_deal_money,bank_number:bank_number,bank_type:bank_type}})
     },
-    //开户行
+    //封装model
+    package(res){
+      this.list_moey = res.data.list_moey //户主
+      this.menu_bank_person = res.data.menu_bank_person
+      this.menu_bank_bank = res.data.menu_bank_bank
+      this.menu_bank_number = res.data.menu_bank_number
+      this.list_fund_name_type = res.data.list_fund_name_type
+      this.list_fund_names = res.data.list_fund_names
+      this.list_customer_name = res.data.list_customer_name
+      this.list_fund_name = res.data.list_fund_name
+      this.menu_fund_name_type = res.data.menu_fund_name_type
+      this.menu_fund_names = res.data.menu_fund_names
+      this.menu_Customer_name = res.data.menu_Customer_name
+    },
+    //户主
     bankPerson(id){
       this.bankPerson_id = id
       this.axios.get(url.moneyRunning+'?bank_person='+id).then(res => {
-        this.list_moey = res.data.list_moey //户主
-        this.menu_bank_person = res.data.menu_bank_person
-        this.menu_bank_bank = res.data.menu_bank_bank
-        this.menu_bank_number = res.data.menu_bank_number
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
-        this.menu_fund_name_type = res.data.menu_fund_name_type
-        this.menu_fund_names = res.data.menu_fund_names
-        this.menu_Customer_name = res.data.menu_Customer_name
+        this.package(res)
       })
     },
     //开户行
     bankBank(id){
       this.bankBank_id = id
-      this.axios.get(url.moneyRunning+'?bank_person='+this.bankPerson_id + '&bank_bank='+id).then(res => {
-        this.list_moey = res.data.list_moey //户主
-        this.menu_bank_person = res.data.menu_bank_person
-        this.menu_bank_bank = res.data.menu_bank_bank
-        this.menu_bank_number = res.data.menu_bank_number
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
-        this.menu_fund_name_type = res.data.menu_fund_name_type
-        this.menu_fund_names = res.data.menu_fund_names
-        this.menu_Customer_name = res.data.menu_Customer_name
+      var add = '?'
+      if (this.bankPerson_id !== '' && this.bankPerson_id !== undefined) {
+        add+='bank_person='+this.bankPerson_id
+      }
+      this.axios.get(url.moneyRunning+add+ '&bank_bank='+id).then(res => {
+        this.package(res)
       })
     },
     //  尾号
     bankNumber(id){
       this.bankNumber_id = id
       this.axios.get(url.moneyRunning+'?bank_person='+this.bankPerson_id + '&bank_bank='+this.bankBank_id + '&bank_number='+ id).then(res => {
-          this.list_moey = res.data.list_moey //户主
-          this.menu_bank_person = res.data.menu_bank_person
-          this.menu_bank_bank = res.data.menu_bank_bank
-          this.menu_bank_number = res.data.menu_bank_number
-          this.list_fund_name_type = res.data.list_fund_name_type
-          this.list_fund_names = res.data.list_fund_names
-          this.list_customer_name = res.data.list_customer_name
-          this.list_fund_name = res.data.list_fund_name
-        this.menu_fund_name_type = res.data.menu_fund_name_type
-        this.menu_fund_names = res.data.menu_fund_names
-        this.menu_Customer_name = res.data.menu_Customer_name
+        this.package(res)
       })
     },
     //类别选择
     fund_namesa(id){
       this.fundNamesa_id = id
-      this.axios.get(url.moneyRunning + '?fund_name_type=' + id).then(res => {
-        this.list_moey = res.data.list_moey //户主
-        this.menu_bank_person = res.data.menu_bank_person
-        this.menu_bank_bank = res.data.menu_bank_bank
-        this.menu_bank_number = res.data.menu_bank_number
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
-        this.menu_fund_name_type = res.data.menu_fund_name_type
-        this.menu_fund_names = res.data.menu_fund_names
-        this.menu_Customer_name = res.data.menu_Customer_name
+      var add = '?'
+      if (this.bankPerson_id !== '' && this.bankPerson_id !== undefined) {
+        add+='bank_person='+this.bankPerson_id
+      }
+      if (this.bankBank_id !== '' && this.bankBank_id !== undefined) {
+        add+='&bankBank_id='+this.bankBank_id
+      }
+      if (this.dataA !== '' && this.dataA !== undefined) {
+        add+='&DateStart='+this.dataA
+      }
+      if (this.dataB !== '' && this.dataB !== undefined) {
+        add+='&DateEnd='+this.dataB
+      }
+      this.axios.get(url.moneyRunning + add + '&fund_name_type=' + id).then(res => {
+        this.package(res)
       })
     },
     //类别名称
     list_fund_nameas(id){
       this.listFund_name_id = id
       this.axios.get(url.moneyRunning + '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+id).then(res => {
-        this.list_moey = res.data.list_moey //户主
-        this.menu_bank_person = res.data.menu_bank_person
-        this.menu_bank_bank = res.data.menu_bank_bank
-        this.menu_bank_number = res.data.menu_bank_number
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
-        this.menu_fund_name_type = res.data.menu_fund_name_type
-        this.menu_fund_names = res.data.menu_fund_names
-        this.menu_Customer_name = res.data.menu_Customer_name
+        this.package(res)
       })
     },
     //工地
     customer_name_list(id){
       this.customerName_id = id
-      this.axios.get(url.moneyRunning +'?fund_name_type=' + this.fundNamesa_id + '&fund_names='+this.listFund_name_id+'&Customer_id='+id).then(res => {
-        this.list_moey = res.data.list_moey //户主
-        this.menu_bank_person = res.data.menu_bank_person
-        this.menu_bank_bank = res.data.menu_bank_bank
-        this.menu_bank_number = res.data.menu_bank_number
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
-        this.menu_fund_name_type = res.data.menu_fund_name_type
-        this.menu_fund_names = res.data.menu_fund_names
-        this.menu_Customer_name = res.data.menu_Customer_name
+      var add = '?'
+      if (this.fundNamesa_id !== '' && this.fundNamesa_id !==undefined){
+        add+= 'fund_name_type='+this.fundNamesa_id
+      }
+      if (this.listFund_name_id !== '' && this.listFund_name_id !== undefined) {
+        add+= '&fund_names='+this.listFund_name_id
+      }
+      this.axios.get(url.moneyRunning +add+'&Customer_id='+id).then(res => {
+        this.package(res)
       })
     },
     //开始时间
     dateList(id){
       this.dataA = id
-      this.axios.get(url.moneyRunning + '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+this.listFund_name_id+'&Customer_id='+this.customerName_id + '&DateStart='+id).then(res => {
-        this.list_moey = res.data.list_moey //户主
-        this.menu_bank_person = res.data.menu_bank_person
-        this.menu_bank_bank = res.data.menu_bank_bank
-        this.menu_bank_number = res.data.menu_bank_number
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
-        this.menu_fund_name_type = res.data.menu_fund_name_type
-        this.menu_fund_names = res.data.menu_fund_names
-        this.menu_Customer_name = res.data.menu_Customer_name
+      var add = '?'
+      if (this.bankPerson_id !== '' && this.bankPerson_id !== undefined) {
+        add+='bank_person='+this.bankPerson_id
+      }
+      if (this.bankBank_id !== '' && this.bankBank_id !== undefined) {
+        add+='&bank_bank='+this.bankBank_id
+      }
+      if (this.fundNamesa_id !== '' && this.fundNamesa_id !== undefined) {
+        add+='&fund_name_type='+this.fundNamesa_id
+      }
+      if (this.listFund_name_id !== '' && this.listFund_name_id !== undefined) {
+        add+='&fund_names='+this.listFund_name_id
+      }
+      if (this.customerName_id !== '' && this.customerName_id !== undefined) {
+        add+='&Customer_id='+this.customerName_id
+      }
+      this.axios.get(url.moneyRunning + add + '&DateStart='+id).then(res => {
+        this.package(res)
       })
     },
     //结束时间
     date_list_two_change(id){
       this.dataB = id
-      this.axios.get(url.moneyRunning + '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+this.listFund_name_id+'&Customer_id='+this.customerName_id + '&DateStart='+this.dataA+'&DateEnd='+id).then(res => {
-        this.list_moey = res.data.list_moey //户主
-        this.menu_bank_person = res.data.menu_bank_person
-        this.menu_bank_bank = res.data.menu_bank_bank
-        this.menu_bank_number = res.data.menu_bank_number
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
-        this.menu_fund_name_type = res.data.menu_fund_name_type
-        this.menu_fund_names = res.data.menu_fund_names
-        this.menu_Customer_name = res.data.menu_Customer_name
+      var add = '?'
+      if (this.fundNamesa_id !== '' && this.fundNamesa_id !== undefined) {
+        add+='fund_name_type='+this.fundNamesa_id
+      }
+      if (this.listFund_name_id !== '' && this.listFund_name_id !== undefined) {
+        add+='&fund_names='+this.listFund_name_id
+      }
+      if (this.customerName_id !== '' && this.customerName_id !== undefined) {
+        add+='&Customer_id='+this.customerName_id
+      }
+      if (this.dataA !==''&& this.dataA!==undefined){
+        add+='&DateStart='+this.dataA
+      }
+      this.axios.get(url.moneyRunning + add +'&DateEnd='+id).then(res => {
+        this.package(res)
       })
     }
   }
@@ -438,9 +479,7 @@ form div select{background: transparent;font-size: 15px!important;}
 .div-tr div:nth-child(5){text-align: right}
 .div-tr div:nth-child(2){width: 70px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis}
 .div-tr div:nth-child(3){width: 25%}
-
-
-
+.mui-table-view-cell.mui-collapse .mui-collapse-content{padding: 0 15px}
 .goOver{display: flex;padding-top: 4px}
 .goOver span{width: 67px;height: 1px;background-color: black;position: relative;right: 24px;top: 50%}
 .goOver label{width: 45%}

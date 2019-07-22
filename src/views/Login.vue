@@ -47,7 +47,7 @@ export default {
       } else {
         var _this = this
         this.imgUrl_loading = true
-        const all = {name:this.name,pwd:this.pwd}
+        // const all = {name:this.name,pwd:this.pwd}
         this.axios.post(url.Login+'?name=' + this.name + '&pwd=' + this.pwd).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false

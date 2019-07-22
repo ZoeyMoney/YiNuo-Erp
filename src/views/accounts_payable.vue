@@ -50,7 +50,7 @@
 
           <div class="mui-input-row">
             <label>总金额</label>
-            <input type="text" class="mui-input-clear" id="fund_money" v-model="fund_money" placeholder="请输入总金额">
+            <input type="text" class="mui-input-clear" id="fund_money" v-model="fund_money" placeholder="￥">
           </div>
           <div class="mui-input-row">
             <label>备注</label>
@@ -77,7 +77,7 @@
             <tr v-for="item in list">
               <td><input type="date" id="fund_details_date" v-model="item.fund_details_date" :style="paRight"></td>
               <td><input type="text" id="fund_details_batch" v-model="item.fund_details_batch" placeholder="批次"></td>
-              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="金额"  :style="padLeft"></td>
+              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="￥"  :style="padLeft"></td>
               <td><input type="text" id="fund_details_text" v-model="item.fund_details_text" placeholder="备注"></td>
             </tr>
           </table>
@@ -187,7 +187,7 @@ export default {
     formAdd(){
       this.batch_index++
       var s = {fund_details_date: '', fund_details_money: '', fund_details_batch: '1', fund_details_text: '' }
-      s.fund_details_batch = this.batch_index
+      s.fund_details_batch = this.batch_index.toString()
       this.list.push(s)
     },
     // 类别选择
@@ -266,6 +266,7 @@ export default {
     add () {
       var then = this
       var nuber = /^[0-9]*$/ // 验证数字
+      var nuber_two = /^\d+(\.\d+)?$/ // 验证带点的数字
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
       var check = true
       // 类别选择
@@ -291,10 +292,50 @@ export default {
         check = false
         return false
       }
+      if (this.dataValue1=='') {
+        mui.toast('时间不能为空')
+        check = false
+        return false
+      }
+      //循环list是否有空
+      for (var index in this.list) {
+        /*list时间不能为空*/
+        if (this.list[index].fund_details_date == '') {
+          mui.toast('时间不能为空')
+          check = false
+          return false
+        }
+        if (this.list[index].fund_details_batch == '') {
+          mui.toast('批次不能为空')
+          check = false
+          return false
+        }
+        if (!nuber.test(this.list[index].fund_details_batch)) {
+          mui.toast('批次内容只能为数字')
+          check = false
+          return false
+        }
+        if (this.list[index].fund_details_money == '') {
+          mui.toast('金额不能为空')
+          check = false
+          return false
+        }
+        if (!nuber_two.test(this.list[index].fund_details_money)) {
+          mui.toast('金额只能为数字')
+          check = false
+          return false
+        }
+      }
       // 判断阶段付款、周期付款
       if (this.fund_type === '阶段付款') {
+        var fund_details_date = document.getElementById('fund_details_date').value //时间
         var data_money = document.getElementById('fund_details_money').value // 金额
         var data_text = document.getElementById('fund_details_batch').value // 批次
+        if (fund_details_date == '') {
+          mui.toast('时间不能为空')
+          check = false
+          return false
+        }
         // 金额
         if (data_money == '') {
           mui.toast('金额不能为空')
@@ -336,7 +377,7 @@ export default {
           all_money += parseInt(this.list[index].fund_details_money)
         }
         if (this.fund_money != all_money) {
-          mui.alert('总金额与阶段金额总和不同')
+          mui.toast('总金额与阶段金额总和不同')
           check = false
           return false
         }
@@ -416,7 +457,8 @@ export default {
           listFund:JSON.stringify(this.list),
           fund_customer_id:list_customer,
           fund_workyard_pact_id:1,
-          fund_debtor:this.fund_person_id,
+          // fund_debtor:this.fund_person_id,
+          fund_person: this.fund_person_id,
           fund_name:add,
           fund_money:this.fund_money,
           fund_text:this.fund_text,

@@ -57,7 +57,7 @@
           <data-value v-model="dataValue"></data-value>
           <div class="mui-input-row">
             <label>金额</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入金额" v-model="bank_money">
+            <input type="text" class="mui-input-clear" placeholder="￥" v-model="bank_money">
           </div>
           <div class="mui-input-row">
             <label>备注</label>
@@ -92,13 +92,11 @@
           <tr>
             <td style="width: 22%">开户行</td>
             <td style="width: 15%">户主</td>
-            <td style="width: 15%">尾号</td>
             <td>余额</td>
           </tr>
-          <tr v-for="item in chuXu">
+          <tr v-for="item in chuXu" @click="msgCu(item.bank_bank,item.bank_person,item.number)">
             <td>{{item.bank_bank}}</td>
             <td>{{item.bank_person}}</td>
-            <td>{{item.bank_number}}</td>
             <td>￥{{item.bank_money}}</td>
           </tr>
         </table>
@@ -110,14 +108,12 @@
           <tr>
             <td style="width: 21%">开户行</td>
             <td style="width: 15%">户主</td>
-            <td style="width: 15%">尾号</td>
             <td>余额</td>
             <td>额度</td>
           </tr>
-          <tr v-for="item in xinY">
+          <tr v-for="item in xinY" @click="msgCu(item.bank_bank,item.bank_person,item.number)">
             <td>{{item.bank_bank}}</td>
             <td>{{item.bank_person}}</td>
-            <td>{{item.bank_number}}</td>
             <td>￥{{item.bank_money}}</td>
             <td>￥{{item.bank_limit}}</td>
           </tr>
@@ -194,15 +190,11 @@ export default {
       var y = 0
       for (var index in res.data) {
         if (res.data[index].bank_type === '储蓄卡') {
-          var n = res.data[index].bank_number.slice(15, 19) // 截取尾号后4位
           m += res.data[index].bank_money // 储蓄卡总额
-          res.data[index].bank_number = n
           chu.push(res.data[index])
         } else {
           if (res.data[index].bank_type === '信用卡') {
-            var n = res.data[index].bank_number.slice(12, 16)	// 截取尾号后4位
             y += res.data[index].bank_money
-            res.data[index].bank_number = n
             xin.push(res.data[index])
           }
         }
@@ -280,6 +272,18 @@ export default {
       var expenditure = 'expenditure_people'
       this.$router.push({path:'relevant_people',})
       window.prosen = expenditure
+    },
+    msgCu(id,person,number){
+      var add = '?'+'&bank_person='+person+'&bank_bank='+id
+      if (number !== undefined) {
+        add+='&bank_number='+number
+      }
+      var transfer = 'transfer'
+      this.axios.get(url.moneyRunning+add).then(res=>{
+        window.transfer = res.data.list_moey
+        this.$router.push({path:'running_money',query:{transfer:transfer}})
+        // console.log(res.data.list_moey)
+      })
     },
     /* 保存 */
     add () {
@@ -416,9 +420,9 @@ form div select{font-size: 15px!important;}
 .all-saving{width: 100%;font-size: 15px;margin-bottom: 50px;}
 .all-saving tr{width: 25%!important;}
 .all-saving tr:nth-child(1),.blaner tr:nth-child(1){background-color: #DADADA;line-height: 34px}
-.all-saving tr td{padding-left: 10px;}
+.all-saving tr td{padding-left: 10px;border-bottom: 1px solid #dadada;line-height: 28px}
 .all-saving tr td input,.blaner tr td input{height: 35px!important;font-size: 14px;padding: 0!important;background-color: transparent!important;border: 0!important;border-bottom: 1px solid #454545!important;margin-bottom: 0!important;}
 /*第二个表单*/
-table{font-size: 15px;width: 100%}
-.blaner tr td{padding-left: 10px}
+table{font-size: 15px;width: 100%;white-space: nowrap}
+.blaner tr td{padding-left: 10px;border-bottom: 1px solid #dadada;line-height: 28px}
 </style>

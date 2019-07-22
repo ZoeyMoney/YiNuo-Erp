@@ -18,7 +18,7 @@
       <div class="mui-content app">
           <form class="mui-input-group">
               <div class="mui-input-row">
-                  <label>工地各项</label>
+                  <label>工地名称</label>
                 <select name="" v-model="customer_name">
                   <option value="" selected="selected">请选择</option>
                   <option v-for="item in listName" :value="item.customer_name">{{item.customer_name}}</option>

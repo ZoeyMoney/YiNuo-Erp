@@ -44,7 +44,7 @@
           <data-value v-model="dataValue1"></data-value>
           <div class="mui-input-row">
             <label>金额</label>
-            <input type="text" class="mui-input-clear" id="total" placeholder="如：900,000" v-model="bank_deal_money">
+            <input type="text" class="mui-input-clear" id="total" placeholder="￥" v-model="bank_deal_money">
           </div>
           <div class="mui-input-row">
             <label>转账费率</label>
@@ -71,13 +71,11 @@
         <tr>
           <td style="width: 21%">开户行</td>
           <td style="width: 15%">户主</td>
-          <td style="width: 15%">尾号</td>
           <td>余额</td>
         </tr>
-        <tr v-for="item in chuxuka">
-          <td @click="bankBank(item.bank_bank)">{{item.bank_bank}}</td>
+        <tr v-for="item in chuxuka" @click="msgCu(item.bank_bank,item.bank_person,item.number)">
+          <td>{{item.bank_bank}}</td>
           <td>{{item.bank_person}}</td>
-          <td>{{item.bank_number}}</td>
           <td>￥{{item.bank_money}}</td>
         </tr>
       </table>
@@ -89,14 +87,12 @@
         <tr>
           <td style="width: 21%">开户行</td>
           <td style="width: 15%">户主</td>
-          <td style="width: 15%">尾号</td>
           <td>余额</td>
           <td>额度</td>
         </tr>
-        <tr v-for="item in xinyong">
-          <td @click="bankBank(item.bank_bank)">{{item.bank_bank}}</td>
+        <tr v-for="item in xinyong" @click="msgCu(item.bank_bank,item.bank_person,item.number)">
+          <td>{{item.bank_bank}}</td>
           <td>{{item.bank_person}}</td>
-          <td>{{item.bank_number}}</td>
           <td>￥{{item.bank_money}}</td>
           <td>￥{{item.bank_limit}}</td>
         </tr>
@@ -121,7 +117,6 @@ export default {
       bank_out_id: '', // 转入
       chuxuka: '', // 储蓄卡
       xinyong: '', // 信用卡
-      bank_number: '', // 尾号
       bank_money: '', // 余额
       addMoney: '', // 储蓄卡总额
       xinMoney: '', // 信用卡总额
@@ -149,15 +144,11 @@ export default {
       var y = 0 // 信用卡总额
       for (var index in this.bank) {
         if (this.bank[index].bank_type === '储蓄卡') {
-          var n = this.bank[index].bank_number.slice(15, 19) // 截取尾号后4位
           m+= this.bank[index].bank_money // 算出储蓄卡总额
-          this.bank[index].bank_number = n
           chux.push(this.bank[index])
         } else {
           if (this.bank[index].bank_type === '信用卡') {
-          var n = this.bank[index].bank_number.slice(12, 16)
           y += this.bank[index].bank_money
-            this.bank[index].bank_number = n
           xin.push(this.bank[index])
           }
         }
@@ -194,7 +185,19 @@ export default {
     },
   },
   methods: {
-    bankBank(id){
+    msgCu(id,person,number){
+      var add = '?'+'&bank_person='+person+'&bank_bank='+id
+      if (number !== undefined) {
+        add+='&bank_number='+number
+      }
+      var transfer = 'transfer'
+      this.axios.get(url.moneyRunning+add).then(res=>{
+        window.transfer = res.data.list_moey
+        this.$router.push({path:'running_money',query:{transfer:transfer}})
+        // console.log(res.data.list_moey)
+      })
+    },
+    /*bankBank(id){
       var bank_bank={}
       for (var index in this.bank) {
         if (id === this.bank[index].bank_bank) {
@@ -203,7 +206,7 @@ export default {
       }
      localStorage.bank_bank = JSON.stringify(bank_bank)
       this.$router.push({name:'edit_bank',query:{bank_bank:bank_bank}})
-    },
+    },*/
     go () {
       var then = this
       var check = true
@@ -357,15 +360,16 @@ export default {
     width: 100%;
     font-size: 15px;
   }
-  .blaner{width: 100%}
+  .blaner{width: 100%;white-space: nowrap}
   .all-saving tr {
     width: 25%!important;
   }
 
   .all-saving tr td{
     padding-left: 11px;
-    border-bottom: 1px solid #dadada;
     white-space: nowrap;
+    border-bottom: 1px solid #dadada;
+    line-height: 28px
   }
   .all-saving tr td input,
   .blaner tr td input {
@@ -377,6 +381,7 @@ export default {
     border-bottom: 1px solid #454545!important;
     margin-bottom: 0!important;
   }
+  .blaner tr td{border-bottom: 1px solid #989898;line-height: 28px}
   /*第二个表单*/
   table {font-size: 15px;}
   table tr:nth-child(1){background-color: #DADADA;text-align: left;padding-left: 10px;line-height: 32px;}

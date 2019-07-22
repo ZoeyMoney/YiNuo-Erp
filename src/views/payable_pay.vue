@@ -35,10 +35,10 @@
         </div>
       </form>
       <form class="mui-input-group">
-        <div class="mui-input-row">
+        <!--<div class="mui-input-row">
           <label>共有</label>
           <input type="text" class="mui-input-clear" placeholder="共有额度" v-model="all_money" disabled="disabled">
-        </div>
+        </div>-->
         <div class="mui-input-row">
           <label>实际转账</label>
           <input type="text" class="mui-input-clear" placeholder="请输入实际转账" v-model="smoney">

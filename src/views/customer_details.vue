@@ -291,7 +291,7 @@ export default {
 .row-box:nth-last-child(1) .mui-input-row:nth-child(2) label:nth-child(1){width: 40%}
 .item-time label:nth-child(2){padding-left: 0;}
 /*按钮*/
-.mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
+.mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;margin-left: 18px}
 .form-botton{text-align: center;}
 .botton-mar{margin-bottom: 27px;}
 .mui-chech{white-space: normal}

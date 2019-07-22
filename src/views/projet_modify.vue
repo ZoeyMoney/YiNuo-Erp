@@ -103,6 +103,80 @@
             <label :class="{money_green:all_enter>0,money_red:all_enter<0}">{{all_enter}}</label>
           </div>
         </form>
+        <p class="text-p">应收：</p>
+        <form class="mui-input-group">
+          <ul class="mui-table-view views">
+            <li class="mui-table-view-cell mui-collapse">
+              <a class="mui-navigate-right" href="#">
+                <label>已应收</label>
+<!--                <label :class="{money_green:already_enter>0,money_red:already_enter<0}">{{already_enter}}</label>-->
+              </a>
+              <!--<div class="mui-collapse-content" v-for="item in list_already_enter">
+                <p><span class="item-data-money">时间：</span>{{item.fund_detail_transaction_date | data}}</p>
+                <p :class="{money_green:item.fund_detail_transaction_money>0,money_red:item.fund_detail_transaction_money<0}"><span class="item-data-money">交易金额：</span>{{item.fund_detail_transaction_money | negative}}</p>
+                <p v-if="item.fund_person !==0"><span class="item-data-money">收款人：</span>{{item.fund_person}}</p>
+                <p><span class="item-data-money">相关人：</span>{{item.fund_debtor}}</p>
+                <p><span class="item-data-money">款项名称：</span>{{item.fund_name}}</p>
+                <p><span class="item-data-money">款项备注：</span>{{item.fund_details_text}}</p>
+              </div>-->
+            </li>
+            <li class="mui-table-view-cell mui-collapse">
+              <a class="mui-navigate-right" href="#">
+                <label>预应收</label>
+<!--                <label :class="{money_green:pre_enter>0,money_red:pre_enter<0}">{{pre_enter}}</label>-->
+              </a>
+              <!--<div class="mui-collapse-content" v-for="item in list_pre_enter">
+                <p><span class="item-data-money">时间：</span>{{item.fund_details_date | data}}</p>
+                <p :class="{money_green:item.fund_details_money>0,money_red:item.fund_details_money<0}"><span class="item-data-money">交易金额：</span>{{item.fund_details_money}}</p>
+                <p v-if="item.fund_person !==0"><span class="item-data-money">收款人：</span>{{item.fund_person}}</p>
+                <p><span class="item-data-money">相关人：</span>{{item.fund_debtor}}</p>
+                <p><span class="item-data-money">款项名称：</span>{{item.fund_name}}</p>
+                <p><span class="item-data-money">款项备注：</span>{{item.fund_details_text}}</p>
+              </div>-->
+            </li>
+          </ul>
+          <div class="mui-input-row">
+            <label>总应收</label>
+<!--            <label :class="{money_green:all_enter>0,money_red:all_enter<0}">{{all_enter}}</label>-->
+          </div>
+        </form>
+        <p class="text-p">应付：</p>
+        <form class="mui-input-group">
+          <ul class="mui-table-view views">
+            <li class="mui-table-view-cell mui-collapse">
+              <a class="mui-navigate-right" href="#">
+                <label>已应付</label>
+<!--                <label :class="{money_green:already_enter>0,money_red:already_enter<0}">{{already_enter}}</label>-->
+              </a>
+              <!--<div class="mui-collapse-content" v-for="item in list_already_enter">
+                <p><span class="item-data-money">时间：</span>{{item.fund_detail_transaction_date | data}}</p>
+                <p :class="{money_green:item.fund_detail_transaction_money>0,money_red:item.fund_detail_transaction_money<0}"><span class="item-data-money">交易金额：</span>{{item.fund_detail_transaction_money | negative}}</p>
+                <p v-if="item.fund_person !==0"><span class="item-data-money">收款人：</span>{{item.fund_person}}</p>
+                <p><span class="item-data-money">相关人：</span>{{item.fund_debtor}}</p>
+                <p><span class="item-data-money">款项名称：</span>{{item.fund_name}}</p>
+                <p><span class="item-data-money">款项备注：</span>{{item.fund_details_text}}</p>
+              </div>-->
+            </li>
+            <li class="mui-table-view-cell mui-collapse">
+              <a class="mui-navigate-right" href="#">
+                <label>预应付</label>
+<!--                <label :class="{money_green:pre_enter>0,money_red:pre_enter<0}">{{pre_enter}}</label>-->
+              </a>
+              <!--<div class="mui-collapse-content" v-for="item in list_pre_enter">
+                <p><span class="item-data-money">时间：</span>{{item.fund_details_date | data}}</p>
+                <p :class="{money_green:item.fund_details_money>0,money_red:item.fund_details_money<0}"><span class="item-data-money">交易金额：</span>{{item.fund_details_money}}</p>
+                <p v-if="item.fund_person !==0"><span class="item-data-money">收款人：</span>{{item.fund_person}}</p>
+                <p><span class="item-data-money">相关人：</span>{{item.fund_debtor}}</p>
+                <p><span class="item-data-money">款项名称：</span>{{item.fund_name}}</p>
+                <p><span class="item-data-money">款项备注：</span>{{item.fund_details_text}}</p>
+              </div>-->
+            </li>
+          </ul>
+          <div class="mui-input-row">
+            <label>总应付</label>
+<!--            <label :class="{money_green:all_enter>0,money_red:all_enter<0}">{{all_enter}}</label>-->
+          </div>
+        </form>
       </div>
     </div>
 </template>
@@ -133,8 +207,8 @@
       }
     },
     created () {
-      this.list = JSON.parse(localStorage.msg)
-      console.log(this.list)
+      this.list = JSON.parse(sessionStorage.getItem('listProfit'))
+      // console.log(JSON.parse(sessionStorage.getItem('listProfit')))
       this.customer_name = this.list.customer_name
       this.pre_profit = this.list.pre_profit
       this.pre_profit_proportion = this.list.pre_profit_proportion

@@ -31,7 +31,7 @@
           </div>
           <div class="mui-input-row">
             <label>交易时间</label>
-            <input type="text" class="mui-input-clear" :value="bank_deal_date | tosDate" placeholder="无" disabled="disabled">
+            <input type="text" class="mui-input-clear" :value="dates" placeholder="无" disabled="disabled">
           </div>
           <div class="mui-input-row">
             <label>卡号</label>
@@ -80,7 +80,7 @@
         bank_person:'',//户主
         bank_bank:'', //开户行
         bank_deal_money:'',//交易金额
-        bank_deal_date:'',  //交易金额
+        dates:'',  //交易金额
         bank_number:'', //卡号
         bank_type:'', //信用卡
         bank_projet:'',//项目名称
@@ -109,7 +109,7 @@
         this.bank_deal_money = this.list.bank_deal_money
       }
       // console.log(JSON.parse(localStorage.msg))
-      this.bank_deal_date = this.list.fund_detail_transaction_date
+      this.dates = this.list.dates
       this.bank_number = this.list.bank_number.replace(reg, "$1 **** **** $2")
       this.bank_projet = this.list.customer_name
       this.fund_details_batch = this.list.fund_details_batch
@@ -120,34 +120,52 @@
       this.balance = this.list.balance
       this.fund_person = this.list.fund_person
       this.fund_debtor = this.list.fund_debtor
-
     },
     methods:{
       dele(){
         var then = this
         var allfund_detail_id = ''
+        //删除转账
         if (this.list.bank_deal_id > 0) {
           allfund_detail_id = this.list.bank_deal_id
-          this.axios.get(url.ringNingDelect+'?bank_detail_id='+allfund_detail_id).then(res=>{
-            mui.alert(res.data,function () {
-              then.$router.push({path:'running_money'})
-            })
+          mui.confirm('是否删除',function (e) {
+            if (e.index == 1) {
+              then.axios.get(url.ringNingDelect+'?bank_detail_id='+allfund_detail_id).then(res=>{
+                mui.alert(res.data,function () {
+                  then.$router.push({path:'running_money'})
+                })
+              })
+            }else{
+              mui.alert('取消成功')
+            }
           })
+        //  删除收入支出
         }else if (this.list.fund_detail_transaction_id > 0) {
           allfund_detail_id = this.list.fund_detail_transaction_id
-          this.axios.get(url.ringNingDelect+'?fund_detail_id='+allfund_detail_id).then(res=>{
-            mui.alert(res.data,function () {
-              then.$router.push({path:'running_money'})
-            })
+          mui.confirm('是否删除',function (e) {
+            if (e.index == 1) {
+              then.axios.get(url.ringNingDelect+'?fund_detail_id='+allfund_detail_id).then(res=>{
+                mui.alert(res.data,function () {
+                  then.$router.push({path:'running_money'})
+                })
+              })
+            }else{
+              mui.alert('取消成功')
+            }
           })
         }
-
         // console.log(allfund_detail_id)
-        this.axios.get(url.ringNingDelect+'?fund_detail_id='+allfund_detail_id).then(res=>{
-          mui.alert(res.data,function () {
-            then.$router.push({path:'running_money'})
-          })
-        })
+        /*mui.confirm('是否删除',function (e) {
+          if (e.index == 1) {
+            then.axios.get(url.ringNingDelect+'?fund_detail_id='+allfund_detail_id).then(res=>{
+              mui.alert(res.data,function () {
+                then.$router.push({path:'running_money'})
+              })
+            })
+          }else{
+            mui.alert('取消成功')
+          }
+        })*/
       }
     }
   }

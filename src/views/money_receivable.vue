@@ -61,14 +61,14 @@
             <th :style="lefta">日期</th>
             <th>类别</th>
             <th>项目</th>
-            <th>相关人</th>
+<!--            <th>相关人</th>-->
             <th>金额</th>
           </tr>
           <tr v-for="item in listTable">
             <td><span :style="paLft">{{item.fund_details_date | data}}</span></td>
-            <td><span :style="fund_name"  @click="msg(item.fund_details_id)">{{item.fund_name}}</span></td>
+            <td><span :style="fund_name" @click="msg(item.fund_details_id)">{{item.fund_name}}</span></td>
             <td><span :style="hid">{{item.customer_name}}</span></td>
-            <td><span>{{item.fund_debtor}}</span></td>
+<!--            <td><span>{{item.fund_debtor}}</span></td>-->
             <td><span :style="money">￥{{item.fund_details_money}}</span></td>
           </tr>
         </table>
@@ -140,11 +140,7 @@ export default {
     this.axios.get(url.moneyReceivable+'?fund_type=1').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
-      this.listTable = res.data.list_fund
-      this.list_fund_name_type = res.data.list_fund_name_type
-      this.list_fund_names = res.data.list_fund_names
-      this.list_customer_name = res.data.list_customer_name
-      this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       }
     }, error => {
       var then = this
@@ -155,17 +151,28 @@ export default {
   },
   methods: {
     msg (id) {
-      this.$router.push({ path: 'account_translation', query: { id: id } })
+      var account_translation = {}
+      for (var index in this.listTable) {
+        if (id === this.listTable[index].fund_details_id) {
+          account_translation = this.listTable[index]
+        }
+      }
+      localStorage.account_translation = JSON.stringify(account_translation)
+      this.$router.push({ path: 'account_translation', query: { id: account_translation } })
+    },
+    //封装model
+    package(res){
+      this.listTable = res.data.list_fund
+      this.list_fund_name_type = res.data.list_fund_name_type
+      this.list_fund_names = res.data.list_fund_names
+      this.list_customer_name = res.data.list_customer_name
+      this.list_fund_name = res.data.list_fund_name
     },
     // 类别选择
     fund_namesa (id) {
       this.fund_nameso = id
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
         if (this.fund_nameo === '个人') {
           this.list_slime_all = false
         }else if (this.fund_nameo === '公司') {
@@ -186,11 +193,7 @@ export default {
         }
       }
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso +'&fund_name='+this.fund_name+ '&fund_names=' + id).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {
@@ -202,22 +205,14 @@ export default {
     list_slim_name(id){
       this.list_fund_slim_id = id
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name='+id).then(res=>{
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       })
     },
     //  项目名称
     customer_name_list (id) {
       this.customer_name_list_one = id
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_name=' + this.fund_name +'&fund_names=' + this.list_fund_namea + '&Customer_name=' + id).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {
@@ -229,11 +224,7 @@ export default {
     dateList (id) {
       this.deteList = id
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' +this.fund_name  + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + id + '&dateB=' + this.dateB).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {
@@ -244,11 +235,7 @@ export default {
     date_list_two_change (id) {
       this.dateB = id
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea  + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + this.deteList + '&dateB=' + id).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {

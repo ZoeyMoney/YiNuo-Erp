@@ -22,11 +22,11 @@
             <input type="text" class="mui-input-clear" placeholder="请输项目名称" v-model="cumoterName" disabled="disabled">
           </div>
           <div class="mui-input-row">
-            <label>债务人</label>
+            <label>相关人</label>
             <input type="text" class="mui-input-clear" placeholder="请输入债务人" v-model="person" disabled="disabled">
           </div>
           <div class="mui-input-row">
-            <label>首款备注</label>
+            <label>备注</label>
             <input type="text" class="mui-input-clear" v-model="text" disabled="disabled">
           </div>
           <div class="mui-input-row">
@@ -35,13 +35,13 @@
           </div>
         </form>
         <form class="mui-input-group">
-          <div class="mui-input-row">
+          <!--<div class="mui-input-row">
             <label>共有</label>
-            <input type="text" class="mui-input-clear" placeholder="共有额度" v-model="all_money" disabled="disabled">
-          </div>
+            <input type="text" class="mui-input-clear" placeholder="￥" v-model="all_money" disabled="disabled">
+          </div>-->
           <div class="mui-input-row">
             <label>实际转账</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入实际转账" v-model="smoney">
+            <input type="text" class="mui-input-clear" placeholder="￥" v-model="smoney">
           </div>
         </form>
         <div class="form-botton">

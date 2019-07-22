@@ -1,4 +1,4 @@
-* { touch-action: pan-y; }
+* { touch-action: auto;}
 /*select*/
 select{font-size: 15px;}
 select option:nth-child(1){color: #848485!important;}

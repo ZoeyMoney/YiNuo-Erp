@@ -35,6 +35,7 @@ export default {
         { href: 'money_receivable', listImg: require('../image/yingshou.png'), text: '应收统计' },
         { href: 'payable_money', listImg: require('../image/yingfu.png'), text: '应付统计' },
         { href: '#', listImg: require('../image/gongzitongji.png'), text: '工资统计' },
+        { href: 'money_summary', listImg: require('../image/mongy7.png'), text: '款项汇总' },
       ]
     }
   }

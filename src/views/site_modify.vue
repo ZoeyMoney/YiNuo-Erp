@@ -46,7 +46,7 @@
         </div>
         <div class="mui-input-row">
           <label>项目预算</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_budget">
+          <input type="text" class="mui-input-clear" placeholder="￥" v-model="item.customer_budget">
         </div>
         <div class="mui-input-row">
           <label>当前阶段</label>

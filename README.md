@@ -27,3 +27,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+###优化代码
+见到封装model注释、就是封装的方法、调取的就是写重复的方法

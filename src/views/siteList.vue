@@ -353,7 +353,7 @@
 </script>
 
 <style scoped>
-  .right{list-style: none;position: fixed;right: 0px;line-height: 21px;top: 4%;padding: 0 13px;height: 416px;overflow: auto}
+  .right{list-style: none;position: fixed;right: 0px;line-height: 21px;top: 4%;padding: 0 13px;/*height: 416px;overflow: auto*/}
   .mui-bar-nav~.mui-content{padding-top: 31px!important;}
   .mui-table-view{position: absolute;width: 100%}
   .app{margin-bottom: 0}

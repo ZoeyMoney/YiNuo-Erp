@@ -54,7 +54,7 @@
 
           <div class="mui-input-row">
             <label>总金额</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入总金额" v-model="fund_money">
+            <input type="text" class="mui-input-clear" placeholder="￥" v-model="fund_money">
           </div>
           <!--<div class="mui-input-row">
             <label>公司人员</label>
@@ -84,7 +84,7 @@
             <tr v-for="item in list">
               <td><input type="date" id="fund_details_date" v-model="item.fund_details_date" :style="paRight"></td>
               <td><input type="text" id="fund_details_batch" v-model="item.fund_details_batch" placeholder="批次"></td>
-              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="金额"  :style="padLeft"></td>
+              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="￥"  :style="padLeft"></td>
               <td><input type="text" id="fund_details_text" v-model="item.fund_details_text" placeholder="备注"></td>
             </tr>
           </table>
@@ -155,7 +155,7 @@ export default {
       yue:'',
       qi:'',
       list: [
-        { 'fund_details_date': '', 'fund_details_batch': '1', 'fund_details_money': '', 'fund_details_text': '' },
+        { 'fund_details_date': '', 'fund_details_batch': '1'.toString(), 'fund_details_money': '', 'fund_details_text': '' },
       ],
       batch_index:1,
       list_list:[],
@@ -185,8 +185,8 @@ export default {
   methods: {
     formAdd(){
         this.batch_index++
-        var s = {fund_details_date: '', fund_details_money: '', fund_details_batch: '1', fund_details_text: '' }
-        s.fund_details_batch = this.batch_index
+        var s = {'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '1', 'fund_details_text': '' }
+        s.fund_details_batch = this.batch_index.toString()
         this.list.push(s)
     },
     del(user){
@@ -284,9 +284,9 @@ export default {
     add() {
       var then = this
       var nuber = /^[0-9]*$/ // 验证数字
+      var nuber_two = /^\d+(\.\d+)?$/ // 验证带点的数字
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
       var check = true
-
       //  类别选择
       if (this.fund_nameo == '') {
         mui.toast('类别选择不能为空')
@@ -305,7 +305,7 @@ export default {
         check = false
         return false
       }
-      if (!nuber.test(this.fund_money)) {
+      if (!nuber_two.test(this.fund_money)) {
         mui.toast('总金额只能填入数字')
         check = false
         return false
@@ -323,15 +323,21 @@ export default {
       }*/
       // 判断阶段付款、周期付款
       if (this.fund_type === '阶段付款') {
+        var fund_details_date = document.getElementById('fund_details_date').value //时间
         var data_money = document.getElementById('fund_details_money').value // 金额
         var data_text = document.getElementById('fund_details_batch').value // 批次
+        if (fund_details_date == '') {
+          mui.toast('时间不能为空')
+          check = false
+          return false
+        }
         // 金额
         if (data_money == '') {
           mui.toast('金额不能为空')
           check = false
           return false
         }
-        if (!nuber.test(data_money)) {
+        if (!nuber_two.test(data_money)) {
           mui.toast('金额只能填入数字')
           check = false
           return false
@@ -346,6 +352,35 @@ export default {
           mui.toast('批次只能填入数字')
           check = false
           return false
+        }
+        //循环list是否有空
+        for (var index in this.list) {
+          /*list时间不能为空*/
+          if (this.list[index].fund_details_date == '') {
+            mui.toast('时间不能为空')
+            check = false
+            return false
+          }
+          if (this.list[index].fund_details_batch == '') {
+            mui.toast('批次不能为空')
+            check = false
+            return false
+          }
+          if (!nuber.test(this.list[index].fund_details_batch)) {
+            mui.toast('批次内容只能为数字')
+            check = false
+            return false
+          }
+          if (this.list[index].fund_details_money == '') {
+            mui.toast('金额不能为空')
+            check = false
+            return false
+          }
+           if (!nuber_two.test(this.list[index].fund_details_money)) {
+             mui.toast('金额只能为数字')
+             check = false
+             return false
+           }
         }
         // 判断是否总金额大于等于 金额的总和
         var money_all = 0
@@ -366,7 +401,7 @@ export default {
            all_money += parseInt(this.list[index].fund_details_money)
         }
         if (this.fund_money != all_money) {
-          mui.alert('总金额与阶段金额总和不同')
+          mui.toast('总金额与阶段金额总和不同')
           check = false
           return false
         }
@@ -434,12 +469,7 @@ export default {
             var m = data_huan.getMonth() + 1
             data_huan.setDate(data_huan.getDate() + 7)
             date = data_huan.getFullYear() + '-' + m + '-' + data_huan.getDate()
-            var a = {
-              'fund_details_date': date,
-              'fund_details_money': qishu_money.toString(),
-              'fund_details_batch': i.toString(),
-              'fund_details_text': ''
-            }
+            var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch': i.toString(), 'fund_details_text': '' }
             this.list.push(a)
           }
         }
@@ -451,9 +481,20 @@ export default {
         list_customer += '0'
       }else if (this.fund_nameo === '公司') {
         add = this.all_rate
-        list_customer += this.customer_name_id
+        list_customer += this.customer_name
       }
-      this.imgUrl_loading = true
+      /*for (var index in this.list) {
+        var data = new Date(this.list[index].fund_details_date)
+        var y = data.getFullYear() +'-'
+        var m = data.getMonth() +1 + '-'
+        var d = data.getDate()
+        var data_a =y+m+d
+        var a = {'fund_details_date':data_a,'fund_details_money':'','fund_details_batch':'','fund_details_text':''}
+        console.log(this.list)
+        console.log(a)
+        console.log(data_a)
+      }*/
+      // this.imgUrl_loading = true
       this.axios({
         method: 'POST',
         url: url.moneyAddFund,
@@ -462,10 +503,9 @@ export default {
           listFund: JSON.stringify(this.list),
           fund_customer_id: list_customer,
           fund_workyard_pact_id: 1,
-          fund_debtor: this.fund_debtor_id,
           fund_name: add,
           fund_money: this.fund_money,
-          fund_person: 0,
+          fund_person: this.fund_debtor_id,
           fund_text: this.fund_text,
           fund_type: this.fund_type,
         },

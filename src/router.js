@@ -317,6 +317,10 @@ export default new Router({
       path: '/profit_edit',
       name: 'profit_edit',
       component:resolve=>require(['@/views/profit_edit'],resolve)
+    }, {
+      path: '/money_summary',
+      name: 'money_summary',
+      component:resolve=>require(['@/views/money_summary'],resolve)
     }
     /* {
       path:'/home',

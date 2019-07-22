@@ -20,15 +20,22 @@
           <label>关键字</label>
           <input type="text" class="mui-input-clear" placeholder="请输入用户名">
         </div>
+        <template>
+          <el-radio v-model="radio" label="2">未完成</el-radio>
+          <el-radio v-model="radio" label="1">已完成</el-radio>
+        </template>
         <div class="input-x">
-        <table border="0">
+       <!-- <table border="0">
+          <thead>
           <tr>
             <th><span :style="siteSlect">工地名称</span></th>
             <th><span>支出合计</span></th>
             <th><span>收入合计</span></th>
             <th><span>预计利润</span></th>
-<!--            <th><span>利润比</span></th>-->
+            <th><span>利润比</span></th>
           </tr>
+          </thead>
+          <tbody id="add">
           <tr v-for="item in list">
             <td @click="projet_modify(item.customer_id)"><span :style="lefProjet">{{item.customer_name}}</span></td>
             <td><span>￥{{item.already_out}}</span></td>
@@ -37,13 +44,26 @@
               <span v-if="item.pre_profit">￥{{item.pre_profit}}</span>
               <span v-if="item.pre_profit === 0">￥0</span>
             </td>
-            <!--<td>
+            <td>
               <span :style="widCate" v-if="item.pre_profit_proportion">￥{{item.pre_profit_proportion}}%</span>
               <span :style="widCate" v-if="item.pre_profit_proportion === 0">￥0%</span>
-            </td>-->
+            </td>
           </tr>
-        </table>
-        </div>
+          </tbody>
+        </table>-->
+          <template>
+            <el-table :data="list" style="width: 100%;color: black" height="77vh" @row-click="projet_modify" >
+              <el-table-column :key="Math.random()" fixed prop="customer_name" label="工地名称" width="150" :header-cell-style="getClass"></el-table-column>
+              <el-table-column :key="Math.random()" v-if="list.already_out<=0" prop="already_out" label="支出合计" width="100"></el-table-column>
+              <el-table-column prop="already_enter" label="收入合计" width="100"></el-table-column>
+              <el-table-column prop="" label="已收合计" width="100"></el-table-column>
+              <el-table-column prop="" label="已付合计" width="100"></el-table-column>
+              <el-table-column prop="" label="应付合计" width="100"></el-table-column>
+              <el-table-column prop="pre_profit" label="预计利润" width="100"></el-table-column>
+              <el-table-column prop="pre_profit_proportion" label="利润比" width="100"></el-table-column>
+            </el-table>
+          </template>
+      </div>
       </div>
       <footer>
         <div>TOTAL</div>
@@ -61,9 +81,15 @@ export default {
     return {
       imgUrl_loading:false,
       moneyNY:'',
-      list: '',
-
-
+      radio: '2',
+      list: [{
+          customer_name:'',
+          already_out:'',
+          already_enter:'',
+          pre_profit:'',
+          pre_profit_proportion:'',
+          customer_id:''
+        }],
       siteSlect:{
         paddingLeft:'10px'
       },
@@ -91,14 +117,22 @@ export default {
     })
   },
   methods: {
+    getClass({row, column, rowIndex, columnIndex}){
+      if (rowIndex === 0) {
+        return 'background: #F2F2F2 '
+      } else {
+        return ''
+      }
+      },
     projet_modify(id){
       var list = {}
       for (var index in this.list) {
-        if (id === this.list[index].customer_id) {
+        if (id.customer_id === this.list[index].customer_id) {
           list = this.list[index]
         }
       }
-      localStorage.msg = JSON.stringify(list)
+      // localStorage.msg = JSON.stringify(list)
+      sessionStorage.setItem('listProfit',JSON.stringify(list))
       this.$router.push({path:'projet_modify',query:{list:list}})
     }
   }
@@ -107,16 +141,16 @@ export default {
 
 <style scoped>
   @import "../css/public.css";
+  .app{margin-bottom: 18px}
   /*input white*/
-  .all-input{background-color: white!important;margin-bottom: 20px;}
-  .all-input input{font-size: 15px}
-  /*tbale*/
-  table{width: 100%;font-size: 14px;text-align: left}
-  table span{display: block;}
-  table tr{line-height: 29px;border-bottom: 1px solid #DADADA;}
-  table tr th{background-color: #DADADA;line-height:32px;}
-  .input-x{width: 100%;overflow-x: auto}
+  .customer{padding-left: 10px;}
+  .mui-input-row label{padding: 11px 10px}
+  /deep/.el-table .cell{white-space: nowrap}
+  /deep/.el-table__header th, .el-table__header tr{background-color: #dadada;color: black;padding: 4px 0;}
+  /deep/.el-table td, .el-table th.is-leaf{border-bottom: 1px solid #dadada;padding: 4px 0;background-color: #efeff4}
+  .element::-webkit-scrollbar {display:none}
+  /deep/.el-radio{padding-left: 9px;line-height: 36px}
   /*bottom*/
-  footer{position: fixed;bottom: 0;display: flex;width: 100%;background-color: #a7a7a7;line-height: 30px;font-size: 14px;}
+  footer{position: fixed;bottom: 0;display: flex;width: 100%;background-color: #a7a7a7;line-height: 30px;font-size: 14px;z-index: 1000}
   footer div{flex: 1;text-align: right;padding-right: 20px}
 </style>

@@ -38,12 +38,12 @@
         </div>
         <div class="mui-input-row money-input">
           <label>甲方预算</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入预算金额" v-model="Customer_DecorateJia">
+          <input type="text" class="mui-input-clear" placeholder="￥" v-model="Customer_DecorateJia">
           <span class="span-money">{{Customer_DecorateJia | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row money-input">
           <label>乙方预算</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入预算金额" v-model="Customer_DecorateYi">
+          <input type="text" class="mui-input-clear" placeholder="￥" v-model="Customer_DecorateYi">
           <span class="span-money">{{Customer_DecorateYi | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row">

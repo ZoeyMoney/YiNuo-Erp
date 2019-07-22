@@ -133,11 +133,7 @@ export default {
     this.axios.get(url.moneyReceivable+'?fund_type=0').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
-      this.listTable = res.data.list_fund
-      this.list_fund_name_type = res.data.list_fund_name_type
-      this.list_fund_names = res.data.list_fund_names
-      this.list_customer_name = res.data.list_customer_name
-      this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       }
     }, error => {
       var then = this
@@ -148,17 +144,29 @@ export default {
   },
   methods: {
     msg (id) {
-      this.$router.push({ path: 'payable_entry', query: { id: id } })
+      // this.$router.push({ path: 'payable_entry', query: { id: id } })
+      var payable_entry = {}
+      for (var index in this.listTable) {
+        if (id === this.listTable[index].fund_details_id) {
+          payable_entry = this.listTable[index]
+        }
+      }
+      localStorage.payable_entry = JSON.stringify(payable_entry)
+      this.$router.push({ path: 'payable_entry', query: { id: payable_entry } })
+    },
+    //封装model
+    package(res){
+      this.listTable = res.data.list_fund
+      this.list_fund_name_type = res.data.list_fund_name_type
+      this.list_fund_names = res.data.list_fund_names
+      this.list_customer_name = res.data.list_customer_name
+      this.list_fund_name = res.data.list_fund_name
     },
     // 类别选择
     fund_namesa (id) {
       this.fund_nameso = id
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
         if (this.fund_nameo === '个人') {
           this.list_slime_all = false
         }else if (this.fund_nameo === '公司') {
@@ -179,11 +187,7 @@ export default {
         }
       }
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso +'&fund_name='+this.fund_name+ '&fund_names=' + id).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {
@@ -195,11 +199,7 @@ export default {
     list_slim_name(id){
       this.list_fund_slim_id = id
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name='+id).then(res=>{
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       })
     },
     //  项目名称
@@ -212,11 +212,7 @@ export default {
         fund_name+='&fund_name='+this.fund_name
       }*/
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_name=' + this.fund_name +'&fund_names=' + this.list_fund_namea + '&Customer_name=' + id).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {
@@ -228,11 +224,7 @@ export default {
     dateList (id) {
       this.deteList = id
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' +this.fund_name  + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + id + '&dateB=' + this.dateB).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {
@@ -243,11 +235,7 @@ export default {
     date_list_two_change (id) {
       this.dateB = id
       this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea  + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + this.deteList + '&dateB=' + id).then(res => {
-        this.listTable = res.data.list_fund
-        this.list_fund_name_type = res.data.list_fund_name_type
-        this.list_fund_names = res.data.list_fund_names
-        this.list_customer_name = res.data.list_customer_name
-        this.list_fund_name = res.data.list_fund_name
+        this.package(res)
       }, error => {
         var then = this
         mui.alert('您无权访问', function () {

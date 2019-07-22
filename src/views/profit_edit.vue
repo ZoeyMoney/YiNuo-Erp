@@ -22,11 +22,11 @@
           </div>
           <div class="mui-input-row">
             <label>已收款</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入用户名">
+            <input type="text" class="mui-input-clear" v-model="paid_for" placeholder="请输入用户名">
           </div>
           <div class="mui-input-row">
             <label>已付款</label>
-            <input type="text" class="mui-input-clear" placeholder="请输入用户名">
+            <input type="text" class="mui-input-clear" v-model="Paid_out_for" placeholder="请输入用户名">
           </div>
         </form>
         <button-save @click.native="add"></button-save>
@@ -35,17 +35,21 @@
 </template>
 
 <script>
+  import url from '../components/config'
   export default {
     name: 'profit_edit',
     data(){
       return{
         site:'',
-        test_id:''
+        test_id:'',
+        paid_for:'',
+        Paid_out_for:'',
       }
     },
     created(){
       this.site = window.test
       this.test_id = window.test_id
+      this.search_for()
     },
     methods:{
       siteChange(){
@@ -53,8 +57,40 @@
         this.$router.push({path:'siteList',})
         window.expenditure = expenditure
       },
+      //search
+      search_for(){
+        if (this.site !== undefined) {
+          this.axios.get(url.clientProjet+"?Customer_id="+this.test_id).then(res=>{
+            if (res.status === 200) {
+              this.paid_for = res.data[0].customer_enter_money
+              this.Paid_out_for = res.data[0].customer_out_money
+            }
+          })
+        }
+      },
       add(){
-
+        var then = this
+        this.axios({
+          url:url.Update_Customer,
+          method:'post',
+          data:{
+            Customer_out_money: this.Paid_out_for,//已付
+            Customer_enter_money: this.paid_for,//已收
+            Customer_id: this.test_id//项目名称
+          },
+          //把json格式编码转为x-www-form-urlencoded
+          transformRequest: [function (data) {
+            let ret = ''
+            for (let it in data) {
+              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+            }
+            return ret
+          }],
+        }).then(res=>{
+          mui.alert(res.data.data,function () {
+            then.$router.go(0)
+          })
+        })
       }
     }
   }
