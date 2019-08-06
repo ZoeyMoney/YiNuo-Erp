@@ -26,15 +26,19 @@
             <input type="text" id="all" class="mui-input-clear" v-model="fund_person" @click="relecantProsen" placeholder="请输入债务人">
           </div>
           <div class="mui-input-row">
+            <label>经手人</label>
+            <input type="text" v-model="hand_man" placeholder="请输入经手人" :class="{select:hand_man==='',selectBlack:hand_man!==''}" @click="huanClick">
+          </div>
+          <div class="mui-input-row">
             <label>类别选择</label>
-            <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
+            <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)"  :class="{select:fund_nameo==='',selectBlack:fund_nameo!==''}" >
               <option value="">请选择</option>
               <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>类别名称</label>
-            <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)">
+            <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)"  :class="{select:list_fund_namea==='',selectBlack:list_fund_namea!==''}" >
               <option value="" selected="selected">请选择</option>
               <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
               <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
@@ -42,20 +46,33 @@
           </div>
           <div class="mui-input-row" v-if="category">
             <label>类别详情</label>
-            <select name="" v-model="all_rate" @change="all_rate_name(all_rate)">
+            <select name="" v-model="all_rate" @change="all_rate_name(all_rate)" :class="{select:all_rate==='',selectBlack:all_rate!==''}" >
               <option value="" selected="selected">请选择</option>
               <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
           </div>
-
           <div class="mui-input-row">
             <label>总金额</label>
             <input type="text" class="mui-input-clear" id="fund_money" v-model="fund_money" placeholder="￥">
           </div>
           <div class="mui-input-row">
+            <label>级别</label>
+            <select name="" v-model="level" :class="{select:level==='',selectBlack:level!==''}" >
+              <option value="">请选择</option>
+              <option v-for="item in list_lev" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>情况</label>
+            <select name="" v-model="whether" :class="{select:whether==='',selectBlack:whether!==''}" >
+              <option value="">请选择</option>
+              <option v-for="item in list_whether" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
+          <!--<div class="mui-input-row">
             <label>备注</label>
             <input type="text" class="mui-input-clear" id="fund_text" v-model="fund_text" placeholder="备注">
-          </div>
+          </div>-->
           <data-value v-model="dataValue1"></data-value>
           <div class="mui-input-row input-radio">
             <div class="mui-input-row mui-left mui-radio">
@@ -77,7 +94,7 @@
             <tr v-for="item in list">
               <td><input type="date" id="fund_details_date" v-model="item.fund_details_date" :style="paRight"></td>
               <td><input type="text" id="fund_details_batch" v-model="item.fund_details_batch" placeholder="批次"></td>
-              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="￥"  :style="padLeft"></td>
+              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="￥" :style="padLeft"></td>
               <td><input type="text" id="fund_details_text" v-model="item.fund_details_text" placeholder="备注"></td>
             </tr>
           </table>
@@ -85,7 +102,7 @@
             <form class="mui-input-group">
               <div class="mui-input-row">
                 <label>还款时间</label>
-                <input type="date" class="mui-input-clear" id="data_huan" v-model="data_huan">
+                <input type="date" class="mui-input-clear" v-model="data_huan">
               </div>
               <div class="mui-input-row">
                 <label>还款周期</label>
@@ -139,9 +156,22 @@ export default {
       customer_name: '', // v项目
       customer_name_id:'',
       data_huan: '', // 还款时间
-      fund_text: '', // 备注
+      fund_text: '0', // 备注
       yue: '', // 还款周期
       qi: '', // 还款期数
+      hand_man:'',//经手人
+      level:'',//级别
+      whether:'',//情况
+      huan_man_id:'', //经手人id
+      list_lev:[
+        {text:'A'},
+        {text:'B'},
+        {text:'C'},
+      ],
+      list_whether:[
+        {text:'是'},
+        {text:'否'},
+      ],
       list_fund_name_type:'',
       batch_index:1,
       list: [
@@ -154,6 +184,9 @@ export default {
         paddingRight:'0'
       }
     }
+  },
+  watch:{
+
   },
   created () {
     /* table */
@@ -169,6 +202,8 @@ export default {
     this.customer_name_id = window.test_id
     this.fund_person = window.fund_people
     this.fund_person_id = window.fund_people_name
+    this.hand_man = window.fund_people_huan
+    this.huan_man_id = window.fund_people_huan_name
   },
   methods: {
     //工地传参
@@ -180,6 +215,12 @@ export default {
     //债权人
     relecantProsen(){
       var prosen = 'accounts_payable'
+      this.$router.push({path:'relevant_people'})
+      window.prosen = prosen
+    },
+    //经手人
+    huanClick(){
+      var prosen = 'accounts_payable_huan'
       this.$router.push({path:'relevant_people'})
       window.prosen = prosen
     },
@@ -281,13 +322,28 @@ export default {
         check = false
         return false
       }
+      if (this.hand_man == '') {
+        mui.toast('经手人不能为空')
+        check = false
+        return false
+      }
+      if (this.level == '') {
+        mui.toast('级别不能为空')
+        check = false
+        return false
+      }
+      if (this.whether =='') {
+        mui.toast('情况不能为空')
+        check = false
+        return false
+      }
       // 总金额
       if (this.fund_money == '') {
         mui.toast('总金额不能为空')
         check = false
         return false
       }
-      if (!nuber.test(this.fund_money)) {
+      if (!nuber_two.test(this.fund_money)) {
         mui.toast('总金额只能填入数字')
         check = false
         return false
@@ -297,52 +353,18 @@ export default {
         check = false
         return false
       }
-      //循环list是否有空
-      for (var index in this.list) {
-        /*list时间不能为空*/
-        if (this.list[index].fund_details_date == '') {
-          mui.toast('时间不能为空')
-          check = false
-          return false
-        }
-        if (this.list[index].fund_details_batch == '') {
-          mui.toast('批次不能为空')
-          check = false
-          return false
-        }
-        if (!nuber.test(this.list[index].fund_details_batch)) {
-          mui.toast('批次内容只能为数字')
-          check = false
-          return false
-        }
-        if (this.list[index].fund_details_money == '') {
-          mui.toast('金额不能为空')
-          check = false
-          return false
-        }
-        if (!nuber_two.test(this.list[index].fund_details_money)) {
-          mui.toast('金额只能为数字')
-          check = false
-          return false
-        }
-      }
+
       // 判断阶段付款、周期付款
       if (this.fund_type === '阶段付款') {
-        var fund_details_date = document.getElementById('fund_details_date').value //时间
         var data_money = document.getElementById('fund_details_money').value // 金额
         var data_text = document.getElementById('fund_details_batch').value // 批次
-        if (fund_details_date == '') {
-          mui.toast('时间不能为空')
-          check = false
-          return false
-        }
         // 金额
         if (data_money == '') {
           mui.toast('金额不能为空')
           check = false
           return false
         }
-        if (!nuber.test(data_money)) {
+        if (!nuber_two.test(data_money)) {
           mui.toast('金额只能填入数字')
           check = false
           return false
@@ -358,11 +380,41 @@ export default {
           check = false
           return false
         }
+        //循环list是否有空
+        for (var index in this.list) {
+          /*list时间不能为空*/
+          /*if (this.list[index].fund_details_date == '') {
+            mui.toast('时间不能为空')
+            check = false
+            return false
+          }*/
+          if (this.list[index].fund_details_batch == '') {
+            mui.toast('批次不能为空')
+            check = false
+            return false
+          }
+          if (!nuber.test(this.list[index].fund_details_batch)) {
+            mui.toast('批次内容只能为数字')
+            check = false
+            return false
+          }
+          if (this.list[index].fund_details_money == '') {
+            mui.toast('金额不能为空')
+            check = false
+            return false
+          }
+          //阶段金额转负数
+          if (!nuber_two.test(this.list[index].fund_details_money)) {
+            mui.toast('金额只能为数字')
+            check = false
+            return false
+          }
+        }
         // 判断是否总金额大于等于 金额的总和
         var money_all = 0
         for (var index in this.list) {
           var n = this.list[index].fund_details_money
-          money_all = money_all + parseInt(n)
+          money_all = money_all + parseFloat(n)
         }
         if (this.fund_money >= money_all) {
 
@@ -374,7 +426,7 @@ export default {
         //阶段金额相加必须跟总金额相等否则无法通过
         var all_money = 0
         for (var index in this.list) {
-          all_money += parseInt(this.list[index].fund_details_money)
+          all_money += parseFloat(this.list[index].fund_details_money)
         }
         if (this.fund_money != all_money) {
           mui.toast('总金额与阶段金额总和不同')
@@ -382,12 +434,6 @@ export default {
           return false
         }
       } else if (this.fund_type === '周期付款') {
-        // 还款时间
-        if (this.data_huan == '') {
-          mui.toast('还款时间不能为空')
-          check = false
-          return false
-        }
         //    还款周期
         if (this.yue == '') {
           mui.toast('还款周期不能为空')
@@ -407,7 +453,8 @@ export default {
         }
       }
       // 正数转负数
-      this.fund_money = ~this.fund_money+1
+      // this.fund_money = ~this.fund_money+1
+      var moneyFu = this.fund_money*(-1)
       var data_huan = new Date(this.data_huan)
       var zhouqi = this.yue
       var qishu = this.qi
@@ -417,7 +464,7 @@ export default {
         this.list = []
         if (zhouqi === '按月') {
           for (var i = 1; i <= qishu; i++) {
-            var m = data_huan.getMonth() + 1 + i
+            var m = data_huan.getMonth() + i
             date = data_huan.getFullYear() + '-' + m + '-' + data_huan.getDate()
             var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch':i.toString(), 'fund_details_text': '' }
             this.list.push(a)
@@ -441,12 +488,37 @@ export default {
       }
       var add = ''
       var list_customer = ''
+      var fund_debtor_id = ''
+      var hand_man =''   //经手人
+      var fund_details_type = ''  //情况
       if (this.fund_nameo === '个人') {
         add = this.list_fund_namea
+        fund_debtor_id+=this.fund_person_id
         list_customer += '0'
       }else if (this.fund_nameo === '公司') {
         add = this.all_rate
-        list_customer += this.customer_name
+        if (this.customer_name !== undefined) {
+          list_customer += this.customer_name_id
+        }else{
+          list_customer += '0'
+        }
+        if (this.fund_person_id !== undefined) {
+          fund_debtor_id+=this.fund_person_id
+        }else{
+          fund_debtor_id+='0'
+        }
+      }
+      //经手人
+      if (this.huan_man_id !== '') {
+        hand_man+=this.huan_man_id
+      }else{
+        hand_man+='0'
+      }
+      //情况
+      if (this.whether === '是') {
+        fund_details_type+='0'
+      }else{
+        fund_details_type+='1'
       }
       this.imgUrl_loading = true
       this.axios({
@@ -457,12 +529,14 @@ export default {
           listFund:JSON.stringify(this.list),
           fund_customer_id:list_customer,
           fund_workyard_pact_id:1,
-          // fund_debtor:this.fund_person_id,
-          fund_person: this.fund_person_id,
+          fund_debtor:hand_man, //经手人
+          fund_person: fund_debtor_id,
           fund_name:add,
-          fund_money:this.fund_money,
+          fund_money:moneyFu,
           fund_text:this.fund_text,
-          fund_type:this.fund_type
+          fund_type:this.fund_type,
+          fund_details_level:this.level,
+          fund_details_type:fund_details_type
         },
         //把json格式编码转为x-www-form-urlencoded
         transformRequest: [function (data) {
@@ -487,6 +561,8 @@ export default {
 
 <style scoped>
 @import "../css/public.css";
+select,input::-webkit-input-placeholder{color: #6e6e6e}
+.selectBlack{color: black}
 .mui-input-group {background-color: transparent}
 /*单选框*/
 .input-radio{display: flex;}

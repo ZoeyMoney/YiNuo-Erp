@@ -321,6 +321,30 @@ export default new Router({
       path: '/money_summary',
       name: 'money_summary',
       component:resolve=>require(['@/views/money_summary'],resolve)
+    }, {
+      path: '/site_stage',
+      name: 'site_stage',
+      component:resolve=>require(['@/views/site_stage'],resolve)
+    }, {
+      path: '/exit_money',
+      name: 'exit_money',
+      component:resolve=>require(['@/views/exit_money'],resolve)
+    }, {
+      path: '/NewUserName',
+      name: 'NewUserName',
+      component:resolve=>require(['@/views/NewUserName'],resolve)
+    }, {
+      path: '/stop_sales',
+      name: 'stop_sales',
+      component:resolve=>require(['@/views/stop_sales'],resolve)
+    }, {
+      path: '/receive_data',
+      name: 'receive_data',
+      component:resolve=>require(['@/views/receive_data'],resolve)
+    }, {
+      path: '/paid_data',
+      name: 'paid_data',
+      component:resolve=>require(['@/views/paid_data'],resolve)
     }
     /* {
       path:'/home',

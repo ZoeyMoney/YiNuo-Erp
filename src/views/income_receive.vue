@@ -16,7 +16,140 @@
     </div>
     <!--form-->
     <div class="mui-content app">
-      <form class="mui-input-group">
+      <div class="mui-content app">
+        <form class="mui-input-group">
+          <div class="mui-input-row site_projet" v-if="site_various">
+            <label>工地名称</label>
+            <input type="text" v-model="customer_name" @click="siteChange" placeholder="请选择">
+          </div>
+          <div class="mui-input-row">
+            <label>债权人</label>
+            <input type="text" id="all" class="mui-input-clear" v-model="fund_person" @click="relecantProsen" placeholder="请输入债务人">
+          </div>
+          <div class="mui-input-row">
+            <label>经手人</label>
+            <input type="text" v-model="hand_man" placeholder="请输入经手人" :class="{select:hand_man==='',selectBlack:hand_man!==''}" @click="huanClick">
+          </div>
+          <div class="mui-input-row">
+            <label>类别选择</label>
+            <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)"  :class="{select:fund_nameo==='',selectBlack:fund_nameo!==''}" >
+              <option value="">请选择</option>
+              <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>类别名称</label>
+            <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)"  :class="{select:list_fund_namea==='',selectBlack:list_fund_namea!==''}" >
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
+              <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row" v-if="category">
+            <label>类别详情</label>
+            <select name="" v-model="all_rate" @change="all_rate_name(all_rate)" :class="{select:all_rate==='',selectBlack:all_rate!==''}" >
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>总金额</label>
+            <input type="text" class="mui-input-clear" id="fund_money" v-model="fund_money" placeholder="￥">
+          </div>
+          <div class="mui-input-row">
+            <label>级别</label>
+            <select name="" v-model="level" :class="{select:level==='',selectBlack:level!==''}" >
+              <option value="">请选择</option>
+              <option v-for="item in list_lev" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>情况</label>
+            <select name="" v-model="whether" :class="{select:whether==='',selectBlack:whether!==''}" >
+              <option value="">请选择</option>
+              <option v-for="item in list_whether" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
+          <!--<div class="mui-input-row">
+            <label>备注</label>
+            <input type="text" class="mui-input-clear" id="fund_text" v-model="fund_text" placeholder="备注">
+          </div>-->
+          <data-value v-model="dataValue1"></data-value>
+          <div class="mui-input-row input-radio">
+            <div class="mui-input-row mui-left mui-radio">
+              <label>阶段付款</label>
+              <input v-model="fund_type" @click="stage_one" type="radio" value="阶段付款">
+            </div>
+            <div class="mui-input-row mui-left mui-radio">
+              <label>周期付款</label>
+              <input v-model="fund_type" @click="week" type="radio" value="周期付款">
+            </div>
+          </div>
+          <table border="0" class="table-all" id="table">
+            <tr>
+              <th>日期</th>
+              <th>批次</th>
+              <th :style="padLeft">金额</th>
+              <th>备注</th>
+            </tr>
+            <tr v-for="item in list">
+              <td><input type="date" id="fund_details_date" v-model="item.fund_details_date" :style="paRight"></td>
+              <td><input type="text" id="fund_details_batch" v-model="item.fund_details_batch" placeholder="批次"></td>
+              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="￥" :style="padLeft"></td>
+              <td><input type="text" id="fund_details_text" v-model="item.fund_details_text" placeholder="备注"></td>
+            </tr>
+          </table>
+          <div class="mui-content data-time" id="data-time">
+            <form class="mui-input-group">
+              <div class="mui-input-row">
+                <label>还款时间</label>
+                <input type="date" class="mui-input-clear" v-model="data_huan">
+              </div>
+              <div class="mui-input-row">
+                <label>还款周期</label>
+                <select name="" id="yue" v-model="yue">
+                  <option value="" selected="selected">请选择</option>
+                  <option value="按月">按月</option>
+                  <option value="按年">按年</option>
+                  <option value="按周">按周</option>
+                </select>
+              </div>
+              <div class="mui-input-row">
+                <label>还款期数</label>
+                <input type="text" class="mui-input-clear" id="qi" placeholder="请填入期数" v-model="qi">
+              </div>
+            </form>
+          </div>
+          <p id="btn-form" @click="formAdd">添加新一行</p>
+          <p id="btn-del" @click="del(user)">删除</p>
+        </form>
+        <div class="mui-input-row form-btn">
+          <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">保存</button>
+        </div>
+      </div>
+      <!--<form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>经手人</label>
+          <input type="text" v-model="hand_man" placeholder="请输入经手人" :class="{select:hand_man==='',selectBlack:hand_man!==''}" @click="huanClick">
+        </div>
+        <div class="mui-input-row">
+          <label>债权人</label>
+          <input type="text" id="all" class="mui-input-clear" v-model="fund_person" @click="relecantProsen" placeholder="请输入债务人">
+        </div>
+        <div class="mui-input-row">
+          <label>级别</label>
+          <select name="" v-model="level" :class="{select:level==='',selectBlack:level!==''}" >
+            <option value="">请选择</option>
+            <option v-for="item in list_lev" :value="item.text">{{item.text}}</option>
+          </select>
+        </div>
+        <div class="mui-input-row">
+          <label>情况</label>
+          <select name="" v-model="whether" :class="{select:whether==='',selectBlack:whether!==''}" >
+            <option value="">请选择</option>
+            <option v-for="item in list_whether" :value="item.text">{{item.text}}</option>
+          </select>
+        </div>
         <div class="mui-input-row">
           <label>类别选择</label>
           <select name="" v-model="fund_detail_id" @change="fund_deId(fund_detail_id)">
@@ -25,7 +158,7 @@
           </select>
         </div>
         <div class="mui-input-row">
-          <label>款项名称</label>
+          <label>类别名称</label>
           <select name="" v-model="detailed" @change="list_fund_nameas(detailed)">
             <option value="" selected="selected">请选择</option>
             <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
@@ -33,7 +166,7 @@
           </select>
         </div>
         <div class="mui-input-row" v-if="category">
-          <label>款项详细</label>
+          <label>类别详情</label>
           <select name="" v-model="slim">
             <option value="" selected="selected">请选择</option>
             <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
@@ -41,17 +174,19 @@
         </div>
         <div class="mui-input-row relevant_people" v-if="relevant_people">
           <label>相关人</label>
-          <select name="" v-model="nameo">
+          <input type="text" v-model="nameo" placeholder="请选择工地" @click="relecantProsen" :class="{select:nameo==='',selectBlack:nameo!==''}" >
+          &lt;!&ndash;<select name="" v-model="nameo">
             <option value="" selected="selected">请选择</option>
             <option v-for="item in list_bank_card_person" :value="item.text">{{item.text}}</option>
-          </select>
+          </select>&ndash;&gt;
         </div>
         <div class="mui-input-row site_projet" v-if="site_projet">
           <label>工地名称</label>
-          <select name="" v-model="site">
+          <input type="text" v-model="site" placeholder="请选择工地"  @click="siteChange"  :class="{select:site==='',selectBlack:site!==''}">
+          &lt;!&ndash;<select name="" v-model="site">
             <option value="">请选择</option>
             <option v-for="item in projet" :value="item.customer_id">{{item.customer_name}}</option>
-          </select>
+          </select>&ndash;&gt;
         </div>
         <div class="mui-input-row">
           <label>金额</label>
@@ -112,7 +247,8 @@
       <div class="mui-input-row form-btn">
         <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">保存</button>
       </div>
-    </div>
+    </div>-->
+  </div>
   </div>
 </template>
 
@@ -124,37 +260,52 @@
       return {
         imgUrl_loading:false,
         user:'',
-        category:true,
+        all_rate:'',
+        dataValue1:new Date().toString(),
+        all_id:'',
+        list_fund_names:'',
+        category:true,//隐藏
         cotrProjet:false,
         idProjet:true,
-        site_projet:true,
-        relevant_people:true, //相关人
-        site:'',
-        listProjet:'',
-        money:'',
-        fund_type:'阶段付款',
-        fund_detail_id:'',
-        detailed:'',
-        id:'',
-        fund_text:'',
+        site_various:true,
+        fund_nameo: '', // v类别
+        list_fund_namea:'',//类别详情
+        list_fund_name:'',//类别详情
+        list_customer_name:'',//项目名称
+        fund_money: '', // 总金额
+        fund_person: '', // 债权人
+        fund_person_id:'',//债权人Id
+        fund_type: '阶段付款', // 项目阶段
+        customer_name: '', // v项目
+        customer_name_id:'',
+        data_huan: '', // 还款时间
+        fund_text: '0', // 备注
+        yue: '', // 还款周期
+        qi: '', // 还款期数
+        hand_man:'',//经手人
+        level:'',//级别
+        whether:'',//情况
+        huan_man_id:'', //经手人id
+        list_lev:[
+          {text:'A'},
+          {text:'B'},
+          {text:'C'},
+        ],
+        list_whether:[
+          {text:'是'},
+          {text:'否'},
+        ],
         list_fund_name_type:'',
-        slim:'',
-        data_huan:'',
-        projet:'',
-        yue:'',
-        qi:'',
-        fund_details_id:'',
-        nameo:'',
-        list_fund_names:'', //二级查询
-        list_fund_name:'',  //三级查询
         batch_index:1,
         list: [
-          { 'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '1', 'fund_details_text': '' },
+          {'fund_details_date': '', 'fund_details_batch': '1', 'fund_details_money': '', 'fund_details_text': '' },
         ],
-        list_bank_card_person:[
-          {text:'胡永生'},
-          {text:'邱梅'},
-        ],
+        padLeft:{
+          padding:'0'
+        },
+        paRight:{
+          paddingRight:'0'
+        }
       }
     },
     created () {
@@ -173,9 +324,9 @@
       }
       this.money = lists[0]
       /*项目名称*/
-      this.axios.get(url.list).then(res=>{
+      /*this.axios.get(url.list).then(res=>{
         this.projet = res.data
-      })
+      })*/
       /* table */
       this.axios.get(url.ClassSelect+'?fund_type=1').then(res => {
         this.list_fund_name_type = res.data.fund_name_type
@@ -185,25 +336,54 @@
           then.$router.push({ name: 'index' })
         })
       })
+      this.customer_name = window.test
+      this.customer_name_id = window.test_id
+      this.fund_person = window.fund_people
+      this.fund_person_id = window.fund_people_name
+      this.hand_man = window.fund_people_huan
+      this.huan_man_id = window.fund_people_huan_name
     },
     methods: {
-      //一级查询
-      fund_deId(id){
+      //工地传参
+      siteChange(){
+        var expenditure = 'income_receive'
+        this.$router.push({path:'siteList',})
+        window.expenditure = expenditure
+      },
+      //债权人
+      relecantProsen(){
+        var prosen = 'income_receive'
+        this.$router.push({path:'relevant_people'})
+        window.prosen = prosen
+      },
+      //经手人
+      huanClick(){
+        var prosen = 'income_receive_huan'
+        this.$router.push({path:'relevant_people'})
+        window.prosen = prosen
+      },
+      //阶段付款每次点击+1批次
+      formAdd(){
+        this.batch_index++
+        var s = {fund_details_date: '', fund_details_money: '', fund_details_batch: '1', fund_details_text: '' }
+        s.fund_details_batch = this.batch_index.toString()
+        this.list.push(s)
+      },
+      // 类别选择
+      fund_namesa (id) {
         this.fund_nameso = id
         this.axios.get(url.ClassSelect+'?fund_type=1&fund_name_type=' + this.fund_nameso).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
-          if (this.fund_detail_id === '个人') {
+          if (this.fund_nameo === '个人') {
             this.category = false
-            this.site_projet = false
-            this.relevant_people = true
-          }else if (this.fund_detail_id === '公司') {
+            this.site_various = false
+          }else if (this.fund_nameo === '公司') {
             this.category = true
             this.cotrProjet = true
             this.idProjet = false
-            this.relevant_people = false
-            this.site_projet = true
+            this.site_various = true
           }
         }, error => {
           var then = this
@@ -212,28 +392,27 @@
           })
         })
       },
-      //二级查询
-      list_fund_nameas(id){
+      // 类别名称
+      list_fund_nameas (id) {
         this.fund_name = id
         this.axios.get(url.ClassSelect+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
-          if (this.detailed === '现金周转'){
-            this.site_projet = false
-            this.relevant_people = true
-          }else if (this.detailed === '工程') {
-            this.relevant_people = false
-            this.site_projet = true
-          }else if (this.detailed === '营业费') {
-            this.relevant_people = true
-            this.site_projet = false
-          }
         }, error => {
           var then = this
           mui.alert('您无权访问', function () {
             then.$router.push({ name: 'index' })
           })
+        })
+      },
+      //类别详细
+      all_rate_name(id){
+        this.all_id = id
+        this.axios.get(url.ClassSelect+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name).then(res => {
+          this.list_fund_name_type = res.data.fund_name_type
+          this.list_fund_names = res.data.fund_names
+          this.list_fund_name = res.data.fund_name
         })
       },
       stage_one () {
@@ -241,9 +420,9 @@
         var data_time = document.getElementById('data-time')
         var btn_form = document.getElementById('btn-form')
         var del = document.getElementById('btn-del')
-        del.style.display = 'block'
         btn_form.style.display = 'block'
         otable.style.display = 'block'
+        del.style.display = 'block'
         data_time.style.display = 'none'
       },
       week () {
@@ -251,16 +430,10 @@
         var data_time = document.getElementById('data-time')
         var btn_form = document.getElementById('btn-form')
         var del = document.getElementById('btn-del')
-        del.style.display = 'none'
         otable.style.display = 'none'
         btn_form.style.display = 'none'
         data_time.style.display = 'block'
-      },
-      formAdd(){
-        this.batch_index++
-        var s = {fund_details_date: '', fund_details_money: '', fund_details_batch: '1', fund_details_text: '' }
-        s.fund_details_batch = this.batch_index
-        this.list.push(s)
+        del.style.display = 'none'
       },
       del(user){
         if (this.list.length === 0) {
@@ -273,30 +446,52 @@
         var then = this
         var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
         var nuber = /^\d+(\.\d+)?$/ // 验证数字
+        var nuber_two = /^\d+(\.\d+)?$/ // 验证带点的数字
         var check = true
-        //  类别选择
-        if (this.fund_nameo == '') {
+        // 类别选择
+        if (this.fund_name == '') {
           mui.toast('类别选择不能为空')
           check = false
           return false
         }
-        //类别详情
-        if (this.list_fund_namea == '') {
-          mui.toast('类别详情不能为空')
+        // 项目名称
+        if (this.customer_id == '') {
+          mui.toast('项目名称不能为空')
+          check = false
+          return false
+        }
+        if (this.hand_man == '') {
+          mui.toast('经手人不能为空')
+          check = false
+          return false
+        }
+        if (this.level == '') {
+          mui.toast('级别不能为空')
+          check = false
+          return false
+        }
+        if (this.whether =='') {
+          mui.toast('情况不能为空')
           check = false
           return false
         }
         // 总金额
-        if (this.money == '') {
+        if (this.fund_money == '') {
           mui.toast('总金额不能为空')
           check = false
           return false
         }
-        if (!nuber.test(this.money)) {
+        if (!nuber_two.test(this.fund_money)) {
           mui.toast('总金额只能填入数字')
           check = false
           return false
         }
+        if (this.dataValue1=='') {
+          mui.toast('时间不能为空')
+          check = false
+          return false
+        }
+
         // 判断阶段付款、周期付款
         if (this.fund_type === '阶段付款') {
           var data_money = document.getElementById('fund_details_money').value // 金额
@@ -307,7 +502,7 @@
             check = false
             return false
           }
-          if (!nuber.test(data_money)) {
+          if (!nuber_two.test(data_money)) {
             mui.toast('金额只能填入数字')
             check = false
             return false
@@ -323,13 +518,43 @@
             check = false
             return false
           }
+          //循环list是否有空
+          for (var index in this.list) {
+            /*list时间不能为空*/
+            /*if (this.list[index].fund_details_date == '') {
+              mui.toast('时间不能为空')
+              check = false
+              return false
+            }*/
+            if (this.list[index].fund_details_batch == '') {
+              mui.toast('批次不能为空')
+              check = false
+              return false
+            }
+            if (!nuber.test(this.list[index].fund_details_batch)) {
+              mui.toast('批次内容只能为数字')
+              check = false
+              return false
+            }
+            if (this.list[index].fund_details_money == '') {
+              mui.toast('金额不能为空')
+              check = false
+              return false
+            }
+            //阶段金额转负数
+            if (!nuber_two.test(this.list[index].fund_details_money)) {
+              mui.toast('金额只能为数字')
+              check = false
+              return false
+            }
+          }
           // 判断是否总金额大于等于 金额的总和
           var money_all = 0
           for (var index in this.list) {
             var n = this.list[index].fund_details_money
-            money_all += parseInt(n)
+            money_all = money_all + parseFloat(n)
           }
-          if (this.money >= money_all) {
+          if (this.fund_money >= money_all) {
 
           } else {
             mui.toast('金额的和不能大于总金额')
@@ -341,43 +566,37 @@
           for (var index in this.list) {
             all_money += parseFloat(this.list[index].fund_details_money)
           }
-          if (this.money != all_money) {
-            mui.alert('总金额与阶段金额总和不同')
+          if (this.fund_money != all_money) {
+            mui.toast('总金额与阶段金额总和不同')
             check = false
             return false
           }
         } else if (this.fund_type === '周期付款') {
-          var qi = document.getElementById('qi').value
-          var yue = document.getElementById('yue').value
-          var data_huan = document.getElementById('data_huan').value
-          // 还款时间
-          if (data_huan == '') {
-            mui.toast('还款时间不能为空')
-            check = false
-            return false
-          }
           //    还款周期
-          if (yue == '') {
+          if (this.yue == '') {
             mui.toast('还款周期不能为空')
             check = false
             return false
           }
           //    还款期数
-          if (qi == '') {
+          if (this.qi == '') {
             mui.toast('还款期数不能为空')
             check = false
             return false
           }
-          if (!nuber.test(qi)) {
-            mui.toast('还款期数只能填入数字')
+          if (!nuber.test(this.qi)) {
+            mui.toast('还款时间只能填入数字')
             check = false
             return false
           }
         }
+        // 正数转负数
+        // this.fund_money = ~this.fund_money+1
+        var moneyFu = this.fund_money*(-1)
         var data_huan = new Date(this.data_huan)
         var zhouqi = this.yue
         var qishu = this.qi
-        var qishu_money = this.money*(-1) / qishu
+        var qishu_money = this.fund_money / qishu
         var date = '';
         if (this.fund_type === '周期付款') {
           this.list = []
@@ -385,24 +604,14 @@
             for (var i = 1; i <= qishu; i++) {
               var m = data_huan.getMonth() + 1 + i
               date = data_huan.getFullYear() + '-' + m + '-' + data_huan.getDate()
-              var a = {
-                'fund_details_date': date,
-                'fund_details_money': qishu_money.toString(),
-                'fund_details_batch': i.toString(),
-                'fund_details_text': ''
-              }
+              var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch':i.toString(), 'fund_details_text': '' }
               this.list.push(a)
             }
           } else if (zhouqi === '按年') {
             for (var i = 1; i <= qishu; i++) {
               var y = data_huan.getFullYear() + i
               date = y + '-' + data_huan.getMonth() + '-' + data_huan.getDate()
-              var a = {
-                'fund_details_date': date,
-                'fund_details_money': qishu_money.toString(),
-                'fund_details_batch': i.toString(),
-                'fund_details_text': ''
-              }
+              var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch': i.toString(), 'fund_details_text': '' }
               this.list.push(a)
             }
           } else if (zhouqi === '按周') {
@@ -410,43 +619,62 @@
               var m = data_huan.getMonth() + 1
               data_huan.setDate(data_huan.getDate() + 7)
               date = data_huan.getFullYear() + '-' + m + '-' + data_huan.getDate()
-              var a = {
-                'fund_details_date': date,
-                'fund_details_money': qishu_money.toString(),
-                'fund_details_batch': i.toString(),
-                'fund_details_text': ''
-              }
+              var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch': i.toString(), 'fund_details_text': '' }
               this.list.push(a)
             }
           }
         }
         var add = ''
-        var add_id = ''
-        if (this.id === '') {
-          add+= '0'
-        }else{
-          add = add+this.id
+        var list_customer = ''
+        var fund_debtor_id = ''
+        var hand_man =''   //经手人
+        var fund_details_type = ''  //情况
+        if (this.fund_nameo === '个人') {
+          add = this.list_fund_namea
+          fund_debtor_id+=this.fund_person_id
+          list_customer += '0'
+        }else if (this.fund_nameo === '公司') {
+          add = this.all_rate
+          if (this.customer_name !== undefined) {
+            list_customer += this.customer_name_id
+          }else{
+            list_customer += '0'
+          }
+          if (this.fund_person_id !== undefined) {
+            fund_debtor_id+=this.fund_person_id
+          }else{
+            fund_debtor_id+='0'
+          }
         }
-        if (this.fund_detail_id === '个人') {
-          add_id+=this.detailed
-        }else if (this.fund_detail_id === '公司') {
-          add_id+=this.slim
+        //经手人
+        if (this.huan_man_id !== '') {
+          hand_man+=this.huan_man_id
+        }else{
+          hand_man+='0'
+        }
+        //情况
+        if (this.whether === '是') {
+          fund_details_type+='0'
+        }else{
+          fund_details_type+='1'
         }
         this.imgUrl_loading = true
         this.axios({
-          method: 'POST',
-          url: url.moneyAddFund,
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-          data: {
-            listFund: JSON.stringify(this.list),
-            fund_customer_id: add,
-            fund_workyard_pact_id: 1,
-            fund_debtor: this.nameo,
-            fund_name: add_id,
-            fund_money: this.money*(-1),
-            fund_person: 5,
-            fund_text: this.fund_text,
-            fund_type: this.fund_type,
+          method:'POST',
+          url:url.moneyAddFund,
+          headers:{'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'},
+          data:{
+            listFund:JSON.stringify(this.list),
+            fund_customer_id:list_customer,
+            fund_workyard_pact_id:1,
+            fund_debtor:hand_man, //经手人
+            fund_person: fund_debtor_id,
+            fund_name:add,
+            fund_money:moneyFu,
+            fund_text:this.fund_text,
+            fund_type:this.fund_type,
+            fund_details_level:this.level,
+            fund_details_type:fund_details_type
           },
           //把json格式编码转为x-www-form-urlencoded
           transformRequest: [function (data) {
@@ -456,13 +684,13 @@
             }
             return ret
           }],
-        }).then(res => {
+        }).then(res=>{
           if (res.status === 200) {
             this.imgUrl_loading = false
-          mui.alert(res.data, function () {
-            then.$router.push({ path: 'income' })
-          })
-         }
+            mui.alert(res.data,function () {
+              then.$router.push({path:'payable_money'})
+            })
+          }
         })
       }
     }

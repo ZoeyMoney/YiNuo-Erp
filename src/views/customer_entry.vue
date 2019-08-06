@@ -200,6 +200,7 @@ export default {
 <style scoped>
 @import "../css/public.css";
 /*表单*/
+select,input::-webkit-input-placeholder{color: #6e6e6e}
 /*    x */
 .mui-icon-clear{display: none!important;}
 form div select{font-size: 15px!important;}

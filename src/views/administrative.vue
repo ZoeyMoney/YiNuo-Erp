@@ -39,6 +39,7 @@ export default {
         { href: '', listImg: require('../image/sp.png'), text: '审批管理' },
         { href: 'admin_nameUpdate', listImg: require('../image/r.png'), text: '个人中心' },
         { href: 'adminPunishment', listImg: require('../image/chuaf.png'), text: '行政处罚' },
+        { href: 'NewUserName', listImg: require('../image/newname.png'), text: '添加账户' },
       ]
     }
   },

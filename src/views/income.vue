@@ -8,13 +8,17 @@
       </header>
       <login-loading v-show="imgUrl_loading"></login-loading>
       <!--收入-->
-      <div class="mui-content">
+      <div class="mui-content one-img">
         <div class="customer">
           <h2>收入</h2>
           <p>/Income</p>
         </div>
+        <div class="mui-img">
+          <div>￥{{allTotal}}</div>
+        </div>
       </div>
       <!--收入记录-->
+      <v-touch v-on:swipeleft="onSwipeLeft" v-on:swiperight="onSwipeRight" :swipe-options="{direction: 'horizontal'}">
       <div class="mui-content app">
         <form class="mui-input-group">
           <div class="mui-input-row site_projet" v-if="site_projet">
@@ -27,22 +31,22 @@
           </div>
           <div class="mui-input-row">
             <label>类别选择</label>
-            <select name="" v-model="fund_detail_id" @change="fund_deId(fund_detail_id)">
+            <select name="" v-model="fund_detail_id" :class="{select:fund_detail_id==='',selectBlack:fund_detail_id!==''}" @change="fund_deId(fund_detail_id)">
               <option value="">请选择</option>
               <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>款项名称</label>
-            <select name="" v-model="detailed" @change="list_fund_nameas(detailed)">
-              <option value="" selected="selected">请选择</option>
+            <select name="" v-model="detailed" :class="{select:detailed==='',selectBlack:detailed!==''}" @change="list_fund_nameas(detailed)">
+              <option value="" selected="selected" style="color: #6e6e6e">请选择</option>
               <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
               <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
             </select>
           </div>
           <div class="mui-input-row" v-if="category">
             <label>款项详细</label>
-            <select name="" v-model="slim" @change="list_fund_namea(slim)">
+            <select name="" v-model="slim" :class="{select:slim==='',selectBlack:slim!==''}" @change="list_fund_namea(slim)">
               <option value="" selected="selected">请选择</option>
               <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
@@ -55,7 +59,7 @@
           <div class="mui-input-row row-label">
             <label>转入账户</label>
             <label>
-              <select v-model="mongey_bank_id" name="" id="card">
+              <select v-model="mongey_bank_id" name="" id="card" :class="{select:mongey_bank_id==='',selectBlack:mongey_bank_id!==''}">
                 <option value="" selected="selected">请选择</option>
                 <option v-for="item in bank_card" :value="item.bank_id">
                   <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
@@ -70,7 +74,7 @@
           </div>
           <div class="mui-input-row">
             <label>手续费</label>
-            <select name="" v-model="money_rate">
+            <select name="" v-model="money_rate" :class="{select:money_rate==='',selectBlack:money_rate!==''}">
               <option value="">请选择</option>
               <option v-for="item in list_money_rate" :value="item.text">{{item.text}}%</option>
             </select>
@@ -123,6 +127,7 @@
           </tr>
         </table>
       </div>
+      </v-touch>
     </div>
 </template>
 
@@ -172,6 +177,7 @@ export default {
       xinY: '',	// 信用卡
       chuXuKa: '', // 储蓄卡总额
       XinYongKa: '', // 储蓄卡总额
+      allTotal:'',//合计金额
       list_fund_names:'', //二级查询
       list_fund_name:'',  //三级查询
       test_id:'',
@@ -180,7 +186,7 @@ export default {
   created () {
     this.imgUrl_loading = true
     /* table */
-    this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=1').then(res => {
+    this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=0').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
       this.list_fund_name_type = res.data.fund_name_type
@@ -198,13 +204,16 @@ export default {
       var xin = []
       var m = 0
       var y = 0
+      var all = 0//合计储蓄卡信用卡总额
       for (var index in res.data) {
         if (res.data[index].bank_type === '储蓄卡') {
           m += res.data[index].bank_money // 储蓄卡总额
           chu.push(res.data[index])
         } else {
           if (res.data[index].bank_type === '信用卡') {
-            y += res.data[index].bank_money
+            if (res.data[index].bank_money > 0) {
+              y += res.data[index].bank_money
+            }
             xin.push(res.data[index])
           }
         }
@@ -213,6 +222,8 @@ export default {
       this.xinY = xin
       this.chuXuKa = Math.floor(m*100)/100
       this.XinYongKa = Math.floor(y*100)/100
+      all += this.chuXuKa+this.XinYongKa
+      this.allTotal = Math.floor(all*100) /100
     }, error => {
       var then = this
       mui.alert('您无权访问', function () {
@@ -243,10 +254,15 @@ export default {
   computed:{
     money_actual:{
       get:function () {
-       var a = this.money -this.money * this.money_rate / 100
+        if (this.money_rate === '' || this.money_rate === undefined) {
+          var a = this.money
+          return a
+        }else{
+        var a = this.money -this.money * this.money_rate / 100
         var b = Math.floor(a*100) /100
         this.money_get = b
         return b
+        }
       },
       set:function (value) {
         this.money_get = value
@@ -313,11 +329,21 @@ export default {
         })
       })
     },
+    // 左滑动
+   onSwipeLeft:function(){
+      this.$router.push({name:'expenditure'})
+    },
+    // 右滑动
+    onSwipeRight:function(){
+      this.$router.push({name:'transfer_money'})
+    },
+    //工地传参
     siteChange(){
       var expenditure = 'income'
       this.$router.push({path:'siteList'})
       window.expenditure = expenditure
     },
+    //相关人传参
     relecantProsen(){
       var prosen = 'income'
       this.$router.push({path:'relevant_people'})
@@ -400,7 +426,13 @@ export default {
       var s = dt.getSeconds();
       var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
       this.imgUrl_loading = true
-      add+='&money='+this.money+'&fund_text='+this.clearBei+'&bank_id='+this.mongey_bank_id+'&shiji_money='+this.money_get+'&date='+dd
+      var money_all = ''
+      if (this.money_get === '') {
+        money_all+=this.money
+      }else{
+        money_all+=this.money_get
+      }
+      add+='&money='+this.money+'&fund_text='+this.clearBei+'&bank_id='+this.mongey_bank_id+'&shiji_money='+money_all+'&date='+dd
       if (this.checkbox === true) {
         this.axios.post(url.moneyOutEnter + add).then(res => {
           var id = ''
@@ -436,8 +468,15 @@ export default {
 <style scoped>
 @import "../css/public.css";
 form{margin-bottom: 12px;}
+input::-webkit-input-placeholder{color: #6e6e6e}
+select{color: #6e6e6e}
+.selectBlack{color: black}
 /*form字体*/
 select{font-size: 15px!important;}
+.customer{flex: 3;}
+.one-img{display: flex;white-space: nowrap}
+.mui-img{width: 100%;padding-top: 10%;padding-right: 31px;font-size: 17px;color: black;font-weight: bold;flex: 1;}
+.mui-img a img{width: 100%;}
 /*第二个form*/
 .row-label{display: flex;}
 .row-label label:nth-child(1) {
@@ -456,15 +495,15 @@ select{font-size: 15px!important;}
 .checkbox label{width: 50%!important;text-align: right}
 .checkbox input{width: 46%;text-align: right}
 /*按钮*/
-.mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 37%}
-.form-btn{background-color: #EFEFF4!important;margin-top: 0;}
+.mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 37%;padding-right: 17px}
+.form-btn{background-color: #EFEFF4!important;margin-top: 20px;padding-bottom: 0;margin-bottom: 20px}
 .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
 .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}
 /*table*/
 .all{display: flex;margin-bottom: 12px;padding-left: 10px;}
 .saving,.all-money{flex: 1;font-weight: bold}
 .all-money{flex: 5;text-align: left;}
-.all-saving{width: 100%;font-size: 15px;margin-bottom: 50px;white-space: nowrap}
+.all-saving{width: 100%;font-size: 15px;margin-bottom: 20px;white-space: nowrap}
 .all-saving tr:nth-child(1),.blaner tr:nth-child(1){background-color: #DADADA;line-height: 34px;}
 .all-saving tr td:nth-child(1),.blaner tr td:nth-child(1){padding-left: 11px}
 .all-saving tr td{padding-left: 10px;border-bottom: 1px solid #dadada;line-height: 28px}

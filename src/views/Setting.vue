@@ -5,6 +5,7 @@
         <router-link :to="{name:'index'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
         <h1 class="mui-title">设置</h1>
       </header>
+      <login-loading v-if="imgUrl_loading"></login-loading>
       <div class="mui-content">
         <ul class="mui-table-view botton-mar">
           <li class="mui-table-view-cell" v-for="item in list">
@@ -23,6 +24,7 @@ export default {
   name: 'Setting',
   data () {
     return {
+      imgUrl_loading:false,
       list: [
         { href: 'SettingName', test: '设置用户名' },
         { href: 'SettingPwd', test: '设置密码' }
@@ -32,10 +34,14 @@ export default {
   methods: {
     setting () {
       var then = this
+      this.imgUrl_loading = true
       this.axios.get('https://formattingclub.com/YiNuoLogin/logout').then(res => {
-        mui.alert(res.data.msg, function () {
-          then.$router.push({ name: 'Login' })
-        })
+        if (res.status === 200) {
+          this.imgUrl_loading = false
+          mui.alert(res.data.msg, function () {
+            then.$router.push({ name: 'Login' })
+          })
+        }
       })
     }
   }

@@ -40,6 +40,20 @@
             <input type="text" class="mui-input-clear" placeholder="￥" v-model="all_money" disabled="disabled">
           </div>-->
           <div class="mui-input-row">
+            <label>级别</label>
+            <select name="" v-model="level" :class="{select:level==='',selectBlack:level!==''}" >
+              <option value="">请选择</option>
+              <option v-for="item in list_lev" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>情况</label>
+            <select name="" v-model="whether" :class="{select:whether==='',selectBlack:whether!==''}" >
+              <option value="">请选择</option>
+              <option v-for="item in list_whether" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
             <label>实际转账</label>
             <input type="text" class="mui-input-clear" placeholder="￥" v-model="smoney">
           </div>
@@ -59,6 +73,17 @@ export default {
       imgUrl_loading:false,
       list: '',
       all_money: '',
+      level:'',
+      whether:'',
+      list_lev:[
+        {text:'A'},
+        {text:'B'},
+        {text:'C'},
+      ],
+      list_whether:[
+        {text:'是'},
+        {text:'否'},
+      ],
       smoney: '',
       cumoterName: '',
       person: '',
@@ -100,6 +125,16 @@ export default {
         check = false
         return false
       }
+      if (this.level == '') {
+        mui.toast('级别不能为空')
+        check = false
+        return false
+      }
+      if (this.whether == '') {
+        mui.toast('情况不能为空')
+        check = false
+        return false
+      }
       // 实际转账
       if (this.smoney == '') {
         mui.toast('实际转账不能为空')
@@ -112,7 +147,13 @@ export default {
         return false
       }
       this.imgUrl_loading = true
-      var add = 'money=' + this.smoney + '&fund_details_id=' + this.id + '&date=' + this.date
+      var add = 'money=' + this.smoney + '&fund_details_id=' + this.id + '&date=' + this.date+'&fund_details_level='+this.level
+      //情况
+      if (this.whether === '是') {
+        add+='&fund_details_type=0'
+      }else{
+        add+='&fund_details_type=1'
+      }
       this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_details?' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
@@ -129,6 +170,7 @@ export default {
 <style scoped>
   @import "../css/public.css";
   .mui-input-group{margin-bottom: 10px;}
+  select{font-size: 15px}
   /*按钮*/
   .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 70%;}
   .form-botton{text-align: center;}

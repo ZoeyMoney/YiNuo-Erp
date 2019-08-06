@@ -23,15 +23,15 @@
         </div>
         <!--表格-->
         <div class="mui-content label-flex">
-          <div class="mui-row row-flex">
+          <!--<div class="mui-row row-flex">
             <label>责任人</label>
             <select v-model="customer_stylist">
               <option value="" selected="selected">请选择</option>
               <option v-for="(item,index) in listName" :value="item">{{item}}</option>
             </select>
-          </div>
+          </div>-->
           <div class="mui-row row-flex">
-            <label>阶段</label>
+            <label>工地名称</label>
             <select v-model="stage_name">
               <option value="" selected="selected">请选择</option>
               <option v-for="index in stageName" :value="index">{{index}}</option>
@@ -39,22 +39,42 @@
           </div>
         </div>
         <!--table-->
-        <table border="0">
+        <!--<table border="0">
           <tr>
-            <th :style="projet">工地各项</th>
-            <th :style="paLift">责任人</th>
-            <th>预算金额</th>
+            <th :style="projet">工地名称</th>
+            <th>分类</th>
+            <th>状态</th>
             <th>阶段</th>
             <th>倒计时</th>
           </tr>
           <tr v-for="item in list" :style="ostyle">
             <td @click="mername(item.customer_id)" :value="item.customer_id"><span :style="projet">{{item.customer_name}}</span></td>
-            <td :style="paLift"><span>{{item.customer_stylist}}</span></td>
-            <td><span>￥{{item.customer_budget}}</span></td>
+            <td>分类</td>
+            <td>状态</td>
             <td><span>{{item.stage_name}}</span></td>
             <td :style="listRad" v-if="time(item.stage_startdate,item.stage_stipulate) === '已逾期'">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
             <td :style="listStyle" v-else-if="time(item.stage_startdate,item.stage_stipulate) === '未开始'">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
             <td :style="listBlue" v-else-if="time(item.stage_startdate,item.stage_stipulate)">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
+          </tr>
+        </table>-->
+        <table class="table_all">
+           <tr>
+             <th :style="projet"><span>工地名称</span></th>
+             <th><span>分类</span></th>
+             <th><span>状态</span></th>
+             <th><span>阶段</span></th>
+             <th><span>倒计时</span></th>
+           </tr>
+          <tr v-for="item in list" :style="ostyle" @click="mername(item.customer_id)">
+            <td><span>{{item.customer_name}}</span></td>
+            <td><span>分类别</span></td>
+            <td><span>已过保</span></td>
+            <td><span>{{item.stage_name}}</span></td>
+            <td>
+              <span v-if="time(item.stage_startdate,item.stage_stipulate) === '已逾期'">{{time(item.stage_startdate,item.stage_stipulate)}}</span>
+              <span v-else-if="time(item.stage_startdate,item.stage_stipulate) === '未开始'">{{time(item.stage_startdate,item.stage_stipulate)}}</span>
+              <span v-else-if="time(item.stage_startdate,item.stage_stipulate)">{{time(item.stage_startdate,item.stage_stipulate)}}</span>
+            </td>
           </tr>
         </table>
       </div>
@@ -86,11 +106,6 @@ export default {
       list: '', // table
       stage_stipulate: '',
       add: '', // 钱总
-      ostyle: {
-        fontSize: '12px',
-        borderBottom: '1px solid #dadada',
-        lineHeight: '30px'
-      },
       /* table的最后一个td */
       listStyle: {
         color: 'blue',
@@ -197,15 +212,21 @@ export default {
   /*设计师一行*/
   .label-flex,.row-flex{display: flex;flex: 1;}
   .label-flex{margin-top: 20px;}
-  .row-flex label{flex: 1;}
-  .row-flex label{flex: 1;line-height: 40px;text-align: center;font-size: 15px;}
-  .row-flex select{flex: 1;}
-  .row-flex select{padding: 9px 15px!important;margin-bottom: 0;}
+  .row-flex label{flex: 1;line-height: 40px;padding-left:13px;font-size: 15px;flex: 1;}
+  .row-flex select{padding: 9px 15px!important;margin-bottom: 0;flex: 4;}
   /*table*/
-  .mui-content table{width: 100%;overflow: auto;margin-bottom: 40px;}
-  table tr th{text-align: left;width: 20%;}
-  table tr td span{display: block;width: 95%;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
-  .mui-content table tr:nth-child(1){font-size: 12px;background-color: #DADADA;line-height: 30px;}
+  .table_all{width: 100%;display: block;overflow: auto;white-space: nowrap;font-size: 14px;padding: 10px 0;line-height: 28px}
+  .table_all tr:nth-child(1){width: 100%;display: block;background-color: #dadada}
+  .table_all tr:nth-child(2){width: 100%;display: block}
+  .table_all tr th{text-align: left;background-color: #dadada}
+  .table_all tr th:nth-child(1){text-align: left;min-width: 120px}
+  .table_all tr th:nth-child(2),.table_all tr th:nth-child(3){text-align: left;min-width: 52px}
+  .table_all tr th:nth-child(4){text-align: left;min-width: 68px}
+  .table_all tr td:nth-child(1){padding-left: 10px;min-width: 120px}
+  .table_all tr td:nth-child(2),.table_all tr td:nth-child(3){min-width: 52px}
+  .table_all tr td:nth-child(4){text-align: left;min-width: 68px}
+  .table_all tr td:nth-child(5){min-width: 80px}
+  .table_all tr td{border-bottom: 1px solid #dadada}
   /*底部*/
   .footer{background-color: #dedcdc;position: fixed;width: 100%;bottom: 0;display: flex;padding-top: 10px;}
   .footer .footer-botton:nth-child(1){flex: 1;padding-left: 8px;}

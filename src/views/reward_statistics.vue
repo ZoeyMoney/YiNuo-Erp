@@ -19,6 +19,7 @@
         </div>
       </div>
       <!--center-->
+
     </div>
 </template>
 
@@ -30,6 +31,11 @@
         money_plus: require('../image/plus.png'),
       }
     },
+    methods:{
+      add(){
+        console.log('123')
+      }
+    }
   }
 </script>
 

@@ -2,65 +2,65 @@
     <div class="relevant_people">
       <!--头部-->
       <header class="mui-bar mui-bar-nav">
-        <router-link :to="{name:'cash_flow'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
-        <h1 class="mui-title">收款人</h1>
+        <router-link to="" @click.native="hrefGo" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+        <h1 class="mui-title">{{UserName}}</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
       <login-loading v-show="imgUrl_loading"></login-loading>
       <!--site-->
       <div class="mui-content app">
         <ul class="mui-table-view" v-if="allperson">
-          <li class="siteAColor" id="A"><span>A</span></li>
+          <li class="siteAColor" id="A" v-if="siteAA"><span>A</span></li>
           <li class="mui-table-view-cell" v-for="item in site_A" @click="suteA(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="B"><span>B</span></li>
+          <li class="siteAColor" id="B" v-if="siteBB"><span>B</span></li>
           <li class="mui-table-view-cell" v-for="item in site_B" @click="suteB(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="C"><span>C</span></li>
+          <li class="siteAColor" id="C" v-if="siteCC"><span>C</span></li>
           <li class="mui-table-view-cell" v-for="item in site_C" @click="suteC(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="D"><span>D</span></li>
+          <li class="siteAColor" id="D" v-if="siteDD"><span>D</span></li>
           <li class="mui-table-view-cell" v-for="item in site_D" @click="suteD(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="E"><span>E</span></li>
+          <li class="siteAColor" id="E" v-if="siteEE"><span>E</span></li>
           <li class="mui-table-view-cell" v-for="item in site_E" @click="suteE(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="F"><span>F</span></li>
+          <li class="siteAColor" id="F" v-if="siteFF"><span>F</span></li>
           <li class="mui-table-view-cell" v-for="item in site_F" @click="suteF(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="G"><span>G</span></li>
+          <li class="siteAColor" id="G" v-if="siteGG"><span>G</span></li>
           <li class="mui-table-view-cell" v-for="item in site_G" @click="suteG(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="H"><span>H</span></li>
+          <li class="siteAColor" id="H" v-if="siteHH"><span>H</span></li>
           <li class="mui-table-view-cell" v-for="item in site_H" @click="suteH(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="I"><span>I</span></li>
+          <li class="siteAColor" id="I" v-if="siteII"><span>I</span></li>
           <li class="mui-table-view-cell" v-for="item in site_I" @click="suteI(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="J"><span>J</span></li>
+          <li class="siteAColor" id="J" v-if="siteJJ"><span>J</span></li>
           <li class="mui-table-view-cell" v-for="item in site_J" @click="suteJ(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="K"><span>K</span></li>
+          <li class="siteAColor" id="K" v-if="siteKK"><span>K</span></li>
           <li class="mui-table-view-cell" v-for="item in site_K" @click="suteK(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="L"><span>L</span></li>
+          <li class="siteAColor" id="L" v-if="siteLL"><span>L</span></li>
           <li class="mui-table-view-cell" v-for="item in site_L" @click="suteL(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="M"><span>M</span></li>
+          <li class="siteAColor" id="M" v-if="siteMM"><span>M</span></li>
           <li class="mui-table-view-cell" v-for="item in site_M" @click="suteM(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="N"><span>N</span></li>
+          <li class="siteAColor" id="N" v-if="siteNN"><span>N</span></li>
           <li class="mui-table-view-cell" v-for="item in site_N" @click="suteN(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="O"><span>O</span></li>
+          <li class="siteAColor" id="O" v-if="siteOO"><span>O</span></li>
           <li class="mui-table-view-cell" v-for="item in site_O" @click="suteO(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="P"><span>P</span></li>
+          <li class="siteAColor" id="P" v-if="sitePP"><span>P</span></li>
           <li class="mui-table-view-cell" v-for="item in site_P" @click="suteP(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="Q"><span>Q</span></li>
+          <li class="siteAColor" id="Q" v-if="siteQQ"><span>Q</span></li>
           <li class="mui-table-view-cell" v-for="item in site_Q" @click="suteQ(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="R"><span>R</span></li>
+          <li class="siteAColor" id="R" v-if="siteRR"><span>R</span></li>
           <li class="mui-table-view-cell" v-for="item in site_R" @click="suteR(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="S"><span>S</span></li>
+          <li class="siteAColor" id="S" v-if="siteSS"><span>S</span></li>
           <li class="mui-table-view-cell" v-for="item in site_S" @click="suteS(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="T"><span>T</span></li>
+          <li class="siteAColor" id="T" v-if="siteTT"><span>T</span></li>
           <li class="mui-table-view-cell" v-for="item in site_T" @click="suteT(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="W"><span>W</span></li>
+          <li class="siteAColor" id="W" v-if="siteWW"><span>W</span></li>
           <li class="mui-table-view-cell" v-for="item in site_W" @click="suteW(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="U"><span>U</span></li>
+          <li class="siteAColor" id="U" v-if="siteUU"><span>U</span></li>
           <li class="mui-table-view-cell" v-for="item in site_U" @click="suteU(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="V"><span>V</span></li>
+          <li class="siteAColor" id="V" v-if="siteVV"><span>V</span></li>
           <li class="mui-table-view-cell" v-for="item in site_V" @click="suteV(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="X"><span>X</span></li>
+          <li class="siteAColor" id="X" v-if="siteXX"><span>X</span></li>
           <li class="mui-table-view-cell" v-for="item in site_X" @click="suteX(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="Y"><span>Y</span></li>
+          <li class="siteAColor" id="Y" v-if="siteYY"><span>Y</span></li>
           <li class="mui-table-view-cell" v-for="item in site_Y" @click="suteY(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
-          <li class="siteAColor" id="Z"><span>Z</span></li>
+          <li class="siteAColor" id="Z" v-if="siteZZ"><span>Z</span></li>
           <li class="mui-table-view-cell" v-for="item in site_Z" @click="suteZ(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
         </ul>
         <ul class="right" v-if="allperson">
@@ -78,6 +78,8 @@
       return {
         imgUrl_loading: false,
         allperson:false,
+        class:'',
+        UserName:'',
         listProjet: '',
         site_A: '',
         site_B: '',
@@ -105,6 +107,33 @@
         site_V:'',
         site_U:'',
         site_I:'',
+
+        siteAA:true,
+        siteBB:true,
+        siteCC:true,
+        siteDD:true,
+        siteEE:true,
+        siteFF:true,
+        siteGG:true,
+        siteHH:true,
+        siteII:true,
+        siteJJ:true,
+        siteKK:true,
+        siteLL:true,
+        siteMM:true,
+        siteNN:true,
+        siteOO:true,
+        sitePP:true,
+        siteQQ:true,
+        siteRR:true,
+        siteSS:true,
+        siteTT:true,
+        siteUU:true,
+        siteVV:true,
+        siteWW:true,
+        siteXX:true,
+        siteYY:true,
+        siteZZ:true,
         AZ: [],
         codeSite: '',
         codeE: '',
@@ -114,7 +143,27 @@
     created () {
       this.imgUrl_loading = true
       this.allperson = false
-      this.axios.get(url.Select_fund_person).then(res=>{
+      this.class = window.prosen
+      //判断传参
+      var add = '?'
+      if (window.prosen === 'accounts_payable' || window.prosen === 'money_entry' ||window.prosen==='income'||window.prosen==='expenditure'||
+      window.prosen === 'income_receive' || window.prosen === 'Project_Reconciliation') {
+        add+='fund_person_state_A=1'
+      }else if (window.prosen ==='accounts_payable_huan' || window.prosen==='income_receive_huan'){
+        add+='fund_person_state_A=2'
+      }
+      //判断头部信息显示
+      if (window.prosen == 'income' || window.prosen == 'money_entry') {
+        this.UserName = '相关人'
+      }else if (window.prosen === 'expenditure') {
+        this.UserName = '收款人'
+      }else if (window.prosen == 'accounts_payable') {
+        this.UserName = '债权人'
+      }else if (window.prosen === 'accounts_payable_huan') {
+        this.UserName = '经手人'
+      }
+      /*判断A-Z的没有则消失*/
+      this.axios.get(url.Select_fund_person+add).then(res=>{
         if (res.status === 200) {
           this.imgUrl_loading = false
           this.allperson = true
@@ -146,7 +195,7 @@
           var siteI = []
           for (var index in res.data.data) {
             if (res.data.data[index].firstChar === 'a') {
-              siteA.push(res.data.data[index])
+                siteA.push(res.data.data[index])
             }
             if (res.data.data[index].firstChar === 'b') {
               siteB.push(res.data.data[index])
@@ -265,17 +314,57 @@
         var a=id
         document.querySelector('#'+a).scrollIntoView(true)
       },
-      all_projet(id,name){
-        window.fund_people=id
-        window.fund_people_name = name
+      //返回上一页根据不同的页面跳不同的页面
+      hrefGo(){
         if (this.prosen === 'income') {
           this.$router.push({path:'income'})
         }else if (this.prosen === 'money_entry') {
           this.$router.push({path:'money_entry'})
-        }else if (this.prosen === 'accounts_payable') {
+        }else if (this.prosen === 'accounts_payable' || this.prosen === 'accounts_payable_huan') {
           this.$router.push({path:'accounts_payable'})
         }else if (this.prosen === 'expenditure_people') {
           this.$router.push({path:'expenditure'})
+        }else if (this.prosen === 'receive_data') {
+          this.$router.push({path:'receive_data'})
+        }else if (this.prosen === 'paid_data') {
+          this.$router.push({path:'paid_data'})
+        }else if (this.prosen === 'income_receive') {
+          this.$router.push({path:'income_receive'})
+        }else if (this.prosen === 'Project_Reconciliation') {
+          this.$router.push({path:'Project_Reconciliation'})
+        }
+      },
+      //根据页面传来不同的数据、点击数据然后返回各种页面
+      all_projet(id,name){
+        if (this.prosen === 'income' || this.prosen === 'money_entry' || this.prosen === 'accounts_payable' || this.prosen === 'expenditure' ||
+          this.prosen === 'receive_data' || this.prosen === 'paid_data' || this.prosen==='income_receive' || this.prosen === 'Project_Reconciliation') {
+          window.fund_people=id
+          window.fund_people_name = name
+          if (this.prosen === 'income') {
+            this.$router.push({path:'income'})
+          }else if (this.prosen === 'money_entry') {
+            this.$router.push({path:'money_entry'})
+          }else if (this.prosen === 'accounts_payable') {
+            this.$router.push({path:'accounts_payable'})
+          }else if (this.prosen === 'expenditure_people') {
+            this.$router.push({path:'expenditure'})
+          }else if (this.prosen === 'receive_data') {
+            this.$router.push({path:'receive_data'})
+          }else if (this.prosen === 'paid_data') {
+            this.$router.push({path:'paid_data'})
+          }else if (this.prosen === 'income_receive') {
+            this.$router.push({path:'income_receive'})
+          }else if (this.prosen === 'Project_Reconciliation') {
+            this.$router.push({path:'Project_Reconciliation'})
+          }
+        }else if (this.prosen === 'accounts_payable_huan'){
+          window.fund_people_huan = id
+          window.fund_people_huan_name = name
+          this.$router.push({path:'accounts_payable'})
+        }else if (this.prosen === 'income_receive_huan') {
+          window.fund_people_huan = id
+          window.fund_people_huan_name = name
+          this.$router.push({path:'income_receive'})
         }
       },
       suteA(id,name){
@@ -283,17 +372,6 @@
       },
       suteB(id,name){
         this.all_projet(id,name)
-        /*window.fund_people=id
-        window.fund_people_name = name
-        if (this.prosen === 'income') {
-          this.$router.push({path:'income'})
-        }else if (this.prosen === 'money_entry') {
-          this.$router.push({path:'money_entry'})
-        }else if (this.prosen === 'accounts_payable') {
-          this.$router.push({path:'accounts_payable'})
-        }else if (this.prosen === 'expenditure_people') {
-          this.$router.push({path:'expenditure'})
-        }*/
       },
       suteC(id,name){
         this.all_projet(id,name)

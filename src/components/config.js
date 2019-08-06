@@ -6,7 +6,7 @@ const url = {
   clientFollowPerson:'https://formattingclub.com/YiNuoLogin/Customer/select_follow_person',//跟进人
   listName:'https://formattingclub.com/YiNuoLogin/Customer/SelectStylist', //设计师
   list:'https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer',  //客户统计数据
-  stageName:'https://formattingclub.com/YiNuoLogin/Customer/SelectStageName', //客户统计阶段
+  // stageName:'https://formattingclub.com/YiNuoLogin/Customer/SelectStageName', //客户统计阶段
   modify_projet:'https://formattingclub.com/YiNuoLogin/Customer/SelectCustomer',//客户详细
   modify_stage:'https://formattingclub.com/YiNuoLogin/Customer/selectStage',//客户详细信息
   projet_follow:'https://formattingclub.com/YiNuoLogin/Customer/SelectFollow',//项目详情-跟进信息
@@ -39,6 +39,7 @@ const url = {
   AfterSiteUpdate:'https://formattingclub.com/YiNuoLogin/AfterSale/SelectUpdate',//售后详情修改记录
   AfterSiteDelete:'https://formattingclub.com/YiNuoLogin/AfterSale/DeleteCustomer',//售后删除
   AfterUpdata:'https://formattingclub.com/YiNuoLogin/AfterSale/UpdateCustomer',//售后修改信息保存
+  AfterUpdata:'https://formattingclub.com/YiNuoLogin/AfterSale/UpdateCustomer',//售后修改信息保存
   AfterPerson:'https://formattingclub.com/YiNuoLogin/AfterSale/select_follow_person',//售后跟进
   AfterAdd:'https://formattingclub.com/YiNuoLogin/AfterSale/AddFollow',//售后跟进保存
   projetAdd:'https://formattingclub.com/YiNuoLogin/AfterSale/addCustomer_name',//项目录入
@@ -49,7 +50,11 @@ const url = {
   Update_Customer:'https://formattingclub.com/YiNuoLogin/Customer/Update_Customer',//  利润原始数据修改
   Update_fund_detail:'https://formattingclub.com/YiNuoLogin/fund/Update_fund_detail',//应收应付修改
   Update_fund_details:'https://formattingclub.com/YiNuoLogin/fund/update_fund_details',//应收应付收款
-  Delete_fund_detail:'https://formattingclub.com/YiNuoLogin/fund/Delete_fund_details'//应收应付删除
+  Delete_fund_detail:'https://formattingclub.com/YiNuoLogin/fund/Delete_fund_details',//应收应付删除
+  money_search:'https://formattingclub.com/YiNuoLogin/fund/Select_fund_name_money',//款项汇总
+  money_refund:'https://formattingclub.com/YiNuoLogin/fund/money_refund',//流水收款
+  newUserName:'https://formattingclub.com/YiNuoLogin/User/Add_User',//账户添加
+  add_customer_person_fund:'https://formattingclub.com/YiNuoLogin/fund/add_customer_person_fund',//账户添加
 
 }
 module.exports = url

@@ -55,15 +55,20 @@
           </div>
           <div class="mui-input-row">
             <label>款项详细</label>
-            <input type="text" class="mui-input-clear" :value="fund_type" placeholder="无" disabled="disabled">
+            <input type="text" class="mui-input-clear" :value="fund_name" placeholder="无" disabled="disabled">
           </div>
           <div class="mui-input-row">
             <label>相关人</label>
             <input type="text" class="mui-input-clear" :value="fund_person" placeholder="无" disabled="disabled">
           </div>
+          <div class="mui-input-row">
+            <label>备注</label>
+            <input type="text" class="mui-input-clear" :value="text" placeholder="无" disabled="disabled">
+          </div>
         </form>
         <div class="mui-input-row form-btn">
           <button type="button" class="mui-btn mui-btn-blue" @click="dele">删除</button>
+          <button type="button" class="mui-btn mui-btn-blue" @click="exitMoney" v-show="exit_money">退款</button>
         </div>
       </div>
     </div>
@@ -82,15 +87,18 @@
         bank_deal_money:'',//交易金额
         dates:'',  //交易金额
         bank_number:'', //卡号
-        bank_type:'', //信用卡
+        fund_name:'', //信用卡
         bank_projet:'',//项目名称
         fund_details_batch:'',//期款
         fund_name_type:'',//款项类别
         fund_names:'',  //款项详情
         fund_type:'',//款项详细
+        bank_type:'',
         balance:'',//余额
         fund_person:'',//债权人
         fund_debtor:'',//相关人
+        exit_money:true,//退款
+        text:'',//备注
       }
     },
     created () {
@@ -113,13 +121,20 @@
       this.bank_number = this.list.bank_number.replace(reg, "$1 **** **** $2")
       this.bank_projet = this.list.customer_name
       this.fund_details_batch = this.list.fund_details_batch
-      this.bank_type = this.list.bank_type
+      this.fund_name = this.list.fund_name
       this.fund_name_type = this.list.fund_name_type
       this.fund_names = this.list.fund_names
       this.fund_type = this.list.fund_details_text
       this.balance = this.list.balance
       this.fund_person = this.list.fund_person
       this.fund_debtor = this.list.fund_debtor
+      this.text = this.list.fund_details_text
+      if (this.list.fund_name === '' || this.list.fund_name === undefined || this.list.fund_name === '手续费') {
+        this.exit_money = false
+      }
+      if (this.fund_name_type !== '') {
+        this.exit_money = true
+      }
     },
     methods:{
       dele(){
@@ -166,6 +181,10 @@
             mui.alert('取消成功')
           }
         })*/
+      },
+    //  退款
+      exitMoney(){
+        this.$router.push({name:'exit_money'})
       }
     }
   }

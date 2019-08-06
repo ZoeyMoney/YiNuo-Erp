@@ -19,7 +19,7 @@
         <!--关键字-->
         <div class="mui-input-row input-top">
           <label>工地搜索</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入关键字" v-model="customer_name">
+          <input type="text" class="mui-input-clear" placeholder="请输入关键字" v-model="search">
         </div>
         <!--表格-->
         <div class="mui-content label-flex">
@@ -30,48 +30,29 @@
               <option v-for="(item,index) in listName" :value="item">{{item}}</option>
             </select>
           </div>
-          <div class="mui-row row-flex">
+          <!--<div class="mui-row row-flex">
             <label>设计阶段</label>
             <select v-model="stage_name">
               <option value="" selected="selected">请选择</option>
               <option v-for="index in stageName" :value="index">{{index}}</option>
             </select>
-          </div>
+          </div>-->
         </div>
         <!--table-->
         <p v-show="false">{{listtime | data}}</p>
-        <template>
+        <template v-if="osd">
           <el-table :data="list" style="width: 100%;color: black" height="65vh" @row-click="mername">
             <el-table-column fixed prop="customer_name" label="工地名称" width="150"></el-table-column>
             <el-table-column prop="customer_stylist" label="设计师" width="120"></el-table-column>
             <el-table-column prop="customer_budget" label="预算" width="120"></el-table-column>
-            <el-table-column prop="stage_name" label="阶段" width="120"></el-table-column>
-            <el-table-column :key="Math.random()" label="倒计时" width="120">
+<!--            <el-table-column prop="stage_name" label="阶段" width="110"></el-table-column>-->
+            <!--<el-table-column :key="Math.random()" label="倒计时" width="120">
               <span :style="listRad" v-if="time(list.stage_startdate,list.stage_stipulate) === '已逾期'">{{time(list.stage_startdate,list.stage_stipulate)}}</span>
               <span :style="listStyle" v-else-if="time(list.stage_startdate,list.stage_stipulate) === '未开始'">{{time(list.stage_startdate,list.stage_stipulate)}}</span>
               <span :style="listBlue" v-else-if="time(list.stage_startdate,list.stage_stipulate)">{{time(list.stage_startdate,list.stage_stipulate)}}</span>
-            </el-table-column>
+            </el-table-column>-->
           </el-table>
         </template>
-        <!--<table border="0">
-            <tr>
-              <th :style="projet">工地名称</th>
-              <th>设计师</th>
-              <th>预算</th>
-              <th>阶段</th>
-              <th>倒计时</th>
-            </tr>
-
-          <tr v-for="item in list" :style="ostyle">
-              <td @click="mername(item.customer_id)" :value="item.customer_id"><span :style="projet">{{item.customer_name}}</span></td>
-              <td :style="paLift"><span>{{item.customer_stylist}}</span></td>
-              <td><span>￥{{item.customer_budget}}</span></td>
-              <td><span>{{item.stage_name}}</span></td>
-            <td :style="listRad" v-if="time(item.stage_startdate,item.stage_stipulate) === '已逾期'">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
-            <td :style="listStyle" v-else-if="time(item.stage_startdate,item.stage_stipulate) === '未开始'">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
-            <td :style="listBlue" v-else-if="time(item.stage_startdate,item.stage_stipulate)">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
-          </tr>
-        </table>-->
       </div>
       <!--底部-->
       <div class="footer">
@@ -93,11 +74,12 @@ export default {
   data () {
     return {
       imgUrl_loading:false,
-      customer_name: '', // 关键字
+      search: '', // 关键字
       customer_stylist: '', // 设计师
       stage_name: '', // 阶段
       listName: '',
-      stageName: '',
+      osd:true,
+      optioos:'',
       list: [{
         customer_name:'',
         customer_stylist:'',
@@ -137,6 +119,13 @@ export default {
       }
     }
   },
+  watch:{
+    /*search(){
+      if (this.search !== '') {
+        this.osd = false
+      }
+    }*/
+  },
   created () {
     this.imgUrl_loading = true
     // table数据
@@ -157,10 +146,6 @@ export default {
     this.axios.get(url.listName).then(res => {
       this.listName = res.data
     })
-    //  阶段
-    this.axios.get(url.stageName).then(res => {
-      this.stageName = res.data
-    })
     //  倒计时
     setInterval(() => {
       var a = new Date()
@@ -170,8 +155,12 @@ export default {
   methods: {
     // 页面传参
     mername (id) {
-      console.log(id.customer_id)
-      this.$router.push({ path: 'customer_details', query: { id: id.customer_id } })
+      var lists = {}
+      lists = id
+      localStorage.customer_statistics = JSON.stringify(lists)
+      this.$router.push({name:'customer_details',query:{lists}})
+      // console.log(list)
+      // this.$router.push({ path: 'customer_details', query: { id: id.customer_id } })
     },
     // 倒计时
     time: function (date, day) {
@@ -217,10 +206,8 @@ export default {
   /*设计师一行*/
   .label-flex,.row-flex{display: flex;flex: 1;}
   .label-flex{margin-top: 20px;}
-  .row-flex label{flex: 1;}
-  .row-flex label{flex: 1;line-height: 40px;text-align: center;font-size: 15px;}
-  .row-flex select{flex: 1;}
-  .row-flex select{padding: 9px 15px!important;margin-bottom: 0;}
+  .row-flex label{flex: 1;line-height: 40px;text-align: left;font-size: 15px;padding: 0 15px}
+  .row-flex select{padding: 9px 15px!important;margin-bottom: 0;flex: 4;}
   /*table*/
   .mui-content table{width: 100%;overflow: auto;margin-bottom: 40px;}
   table tr th{text-align: left;width: 20%;}
@@ -231,6 +218,7 @@ export default {
   /deep/.el-table td, .el-table th.is-leaf{border-bottom: 1px solid #dadada;padding: 4px 0;background-color: #efeff4}
   .element::-webkit-scrollbar {display:none}
   /deep/.el-radio{padding-left: 9px;line-height: 36px}
+  /deep/.el-table, .el-table__expanded-cell{background-color: #efeff4}
   /*底部*/
   .footer{background-color: #dedcdc;position: fixed;width: 100%;bottom: 0;display: flex;padding-top: 10px;z-index: 1000}
   .footer .footer-botton:nth-child(1){flex: 1;padding-left: 8px;}

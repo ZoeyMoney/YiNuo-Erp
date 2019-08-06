@@ -52,7 +52,7 @@ export default {
           if (res.status === 200) {
             this.imgUrl_loading = false
             if (res.data.msg === '登录成功') {
-              localStorage.data = JSON.stringify(res.data.user)
+              localStorage.data = JSON.stringify(res.data.role)
               mui.alert(res.data.msg, function () {
                 _this.$router.push('index')
               })

@@ -18,7 +18,7 @@
       <!--管理处-->
       <div class="mui-content">
 			  <ul class="mui-table-view mui-grid-view mui-grid-9 jiugongge">
-			    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" v-for="item in mgrid">
+			    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" v-for="item in mgrid" v-if="item.projet">
 			      <router-link :to="item.href">
               <img :src="item.ImgArr" alt="">
 			        <div class="mui-media-body">{{item.text}}</div>
@@ -46,19 +46,89 @@ export default {
   data () {
     return {
       mgrid: [
-        { href: 'customer_management', ImgArr: require('../image/admin.png'), text: '客户管理' },
-        { href: 'site_management', ImgArr: require('../image/gongdi.png'), text: '工地管理' },
-        { href: 'money_management', ImgArr: require('../image/caiwu.png'), text: '财务管理' },
-        { href: 'administrative', ImgArr: require('../image/xingzheng.png'), text: '行政管理' },
-        { href: '', ImgArr: require('../image/cangku.png'), text: '库存管理' },
-        { href: '', ImgArr: require('../image/data.png'), text: '数据汇总' },
-        { href: 'cash_flow', ImgArr: require('../image/xianjin.png'), text: '现金流水' },
-        { href: 'Project_Reconciliation', ImgArr: require('../image/xiangmduiz.png'), text: '项目对账' },
-        { href: 'money_sale', ImgArr: require('../image/souhou.png'), text: '售后信息' },
-        { href: 'summary_entry', ImgArr: require('../image/Summary.png'), text: '数据录入' },
+        { href: 'customer_management', ImgArr: require('../image/admin.png'), text: '客户管理',projet:false},
+        { href: 'site_management', ImgArr: require('../image/gongdi.png'), text: '工地管理' ,projet:false},
+        { href: 'money_management', ImgArr: require('../image/caiwu.png'), text: '财务管理' ,projet:false},
+        { href: 'administrative', ImgArr: require('../image/xingzheng.png'), text: '行政管理' ,projet:true},
+        { href: '', ImgArr: require('../image/cangku.png'), text: '库存管理' ,projet:true},
+        { href: '', ImgArr: require('../image/data.png'), text: '数据汇总' ,projet:true},
+        { href: 'cash_flow', ImgArr: require('../image/xianjin.png'), text: '现金流水' ,projet:false},
+        { href: 'Project_Reconciliation', ImgArr: require('../image/xiangmduiz.png'), text: '项目对账',projet:false,},
+        { href: 'money_sale', ImgArr: require('../image/souhou.png'), text: '售后信息' ,projet:false},
+        { href: 'summary_entry', ImgArr: require('../image/Summary.png'), text: '数据录入' ,projet:true},
       ]
     }
-  }
+  },
+  created () {
+    this.NewUserName = JSON.parse(localStorage.data)
+    // console.log(this.NewUserName)
+    for (var index in this.mgrid) {
+      if (this.mgrid[index].text === '售后信息') {
+        for (var inde in this.NewUserName) {
+          if (this.NewUserName[inde].jurisdiction === "AfterSale:AfterSale") {
+            this.mgrid[index].projet = true
+          }
+        }
+      }else if (this.mgrid[index].text === '客户管理') {
+        for (var inde in this.NewUserName) {
+          if (this.NewUserName[inde].jurisdiction === "Customer:Customer") {
+            this.mgrid[index].projet = true
+          }
+        }
+      }else if (this.mgrid[index].text === '财务管理' || this.mgrid[index].text ==='现金流水') {
+        for (var inde in this.NewUserName) {
+          if (this.NewUserName[inde].jurisdiction === "fund:fund") {
+            this.mgrid[index].projet = true
+          }
+        }
+      }else if (this.mgrid[index].text === '行政管理') {
+        for (var inde in this.NewUserName) {
+          if (this.NewUserName[inde].jurisdiction === "notice:notice") {
+            this.mgrid[index].projet = true
+          }
+        }
+      }else if (this.mgrid[index].text === '工地管理') {
+        for (var inde in this.NewUserName) {
+          if (this.NewUserName[inde].jurisdiction === "Wokyard:Wokyard") {
+            this.mgrid[index].projet = true
+          }
+        }
+      }else if (this.mgrid[index].text === '项目对账') {
+        for (var inde in this.NewUserName) {
+          if (this.NewUserName[inde].jurisdiction === "User:Select_accounting") {
+            this.mgrid[index].projet = true
+          }
+        }
+      }
+    }
+    for (var index in this.mgrid) {
+      if (this.mgrid[index].text === '行政管理') {
+        for (var inde in this.NewUserName) {
+          if (this.NewUserName[inde].role_name === '项目经理') {
+            this.mgrid[index].projet = false
+          }
+        }
+      }else if (this.mgrid[index].text === '库存管理') {
+        for (var inde in this.NewUserName) {
+          if (this.NewUserName[inde].role_name === '项目经理') {
+            this.mgrid[index].projet = false
+          }
+        }
+      }else if (this.mgrid[index].text === '数据汇总') {
+        for (var inde in this.NewUserName) {
+          if (this.NewUserName[inde].role_name === '项目经理') {
+            this.mgrid[index].projet = false
+          }
+        }
+      }else if (this.mgrid[index].text === '数据录入') {
+        for (var inde in this.NewUserName) {
+          if (this.NewUserName[inde].role_name === '项目经理') {
+            this.mgrid[index].projet = false
+          }
+        }
+      }
+    }
+  },
 }
 </script>
 

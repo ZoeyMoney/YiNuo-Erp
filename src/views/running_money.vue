@@ -105,7 +105,7 @@
             <span v-if="item.fund_name ==='手续费'">手续费</span>
           </div>-->
           <div>
-            <span @click="person(item.fund_detail_id)"
+            <span @click="person(item.fund_detail_transaction_id)"
                   :class="{money_green:item.fund_detail_transaction_money>0,
                money_red: item.fund_detail_transaction_money<0}"
                   v-if="item.fund_detail_transaction_money">￥{{item.fund_detail_transaction_money | negative}}</span>
@@ -129,7 +129,7 @@
               <span v-if="item.fund_name ==='手续费'">手续费</span>
             </div>-->
             <div>
-            <span @click="person(item.fund_detail_id)"
+            <span @click="person(item.fund_detail_transaction_id)"
                   :class="{money_green:item.fund_detail_transaction_money>0,
                money_red: item.fund_detail_transaction_money<0}"
                   v-if="item.fund_detail_transaction_money">￥{{item.fund_detail_transaction_money | negative}}</span>
@@ -280,7 +280,6 @@ export default {
       this.al_projet = false
       this.al_projet_two = true
       this.list_moey_two = window.transfer
-      console.log(this.list_moey_two)
     }
   },
   methods: {
@@ -303,19 +302,20 @@ export default {
       var list = {}
       if (this.all_all === 'transfer') {
       for (var index in this.list_moey_two) {
-        if (id === this.list_moey_two[index].bank_deal_id || id === this.list_moey_two[index].fund_detail_id) {
+        if (id === this.list_moey_two[index].fund_detail_transaction_id || id === this.list_moey_two[index].bank_deal_id) {
           list = this.list_moey_two[index]
         }
       }
       }else{
         for (var index in this.list_moey) {
-        if (id === this.list_moey[index].bank_deal_id || id === this.list_moey[index].fund_detail_id) {
+        if (id === this.list_moey[index].fund_detail_transaction_id || id === this.list_moey[index].bank_deal_id) {
           list = this.list_moey[index]
+          }
         }
-      }
       }
       localStorage.msg = JSON.stringify(list)
       this.$router.push({path:'running_details',query:{list:list}})
+      // console.log(id)
       // this.$router.push({path:'running_details',query:{id:then.fund_details_id,person:person,bank_bank:bank_bank,bank_deal_date:bank_deal_date,bank_deal_moneya:bank_deal_money,bank_number:bank_number,bank_type:bank_type}})
     },
     //封装model

@@ -38,11 +38,11 @@
             <label>类别详情</label>
             <select name="" v-model="slim" @change="list_slim_name(slim)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
+              <option v-for="item in list_fund_name" :value="item.fund_name">{{item.fund_name}}</option>
             </select>
           </div>
           <div class="mui-input-row">
-            <label>工地各项</label>
+            <label>工地名称</label>
             <select name="" v-model="customer_name" @change="customer_name_list(customer_name)">
               <option value="" selected="selected">请选择</option>
               <option v-for="item in list_customer_name" :value="item.customer_name">{{item.customer_name}}</option>
@@ -61,17 +61,32 @@
             <th :style="lefta">日期</th>
             <th>类别</th>
             <th>项目</th>
-<!--            <th>相关人</th>-->
+            <th>相关人</th>
             <th>金额</th>
           </tr>
-          <tr v-for="item in listTable">
-            <td><span :style="paLft">{{item.fund_details_date | data}}</span></td>
-            <td><span :style="fund_name" @click="msg(item.fund_details_id)">{{item.fund_name}}</span></td>
-            <td><span :style="hid">{{item.customer_name}}</span></td>
-<!--            <td><span>{{item.fund_debtor}}</span></td>-->
-            <td><span :style="money">￥{{item.fund_details_money}}</span></td>
+          <tr v-for="item in listTable" @click="msg(item.fund_details_id)" :class="{clasred:item.dates <= datesdm}">
+            <td>
+              <span v-if="item.dates" :style="paLft">{{item.dates}}</span>
+              <span v-if="item.dates===undefined" :style="paLft">待定</span>
+            </td>
+            <td>
+              <span v-if="item.fund_details_batch==='99'" :style="fund_name">质保金</span>
+              <span v-else-if="item.fund_name" :style="fund_name">{{item.fund_name}}</span>
+              <span v-else-if="item.fund_name===undefined" :style="fund_name">无</span>
+            </td>
+            <td>
+              <span :style="hid" v-if="item.customer_name">{{item.customer_name}}</span>
+              <span v-if="item.customer_name===undefined">无</span>
+            </td>
+            <td><span :style="person">{{item.fund_person}}</span></td>
+            <td><span :style="money" :class="{clasyews:item.fund_details_type =='1'}">￥{{item.fund_details_money}}</span></td>
           </tr>
         </table>
+      </div>
+      <div class="footer">
+        <div class="box">
+          总金额:￥{{allMoney | negative}}
+        </div>
       </div>
     </div>
 </template>
@@ -85,6 +100,7 @@ export default {
       imgUrl_loading:false,
       fund_nameso: '',
       fund_nameo: '', // 项目类别
+      datesdm:'',
       fund_name: '',
       list_slime_all:true,
       customer_name: '', // 项目名称
@@ -99,6 +115,7 @@ export default {
       date_list: '',
       list_customer_name: '',
       list_fund_name_type:'',
+      allMoney:'',
       slim:'',
       dateB: '',
       list_fund_slim_id:'',
@@ -125,6 +142,19 @@ export default {
       lefta: {
         paddingLeft: '10px'
       },
+      boder:{
+        border:'1px solid #565656',
+        display:'block',
+        width:'63px',
+
+      },
+      person:{
+        display:'block',
+        width:'62px',
+        whiteSpace:'nowrap',
+        overflow:'hidden',
+        textOverflow:'ellipsis'
+      },
       fund_name:{
         display:'block',
         width:'74px',
@@ -137,10 +167,15 @@ export default {
   created () {
     this.imgUrl_loading = true
     /* table */
-    this.axios.get(url.moneyReceivable+'?fund_type=1').then(res => {
+    this.axios.get(url.moneyReceivable+'?fund_type=0').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
         this.package(res)
+        var allMoney = 0
+        for (var index in this.listTable) {
+          allMoney+=this.listTable[index].fund_details_money
+        }
+        this.allMoney = Math.floor(allMoney * 100) /100
       }
     }, error => {
       var then = this
@@ -148,6 +183,20 @@ export default {
         then.$router.push({ name: 'index' })
       })
     })
+    /*data*/
+    var data = new Date()
+    var dt = new Date(data)
+    var y = dt.getFullYear()
+    var mm = dt.getMonth() + 1
+    var d = dt.getDate()
+    if (mm < 10) {
+      mm = '0'+mm
+    }
+    if (d < 10) {
+      d = '0'+d
+    }
+    var dd  = y+'-'+mm+'-'+d
+    this.datesdm = dd
   },
   methods: {
     msg (id) {
@@ -189,10 +238,10 @@ export default {
     list_fund_nameas (id) {
       for (var index in this.list_fund_names) {
         if (this.list_fund_names[index].fund_names === id) {
-          this.fund_name = this.list_fund_names[index].fund_name_id
+          this.fund_name = this.list_fund_names[index].fund_name
         }
       }
-      this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso +'&fund_name='+this.fund_name+ '&fund_names=' + id).then(res => {
+      this.axios.get(url.moneyReceivable+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.package(res)
       }, error => {
         var then = this
@@ -252,14 +301,18 @@ export default {
 .customer{flex: 1;}
 .one-img{display: flex;}
 .mui-img{width: 36px;padding-top: 9%;padding-right: 9px;}
+  .clasred{color: #007aff}
+  .clasyews{color: red}
 .mui-img a img{width: 100%;}
 form{margin-bottom: 20px;}
 .goOver{display: flex;}
 .goOver label{flex: 0.8;}
 .goOver .go-span{width: 20px;height: 2px;background-color: black;position: relative;top: 50%;right: 23px;}
 .goOver input{flex: 1;}
-table{width: 100%;text-align: left;font-size: 15px;}
+table{width: 100%;text-align: left;font-size: 13px;display: block;overflow: auto}
 table th{text-align: left;background-color: #DADADA;line-height: 32px;}
 table tr{line-height: 29px;border-bottom: 1px solid #DADADA;white-space: nowrap}
 select{font-size: 15px!important;}
+  /*底部*/
+  .footer{position: fixed;bottom: 0;background-color: #acacac;width: 100%;line-height: 29px;font-size: 15px;text-align: right;padding-right: 30px}
 </style>

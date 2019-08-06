@@ -28,12 +28,20 @@
             <input type="text" class="mui-input-clear" v-model="bank_person" placeholder="请输入户主">
           </div>
           <div class="mui-input-row">
-            <label>余额</label>
+            <label>可用余额</label>
             <input type="text" class="mui-input-clear" v-model="bank_money" placeholder="请输入余额">
           </div>
-          <div class="mui-input-row" id="persion">
+          <div class="mui-input-row" v-if="persion_if">
             <label>额度</label>
             <input type="text" class="mui-input-clear" v-model="bank_limit" placeholder="请输入额度">
+          </div>
+          <div class="mui-input-row" v-if="billIf">
+            <label>账单日</label>
+            <input type="text" class="mui-input-clear" v-model="bill" placeholder="请输入账单日">
+          </div>
+          <div class="mui-input-row" v-if="repayment_if">
+            <label>还款日</label>
+            <input type="text" class="mui-input-clear" v-model="repayment" placeholder="请输入还款日">
           </div>
         </form>
         <div class="mui-input-row input-radio">
@@ -60,26 +68,32 @@ export default {
   data () {
     return {
       imgUrl_loading:false,
+      persion_if:false,
+      billIf:false,
+      repayment_if:false,
       bank_number: '', // 银行卡账户
       bank_bank: '', // 户主
       bank_money: '', // 余额
       bank_person: '', // 开户行
       bank_limit: '', // 额度
+      repayment:'', //还款日
+      bill:'',//账单日
       bank_type: '储蓄卡'
     }
   },
   methods: {
     fund_xin () {
-      var persion = document.getElementById('persion')
-      persion.style.display = 'block'
+      this.persion_if = true
+      this.billIf = true
+      this.repayment_if = true
     },
     fund_cu () {
-      var persion = document.getElementById('persion')
-      persion.style.display = 'none'
+      this.persion_if = false
+      this.billIf = false
+      this.repayment_if = false
     },
     go () {
       var then = this
-      this.imgUrl_loading = true
       var add = '?bank_number=' + this.bank_number + '&bank_bank=' + this.bank_bank + '&bank_person=' + this.bank_person + '&bank_type=' + this.bank_type +
           '&bank_money=' + this.bank_money/* '&bank_limit='+this.bank_limit */
       var check = true
@@ -87,46 +101,37 @@ export default {
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
       // var yin = /^(\d{16}|\d{19})$/ // 银行卡验证
       var nuber = /^\d+(\.\d+)?$/ // 验证数字
+
+
+      // 开户行
+      if (this.bank_person == '') {
+        mui.toast('开户行不能为空')
+        check = false
+        return false
+      }
+      // 户主
+      if (this.bank_bank == '') {
+        mui.toast('户主不能为空')
+        check = false
+        return false
+      }
+      if (!nameReg.test(this.bank_bank)) {
+        mui.toast('户主格式错误')
+        check = false
+        return false
+      }
+      // 余额
+      if (this.bank_money == '') {
+        mui.toast('余额不能为空')
+        check = false
+        return false
+      }
+      if (!nuber.test(this.bank_money)) {
+        mui.toast('余额格式错误')
+        check = false
+        return false
+      }
       if (this.bank_type === '储蓄卡') {
-        // 银行卡账户
-        /*if (this.bank_number == '') {
-          mui.toast('银行卡账户不能为空')
-          check = false
-          return false
-        }*/
-        /*if (!yin.test(this.bank_number)) {
-          mui.toast('银行卡格式错误')
-          check = false
-          return false
-        }*/
-        // 户主
-        if (this.bank_bank == '') {
-          mui.toast('户主不能为空')
-          check = false
-          return false
-        }
-        if (!nameReg.test(this.bank_bank)) {
-          mui.toast('户主不能为空')
-          check = false
-          return false
-        }
-        // 余额
-        if (this.bank_money == '') {
-          mui.toast('余额不能为空')
-          check = false
-          return false
-        }
-        if (!nuber.test(this.bank_money)) {
-          mui.toast('余额格式错误')
-          check = false
-          return false
-        }
-        // 开户行
-        if (this.bank_person == '') {
-          mui.toast('开户行不能为空')
-          check = false
-          return false
-        }
         add = add + '&bank_limit=0'
       } else if (this.bank_type === '信用卡') {
         // 银行卡账户
@@ -140,34 +145,6 @@ export default {
           check = false
           return false
         }*/
-        // 户主
-        if (this.bank_bank == '') {
-          mui.toast('户主不能为空')
-          check = false
-          return false
-        }
-        if (!nameReg.test(this.bank_bank)) {
-          mui.toast('户主不能为空')
-          check = false
-          return false
-        }
-        // 余额
-        if (this.bank_money == '') {
-          mui.toast('余额不能为空')
-          check = false
-          return false
-        }
-        if (!nuber.test(this.bank_money)) {
-          mui.toast('余额格式错误')
-          check = false
-          return false
-        }
-        // 开户行
-        if (this.bank_person == '') {
-          mui.toast('开户行不能为空')
-          check = false
-          return false
-        }
         // 额度
         if (this.bank_limit == '') {
           mui.toast('额度不能为空')
@@ -179,9 +156,31 @@ export default {
           check = false
           return false
         }
+        //账单日
+        if (this.bill == '') {
+          mui.toast('账单日不能为空')
+          check = false
+          return false
+        }
+        if (!nuber.test(this.bill)) {
+          mui.toast('账单日格式错误')
+          check = false
+          return false
+        }
+        //还款日
+        if (this.repayment == '') {
+          mui.toast('还款日不能为空')
+          check = false
+          return false
+        }
+        if (!nuber.test(this.repayment)) {
+          mui.toast('还款日不能为空')
+          check = false
+          return false
+        }
         add = add + '&bank_limit=' + this.bank_limit
       }
-
+      this.imgUrl_loading = true
       this.axios.get(url.BankAdd + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false

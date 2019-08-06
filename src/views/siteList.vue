@@ -1,8 +1,9 @@
 <template>
     <div class="siteList">
       <!--头部-->
+<!--      :to="{name: 'cash_flow'}"-->
       <header class="mui-bar mui-bar-nav">
-        <router-link :to="{name:'cash_flow'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+        <router-link to="" @click.native='hrefGo' class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
         <h1 class="mui-title">工地列表</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
@@ -114,7 +115,15 @@
     created () {
       this.imgUrl_loading = true
       this.allperson = false
-      this.axios.get(url.clientProjet).then(res=>{
+      this.allProjet = window.expenditure
+      var add = '?'
+      if (window.expenditure === 'income' || window.expenditure === 'expenditure' || window.expenditure === 'money_entry' || window.expenditure === 'accounts_payable' ||
+        window.expenditure ==='profit_edit' || window.expenditure ==='income_receive' || window.expenditure ==='expenditure_receive') {
+        add+='Customer_A=1'+'&Customer_B=2'+'&Customer_C=3'+'&Customer_D=4'
+      }else if (window.expenditure === 'paid_data' || window.expenditure === 'receive_data') {
+        add+='Customer_A=1'+'&Customer_B=2'+'&Customer_C=3'+'&Customer_D=4'
+      }
+      this.axios.get(url.clientProjet+add).then(res=>{
         if (res.status === 200) {
           this.imgUrl_loading = false
           this.allperson = true
@@ -257,13 +266,35 @@
         az.push(String.fromCharCode((65+i)))
         }
       this.AZ = az
-      this.allProjet = window.expenditure
       },
     methods:{
       /*给字母加上锚点*/
       siteAZ(id){
         document.querySelector('#'+id).scrollIntoView(true)
       },
+      //返回上一页根据不同的页面跳不同的页面
+      hrefGo(){
+        if (this.allProjet === 'expenditure') {
+          this.$router.push({path:'expenditure'})
+        }else if (this.allProjet === 'income') {
+          this.$router.push({path:'income'})
+        }else if (this.allProjet === 'money_entry') {
+          this.$router.push({path:'money_entry'})
+        }else if (this.allProjet === 'accounts_payable') {
+          this.$router.push({path:'accounts_payable'})
+        }else if (this.allProjet === 'profit_edit') {
+          this.$router.push({path:'profit_edit'})
+        }else if (this.allProjet === 'paid_data') {
+          this.$router.push({path:'paid_data'})
+        }else if (this.allProjet === 'receive_data') {
+          this.$router.push({path:'receive_data'})
+        }else if (this.allProjet === 'income_receive') {
+          this.$router.push({path:'income_receive'})
+        }else if (this.allProjet === 'expenditure_receive') {
+          this.$router.push({path:'expenditure_receive'})
+        }
+      },
+      //判断根据跳进来的页面返回不同的页面
       all_sute(id,name){
         window.test = id
         window.test_id = name
@@ -277,6 +308,14 @@
           this.$router.push({path:'accounts_payable'})
         }else if (this.allProjet === 'profit_edit') {
           this.$router.push({path:'profit_edit'})
+        }else if (this.allProjet === 'paid_data') {
+          this.$router.push({path:'paid_data'})
+        }else if (this.allProjet === 'receive_data') {
+          this.$router.push({path:'receive_data'})
+        }else if (this.allProjet === 'income_receive') {
+          this.$router.push({path:'income_receive'})
+        }else if (this.allProjet === 'expenditure_receive') {
+          this.$router.push({path:'expenditure_receive'})
         }
       },
       suteA(id,name){

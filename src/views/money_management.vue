@@ -36,6 +36,8 @@ export default {
         { href: 'payable_money', listImg: require('../image/yingfu.png'), text: '应付统计' },
         { href: '#', listImg: require('../image/gongzitongji.png'), text: '工资统计' },
         { href: 'money_summary', listImg: require('../image/mongy7.png'), text: '款项汇总' },
+        { href: 'site_stage', listImg: require('../image/site_stage.png'), text: '工地阶段' },
+        { href: 'stop_sales', listImg: require('../image/saloe.png'), text: '暂支销账' },
       ]
     }
   }

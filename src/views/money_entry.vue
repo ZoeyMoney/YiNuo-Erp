@@ -31,14 +31,14 @@
           </div>
           <div class="mui-input-row">
             <label>类别选择</label>
-            <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
+            <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)" :class="{select:fund_nameo==='',selectBlack:fund_nameo!==''}" >
               <option value="">请选择</option>
               <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>类别名称</label>
-            <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)">
+            <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)"  :class="{select:list_fund_namea==='',selectBlack:list_fund_namea!==''}" >
               <option value="" selected="selected">请选择</option>
               <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
               <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
@@ -46,12 +46,25 @@
           </div>
           <div class="mui-input-row" v-if="category">
             <label>类别详情</label>
-            <select name="" v-model="all_rate" @change="all_rate_name(all_rate)">
+            <select name="" v-model="all_rate" @change="all_rate_name(all_rate)"  :class="{select:all_rate==='',selectBlack:all_rate!==''}" >
               <option value="" selected="selected">请选择</option>
               <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
           </div>
-
+          <div class="mui-input-row">
+            <label>级别</label>
+            <select name="" v-model="level" :class="{select:level==='',selectBlack:level!==''}" >
+              <option value="">请选择</option>
+              <option v-for="item in list_lev" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row">
+            <label>情况</label>
+            <select name="" v-model="whether" :class="{select:whether==='',selectBlack:whether!==''}" >
+              <option value="">请选择</option>
+              <option v-for="item in list_whether" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
           <div class="mui-input-row">
             <label>总金额</label>
             <input type="text" class="mui-input-clear" placeholder="￥" v-model="fund_money">
@@ -60,10 +73,10 @@
             <label>公司人员</label>
             <input type="text" class="mui-input-clear" placeholder="请输入经手人" v-model="fund_person">
           </div>-->
-          <div class="mui-input-row">
+          <!--<div class="mui-input-row">
             <label>备注</label>
             <input type="text" class="mui-input-clear" placeholder="备注" v-model="fund_text">
-          </div>
+          </div>-->
           <div class="mui-input-row input-radio">
             <div class="mui-input-row mui-left mui-radio">
               <label>阶段付款</label>
@@ -76,7 +89,7 @@
           </div>
           <table border="0" class="table-all" id="table">
             <tr>
-              <th>日期</th>
+              <th>预收日期</th>
               <th>批次</th>
               <th :style="padLeft">金额</th>
               <th>备注</th>
@@ -132,6 +145,17 @@ export default {
       cotrProjet:false,
       idProjet:true,
       site_various:true,
+      level:'',//级别
+      whether:'',//情况
+      list_lev:[  //级别说明
+        {text:'A'},
+        {text:'B'},
+        {text:'C'},
+      ],
+      list_whether:[  //情况说明
+        {text:'是'},
+        {text:'否'},
+      ],
       fund_type:'阶段付款',
       list_fund_name_type:'',
       fund_nameo:'',
@@ -143,7 +167,7 @@ export default {
         {text:'邱梅'},
       ],
       fund_person:'',
-      fund_text:'',
+      fund_text:'0',
       list_fund_names:'',
       list_fund_namea:'',
       list_fund_name:'',
@@ -299,6 +323,18 @@ export default {
         check = false
         return false
       }
+      //级别
+      if (this.level == '') {
+        mui.toast('级别不能为空')
+        check = false
+        return false
+      }
+      //情况
+      if (this.whether == '') {
+        mui.toast('情况不能为空')
+        check = false
+        return false
+      }
       // 总金额
       if (this.fund_money == '') {
         mui.toast('总金额不能为空')
@@ -326,11 +362,6 @@ export default {
         var fund_details_date = document.getElementById('fund_details_date').value //时间
         var data_money = document.getElementById('fund_details_money').value // 金额
         var data_text = document.getElementById('fund_details_batch').value // 批次
-        if (fund_details_date == '') {
-          mui.toast('时间不能为空')
-          check = false
-          return false
-        }
         // 金额
         if (data_money == '') {
           mui.toast('金额不能为空')
@@ -356,11 +387,11 @@ export default {
         //循环list是否有空
         for (var index in this.list) {
           /*list时间不能为空*/
-          if (this.list[index].fund_details_date == '') {
+          /*if (this.list[index].fund_details_date == '') {
             mui.toast('时间不能为空')
             check = false
             return false
-          }
+          }*/
           if (this.list[index].fund_details_batch == '') {
             mui.toast('批次不能为空')
             check = false
@@ -386,7 +417,7 @@ export default {
         var money_all = 0
         for (var index in this.list) {
           var n = this.list[index].fund_details_money
-          money_all += parseInt(n)
+          money_all += parseFloat(n)
         }
         if (this.fund_money >= money_all) {
 
@@ -398,7 +429,7 @@ export default {
         //阶段金额相加必须跟总金额相等否则无法通过
         var all_money = 0
         for (var index in this.list) {
-           all_money += parseInt(this.list[index].fund_details_money)
+           all_money += parseFloat(this.list[index].fund_details_money)
         }
         if (this.fund_money != all_money) {
           mui.toast('总金额与阶段金额总和不同')
@@ -442,7 +473,7 @@ export default {
         this.list = []
         if (zhouqi === '按月') {
           for (var i = 1; i <= qishu; i++) {
-            var m = data_huan.getMonth() + 1 + i
+            var m = data_huan.getMonth() + i
             date = data_huan.getFullYear() + '-' + m + '-' + data_huan.getDate()
             var a = {
               'fund_details_date': date,
@@ -476,25 +507,32 @@ export default {
       }
       var add = ''
       var list_customer = ''
+      var fund_debtor_id = ''
+      var fund_details_type = ''  //情况
       if (this.fund_nameo === '个人') {
         add = this.list_fund_namea
+        fund_debtor_id+=this.fund_debtor_id
         list_customer += '0'
       }else if (this.fund_nameo === '公司') {
         add = this.all_rate
-        list_customer += this.customer_name
+        if (this.customer_name === undefined) {
+          list_customer+='0'
+        }else{
+          list_customer += this.customer_name_id
+        }
+        if (this.fund_debtor === undefined) {
+          fund_debtor_id+='0'
+        }else{
+          fund_debtor_id+=this.fund_debtor_id
+        }
       }
-      /*for (var index in this.list) {
-        var data = new Date(this.list[index].fund_details_date)
-        var y = data.getFullYear() +'-'
-        var m = data.getMonth() +1 + '-'
-        var d = data.getDate()
-        var data_a =y+m+d
-        var a = {'fund_details_date':data_a,'fund_details_money':'','fund_details_batch':'','fund_details_text':''}
-        console.log(this.list)
-        console.log(a)
-        console.log(data_a)
-      }*/
-      // this.imgUrl_loading = true
+      //情况
+      if (this.whether === '是') {
+        fund_details_type+='0'
+      }else{
+        fund_details_type+='1'
+      }
+      this.imgUrl_loading = true
       this.axios({
         method: 'POST',
         url: url.moneyAddFund,
@@ -505,9 +543,11 @@ export default {
           fund_workyard_pact_id: 1,
           fund_name: add,
           fund_money: this.fund_money,
-          fund_person: this.fund_debtor_id,
+          fund_person: fund_debtor_id,
           fund_text: this.fund_text,
           fund_type: this.fund_type,
+          fund_details_level:this.level,
+          fund_details_type:fund_details_type
         },
         //把json格式编码转为x-www-form-urlencoded
         transformRequest: [function (data) {
@@ -532,6 +572,8 @@ export default {
 
 <style scoped>
   @import "../css/public.css";
+  select,input::-webkit-input-placeholder{color: #6e6e6e}
+  .selectBlack{color: black}
 .mui-input-group {background-color: transparent}
 /*单选框*/
 .input-radio{display: flex;}

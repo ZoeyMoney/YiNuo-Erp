@@ -15,13 +15,13 @@
     <div class="mui-content app">
       <form class="mui-input-group">
         <div class="mui-input-row">
-          <label>工地各项</label>
-          <select name="" v-model="Customer_name">
+          <label>工地名称</label>
+          <select name="" v-model="Customer_name" :class="{classGary:Customer_name==='',classBlack: Customer_name!==''}">
             <option value="">请选择</option>
             <option v-for="item in projet" :value="item.customer_name">{{item.customer_name}}</option>
           </select>
         </div>
-        <div class="mui-input-row">
+        <!--<div class="mui-input-row">
           <label>联系人</label>
           <input type="text" class="mui-input-clear" placeholder="请输入联系人" v-model="Customer_linkman">
         </div>
@@ -30,39 +30,100 @@
           <input type="text" class="mui-input-clear" placeholder="请输入手机号" v-model="Customer_connect">
         </div>
         <div class="mui-input-row">
-          <label>责任人</label>
-          <select name="" v-model="Customer_stylist">
+          <label>负责人</label>
+          <select name="" v-model="Customer_stylist" :class="{classGary:Customer_stylist==='',classBlack: Customer_stylist!==''}">
             <option value="">请选择</option>
             <option v-for="item in SelectStylist" :value="item">{{item}}</option>
           </select>
+        </div>-->
+        <!--<div class="mui-input-row">
+          <label>质保期</label>
+          <input type="text" class="mui-input-clear" placeholder="请输入保质期" v-model="Customer_baozhiqi">
+        </div>-->
+        <div class="mui-input-row">
+          <label>分类</label>
+          <input type="text" class="mui-input-clear" placeholder="请输入保质期" v-model="options">
         </div>
+<!--        责任人下选-->
+        <!--<table class="all_process">
+          <tr>
+            <th><span>分类</span></th>
+            <th><span>问题描述</span></th>
+            <th><span>责任人</span></th>
+            <th><span>进程</span></th>
+            <th><span>预计完成</span></th>
+            <th><span>报修时间</span></th>
+            <th><span>甲方</span></th>
+            <th><span>乙方</span></th>
+            <th><span>费用</span></th>
+            <th><span>处理方法</span></th>
+          </tr>
+          <tr v-for="item in listInput">
+            <td>
+              <span>
+                <select name="" v-model="item.options" :class="{classGary:item.options==='',classBlack: item.options!==''}">
+                  <option value="">请选择</option>
+                  <option v-for="items in listOptions" :value="items.text">{{items.text}}</option>
+                </select>
+              </span>
+            </td>
+            <td><span><input type="text" v-model="item.text" placeholder="请输入问题"></span></td>
+            <td><span><input type="text" v-model="item.people" placeholder="请输入负责人"></span></td>
+            <td><span><input type="text" v-model="item.process" placeholder="请输入进程"></span></td>
+            <td><span><el-date-picker v-model="item.expected" type="date" placeholder="请输入预计完成"></el-date-picker></span></td>
+            <td><span><el-date-picker v-model="item.dataTime" type="date" placeholder="请输入报修时间"></el-date-picker></span></td>
+            <td><span><input type="text" v-model="item.partyA" placeholder="请输入甲方"></span></td>
+            <td><span><input type="text" v-model="item.partyB" placeholder="请输入乙方"></span></td>
+            <td><span><input type="text" v-model="item.cost" placeholder="请输入费用"></span></td>
+            <td><span><input type="text" v-model="item.method" placeholder="请输入处理方法"></span></td>
+          </tr>
+        </table>
+        <div class="mui-input-row button-del">
+          <span class="increase" @click="del(user)"><i class="el-icon-minus"></i></span>
+          <span class="increase" @click="increase"><i class="el-icon-plus"></i></span>
+        </div>-->
         <div class="mui-input-row money-input">
-          <label>甲方预算</label>
+          <label>甲方</label>
           <input type="text" class="mui-input-clear" placeholder="￥" v-model="Customer_DecorateJia">
           <span class="span-money">{{Customer_DecorateJia | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row money-input">
-          <label>乙方预算</label>
+          <label>乙方</label>
           <input type="text" class="mui-input-clear" placeholder="￥" v-model="Customer_DecorateYi">
           <span class="span-money">{{Customer_DecorateYi | MoneyFormat}}</span>
         </div>
+        <div class="mui-input-row money-input">
+          <label>工人</label>
+          <input type="text" class="mui-input-clear" placeholder="￥" v-model="worker">
+          <span class="span-money">{{worker | MoneyFormat}}</span>
+        </div>
+        <div class="mui-input-row money-input">
+          <label>总金额</label>
+          <div class="allmoeny">￥{{all_money | MoneyFormat}}</div>
+        </div>
         <div class="mui-input-row">
-          <label>项目时间</label>
-          <input type="date" class="mui-input-clear" v-model="Customer_Date">
+          <label>质保截至</label>
+          <input type="date" v-model="Customer_Date">
+<!--          <el-date-picker v-model="Customer_Date" type="datetime" placeholder="选择日期时间"></el-date-picker>-->
         </div>
         <div class="mui-input-row">
           <label>报修时间</label>
-          <input type="date" class="mui-input-clear" v-model="Customer_baoxiushijian">
+          <input type="date" v-model="Customer_baoxiushijian">
+<!--          <el-date-picker v-model="Customer_baoxiushijian" type="datetime" placeholder="选择日期时间"></el-date-picker>-->
+        </div>
+        <div class="mui-input-row">
+          <label>状态</label>
+          <input type="text" class="mui-input-clear" v-model="statusd" placeholder="状态" disabled="disabled">
+          <!--<select name="">
+            <option value="">请选择</option>
+            <option v-for="item in listOptions" :value="item.text">{{item.text}}</option>
+          </select>-->
         </div>
         <div class="mui-input-row">
           <label>预计完成</label>
           <input type="date" class="mui-input-clear" v-model="Customer_yujiwanchengshijian">
         </div>
-        <div class="mui-input-row">
-          <label>保质期</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入保质期" v-model="Customer_baozhiqi">
-        </div>
-        <div class="mui-input-row radio-form">
+        <!--<div class="mui-input-row radio-form">
           <div class="mui-input-row mui-radio mui-left go-label">
             <label>所属类型</label>
             <input type="text" class="mui-input-clear" v-model="Customer_type" name="Customer_type" id="Customer_type" placeholder="所属类型">
@@ -71,11 +132,25 @@
             <label>{{item.value}}</label>
             <input name="Customer_form" type="radio" :value="item.value" v-model="Customer_form">
           </div>
-        </div>
+        </div>-->
         <div class="mui-input-row form-textarea row-textarea">
-          <label>客户需求</label>
-          <textarea name="Customer_demand" rows="" cols="" v-model="Customer_demand" id="Customer_demand" placeholder="请填写需求"></textarea>
+          <label>问题描述</label>
+          <textarea name="Customer_demand" rows="" cols="" v-model="Customer_demand" id="Customer_demand" placeholder="请填写问题及解决办法"></textarea>
         </div>
+          <div class="imgUrl">图片添加</div>
+        <el-upload action="imgURl"
+                   :auto-upload="true"
+                   :http-request = "customUpload"
+                   list-type="picture-card"
+                   :on-preview="handlePictureCardPreview"
+                   :limit="3"
+                   :on-exceed="leng"
+                   :on-remove="handleRemove">
+          <i class="el-icon-plus"></i>
+        </el-upload>
+        <el-dialog :visible.sync="dialogVisible" v-if="imgIf">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
       </form>
       <div class="mui-input-row form-btn">
         <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="go">保存</button>
@@ -91,16 +166,23 @@
     data () {
       return {
         imgUrl_loading:false,
+        imgIf:true,
         Customer_name: '', // 项目名称
+        options:'',
+        /*listInput:[
+          {options:'',text:'',people:'',process:'',expected:'',dataTime:'',partyA:'',partyB:'',cost:'',method:''}
+        ],*/
+        // user:'',
         projet:'',
         SelectStylist:'',
+        worker:'',//工人
         Customer_linkman: '', // 联系人
         Customer_connect: '', // 联系方式
         Customer_stylist: '', // 责任人
         Customer_type: '', // 所属类型
         Customer_DecorateJia:'',//甲方预算
         Customer_DecorateYi:'',//一方预算
-        Customer_baozhiqi:'',//保质期
+        // Customer_baozhiqi:'',//保质期
         Customer_Date:'',//项目时间
         Customer_baoxiushijian:'',
         Customer_yujiwanchengshijian:'',//
@@ -109,7 +191,36 @@
           { value: '家装' },
           { value: '工装' }
         ],
-        Customer_demand: ''// 客户需求
+        /*listOptions:[
+          {text:'已过保'},
+          {text:'债保'},
+        ],*/
+        Customer_demand: '',// 客户需求
+        dialogImageUrl: '',
+        dialogVisible: false,
+
+
+
+        /*listOptions:[
+          {text:'防水'},
+          {text:'水电'},
+          {text:'木工'},
+          {text:'瓦工'},
+          {text:'油漆'},
+          {text:'墙漆'},
+          {text:'杂工'},
+          {text:'安装'},
+          {text:'材料'},
+          {text:'原始结构'},
+          {text:'人为损坏'},
+          {text:'磨损'},
+        ],
+        list_no:[
+          {text:'勘察'},
+          {text:'维修中'},
+          {text:'维修完毕'},
+          {text:'勘察'},
+        ],*/
       }
     },
     created () {
@@ -122,7 +233,89 @@
         this.SelectStylist = res.data
       })
     },
+    computed:{
+      //总金额
+      all_money() {
+        if (this.Customer_DecorateJia != '' && this.Customer_DecorateYi != '' && this.worker) {
+          var a = 0
+          a += parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
+          return a
+        }else if (this.Customer_DecorateJia != '' && this.Customer_DecorateYi != '') {
+          var b = 0
+          b += parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi)
+          return b
+        }else if (this.Customer_DecorateJia != '' && this.worker != '') {
+          var c = 0
+          c += parseFloat(this.Customer_DecorateJia) + parseFloat(this.worker)
+          return c
+        }else if (this.Customer_DecorateYi != '' && this.worker != '') {
+          var d = 0
+          d += parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
+          return d
+        }
+        /*if (this.Customer_DecorateJia == '' || this.Customer_DecorateYi == '' || this.worker == '') {
+          return this.Customer_DecorateJia
+        }else{
+            var a = 0
+            a += parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
+            return a
+        }*/
+      },
+    //  状态
+      statusd(){
+        //报修时见大于质保时间则在状态里面自动添加过保 小于等于债保
+        if (this.Customer_Date != '' && this.Customer_baoxiushijian != '') {
+          //报修时间
+            var dates = new Date(this.Customer_baoxiushijian)
+            var ds = dates.getFullYear()
+            var ys = dates.getMonth() + 1
+            var ms = dates.getDate()
+            var dds = ds + '-' + ys + '-' + ms
+          //质保时间
+            var date = new Date(this.Customer_Date)
+            var d = date.getFullYear()
+            var y = date.getMonth() + 1
+            var m = date.getDate()
+            var dd = d + '-' + y + '-' + m
+          if (dds > dd) {
+            return '已过保'
+          } else {
+            return '在保'
+          }
+        }
+      }
+    },
     methods: {
+      //增加
+      /*increase(){
+        var list = {text:'',people:'',process:'',expected:'',dataTime:'',partyA:'',partyB:'',cost:'',method:''}
+        this.listInput.push(list)
+      },*/
+      /*删除*/
+      /*del(user){
+        if (this.listInput.length === 0) {
+          mui.toast('没有可删的了')
+        }else{
+          this.listInput.splice(this.listInput.indexOf(user),1)
+        }
+      },*/
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      customUpload(val){
+        console.log(val.file)
+      },
+      leng(){
+        var a = true
+        mui.toast('最多3张图片')
+        a = false
+        return false
+      },
+      //添加
       go () {
         var _this = this
         var check = true
@@ -130,7 +323,7 @@
         var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
         var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
         var regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
-        var nuber = /^[0-9]*$/ // 验证数字
+        var nuber = /^\d+(\.\d+)?$/ // 验证数字
         //项目名称
         if (this.Customer_name == '') {
           mui.toast('项目名称不能为空')
@@ -230,6 +423,28 @@
   .radio-form{display: flex;}
   .go-label label{width: 50%;}
   .go-label input{width: 48%!important;}
+  /*表格*/
+  .all_process{width: 100%;display: block;overflow: auto;white-space: nowrap;font-size: 14px;padding: 10px 0}
+  .all_process tr td span select{margin-bottom: 0;padding-bottom: 8px}
+  .all_process tr th{padding: 0 16px;text-align: left;}
+  .all_process tr th:nth-child(1){min-width: 100px}
+  .all_process tr th:nth-child(2),.all_process tr th:nth-child(10){min-width: 300px}
+  .all_process tr th:nth-child(3),.all_process tr th:nth-child(4){min-width: 100px}
+  .all_process tr th:nth-child(5),.all_process tr th:nth-child(6){min-width: 126px}
+  .all_process tr th:nth-child(7),.all_process tr th:nth-child(8),.all_process tr th:nth-child(9){min-width: 112px}
+  .all_process tr td span input{font-size: 15px;padding: 0 17px}
+  .increase{float:right;padding-right: 6px;font-weight: bold;color: #2979b4;font-size: 15px;letter-spacing: 5px}
+  .button-del{padding: 7px 0}
+  /deep/.el-date-editor.el-input, .el-date-editor.el-input__inner{padding: 0 17px!important;width: 128px}
+  /deep/.el-icon-date:before{content: ''}
+  /deep/.el-icon-plus:before{font-size: 26px}
+  /deep/.el-icon-minus:before{font-size: 25px;position: relative;top: 1px}
+  /deep/.el-upload--picture-card{border: 1px solid #dadada!important;background-color: transparent!important;width: 108px;height: 108px;line-height: 118px;margin-left: 9px}
+  /deep/.el-upload-list--picture-card .el-upload-list__item{width: 108px;height: 108px;margin-left: 9px}
+  .allmoeny{width: 70%;line-height: 37px;font-size: 15px}
+  .imgUrl{font-size: 15px;line-height: 42px;padding-left: 13px}
+  .classGary{color: gray}
+  .classBlack{color: black}
   /*平方米*/
   .square{display: flex;}
   .square input{width: 55%!important;}

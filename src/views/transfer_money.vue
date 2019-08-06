@@ -8,19 +8,23 @@
       </header>
       <login-loading v-show="imgUrl_loading"></login-loading>
       <!--转账-->
-      <div class="mui-content">
+      <div class="mui-content one-img">
         <div class="customer">
           <h2>转账</h2>
           <p>/Transfers</p>
         </div>
+        <div class="mui-img">
+          <div>￥{{allTotal}}</div>
+        </div>
       </div>
       <!--form-->
+      <v-touch v-on:swipeleft="onSwipeLeft" :swipe-options="{direction: 'horizontal'}">
       <div class="mui-content app">
         <form class="mui-input-group">
           <div class="mui-input-row row-label">
             <label>转出</label>
             <label>
-              <select  v-model="bank_out_id" name="" id="enter">
+              <select  v-model="bank_out_id" name="" id="enter" :class="{select:bank_out_id==='',selectBlack:bank_out_id!==''}" >
                 <option value="" selected="selected">请选择</option>
                 <option v-for="item in cead"  :value="item.bank_id">
                   <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
@@ -32,7 +36,7 @@
           <div class="mui-input-row row-label">
             <label>转入</label>
             <label>
-              <select  v-model="bank_enter_id" id="out">
+              <select  v-model="bank_enter_id" id="out" :class="{select:bank_enter_id==='',selectBlack:bank_enter_id!==''}" >
                 <option value="" selected="selected">请选择</option>
                 <option v-for="item in cead"  :value="item.bank_id">
                   <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
@@ -48,7 +52,7 @@
           </div>
           <div class="mui-input-row">
             <label>转账费率</label>
-            <select name="" id="rate" v-model="bank_deal_rate">
+            <select name="" id="rate" v-model="bank_deal_rate"  :class="{select:bank_deal_rate==='',selectBlack:bank_deal_rate!==''}" >
               <option value="" selected="selected">请选择</option>
               <option v-for="item in listD" :value="item.Tnumber">{{item.Tnumber}}%</option>
             </select>
@@ -97,6 +101,7 @@
           <td>￥{{item.bank_limit}}</td>
         </tr>
       </table>
+      </v-touch>
     </div>
 </template>
 
@@ -120,6 +125,7 @@ export default {
       bank_money: '', // 余额
       addMoney: '', // 储蓄卡总额
       xinMoney: '', // 信用卡总额
+      allTotal:'',//合计金额
       all_money:'',
       cead: '', // 银行卡
       bank_limit: '', // 额度
@@ -142,14 +148,17 @@ export default {
       var xin = []
       var m = 0 // 储蓄卡总额
       var y = 0 // 信用卡总额
+        var all = 0//合计储蓄卡信用卡总额
       for (var index in this.bank) {
         if (this.bank[index].bank_type === '储蓄卡') {
           m+= this.bank[index].bank_money // 算出储蓄卡总额
           chux.push(this.bank[index])
         } else {
           if (this.bank[index].bank_type === '信用卡') {
-          y += this.bank[index].bank_money
-          xin.push(this.bank[index])
+            if (this.bank[index].bank_money > 0) {
+              y += this.bank[index].bank_money
+            }
+            xin.push(this.bank[index])
           }
         }
       }
@@ -157,6 +166,8 @@ export default {
       this.xinyong = xin
       this.addMoney = Math.floor(m*100) / 100
       this.xinMoney = Math.floor(y*100) / 100
+        all += this.addMoney+this.xinMoney
+        this.allTotal = Math.floor(all*100) /100
       }
     })
     /* 银行卡 */
@@ -174,10 +185,15 @@ export default {
     /* 自动计算 */
     addMoneys:{
       get:function (){
-        var a = this.bank_deal_money - this.bank_deal_money * this.bank_deal_rate / 100
-        var b = Math.floor(a * 100) / 100
-        this.all_money = b
-        return b
+        if (this.bank_deal_rate === '' || this.bank_deal_rate === undefined) {
+          var a = this.bank_deal_money
+         return a
+        }else {
+          var a = this.bank_deal_money - this.bank_deal_money * this.bank_deal_rate / 100
+          var b = Math.floor(a * 100) / 100
+          this.all_money = b
+          return b
+        }
       },
       set:function (value) {
         this.all_money = value
@@ -196,6 +212,10 @@ export default {
         this.$router.push({path:'running_money',query:{transfer:transfer}})
         // console.log(res.data.list_moey)
       })
+    },
+    // 左滑动
+    onSwipeLeft:function(){
+      this.$router.push({name:'expenditure'})
     },
     /*bankBank(id){
       var bank_bank={}
@@ -268,7 +288,13 @@ export default {
       var s = dt.getSeconds();
       var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
       this.imgUrl_loading = true
-      var all = '?bank_deal_money=' + this.bank_deal_money + '&money=' + this.all_money + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id+'&date='+dd
+      var all_money = ''
+      if (this.all_money === ''){
+        all_money+=this.bank_deal_money
+      }else{
+        all_money+=this.all_money
+      }
+      var all = '?bank_deal_money=' + this.bank_deal_money + '&money=' + all_money + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id+'&date='+dd
       this.axios.get(url.moneyTransfer + all).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
@@ -286,7 +312,13 @@ export default {
 
 <style scoped>
   /*table{width: 100%;}*/
+  select,input::-webkit-input-placeholder{color: #6e6e6e}
+  .selectBlack{color: black}
   .app {margin-bottom: 0;}
+  .customer{flex: 3;}
+  .one-img{display: flex;white-space: nowrap}
+  .mui-img{width: 100%;padding-top: 10%;padding-right: 31px;font-size: 17px;color: black;font-weight: bold;flex: 1;}
+  .mui-img a img{width: 100%;}
   /*转账单*/
 
   .mui-input-group {
@@ -313,6 +345,7 @@ export default {
     background-color: #EFEFF4!important;
     margin-top: 0;
     padding-bottom: 0;
+    margin-bottom: 20px;
   }
 
   .mui-btn-blue,
@@ -345,6 +378,7 @@ export default {
     display: flex;
     margin-bottom: 12px;
     padding-left: 10px;
+    margin-top: 20px;
   }
 
   .saving {

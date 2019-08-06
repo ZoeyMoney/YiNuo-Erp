@@ -8,13 +8,17 @@
       </header>
       <login-loading v-show="imgUrl_loading"></login-loading>
       <!--收入-->
-      <div class="mui-content">
+      <div class="mui-content one-img">
         <div class="customer">
           <h2>支出</h2>
           <p>/Expense</p>
         </div>
+        <div class="mui-img">
+          <div>￥{{allTotal}}</div>
+        </div>
       </div>
       <!--收入记录-->
+      <v-touch v-on:swipeleft="onSwipeLeft" v-on:swiperight="onSwipeRight" :swipe-options="{direction: 'horizontal'}">
       <div class="mui-content app">
         <form class="mui-input-group">
           <div class="mui-input-row site_projet" v-if="site_projet">
@@ -27,14 +31,14 @@
           </div>
           <div class="mui-input-row">
             <label>类别选择</label>
-            <select name="" v-model="fund_detail_id" @change="fund_deId(fund_detail_id)">
+            <select name="" v-model="fund_detail_id"  :class="{select:fund_detail_id==='',selectBlack:fund_detail_id!==''}"  @change="fund_deId(fund_detail_id)">
               <option value="">请选择</option>
               <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>款项名称</label>
-            <select name="" v-model="detailed" @change="list_fund_nameas(detailed)">
+            <select name="" v-model="detailed"  :class="{select:detailed==='',selectBlack:detailed!==''}"  @change="list_fund_nameas(detailed)">
               <option value="" selected="selected">请选择</option>
               <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
               <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
@@ -42,7 +46,7 @@
           </div>
           <div class="mui-input-row" v-if="category">
             <label>款项详细</label>
-            <select name="" v-model="slim">
+            <select name="" v-model="slim" :class="{select:slim==='',selectBlack:slim!==''}" >
               <option value="" selected="selected">请选择</option>
               <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
@@ -66,7 +70,7 @@
           <div class="mui-input-row row-label">
             <label>转出账户</label>
             <label style="padding: 0;width: 70%">
-              <select  v-model="mongey_bank_id" name="" id="card">
+              <select  v-model="mongey_bank_id" name="" id="card" :class="{select:mongey_bank_id==='',selectBlack:mongey_bank_id!==''}">
                 <option value="" selected="selected">请选择</option>
                 <option v-for="item in bank_card" :value="item.bank_id">
                   <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
@@ -101,7 +105,7 @@
           </tr>
         </table>
         <div class="mui-content all">
-          <div class="saving">信用</div>
+          <div class="saving">信用卡</div>
           <div class="all-money">￥{{XinYongKa}}</div>
         </div>
         <table class="blaner" border="0" cellspacing="" cellpadding="">
@@ -119,6 +123,7 @@
           </tr>
         </table>
       </div>
+      </v-touch>
     </div>
 </template>
 
@@ -153,6 +158,7 @@ export default {
       bank_card: '', // 银行卡
       chuXu: '',	// 储蓄卡
       xinY: '',	// 信用卡
+      allTotal:'',//合计金额
       chuXuKa: '', // 储蓄卡总额
       XinYongKa: '', // 储蓄卡总额
       fund_name_id: '', //类别详情id
@@ -170,7 +176,7 @@ export default {
   created () {
     this.imgUrl_loading = true
     /* table */
-    this.axios.get(url.ClassSelect+'?fund_type=1&fund_stale=0').then(res => {
+    this.axios.get(url.ClassSelect+'?fund_type=1&fund_stale=1').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
       this.list_fund_name_type = res.data.fund_name_type
@@ -188,22 +194,26 @@ export default {
       var xin = []
       var m = 0
       var y = 0
+      var all = 0//合计储蓄卡信用卡总额
       for (var index in res.data) {
         if (res.data[index].bank_type === '储蓄卡') {
           m += res.data[index].bank_money // 储蓄卡总额
           chu.push(res.data[index])
         } else {
           if (res.data[index].bank_type === '信用卡') {
-            y += res.data[index].bank_money
+            if (res.data[index].bank_money > 0) {
+              y += res.data[index].bank_money
+            }
             xin.push(res.data[index])
           }
         }
       }
       this.chuXu = chu
       this.xinY = xin
-
       this.chuXuKa = Math.floor(m * 100)/100
       this.XinYongKa = Math.floor(y*100)/100
+      all += this.chuXuKa+this.XinYongKa
+      this.allTotal = Math.floor(all*100) /100
     }, error => {
       var then = this
       mui.alert('您无权访问', function () {
@@ -219,7 +229,7 @@ export default {
     //一级查询
     fund_deId(id){
       this.fund_nameso = id
-      this.axios.get(url.ClassSelect+'?fund_type=1&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=1&fund_stale=1&fund_name_type=' + this.fund_nameso).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -244,7 +254,7 @@ export default {
     //二级查询
     list_fund_nameas(id){
       this.fund_name_id = id
-      this.axios.get(url.ClassSelect+'?fund_type=1&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get(url.ClassSelect+'?fund_type=1&fund_stale=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -262,11 +272,21 @@ export default {
         })
       })
     },
+    // 左滑动
+    onSwipeLeft:function(){
+      this.$router.push({name:'income'})
+    },
+    // 右滑动
+    onSwipeRight:function(){
+      this.$router.push({name:'transfer_money'})
+    },
+    //工地传参
     siteChange(){
-      var expenditure = 'expenditure'
+      var expenditure = 'transfer_money'
       this.$router.push({path:'siteList',})
       window.expenditure = expenditure
     },
+    //相关人传参
     relecant(){
       // this.$router.push({path:'relevant_people'})
       var expenditure = 'expenditure_people'
@@ -392,10 +412,15 @@ export default {
 
 <style scoped>
 @import "../css/public.css";
-form{margin-bottom: 12px;}
-input::-webkit-input-placeholder{color: black}
+input::-webkit-input-placeholder{color: #6e6e6e}
 /*form字体*/
+select{color: #6e6e6e}
+.selectBlack{color: black}
 form div select{font-size: 15px!important;}
+.customer{flex: 3;}
+.one-img{display: flex;white-space: nowrap}
+.mui-img{width: 100%;padding-top: 10%;padding-right: 31px;font-size: 17px;color: black;font-weight: bold;flex: 1;}
+.mui-img a img{width: 100%;}
 /*第二个form*/
 .row-label label:nth-child(2)
 ,.row-label label:nth-child(3)
@@ -406,7 +431,7 @@ form div select{font-size: 15px!important;}
 /*多选框*/
 .mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 37%}
 /*按钮*/
-.form-btn{background-color: #EFEFF4!important;margin-top: 0;}
+.form-btn{background-color: #EFEFF4!important;margin-top: 20px;padding-bottom: 0;margin-bottom: 20px}
 .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
 .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}
 /*form底部栏*/
@@ -417,7 +442,7 @@ form div select{font-size: 15px!important;}
 .saving{flex: 1;}
 .all-money{flex: 4;text-align: left;}
 .saving,.all-money{font-weight: bold}
-.all-saving{width: 100%;font-size: 15px;margin-bottom: 50px;}
+.all-saving{width: 100%;font-size: 15px;margin-bottom: 20px;}
 .all-saving tr{width: 25%!important;}
 .all-saving tr:nth-child(1),.blaner tr:nth-child(1){background-color: #DADADA;line-height: 34px}
 .all-saving tr td{padding-left: 10px;border-bottom: 1px solid #dadada;line-height: 28px}

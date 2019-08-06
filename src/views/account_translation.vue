@@ -34,6 +34,28 @@
 <!--            <input type="text" class="mui-input-clear" :value="dates" placeholder="无">-->
             <el-date-picker v-model="dates" type="datetime" placeholder="选择日期时间"></el-date-picker>
           </div>
+          <div class="mui-input-row">
+            <label>金额</label>
+            <input type="text" class="mui-input-clear" v-model="fund_details_money" placeholder="￥">
+          </div>
+          <div class="mui-input-row">
+            <label>级别</label>
+            <select name="" v-model="level" :class="{select:level==='',selectBlack:level!==''}" >
+              <option value="">请选择</option>
+              <option v-for="item in list_lev" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row dian">
+            <label>情况</label>
+            <div class="mui-input-row mui-radio dian-a">
+              <label>是</label>
+              <input name="radio1" type="radio" checked="a" value="0" v-model="ab">
+            </div>
+            <div class="mui-input-row mui-radio dian-a">
+              <label>否</label>
+              <input name="radio1" type="radio" checked="b" value="1" v-model="ab">
+            </div>
+          </div>
         </form>
         <form class="mui-input-group">
           <div class="mui-input-row">
@@ -50,10 +72,6 @@
           <div class="mui-input-row">
             <label>收款时间</label>
             <el-date-picker v-model="DateValue" type="datetime" placeholder="选择日期时间"></el-date-picker>
-          </div>
-          <div class="mui-input-row">
-            <label>金额</label>
-            <input type="text" class="mui-input-clear" v-model="fund_details_money" placeholder="￥">
           </div>
           <div class="mui-input-row">
             <label>实际转账</label>
@@ -97,7 +115,23 @@ export default {
       fund_details_id: '', // 传参ID
       fund_bank: '', // 银行卡
       income_y: '',// 银行卡
-      DateValue:'',//时间修改
+      DateValue:new Date(),//时间修改
+      ab:'',
+      dian:[
+        {text:'是',name:'情况A'},
+        {text:'否',name:'情况B'},
+      ],
+      level:'',//级别
+      whether:'',//情况
+      list_lev:[  //级别说明
+        {text:'A'},
+        {text:'B'},
+        {text:'C'},
+      ],
+      list_whether:[  //情况说明
+        {text:'是'},
+        {text:'否'},
+      ],
     }
   },
   created () {
@@ -110,6 +144,12 @@ export default {
     this.dates = this.projet.dates
     this.fund_details_money = this.projet.fund_details_money
     this.fund_details_id = this.projet.fund_details_id
+    this.level = this.projet.fund_details_level
+    if (this.projet.fund_details_type == 1) {
+      this.ab = '1'
+    }else if (this.projet.fund_details_type == 0) {
+      this.ab = '0'
+    }
     // 银行卡
     this.axios.get(url.bankCard).then(res => {
       this.income_y = res.data
@@ -150,7 +190,7 @@ export default {
        var MM =dt.getMinutes();
        var s = dt.getSeconds();
        var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
-       var add = '?fund_details_id=' + this.fund_details_id +'&money='+this.money+'&fund_details_date='+dd+'&bank_id='+this.fund_bank
+       var add = '?fund_details_id=' + this.fund_details_id +'&money='+this.money+'&fund_details_date='+dd+'&bank_id='+this.fund_bank+'&fund_details_type='+this.ab
        if (this.checkBox === true) {
          // console.log('点住')
          var fund_money = this.projet.fund_details_money
@@ -171,14 +211,13 @@ export default {
          })
        } else {
          // console.log('没')
+         console.log(dd)
          this.axios.get(url.Update_fund_details + add).then(res => {
            if (res.status === 200) {
              this.imgUrl_loading = false
-             if (res.data.data === '修改成功') {
-               mui.alert('添加成功', function () {
+               mui.alert(res.msg, function () {
                  then.$router.push({ name: 'money_receivable' })
                })
-             }
            } else {
              mui.alert('支付失败')
            }
@@ -223,19 +262,26 @@ export default {
       var MM =dt.getMinutes();
       var s = dt.getSeconds();
       var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
-      var add = '?fund_details_id=' + this.fund_details_id +'&fund_id='+this.projet.fund_id+'&date='+dd
+      var add = '?fund_details_id=' + this.fund_details_id +'&fund_id='+this.projet.fund_id+'&fund_details_type='+this.ab
       if (this.fund_details_money !== this.projet.fund_details_money){
         add+='&money='+this.fund_details_money
       }
       if (this.fund_details_text !== this.projet.fund_details_text) {
         add+='&text='+this.fund_details_text
       }
+      if (this.dates !== null) {
+        add+='&date='+dd
+      }
         this.axios.get(url.Update_fund_detail + add).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
-              mui.alert(res.data.data,function () {
-                then.$router.push({path:'money_receivable'})
+            if (this.dates !== this.projet.dates || this.fund_details_id !== this.projet.fund_details_id || this.fund_details_money !== this.projet.fund_details_money ||  this.fund_details_type!==this.projet.fund_details_type) {
+              mui.alert(res.data.data, function () {
+                then.$router.push({ path: 'money_receivable' })
               })
+            }else{
+              mui.alert('您什么都没有修改！')
+            }
           }else if (res.status === 406) {
             mui.alert('数据异常')
           }
@@ -252,6 +298,8 @@ select{font-size: 15px}
   .radio-one label{width: 52%}
 .mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: 186px!important;}
 .mui-checkbox.mui-left label, .mui-radio.mui-left label{padding-left: 117px}
+  .dian{display: flex;white-space: nowrap}
+  .dian-a{position: relative;right: 11px}
 /*按钮*/
 .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;margin-left: 18px}
 .form-botton{text-align: center;}
