@@ -62,7 +62,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'bank_card',
   data () {
@@ -181,7 +180,7 @@ export default {
         add = add + '&bank_limit=' + this.bank_limit
       }
       this.imgUrl_loading = true
-      this.axios.get(url.BankAdd + add).then(res => {
+      this.axios.get('/fund/AddBank' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
         if (res.data === '添加成功') {
@@ -190,10 +189,6 @@ export default {
           })
         }
         }
-      }, error => {
-        mui.alert('您无权录入', function () {
-          then.$router.push({ name: 'index' })
-        })
       })
     }
   }

@@ -154,7 +154,7 @@ export default {
       }else{
         add+='&fund_details_type=1'
       }
-      this.axios.get('https://formattingclub.com/YiNuoLogin/fund/add_fund_details?' + add).then(res => {
+      this.axios.get('/fund/add_fund_details?' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
         mui.alert(res.data, function () {

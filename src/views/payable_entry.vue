@@ -104,7 +104,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'payable_entry',
   data () {
@@ -157,7 +156,7 @@ export default {
       this.ab = '0'
     }
     // 银行卡
-    this.axios.get(url.bankCard).then(res => {
+    this.axios.get('/fund/select_bank').then(res => {
       this.income_y = res.data
     })
   },
@@ -207,7 +206,7 @@ export default {
         var data = this.projet.dates
         var datas = data.split(' ')
         // then.$router.push({ path: 'account_translation_one', query: { id: this.fund_details_id, money: money, cumoterName: cumoterName, person: person, text: text, datas: datas } })
-        this.axios.get(url.Update_fund_details + add).then(res => {
+        this.axios.get('/fund/update_fund_details' + add).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
             then.$router.push({ path: 'payable_pay', query: { id: then.fund_details_id, money: money, cumoterName: cumoterName, person: person, text: text, datas: datas } })
@@ -217,7 +216,7 @@ export default {
         })
       } else {
         // console.log('没')
-        this.axios.get(url.Update_fund_details + add).then(res => {
+        this.axios.get('/fund/update_fund_details' + add).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
             if (res.data.msg === '支付成功') {
@@ -235,7 +234,7 @@ export default {
     dele(){
       var then = this
       this.imgUrl_loading = true
-      this.axios(url.Delete_fund_detail+'?fund_details_id='+this.fund_details_id).then(res=>{
+      this.axios('/fund/Delete_fund_details'+'?fund_details_id='+this.fund_details_id).then(res=>{
         if (res.status ===200){
           this.imgUrl_loading = false
           mui.alert(res.data.data,function () {
@@ -283,7 +282,7 @@ export default {
       if (this.fund_details_money !== this.projet.fund_details_money){
         add+='&money='+this.fund_details_money
       }
-        this.axios.get(url.Update_fund_detail + add).then(res => {
+        this.axios.get('/fund/Update_fund_detail' + add).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
             if (this.dates !== this.projet.dates || this.fund_details_id !== this.projet.fund_details_id || this.fund_details_money !== this.projet.fund_details_money || this.fund_details_type!==this.projet.fund_details_type) {

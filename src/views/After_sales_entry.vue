@@ -16,16 +16,13 @@
       <form class="mui-input-group">
         <div class="mui-input-row">
           <label>工地名称</label>
-          <select name="" v-model="Customer_name" :class="{classGary:Customer_name==='',classBlack: Customer_name!==''}">
-            <option value="">请选择</option>
-            <option v-for="item in projet" :value="item.customer_name">{{item.customer_name}}</option>
-          </select>
-        </div>
-        <!--<div class="mui-input-row">
-          <label>联系人</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入联系人" v-model="Customer_linkman">
+          <input type="text" placeholder="请选择工地名称" v-model="Customer_name" :class="{classGary:Customer_name==='',classBlack: Customer_name!==''}" @click="site">
         </div>
         <div class="mui-input-row">
+          <label>负责人</label>
+          <input type="text" class="mui-input-clear" placeholder="请输入联系人" v-model="AfterSale_person">
+        </div>
+        <!--<div class="mui-input-row">
           <label>联系方式</label>
           <input type="text" class="mui-input-clear" placeholder="请输入手机号" v-model="Customer_connect">
         </div>
@@ -42,7 +39,10 @@
         </div>-->
         <div class="mui-input-row">
           <label>分类</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入保质期" v-model="options">
+          <select name="" v-model="options" :class="{classGary:options==='',classBlack: options!==''}">
+            <option value="">请选择</option>
+            <option v-for="item in listOptions" :value="item.text">{{item.text}}</option>
+          </select>
         </div>
 <!--        责任人下选-->
         <!--<table class="all_process">
@@ -102,7 +102,7 @@
           <div class="allmoeny">￥{{all_money | MoneyFormat}}</div>
         </div>
         <div class="mui-input-row">
-          <label>质保截至</label>
+          <label>质保截止</label>
           <input type="date" v-model="Customer_Date">
 <!--          <el-date-picker v-model="Customer_Date" type="datetime" placeholder="选择日期时间"></el-date-picker>-->
         </div>
@@ -123,29 +123,28 @@
           <label>预计完成</label>
           <input type="date" class="mui-input-clear" v-model="Customer_yujiwanchengshijian">
         </div>
-        <!--<div class="mui-input-row radio-form">
-          <div class="mui-input-row mui-radio mui-left go-label">
-            <label>所属类型</label>
-            <input type="text" class="mui-input-clear" v-model="Customer_type" name="Customer_type" id="Customer_type" placeholder="所属类型">
-          </div>
-          <div class="mui-input-row mui-radio mui-left mui-chech" v-for="(item,index) in Customer_formList">
-            <label>{{item.value}}</label>
-            <input name="Customer_form" type="radio" :value="item.value" v-model="Customer_form">
-          </div>
-        </div>-->
         <div class="mui-input-row form-textarea row-textarea">
           <label>问题描述</label>
           <textarea name="Customer_demand" rows="" cols="" v-model="Customer_demand" id="Customer_demand" placeholder="请填写问题及解决办法"></textarea>
         </div>
           <div class="imgUrl">图片添加</div>
-        <el-upload action="imgURl"
-                   :auto-upload="true"
-                   :http-request = "customUpload"
-                   list-type="picture-card"
-                   :on-preview="handlePictureCardPreview"
-                   :limit="3"
-                   :on-exceed="leng"
-                   :on-remove="handleRemove">
+        <!--<el-upload
+          class="avatar-uploader"
+          action="https://formattingclub.com/YiNuoLogin/AfterSale/uploadImg"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>-->
+       <el-upload action="https://formattingclub.com/YiNuoLogin/AfterSale/uploadImg"
+                  ref="upload"
+                  multiple
+                  list-type="picture-card"
+                  :file-list="fileLists"
+                  :on-preview="handlePictureCardPreview"
+                  :on-success="handleAvatarSuccess"
+                  :on-remove="handleRemove">
           <i class="el-icon-plus"></i>
         </el-upload>
         <el-dialog :visible.sync="dialogVisible" v-if="imgIf">
@@ -167,12 +166,19 @@
       return {
         imgUrl_loading:false,
         imgIf:true,
+        fileLists: [],
         Customer_name: '', // 项目名称
+        Customer_name_id:'',//项目id
         options:'',
         /*listInput:[
           {options:'',text:'',people:'',process:'',expected:'',dataTime:'',partyA:'',partyB:'',cost:'',method:''}
         ],*/
         // user:'',
+        ImgBase:'',
+        data: {
+          multiple:true,
+          formDate:""
+        },
         projet:'',
         SelectStylist:'',
         worker:'',//工人
@@ -180,6 +186,7 @@
         Customer_connect: '', // 联系方式
         Customer_stylist: '', // 责任人
         Customer_type: '', // 所属类型
+        AfterSale_person:'',//负责人
         Customer_DecorateJia:'',//甲方预算
         Customer_DecorateYi:'',//一方预算
         // Customer_baozhiqi:'',//保质期
@@ -198,10 +205,7 @@
         Customer_demand: '',// 客户需求
         dialogImageUrl: '',
         dialogVisible: false,
-
-
-
-        /*listOptions:[
+        listOptions:[
           {text:'防水'},
           {text:'水电'},
           {text:'木工'},
@@ -215,7 +219,7 @@
           {text:'人为损坏'},
           {text:'磨损'},
         ],
-        list_no:[
+        /*list_no:[
           {text:'勘察'},
           {text:'维修中'},
           {text:'维修完毕'},
@@ -224,14 +228,8 @@
       }
     },
     created () {
-      /*项目名称*/
-      this.axios.get(url.listProjet).then(res=>{
-        this.projet = res.data
-      })
-      /*责任人*/
-      this.axios.get(url.AfterListName).then(res=>{
-        this.SelectStylist = res.data
-      })
+      this.Customer_name = window.test
+      this.Customer_name_id = window.test_id
     },
     computed:{
       //总金额
@@ -253,13 +251,6 @@
           d += parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
           return d
         }
-        /*if (this.Customer_DecorateJia == '' || this.Customer_DecorateYi == '' || this.worker == '') {
-          return this.Customer_DecorateJia
-        }else{
-            var a = 0
-            a += parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
-            return a
-        }*/
       },
     //  状态
       statusd(){
@@ -286,28 +277,24 @@
       }
     },
     methods: {
-      //增加
-      /*increase(){
-        var list = {text:'',people:'',process:'',expected:'',dataTime:'',partyA:'',partyB:'',cost:'',method:''}
-        this.listInput.push(list)
-      },*/
-      /*删除*/
-      /*del(user){
-        if (this.listInput.length === 0) {
-          mui.toast('没有可删的了')
-        }else{
-          this.listInput.splice(this.listInput.indexOf(user),1)
-        }
-      },*/
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
+      //工地
+      site () {
+        var expenditure = 'expenditure_after'
+        this.$router.push({ path: 'siteList', })
+        window.expenditure = expenditure
+      },
+      //base64图片转换
+      //图片上传
+      handleRemove(file) {
+        console.log(file);
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-      customUpload(val){
-        console.log(val.file)
+      handleAvatarSuccess(response, file) {
+        this.ImgBase = response
+        console.log(response)
       },
       leng(){
         var a = true
@@ -325,36 +312,8 @@
         var regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
         var nuber = /^\d+(\.\d+)?$/ // 验证数字
         //项目名称
-        if (this.Customer_name == '') {
+        /*if (this.Customer_name == '') {
           mui.toast('项目名称不能为空')
-          check = false
-          return false
-        }
-        //联系人
-        if (this.Customer_linkman == '') {
-          mui.toast('联系人不能为空')
-          check = false
-          return false
-        }
-        if (!nameReg.test(this.Customer_linkman)) {
-          mui.toast('联系人格式不正确')
-          check = false
-          return false
-        }
-        //联系方式
-        if (this.Customer_connect == '') {
-          mui.toast('联系方式不能为空')
-          check = false
-          return false
-        }
-        if (!pattern.test(this.Customer_connect)) {
-          mui.toast('联系方式格式不正确')
-          check = false
-          return false
-        }
-        //责任人
-        if (this.Customer_stylist == '') {
-          mui.toast('责任人不能为空')
           check = false
           return false
         }
@@ -369,12 +328,6 @@
           check = false
           return false
         }
-        // 项目时间
-        if (this.Customer_Date == '') {
-          mui.toast('项目时间不能为空')
-          check = false
-          return false
-        }
         //报修时间
         if (this.Customer_baoxiushijian == '') {
           mui.toast('报修时间不能为空')
@@ -386,23 +339,16 @@
           mui.toast('预计完成时间不能为空')
           check = false
           return false
-        }
-        //保质期
-        if (this.Customer_baozhiqi == '') {
-          mui.toast('保质期不能为空')
-          check = false
-          return false
-        }
-        this.imgUrl_loading = true
+        }*/
+        // this.imgUrl_loading = true
         /* 录入数据 */
-        var add = '?Customer_name=' + this.Customer_name + '&Customer_linkman=' + this.Customer_linkman + '&Customer_connect=' + this.Customer_connect + '&Customer_stylist=' + this.Customer_stylist +
-          '&Customer_form=' + this.Customer_form + '&Customer_type=' + this.Customer_type + '&Customer_demand=' + this.Customer_demand+
-          '&Customer_DecorateJia='+this.Customer_DecorateJia+'&Customer_DecorateYi='+this.Customer_DecorateYi+'&Customer_baozhiqi='+this.Customer_baozhiqi+
-          '&Customer_Date='+this.Customer_Date+'&Customer_baoxiushijian='+this.Customer_baoxiushijian+'&Customer_yujiwanchengshijian='+this.Customer_yujiwanchengshijian
-        this.axios.post(url.AfterSaleAdd + add).then(res => {
+        var add = '?Customer_id=' + this.Customer_name_id + '&AfterSale_day=' + this.options + '&AfterSale_jia=' + this.Customer_DecorateJia + '&AfterSale_yi=' + this.Customer_DecorateYi +
+          '&AfterSale_worker=' + this.worker + '&AfterSale_date=' + this.Customer_baoxiushijian + '&AfterSale_date_close=' + this.Customer_Date+
+          '&AfterSale_pre_date='+this.Customer_yujiwanchengshijian+'&AfterSale_text='+this.Customer_demand+'&AfterSale_img='+this.ImgBase+'&AfterSale_state=0'+'&AfterSale_person='+this.AfterSale_person
+        this.axios.post('/AfterSale/Add_AfterSale' + add).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
-          mui.alert(res.data, function () {
+          mui.alert(res.data.data, function () {
             _this.$router.push('money_sale')
           })
           }

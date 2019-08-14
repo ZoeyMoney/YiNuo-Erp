@@ -14,7 +14,7 @@
       return{
         imgUrl:require('../image/loading-msg.gif'),
       }
-    }
+    },
   }
 </script>
 

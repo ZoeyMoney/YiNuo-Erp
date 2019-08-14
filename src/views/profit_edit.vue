@@ -35,7 +35,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'profit_edit',
     data(){
@@ -60,7 +59,7 @@
       //search
       search_for(){
         if (this.site !== undefined) {
-          this.axios.get(url.clientProjet+"?Customer_id="+this.test_id).then(res=>{
+          this.axios.get('/SelectAllCustomer'+"?Customer_id="+this.test_id).then(res=>{
             if (res.status === 200) {
               this.paid_for = res.data[0].customer_enter_money
               this.Paid_out_for = res.data[0].customer_out_money
@@ -71,7 +70,7 @@
       add(){
         var then = this
         this.axios({
-          url:url.Update_Customer,
+          url:'/Customer/Update_Customer',
           method:'post',
           data:{
             Customer_out_money: this.Paid_out_for,//已付

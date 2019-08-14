@@ -54,7 +54,6 @@
 
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'money_summary',
     data(){
@@ -88,7 +87,7 @@
       prop:Number
     },
     created(){
-      this.axios.get(url.money_search).then(res=>{
+      this.axios.get('/fund/Select_fund_name_money').then(res=>{
         if (res.status === 200) {
           this.imgUrl_loading = false
           this.listValue = res.data.list_fund_name_money

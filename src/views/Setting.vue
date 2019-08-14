@@ -35,7 +35,7 @@ export default {
     setting () {
       var then = this
       this.imgUrl_loading = true
-      this.axios.get('https://formattingclub.com/YiNuoLogin/logout').then(res => {
+      this.axios.get('/logout').then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
           mui.alert(res.data.msg, function () {

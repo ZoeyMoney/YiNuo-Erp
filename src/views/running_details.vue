@@ -75,7 +75,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'running_details',
     data(){
@@ -145,7 +144,7 @@
           allfund_detail_id = this.list.bank_deal_id
           mui.confirm('是否删除',function (e) {
             if (e.index == 1) {
-              then.axios.get(url.ringNingDelect+'?bank_detail_id='+allfund_detail_id).then(res=>{
+              then.axios.get('/fund/Deleter_flowing'+'?bank_detail_id='+allfund_detail_id).then(res=>{
                 mui.alert(res.data,function () {
                   then.$router.push({path:'running_money'})
                 })
@@ -159,7 +158,7 @@
           allfund_detail_id = this.list.fund_detail_transaction_id
           mui.confirm('是否删除',function (e) {
             if (e.index == 1) {
-              then.axios.get(url.ringNingDelect+'?fund_detail_id='+allfund_detail_id).then(res=>{
+              then.axios.get('/fund/Deleter_flowing'+'?fund_detail_id='+allfund_detail_id).then(res=>{
                 mui.alert(res.data,function () {
                   then.$router.push({path:'running_money'})
                 })
@@ -169,18 +168,6 @@
             }
           })
         }
-        // console.log(allfund_detail_id)
-        /*mui.confirm('是否删除',function (e) {
-          if (e.index == 1) {
-            then.axios.get(url.ringNingDelect+'?fund_detail_id='+allfund_detail_id).then(res=>{
-              mui.alert(res.data,function () {
-                then.$router.push({path:'running_money'})
-              })
-            })
-          }else{
-            mui.alert('取消成功')
-          }
-        })*/
       },
     //  退款
       exitMoney(){

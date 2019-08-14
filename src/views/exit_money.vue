@@ -28,7 +28,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'exit_money',
     data(){
@@ -82,7 +81,7 @@
         }
         this.imgUrl_loading = true
         if (this.fund_detail_transaction_money !== this.list.fund_detail_transaction_money || this.fund_text !== this.list.fund_text) {
-          this.axios.get(url.money_refund+'?date='+dd+'&money='+number+'&fund_detail_transaction_id='+this.fund_detail_transaction_id+'&text='+this.fund_text).then(res=>{
+          this.axios.get('/fund/money_refund'+'?date='+dd+'&money='+number+'&fund_detail_transaction_id='+this.fund_detail_transaction_id+'&text='+this.fund_text).then(res=>{
             if (res.status === 200) {
               this.imgUrl_loading = false
               mui.alert(res.data,function () {

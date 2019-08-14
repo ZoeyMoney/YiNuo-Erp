@@ -19,55 +19,79 @@
         <form class="mui-input-group">
           <ul class="mui-table-view">
             <li class="mui-table-view-cell mui-collapse">
-              <a class="mui-navigate-right" href="#">默认信息</a>
+              <a class="mui-navigate-right" href="#"><label>基本信息</label></a>
               <div class="mui-collapse-content">
                 <div class="mui-input-row">
-                  <label>客户名称</label>
-                  <input type="text" class="mui-input-clear" v-model="customer_name" placeholder="无" disabled="disabled">
+                  <label>项目名称</label>
+                  <input type="text" class="mui-input-clear" v-model="customer_name" placeholder="无">
                 </div>
                 <div class="mui-input-row">
                   <label>联系人</label>
-                  <input type="text" class="mui-input-clear" v-model="customer_linkman" placeholder="无" disabled="disabled">
+                  <input type="text" class="mui-input-clear" v-model="customer_linkman" placeholder="无">
                 </div>
                 <div class="mui-input-row">
                   <label>联系方式</label>
-                  <input type="text" class="mui-input-clear" v-model="customer_connect" placeholder="无" disabled="disabled">
+                  <input type="text" class="mui-input-clear" v-model="customer_connect" placeholder="无">
                 </div>
                 <div class="mui-input-row">
                   <label>设计师</label>
-                  <input type="text" class="mui-input-clear" v-model="customer_stylist" placeholder="无" disabled="disabled">
+<!--                  <input type="text" v-model="customer_stylist">-->
+                  <select name="" v-model="customer_stylist">
+                    <option value="">请选择</option>
+                    <option v-for="item in listName" :value="item.fund_person_id">{{item.fund_person}}</option>
+                  </select>
                 </div>
                 <div class="mui-input-row">
                   <label>装修面积</label>
-                  <input type="text" class="mui-input-clear" v-model="customer_Decorate" placeholder="无" disabled="disabled">
+                  <input type="text" class="mui-input-clear" v-model="customer_Decorate" placeholder="无">
                 </div>
                 <div class="mui-input-row">
                   <label>推荐人</label>
-                  <input type="text" class="mui-input-clear" v-model="customer_referrer" placeholder="无" disabled="disabled">
+                  <input type="text" class="mui-input-clear" v-model="customer_referrer" placeholder="无">
                 </div>
                 <div class="mui-input-row">
                   <label>项目预算</label>
-                  <input type="text" class="mui-input-clear" v-model="customer_budget" placeholder="无" disabled="disabled">
+                  <input type="text" class="mui-input-clear" v-model="customer_budget" placeholder="无">
                 </div>
-                <div class="mui-input-row all-row">
+                <div class="mui-input-row">
+                  <label>客户等级</label>
+<!--                  <input type="text" class="mui-input-clear" placeholder="无" v-model="Customer_grade">-->
+                  <select name="" v-model="Customer_grade" :class="{classGray:Customer_grade =='',classBlack: Customer_grade!=''}">
+                    <option value="">请选择</option>
+                    <option v-for="item in listLevel" :value="item.text">{{item.text}}</option>
+                  </select>
+                </div>
+                <!--<div class="mui-input-row all-row">
                   <label>所属类型</label>
-                  <input type="text" class="mui-input-clear row-input" v-model="Customer_type" placeholder="无" disabled="disabled">
+                  <input type="text" class="mui-input-clear row-input" v-model="Customer_type" placeholder="无">
                   <div class="mui-input-row mui-radio mui-left mui-chech" name="" v-for="item in listRadio">
                     <label>{{item.text}}</label>
-                    <input name="Customer_form" type="radio" v-model="listRadio_all" :value="item.text" checked="a" disabled="disabled">
+                    <input name="Customer_form" type="radio" v-model="listRadio_all" :value="item.text" checked="a">
                   </div>
-                  <!--<div class="mui-input-row mui-radio mui-left mui-chech" name="">
-                    <label>家装</label>
-                    <input name="Customer_form" type="radio" value="家装" checked="a" disabled="disabled">
+                </div>-->
+                <div class="row-left">
+                  <div class="row-left-on">
+                    <label>所属类型</label>
+                    <select name="" v-model="Customer_type" :class="{classGray:Customer_type =='',classBlack: Customer_type!=''}">
+                      <option value="">请选择</option>
+                      <option v-for="item in list_type" :value="item.text">{{item.text}}</option>
+                    </select>
                   </div>
-                  <div class="mui-input-row mui-radio mui-left mui-heck">
-                    <label>工装</label>
-                    <input name="Customer_form" type="radio" value="工装" checked="b" disabled="disabled">
-                  </div>-->
+                  <div class="radio-left">
+                    <div class="mui-input-row mui-radio mui-left" v-for="item in listRadio">
+                      <label>{{item.text}}</label>
+                      <input name="radio1" type="radio" v-model="listRadio_all" :value="item.text">
+                    </div>
+                  </div>
                 </div>
                 <div class="mui-input-row all-row textreap">
                   <label>客户需求</label>
-                  <label>{{customer_demand}}</label>
+                  <input type="text" v-model="customer_demand">
+                </div>
+                <div class="mui-input-row update-btn">
+                  <div>
+                    <button type="button" class="mui-btn mui-btn-black" @click="UpdateCustomer">信息修改</button>
+                  </div>
                 </div>
               </div>
             </li>
@@ -112,35 +136,28 @@
             </div>
           </div>
         </form>-->
-          <!--跟进记录-->
-          <!--<form class="mui-input-group form-pad box-h4">
-            <h4>跟进记录</h4>
-            <div class="box"  v-for="item in stage">
-              <div class="mui-input-row jin">
-                <div class="gen">
-                  {{item.follow_person}}
-                </div>
-                <div class="jin-date">
-                  <p>{{item.follow_date | data}}</p>
-                </div>
-              </div>
-              <div class="row-go">
-                <div class="mui-input-row row-textarea">
-                  <textarea name="" rows="" cols="" :value="item.follow_text" disabled="disabled"></textarea>
-                </div>
-              </div>
-            </div>
-          </form>-->
         <form class="mui-input-group form-pad box-h4">
-          <div class="box3">
+          <div class="box3 ">
             <div>
-              <h4>跟进记录添加</h4>
+              <h4>添加记录</h4>
             </div>
-            <div>
-              <label>相关人</label>
-              <select name="" v-model="follow_person">
+            <div class="mui-input-row go-nai">
+              <label>跟进人员</label>
+              <select name="" v-model="follow_person" :class="{classGray:follow_person=='',classBlack:follow_person !=''}">
                 <option value="" selected="selected">请选择</option>
-                <option v-for="item in profetName" :value="item">{{item}}</option>
+                <option v-for="item in profetName" :value="item.fund_person_id">{{item.fund_person}}</option>
+              </select>
+            </div>
+            <div class="mui-input-row go-nai">
+              <label>下次跟进</label>
+              <input type="date" v-model="nexDate">
+<!--              <el-date-picker v-model="nexDate" type="date" placeholder="选择日期"></el-date-picker>-->
+            </div>
+            <div class="mui-input-row go-nai">
+              <label>当前阶段</label>
+              <select name="" v-model="stage_name" :class="{classGray:stage_name=='',classBlack:stage_name!=''}">
+                <option value="">请选择</option>
+                <option v-for="item in vstage_name">{{item.stage_name}}</option>
               </select>
             </div>
           </div>
@@ -149,12 +166,8 @@
               <div class="mui-input-row row-textarea">
                 <textarea name="" rows="" cols="" placeholder="请输入跟进记录" v-model="list_text"></textarea>
               </div>
-              <!--<div class="go-yi">
-                <span @click="NewLine">添加新一行</span>
-                <span @click="Newdel">删除</span>
-              </div>-->
               <div class="go-add">
-                <button type="button" @click="add">记录保存</button>
+                <button type="button" @click="add">保存记录</button>
               </div>
             </div>
           </div>
@@ -163,11 +176,14 @@
           <h4>跟进记录</h4>
           <div class="box"  v-for="item in stage">
             <div class="mui-input-row jin">
-              <div class="gen">
-                {{item.follow_person}}
-              </div>
               <div class="jin-date">
                 <p>{{item.follow_date | data}}</p>
+              </div>
+              <div class="gen">
+                {{item.fund_person}}
+              </div>
+              <div class="gen">
+                {{item.follow_stage}}
               </div>
             </div>
             <div class="row-go">
@@ -177,36 +193,15 @@
             </div>
           </div>
         </form>
-          <!--<form class="mui-input-group form-pad box-h4 botton-mar">
-            <h4>修改记录</h4>
-            <div class="box" v-for="item in undata">
-              <div class="mui-input-row jin">
-                <div class="gen">
-                  {{item.follow_person}}
-                </div>
-                <div class="jin-date">
-                  <p>{{item.update_date | data}}</p>
-                  <p>修改人：{{item.update_user_id}}</p>
-                </div>
-              </div>
-              <div class="row-go">
-                <div class="mui-input-row row-textarea">
-                  <textarea name="" rows="" cols="" :value="item.update_text" disabled="disabled"></textarea>
-                </div>
-              </div>
-            </div>
-          </form>-->
           <div class="form-botton">
-            <button type="button" class="mui-btn mui-btn-black">开工</button>
+            <button type="button" class="mui-btn mui-btn-black" @click="goadd">开工</button>
             <button type="button" class="mui-btn mui-btn-black" @click="dele">删除</button>
-            <button type="button" class="mui-btn mui-btn-black" @click="UpdateCustomer">修改</button>
           </div>
         </div>
     </div>
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'customer_details',
   data () {
@@ -222,15 +217,40 @@ export default {
       customer_referrer:'',//推荐人
       customer_budget:'',//项目预算
       customer_demand:'',//需求
-      // stageName: '', // 第二个form
       listtime: '', // 倒计时
       stage: '', // 修改记录
-      // undata: '',// 修改记录
-      listRadio_all:'家装',//单选
+      stage_name: '', // 当前阶段
+      listRadio_all:'',//单选
       follow_text:'',//跟进记录
+      listName:'',//设计师
       follow_person:'',//跟进人
+      nexDate:'',//时间
       profetName:'',//跟进人
+      Customer_grade:'',//客户等级
       list_text:'',
+      vstage_name: [
+        { stage_name: '未量尺' },
+        { stage_name: '平面图' },
+        { stage_name: '效果图' },
+        { stage_name: '施工图' }
+      ],
+      listLevel:[
+        {text:'A'},
+        {text:'B'},
+        {text:'C'},
+      ],
+      list_type:[
+        {text:'餐饮'},
+        {text:'服装'},
+        {text:'办公'},
+        {text:'健身'},
+        {text:'美容'},
+        {text:'娱乐'},
+        {text:'教育'},
+        {text:'医疗'},
+        {text:'销售'},
+        {text:'小区'},
+      ],
       listRadio:[
         {text:'家装'},
         {text:'工装'},
@@ -245,16 +265,18 @@ export default {
     }, 1000)*/
 
     this.cv = JSON.parse(localStorage.customer_statistics)
+    // console.log(this.cv)
     this.customer_name = this.cv.customer_name
     this.customer_linkman = this.cv.customer_linkman
     this.customer_connect = this.cv.customer_connect
-    this.customer_stylist = this.cv.customer_stylist
+    this.customer_stylist = this.cv.fund_person_id
     this.customer_Decorate = this.cv.customer_Decorate
     this.customer_referrer = this.cv.customer_referrer
     this.customer_budget = this.cv.customer_budget
-    this.Customer_type = this.cv.Customer_type
+    this.Customer_type = this.cv.customer_type
     // this.listRadio_all = this.cv.customer_form
     this.customer_demand = this.cv.customer_demand
+    this.Customer_grade = this.cv.customer_grade
     if (this.cv.customer_form == ''){
       this.listRadio_all = ''
     }else if (this.cv.customer_form == '家装') {
@@ -262,45 +284,18 @@ export default {
     }else if (this.cv.customer_form == '工装') {
       this.listRadio_all = '工装'
     }
-      console.log(this.cv)
-   /* var loc = location.href
-    var n1 = loc.length// 地址的总长度
-    var n2 = loc.indexOf('=')// 取得=号的位置
-    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
-    // 查询客户项目信息
-    this.customer_id = id
-
-    this.axios.get(url.modify_projet+'?Customer=' + id).then(res => {
-      this.projet = res.data
-      if (this.projet.Customer_form == '家装') {
-        this.a = true
-        this.b = true
-      } else {
-        this.a = false
-        this.b = true
-      }
-    })*/
-    // 客户信息
-    /*this.axios.get(url.modify_stage+'?Customer=' + this.cv.customer_id).then(res => {
-      this.stageName = res.data
-      if (res.data == '') {
-        var k = [{
-          stage_measure: '',
-          stage_day: '',
-          stage_stipulate: '',
-          stage_name: '',
-          stage_startdate: ''
-        }]
-        this.stageName = k
-      }
-    })*/
     //  跟进人
-    this.axios.get(url.clientFollowPerson).then(res => {
-      this.profetName = res.data
+    this.axios.get('/select_follow_person'+'?fund_person_state=4').then(res => {
+      this.profetName = res.data.data
     })
     // 查询项目的跟进信息
-    this.axios.get(url.projet_follow+'?Customer_id=' + this.cv.customer_id).then(res => {
+    this.axios.get('/Customer/SelectFollow'+'?Customer_id=' + this.cv.customer_id).then(res => {
       this.stage = res.data
+    })
+
+    // 设计师
+    this.axios.get('/select_follow_person'+'?fund_person_state=3').then(res => {
+      this.listName = res.data.data
     })
     //	修改记录
     /*this.axios.get(url.clientUndata).then(info => {
@@ -308,55 +303,120 @@ export default {
     })*/
   },
   methods: {
-    //添加新一行
-    /*NewLine(){
-      var newLinek = {text:''}
-      this.list_text.push(newLinek)
-    },
-    //删除新一行
-    Newdel(){
-      if (this.list_text.length == '0') {
-        mui.alert('没有可删除的了')
-      }else{
-        this.list_text.splice(this.list_text.indexOf(1))
-      }
-    },*/
     //记录保存
     add(){
+      var then = this
       var check = true
       if (this.follow_person == '') {
-        mui.toast('相关人不能为空')
+        mui.toast('跟进人不能为空')
         check = false
         return false
       }
-      for (var index in this.list_text) {
-        if (this.list_text[index].text == '') {
-          mui.toast('跟进记录不能为空')
-          check = false
-          return false
-        }
+      if (this.nexDate == '') {
+        mui.toast('下次跟进不能为空')
+        check = false
+        return false
+      }
+      if (this.stage_name == '') {
+        mui.toast('当前阶段不能为空')
+        check = false
+        return false
+      }
+      if (this.list_text== '') {
+        mui.toast('跟进记录不能为空')
+        check = false
+        return false
       }
       //    录入数据
-      var add = '?Customer_name=' + this.customer_name + '&follow_person=' + this.follow_person + '&follow_text=' + this.list_text
-      this.axios.get(url.clientAddFollow + add).then(res => {
+      var add = '?Customer_name=' + this.cv.customer_id + '&follow_person=' + this.follow_person + '&follow_text=' + this.list_text +'&follow_stage='+this.stage_name
+      + '&follow_Pre_date='+this.nexDate
+      this.axios.get('/Customer/AddFollow' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
           mui.alert(res.data, function () {
-            then.$router.push('customer_management')
+            then.$router.push('customer_statistics')
           })
         }
       })
     },
+    //开工
+    goadd(){
+        var then = this
+        var check=true
+        if (this.radio == '') {
+          mui.toast('阶段不能为空')
+          check = false
+          return false
+        }
+        this.imgUrl_loading = true
+        this.axios.get('/Customer/Update_Customer'+'?Customer_id='+this.cv.customer_id+'&Customer_name_state=2').then(res=>{
+          if (res.status === 200) {
+            this.imgUrl_loading = false
+            if (res.data.data == '修改成功') {
+            mui.alert('已开工',function () {
+              then.$router.go(0)
+            })
+            }
+          }
+        })
+        this.alerto = false
+      // this.$router.push({ path: 'site_modify', query: { id: this.cv.customer_id } })
+    },
     // 修改
     UpdateCustomer () {
-      this.$router.push({ path: 'site_modify', query: { id: this.customer_id } })
+      var then = this
+      var add = '?Customer_id='+this.cv.customer_id
+      if (this.customer_name != this.cv.customer_name) {
+        add+='&Customer_name='+this.customer_name
+      }
+      if (this.customer_linkman != this.cv.customer_linkman) {
+        add+='&Customer_linkman='+this.customer_linkman
+      }
+      if (this.customer_connect != this.cv.customer_connect) {
+        add+='&Customer_connect='+this.customer_connect
+      }
+      if (this.customer_stylist != this.cv.customer_stylist) {
+        add+='&Customer_stylist='+this.customer_stylist
+      }
+      if (this.customer_Decorate != this.cv.customer_Decorate) {
+        add+='&Customer_Decorate='+this.customer_Decorate
+      }
+      if (this.customer_budget != this.cv.customer_budget) {
+        add+='&Customer_budget='+this.customer_budget
+      }
+      if (this.customer_demand != this.cv.customer_demand) {
+        add+='&Customer_demand='+this.customer_demand
+      }
+      if (this.Customer_type != this.cv.customer_type) {
+        add+='&Customer_type='+this.Customer_type
+      }
+      if (this.listRadio_all != this.cv.customer_form) {
+        add+='&Customer_form='+this.listRadio_all
+      }
+      if (this.customer_referrer != this.cv.customer_referrer) {
+        add+='&Customer_referere='+this.customer_referrer
+      }
+      if (this.Customer_grade != this.cv.Customer_grade) {
+        add+='&Customer_grade='+this.Customer_grade
+      }
+      this.axios.get('/Customer/UpdateCustomer'+add).then(res=>{
+        //   判断是否修改数据
+        if (this.customer_name != this.cv.customer_name || this.customer_linkman != this.cv.customer_linkman || this.customer_connect!=this.cv.customer_connect||
+          this.customer_stylist != this.cv.customer_stylist || this.customer_Decorate!=this.cv.customer_Decorate || this.customer_referrer != this.cv.customer_referrer
+          || this.customer_budget != this.cv.customer_budget || this.Customer_type != this.cv.Customer_type){
+          mui.alert(res.data,function () {
+            then.$router.push({name:'customer_statistics'})
+          })
+        }else{
+          mui.toast('您什么都未修改')
+        }
+      })
     },
     //  删除
     dele () {
       var then = this
-      var va = this.customer_id
       this.imgUrl_loading = true
-      this.axios.get(url.clientDelect+'?Customer=' + va).then(res => {
+      this.axios.get('/Customer/DeleteCustomer'+'?Customer=' + this.cv.customer_id).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
           if (res.data == '删除成功') {
@@ -370,7 +430,7 @@ export default {
       })
     },
     //  倒计时
-    time: function (date, day) {
+    /*time: function (date, day) {
       if (date == null) {
         return '未开始'
       } else {
@@ -392,59 +452,61 @@ export default {
         }
         return showTime
       }
-    }
+    }*/
   }
 }
 </script>
 
 <style scoped>
 @import "../css/public.css";
+/deep/input::-webkit-input-placeholder{color: #818181}
 .mui-input-group{background-color: transparent}
 /*form与form之间的差距*/
+.classGray{color: gray}
 .form-pab{margin-bottom: 15px;}
 .all-row{display: flex;}
 .all-row input{font-size: 14px!important;}
 .all-row label:nth-child(1){flex: 1}
 .all-row label:nth-child(2){flex:4;overflow: auto}
-.textreap{height: 80px!important;}
-.textreap label:nth-child(1){line-height: 58px}
+.update-btn{text-align: center;margin-top: 12px}
+.update-btn button{width: 38%;line-height: 10px;float:inherit}
+select{font-size: 15px}
 /*form2-label*/
 #app{padding-top: 0;}
 .row-flex label{width: 50%;}
 .row-flex input{width: 50%!important;font-size: 12px;}
 .flex-mm div{width: 50%;}
-.box3 div:nth-child(2){font-size: 15px;padding: 0 13px}
-.box3 div:nth-child(2) select{width: 70%;padding: 0 10px;margin-bottom: 4px}
 /*记录*/
-.jin{display: flex;line-height: 40px;}
-.jin-date{display: flex;width: 100%}
-.gen{flex: 1;text-align: center;font-size: 15px}
-.jin-date{flex: 4}
-.jin-date p{padding-left: 16px;flex: 1;}
+.jin{display: flex;line-height: 40px;border-bottom: 1px solid black;width: 95%;margin-left: 15px;margin-bottom: 11px}
+.jin-date{display: flex;}
+.gen{text-align: left;font-size: 15px;color: gray;padding-left: 43px}
 .jin-date p:nth-child(2){text-align: right;padding-right: 16px;}
-.row-textarea{height: 54px!important;border: 1px solid #dadada}
-.row-textarea textarea{font-size: 14px;padding: 3px;color: black}
-.box-h4 h4{line-height: 40px;padding-left: 14px;border-bottom: 1px solid #DADADA;font-size: 15px}
+.row-textarea{height: 54px!important;border: 1px solid #dadada;width: 95%;margin-left: 11px}
+.row-textarea textarea{font-size: 14px;color: black;padding-left: 2px!important;padding-top: 3px}
+.box-h4 h4:nth-child(1){line-height: 28px;border-bottom: 2px solid black;font-size: 15px;width: 95%;margin-left: 14px}
 ul{background-color: #efeff4;font-size: 15px}
 .mui-table-view-cell.mui-collapse .mui-collapse-content{background-color: #efeff4;padding: 0}
-.go-yi{text-align: right;font-size: 15px;padding: 15px 13px 0;color: #007aff;font-weight: bold}
-.go-yi span{display: block}
-/*form尺量*/
-.row-box{display: flex;}
-.row-box div label{width: 50%}
-.row-box div input{width: 50%;padding-left: 14px;}
-.row-box .mui-input-row{width: 50%}
-.row-box:nth-last-child(1) .mui-input-row:nth-child(2) label:nth-child(1){width: 40%}
-.item-time label:nth-child(2){padding-left: 0;}
-.mui-navigate-right{font-weight: bold}
 /*按钮*/
+.row-left{font-size: 15px;display: flex;}
+.row-left-on{flex: 1;display: flex;}
+.row-left-on:nth-child(1) label{padding: 10px 15px;line-height: 25px;white-space: nowrap}
+.row-left-on:nth-child(1) select{margin-left: 10px;margin-bottom: 0}
+.radio-left{display: flex;position: relative;right: 18px;top: 6px}
+.mui-checkbox.mui-left label, .mui-radio.mui-left label{padding-left: 23px;white-space: nowrap}
+.mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: -2px!important;}
+.mui-input-row{overflow: unset}
+.mui-input-group:before,.mui-table-view:before,.mui-input-group:after,.mui-table-view:after,.mui-table-view-cell:after,
+.mui-input-group:after, .mui-input-row:nth-last-child(1):after{background-color: transparent!important;}
 .go-add{text-align: center;margin-bottom: 34px;}
+.go-add button{background-color: black;color: white;width: 45%;margin-top: 17px}
 .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;margin-left: 18px}
-.form-botton{text-align: center;}
+.form-botton{text-align: center;margin-top: 17px}
 .botton-mar{margin-bottom: 27px;}
 .mui-chech{white-space: normal}
 .mui-chech label{width: 21%;}
 .mui-heck{position: relative;right: 9px;}
 .mui-chech label,.mui-heck label{padding-left: 48px!important;width: 131%}
 .row-input{flex: 1;padding-left: 21px!important;}
+.mui-input-group .mui-input-row:after{background-color: transparent}
+/deep/.el-input__prefix{display: none}
 </style>

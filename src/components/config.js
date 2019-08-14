@@ -2,9 +2,9 @@ const url = {
 //  https://formattingclub.com/
   Login:'https://formattingclub.com/YiNuoLogin/Login',//登录
   clientAdd:'https://formattingclub.com/YiNuoLogin/Customer/AddCustomer',//客户录入
-  clientProjet:'https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer',//项目名称
-  clientFollowPerson:'https://formattingclub.com/YiNuoLogin/Customer/select_follow_person',//跟进人
-  listName:'https://formattingclub.com/YiNuoLogin/Customer/SelectStylist', //设计师
+  clientProjet:'https://formattingclub.com/YiNuoLogin/SelectAllCustomer',//项目名称
+  clientFollowPerson:'https://formattingclub.com/YiNuoLogin/select_follow_person',//跟进人
+  listName:'https://formattingclub.com/YiNuoLogin/SelectStylist', //设计师
   list:'https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer',  //客户统计数据
   // stageName:'https://formattingclub.com/YiNuoLogin/Customer/SelectStageName', //客户统计阶段
   modify_projet:'https://formattingclub.com/YiNuoLogin/Customer/SelectCustomer',//客户详细
@@ -55,6 +55,5 @@ const url = {
   money_refund:'https://formattingclub.com/YiNuoLogin/fund/money_refund',//流水收款
   newUserName:'https://formattingclub.com/YiNuoLogin/User/Add_User',//账户添加
   add_customer_person_fund:'https://formattingclub.com/YiNuoLogin/fund/add_customer_person_fund',//账户添加
-
 }
 module.exports = url

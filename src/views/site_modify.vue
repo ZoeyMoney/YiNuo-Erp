@@ -2,9 +2,9 @@
   <div class="site_modify">
     <!--返回-->
     <header class="mui-bar mui-bar-nav">
-      <router-link :to="{name:'customer_statistics'}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+      <router-link :to="{name:'customer_statistics'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
       <h1 class="mui-title">修改信息</h1>
-      <router-link :to="{name:'index'}" class="mui-action-back mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
+      <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
     </header>
     <login-loading v-show="imgUrl_loading"></login-loading>
     <!--客户详情-->
@@ -16,51 +16,51 @@
     </div>
     <!--form-->
     <div class="mui-content app">
-    	<form class="mui-input-group" v-for="item in projet">
+    	<form class="mui-input-group">
     	    <div class="mui-input-row">
     	        <label>工地名称</label>
-    	        <input type="text" class="mui-input-clear" v-model="item.customer_name">
+    	        <input type="text" class="mui-input-clear" v-model="customer_name">
     	    </div>
         <div class="mui-input-row">
           <label>联系人</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_linkman">
+          <input type="text" class="mui-input-clear" v-model="customer_linkman">
         </div>
         <div class="mui-input-row">
           <label>联系方式</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_connect">
+          <input type="text" class="mui-input-clear" v-model="customer_connect">
         </div>
         <div class="mui-input-row">
           <label>设计师</label>
-          <select name="" v-model="item.customer_stylist">
+          <select name="" v-model="customer_stylist">
             <option value="" selected="selected">请选择</option>
-            <option v-for="item in listName" :value="item">{{item}}</option>
+            <option v-for="item in listName" :value="item.fund_person_id">{{item.fund_person}}</option>
           </select>
         </div>
         <div class="mui-input-row">
           <label>装修面积</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_Decorate">
+          <input type="text" class="mui-input-clear" v-model="customer_Decorate">
         </div>
         <div class="mui-input-row">
           <label>客户需求</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_demand">
+          <input type="text" class="mui-input-clear" v-model="customer_demand">
         </div>
         <div class="mui-input-row">
           <label>项目预算</label>
-          <input type="text" class="mui-input-clear" placeholder="￥" v-model="item.customer_budget">
+          <input type="text" class="mui-input-clear" placeholder="￥" v-model="customer_budget">
         </div>
         <div class="mui-input-row">
           <label>当前阶段</label>
-          <select name="" v-model="item.stage_name">
+          <select name="" v-model="stage_name">
             <option v-for="item in vstage_name">{{item.stage_name}}</option>
           </select>
         </div>
         <div class="mui-input-row">
           <label>限时</label>
-          <input type="text" class="mui-input-clear" v-model="item.stage_stipulate">
+          <input type="text" class="mui-input-clear" v-model="stage_stipulate">
         </div>
         <div class="mui-input-row">
           <label>开始时间</label>
-          <input type="date" class="mui-input-clear" v-model="item.stage_startdate">
+          <input type="date" class="mui-input-clear" v-model="stage_startdate">
         </div>
     	</form>
       <button-save @click.native="add"></button-save>
@@ -77,13 +77,18 @@ export default {
       imgUrl_loading:false,
       projet: '', // 项目
       selet_aa: '', // 复制项目
+      customer_name:'',//工地名称
+      customer_linkman:'',//联系人
       listName: '', // 设计师
+      customer_stylist:'',//设计师
       stage_name: '', // 当前阶段
-      customer_linkman: '', // 联系人
       customer_connect: '', // 联系方式
       customer_Decorate: '', // 装修面积
+      customer_demand:'',//客户需求
+      stage_startdate:'',//开始时间
       customer_budget: '', // 项目预算
       stage_stipulate: '', // 限时
+      customer_id:'',
       vstage_name: [
         { stage_name: '报价中' },
         { stage_name: '谈价中' },
@@ -101,13 +106,26 @@ export default {
     var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
     // 查询客户项目信息
     this.customer_id = id
-    this.axios.get(url.modify_projet+'?Customer=' + id).then(res => {
+    /*this.axios.get(url.modify_projet+'?Customer=' + id).then(res => {
       this.projet = res.data
       this.select_aa = JSON.parse(JSON.stringify(res.data))
-    })
+    })*/
+    if (this.customer_id == JSON.parse(localStorage.customer_statistics).customer_id) {
+      // console.log(JSON.parse(localStorage.customer_statistics))
+      this.customer_name = JSON.parse(localStorage.customer_statistics).customer_name
+      this.customer_linkman = JSON.parse(localStorage.customer_statistics).customer_linkman
+      this.customer_connect = JSON.parse(localStorage.customer_statistics).customer_connect
+      this.customer_stylist = JSON.parse(localStorage.customer_statistics).customer_stylist
+      this.customer_Decorate = JSON.parse(localStorage.customer_statistics).customer_Decorate
+      this.customer_demand = JSON.parse(localStorage.customer_statistics).customer_demand
+      this.customer_budget = JSON.parse(localStorage.customer_statistics).customer_budget
+      this.stage_name = JSON.parse(localStorage.customer_statistics).stage_name
+      this.stage_stipulate = JSON.parse(localStorage.customer_statistics).stage_stipulate
+      this.stage_startdate = JSON.parse(localStorage.customer_statistics).stage_startdate
+    }
     // 设计师
-    this.axios.get(url.listName).then(customName => {
-      this.listName = customName.data
+    this.axios.get(url.clientFollowPerson+'?fund_person_state=3').then(customName => {
+      this.listName = customName.data.data
     })
   },
   methods: {

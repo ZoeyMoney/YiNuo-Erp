@@ -106,11 +106,8 @@
 </template>
 
 <script>
-  import url from '../components/config'
-  import Login from './Login'
 export default {
   name: 'transfer_money',
-  components: { Login },
   data () {
     return {
       bank_id: 0,
@@ -140,7 +137,7 @@ export default {
   created () {
     this.imgUrl_loading = true
     /* 储蓄卡 */
-    this.axios.get(url.bankCard).then(res => {
+    this.axios.get('/fund/select_bank').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
         this.bank = res.data
@@ -171,13 +168,8 @@ export default {
       }
     })
     /* 银行卡 */
-    this.axios.get(url.bankCard).then(res => {
+    this.axios.get('/fund/select_bank').then(res => {
       this.cead = res.data
-    }, error => {
-      var then = this
-      mui.alert('您无权访问', function () {
-        then.$router.push({ name: 'index' })
-      })
     })
   },
 
@@ -207,7 +199,7 @@ export default {
         add+='&bank_number='+number
       }
       var transfer = 'transfer'
-      this.axios.get(url.moneyRunning+add).then(res=>{
+      this.axios.get('/fund/select_detail'+add).then(res=>{
         window.transfer = res.data.list_moey
         this.$router.push({path:'running_money',query:{transfer:transfer}})
         // console.log(res.data.list_moey)
@@ -295,7 +287,7 @@ export default {
         all_money+=this.all_money
       }
       var all = '?bank_deal_money=' + this.bank_deal_money + '&money=' + all_money + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id+'&date='+dd
-      this.axios.get(url.moneyTransfer + all).then(res => {
+      this.axios.get('/fund/add_bank_deal' + all).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
           mui.alert('转账成功', function () {

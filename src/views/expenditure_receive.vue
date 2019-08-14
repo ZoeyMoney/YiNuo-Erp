@@ -131,7 +131,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'expenditure_receive',
   data () {
@@ -211,13 +210,8 @@ export default {
       this.projet = res.data
     })
     /* table */
-    this.axios.get(url.ClassSelect+'?fund_type=1').then(res => {
+    this.axios.get('/fund/Select_three_fund_name'+'?fund_type=1').then(res => {
       this.list_fund_name_type = res.data.fund_name_type
-    }, error => {
-      var then = this
-      mui.alert('您无权访问', function () {
-        then.$router.push({ name: 'index' })
-      })
     })
     this.customer_name = window.test
     this.customer_name_id = window.test_id
@@ -242,7 +236,7 @@ export default {
     // 类别选择
     fund_namesa (id) {
       this.fund_nameso = id
-      this.axios.get(url.ClassSelect+'?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -255,17 +249,12 @@ export default {
           this.idProjet = false
           this.site_various = true
         }
-      }, error => {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
       })
     },
     // 类别名称
     list_fund_nameas (id) {
       this.fund_name = id
-      this.axios.get(url.ClassSelect+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -276,17 +265,12 @@ export default {
           this.relevant_people = true
           this.site_various = true
         }
-      }, error => {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
       })
     },
     //类别详细
     all_rate_name(id){
       this.all_id = id
-      this.axios.get(url.ClassSelect+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name).then(res => {
+      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -554,7 +538,7 @@ export default {
       this.imgUrl_loading = true
       this.axios({
         method: 'POST',
-        url: url.moneyAddFund,
+        url: '/fund/Add_Fund',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
         data: {
           listFund: JSON.stringify(this.list),

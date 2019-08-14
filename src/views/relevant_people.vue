@@ -71,7 +71,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'relevant_people',
     data() {
@@ -145,15 +144,16 @@
       this.allperson = false
       this.class = window.prosen
       //判断传参
+      console.log(window.prosen)
       var add = '?'
       if (window.prosen === 'accounts_payable' || window.prosen === 'money_entry' ||window.prosen==='income'||window.prosen==='expenditure'||
-      window.prosen === 'income_receive' || window.prosen === 'Project_Reconciliation') {
+      window.prosen === 'income_receive' || window.prosen === 'Project_Reconciliation' || window.prosen === 'receive_data' || window.paid_data==='paid_data') {
         add+='fund_person_state_A=1'
-      }else if (window.prosen ==='accounts_payable_huan' || window.prosen==='income_receive_huan'){
+      }else if (window.prosen ==='accounts_payable_huan' || window.prosen==='income_receive_huan' || window.prosen ==='task_admin' || window.prosen ==='Release_admin'){
         add+='fund_person_state_A=2'
       }
       //判断头部信息显示
-      if (window.prosen == 'income' || window.prosen == 'money_entry') {
+      if (window.prosen == 'income' || window.prosen == 'money_entry' || window.prosen =='receive_data' || window.prosen =='paid_data') {
         this.UserName = '相关人'
       }else if (window.prosen === 'expenditure') {
         this.UserName = '收款人'
@@ -161,9 +161,13 @@
         this.UserName = '债权人'
       }else if (window.prosen === 'accounts_payable_huan') {
         this.UserName = '经手人'
+      }else if (window.prosen === 'task_admin') {
+        this.UserName = '执行人'
+      }else if (window.prosen === 'Release_admin') {
+        this.UserName = '下达人'
       }
       /*判断A-Z的没有则消失*/
-      this.axios.get(url.Select_fund_person+add).then(res=>{
+      this.axios.get('/fund/Select_fund_person'+add).then(res=>{
         if (res.status === 200) {
           this.imgUrl_loading = false
           this.allperson = true
@@ -322,7 +326,7 @@
           this.$router.push({path:'money_entry'})
         }else if (this.prosen === 'accounts_payable' || this.prosen === 'accounts_payable_huan') {
           this.$router.push({path:'accounts_payable'})
-        }else if (this.prosen === 'expenditure_people') {
+        }else if (this.prosen === 'expenditure') {
           this.$router.push({path:'expenditure'})
         }else if (this.prosen === 'receive_data') {
           this.$router.push({path:'receive_data'})
@@ -332,12 +336,18 @@
           this.$router.push({path:'income_receive'})
         }else if (this.prosen === 'Project_Reconciliation') {
           this.$router.push({path:'Project_Reconciliation'})
+        }else if (this.prosen === 'receive_data') {
+          this.$router.push({path:'receive_data'})
+        }else if (this.prosen === 'task_admin') {
+          this.$router.push({path:'task_people'})
+        }else if (this.prosen === 'Release_admin') {
+          this.$router.push({path:'task_people'})
         }
       },
       //根据页面传来不同的数据、点击数据然后返回各种页面
       all_projet(id,name){
         if (this.prosen === 'income' || this.prosen === 'money_entry' || this.prosen === 'accounts_payable' || this.prosen === 'expenditure' ||
-          this.prosen === 'receive_data' || this.prosen === 'paid_data' || this.prosen==='income_receive' || this.prosen === 'Project_Reconciliation') {
+          this.prosen === 'receive_data' || this.prosen === 'paid_data' || this.prosen==='income_receive' || this.prosen === 'Project_Reconciliation' ||this.prosen === 'task_admin') {
           window.fund_people=id
           window.fund_people_name = name
           if (this.prosen === 'income') {
@@ -346,7 +356,7 @@
             this.$router.push({path:'money_entry'})
           }else if (this.prosen === 'accounts_payable') {
             this.$router.push({path:'accounts_payable'})
-          }else if (this.prosen === 'expenditure_people') {
+          }else if (this.prosen === 'expenditure') {
             this.$router.push({path:'expenditure'})
           }else if (this.prosen === 'receive_data') {
             this.$router.push({path:'receive_data'})
@@ -356,6 +366,8 @@
             this.$router.push({path:'income_receive'})
           }else if (this.prosen === 'Project_Reconciliation') {
             this.$router.push({path:'Project_Reconciliation'})
+          }else if (this.prosen === 'task_admin') {
+            this.$router.push({path:'task_people'})
           }
         }else if (this.prosen === 'accounts_payable_huan'){
           window.fund_people_huan = id
@@ -365,6 +377,10 @@
           window.fund_people_huan = id
           window.fund_people_huan_name = name
           this.$router.push({path:'income_receive'})
+        }else if (this.prosen === 'Release_admin') {
+          window.fund_people_huan = id
+          window.fund_people_huan_name = name
+          this.$router.push({path:'task_people'})
         }
       },
       suteA(id,name){

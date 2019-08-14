@@ -101,7 +101,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'site_stage',
     data(){
@@ -138,10 +137,10 @@
     },
     created(){
       this.imgUrl_loading = true
-      this.axios.get(url.clientProjet+'?Customer_A=1').then(res=>{
+      this.axios.get('/SelectAllCustomer'+'?Customer_A=1').then(res=>{
         if (res.status === 200) {
           this.imgUrl_loading = false
-          this.listProjet_A = res.data
+          this.listProjet_A = res.data.data
         }
       });
     },
@@ -149,34 +148,34 @@
       handleClick(tab) {
         if (tab.index === '0') {
           this.imgUrl_loading = true
-          this.axios.get(url.clientProjet+'?Customer_A=1').then(res=>{
+          this.axios.get('/SelectAllCustomer'+'?Customer_A=1').then(res=>{
             if (res.status === 200) {
               this.imgUrl_loading = false
-              this.listProjet_A = res.data
+              this.listProjet_A = res.data.data
             }
           })
         }else if (tab.index === '1') {
           this.imgUrl_loading = true
-          this.axios.get(url.clientProjet+'?Customer_B=2').then(res=>{
+          this.axios.get('/SelectAllCustomer'+'?Customer_B=2').then(res=>{
             if (res.status === 200) {
               this.imgUrl_loading = false
-              this.listProjet_B = res.data
+              this.listProjet_B = res.data.data
             }
           })
         }else if (tab.index === '2') {
-          this.axios.get(url.clientProjet+'?Customer_C=3').then(res=>{
+          this.axios.get('/SelectAllCustomer'+'?Customer_C=3').then(res=>{
             this.imgUrl_loading = true
             if (res.status === 200) {
               this.imgUrl_loading = false
-              this.listProjet_C = res.data
+              this.listProjet_C = res.data.data
             }
           })
         }else if (tab.index === '3') {
-          this.axios.get(url.clientProjet+'?Customer_D=4').then(res=>{
+          this.axios.get('/SelectAllCustomer'+'?Customer_D=4').then(res=>{
             this.imgUrl_loading = true
             if (res.status === 200) {
               this.imgUrl_loading = false
-              this.listProjet_D = res.data
+              this.listProjet_D = res.data.data
             }
           })
         }
@@ -185,17 +184,21 @@
       handleEdit(index, row) {
           this.customer_id = row.customer_id
           this.alerto = true
+        var mo=function(e){e.preventDefault();};
+        document.body.style.overflow='hidden';
+        document.addEventListener("touchmove",mo,false);//禁止页面滑动
       },
       //删除
       handleDelete(index, row) {
         var then = this
         this.imgUrl_loading = true
         this.customer_id = row.customer_id
+        console.log(this.customer_id)
         mui.confirm('是否删除',function (e) {
           if (e.index == 1) {
-            then.axios.get(url.clientDelect+'?Customer='+this.customer_id).then(res=>{
+            then.axios.get('/Customer/DeleteCustomer'+'?Customer='+row.customer_id).then(res=>{
               if (res.status === 200) {
-                this.imgUrl_loading = false
+                then.imgUrl_loading = false
                 mui.alert(res.data,function () {
                   then.$router.go(0)
                 })
@@ -210,6 +213,9 @@
     //  弹窗关闭
       close(){
         this.alerto = false
+        var mo=function(e){e.preventDefault();};
+        document.body.style.overflow='';//出现滚动条
+        document.removeEventListener("touchmove",mo,false);
       },
     //  阶段保存
       add(){
@@ -221,7 +227,7 @@
           return false
         }
         this.imgUrl_loading = true
-        this.axios.get(url.Update_Customer+'?Customer_id='+this.customer_id+'&Customer_name_state='+this.radio).then(res=>{
+        this.axios.get('/Customer/Update_Customer'+'?Customer_id='+this.customer_id+'&Customer_name_state='+this.radio).then(res=>{
           if (res.status === 200) {
             this.imgUrl_loading = false
             mui.alert(res.data.data,function () {
@@ -236,9 +242,10 @@
 </script>
 
 <style scoped>
-.pad{margin-top: 11px;}
+  *{touch-action: pan-y;}
+  .pad{margin-top: 11px;}
   /deep/.el-tabs__header{margin-bottom: 0}
-/deep/.el-table th,.el-table tr{color: black}
+  /deep/.el-table th,.el-table tr{color: black}
   /deep/.el-table th{background-color: #dadada;padding: 4px 0}
   /deep/.el-table tr{background-color: #efeff4}
   /deep/.el-table td, .el-table th.is-leaf{border-bottom: 1px solid #dadada}

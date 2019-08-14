@@ -72,7 +72,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'siteList',
     data(){
@@ -118,12 +117,12 @@
       this.allProjet = window.expenditure
       var add = '?'
       if (window.expenditure === 'income' || window.expenditure === 'expenditure' || window.expenditure === 'money_entry' || window.expenditure === 'accounts_payable' ||
-        window.expenditure ==='profit_edit' || window.expenditure ==='income_receive' || window.expenditure ==='expenditure_receive') {
+        window.expenditure ==='profit_edit' || window.expenditure ==='income_receive' || window.expenditure ==='expenditure_receive'||window.expenditure ==='expenditure_after') {
         add+='Customer_A=1'+'&Customer_B=2'+'&Customer_C=3'+'&Customer_D=4'
       }else if (window.expenditure === 'paid_data' || window.expenditure === 'receive_data') {
         add+='Customer_A=1'+'&Customer_B=2'+'&Customer_C=3'+'&Customer_D=4'
       }
-      this.axios.get(url.clientProjet+add).then(res=>{
+      this.axios.get('/SelectAllCustomer'+add).then(res=>{
         if (res.status === 200) {
           this.imgUrl_loading = false
           this.allperson = true
@@ -153,84 +152,84 @@
         var siteI = []
         var siteU = []
         var siteV = []
-        for (var index in res.data) {
-          if (res.data[index].firstChar === 'a') {
-            siteA.push( res.data[index])
+        for (var index in res.data.data) {
+          if (res.data.data[index].firstChar === 'a') {
+            siteA.push( res.data.data[index])
           }
-          if (res.data[index].firstChar === 'b') {
-            siteB.push(res.data[index])
+          if (res.data.data[index].firstChar === 'b') {
+            siteB.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'c') {
-            siteC.push(res.data[index])
+          if (res.data.data[index].firstChar === 'c') {
+            siteC.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'd') {
-            siteD.push(res.data[index])
+          if (res.data.data[index].firstChar === 'd') {
+            siteD.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'e') {
-            siteE.push(res.data[index])
+          if (res.data.data[index].firstChar === 'e') {
+            siteE.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'f') {
-            siteF.push(res.data[index])
+          if (res.data.data[index].firstChar === 'f') {
+            siteF.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'g') {
-            siteG.push(res.data[index])
+          if (res.data.data[index].firstChar === 'g') {
+            siteG.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'h') {
-            siteH.push(res.data[index])
+          if (res.data.data[index].firstChar === 'h') {
+            siteH.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'i') {
-            siteI.push(res.data[index])
+          if (res.data.data[index].firstChar === 'i') {
+            siteI.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'j') {
-            siteJ.push(res.data[index])
+          if (res.data.data[index].firstChar === 'j') {
+            siteJ.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'k') {
-            siteK.push(res.data[index])
+          if (res.data.data[index].firstChar === 'k') {
+            siteK.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'l') {
-            siteL.push(res.data[index])
+          if (res.data.data[index].firstChar === 'l') {
+            siteL.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'm') {
-            siteM.push(res.data[index])
+          if (res.data.data[index].firstChar === 'm') {
+            siteM.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'n') {
-            siteN.push(res.data[index])
+          if (res.data.data[index].firstChar === 'n') {
+            siteN.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'o') {
-            siteO.push(res.data[index])
+          if (res.data.data[index].firstChar === 'o') {
+            siteO.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'p') {
-            siteP.push(res.data[index])
+          if (res.data.data[index].firstChar === 'p') {
+            siteP.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'q') {
-            siteQ.push(res.data[index])
+          if (res.data.data[index].firstChar === 'q') {
+            siteQ.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'r') {
-            siteR.push(res.data[index])
+          if (res.data.data[index].firstChar === 'r') {
+            siteR.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 's') {
-            siteS.push(res.data[index])
+          if (res.data.data[index].firstChar === 's') {
+            siteS.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 't') {
-            siteT.push(res.data[index])
+          if (res.data.data[index].firstChar === 't') {
+            siteT.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'u') {
-            siteU.push(res.data[index])
+          if (res.data.data[index].firstChar === 'u') {
+            siteU.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'v') {
-            siteV.push(res.data[index])
+          if (res.data.data[index].firstChar === 'v') {
+            siteV.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'w') {
-            siteW.push(res.data[index])
+          if (res.data.data[index].firstChar === 'w') {
+            siteW.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'x') {
-            siteX.push(res.data[index])
+          if (res.data.data[index].firstChar === 'x') {
+            siteX.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'y') {
-            siteY.push(res.data[index])
+          if (res.data.data[index].firstChar === 'y') {
+            siteY.push(res.data.data[index])
           }
-          if (res.data[index].firstChar === 'z') {
-            siteZ.push(res.data[index])
+          if (res.data.data[index].firstChar === 'z') {
+            siteZ.push(res.data.data[index])
           }
         }
         this.site_A = siteA
@@ -292,6 +291,8 @@
           this.$router.push({path:'income_receive'})
         }else if (this.allProjet === 'expenditure_receive') {
           this.$router.push({path:'expenditure_receive'})
+        }else if (this.allProjet === 'expenditure_after') {
+          this.$router.push({path:'After_sales_entry'})
         }
       },
       //判断根据跳进来的页面返回不同的页面
@@ -316,6 +317,8 @@
           this.$router.push({path:'income_receive'})
         }else if (this.allProjet === 'expenditure_receive') {
           this.$router.push({path:'expenditure_receive'})
+        }else if (this.allProjet === 'expenditure_after') {
+          this.$router.push({path:'After_sales_entry'})
         }
       },
       suteA(id,name){

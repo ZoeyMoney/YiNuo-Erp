@@ -40,7 +40,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'announcement_entry',
   data () {
@@ -81,7 +80,7 @@ export default {
         return false
       }
       this.imgUrl_loading = true
-      this.axios.get(url.AnnouncementAdd+'?notice_title=' + this.notice_title + '&notice_number=' + this.notice_number +
+      this.axios.get('/notice/addNotice'+'?notice_title=' + this.notice_title + '&notice_number=' + this.notice_number +
         '&notice_person=' + this.notice_person + '&notice_text=' + this.notice_text).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false

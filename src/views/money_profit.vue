@@ -18,49 +18,33 @@
       <div class="mui-content app">
         <div class="mui-input-row all-input">
           <label>关键字</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入用户名">
+          <input type="text" class="mui-input-clear" placeholder="请输入用户名" v-model="search">
         </div>
         <template>
           <el-radio v-model="radio" label="2">未完成</el-radio>
           <el-radio v-model="radio" label="1">已完成</el-radio>
         </template>
         <div class="input-x">
-       <!-- <table border="0">
-          <thead>
-          <tr>
-            <th><span :style="siteSlect">工地名称</span></th>
-            <th><span>支出合计</span></th>
-            <th><span>收入合计</span></th>
-            <th><span>预计利润</span></th>
-            <th><span>利润比</span></th>
-          </tr>
-          </thead>
-          <tbody id="add">
-          <tr v-for="item in list">
-            <td @click="projet_modify(item.customer_id)"><span :style="lefProjet">{{item.customer_name}}</span></td>
-            <td><span>￥{{item.already_out}}</span></td>
-            <td><span>￥{{item.already_enter}}</span></td>
-            <td>
-              <span v-if="item.pre_profit">￥{{item.pre_profit}}</span>
-              <span v-if="item.pre_profit === 0">￥0</span>
-            </td>
-            <td>
-              <span :style="widCate" v-if="item.pre_profit_proportion">￥{{item.pre_profit_proportion}}%</span>
-              <span :style="widCate" v-if="item.pre_profit_proportion === 0">￥0%</span>
-            </td>
-          </tr>
-          </tbody>
-        </table>-->
           <template>
-            <el-table :data="list" style="width: 100%;color: black" height="77vh" @row-click="projet_modify" >
-              <el-table-column :key="Math.random()" fixed prop="customer_name" label="工地名称" width="150" :header-cell-style="getClass"></el-table-column>
-              <el-table-column :key="Math.random()" v-if="list.already_out<=0" prop="already_out" label="支出合计" width="100"></el-table-column>
-              <el-table-column prop="already_enter" label="收入合计" width="100"></el-table-column>
+            <el-table :data="lists" style="width: 100%;color: black" height="77vh" @row-click="projet_modify" >
+              <el-table-column :key="Math.random()" fixed label="工地名称" width="150" :header-cell-style="getClass">
+                <template slot-scope="scope">{{ scope.row.customer_name }}</template>
+              </el-table-column>
+              <el-table-column :key="Math.random()" v-if="list.already_out<=0" label="支出合计" width="100">
+                <template slot-scope="scope">￥{{ scope.row.already_out }}</template>
+              </el-table-column>
+              <el-table-column label="收入合计" width="100">
+                <template slot-scope="scope">￥{{ scope.row.already_enter }}</template>
+              </el-table-column>
               <el-table-column prop="" label="已收合计" width="100"></el-table-column>
               <el-table-column prop="" label="已付合计" width="100"></el-table-column>
               <el-table-column prop="" label="应付合计" width="100"></el-table-column>
-              <el-table-column prop="pre_profit" label="预计利润" width="100"></el-table-column>
-              <el-table-column prop="pre_profit_proportion" label="利润比" width="100"></el-table-column>
+              <el-table-column label="预计利润" width="100">
+                <template slot-scope="scope">￥{{ scope.row.pre_profit }}</template>
+              </el-table-column>
+              <el-table-column label="利润比" width="100">
+                <template slot-scope="scope">￥{{ scope.row.pre_profit_proportion }}</template>
+              </el-table-column>
             </el-table>
           </template>
       </div>
@@ -74,13 +58,13 @@
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'money_profit',
   data () {
     return {
       imgUrl_loading:false,
       moneyNY:'',
+      search:'',
       radio: '2',
       list: [{
           customer_name:'',
@@ -109,12 +93,24 @@ export default {
   },
   created(){
     this.imgUrl_loading = true
-    this.axios.get(url.moneyProfit).then(res=>{
+    this.axios.get('/fund/Select_profits').then(res=>{
       if (res.status === 200) {
         this.imgUrl_loading = false
       this.list = res.data.data
       }
     })
+  },
+  computed:{
+    lists(){
+      var then = this
+      var newList = []
+      then.list.map(function (item) {
+        if (item.customer_name.search(then.search) != -1){
+          newList.push(item)
+        }
+      })
+      return newList
+    }
   },
   methods: {
     getClass({row, column, rowIndex, columnIndex}){

@@ -158,7 +158,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'Project_Reconciliation',
     data(){
@@ -226,7 +225,7 @@
         this.imgUrl_loading = true
       //查询
       var then = this
-      this.axios.get(url.selectSerch).then(res => {
+      this.axios.get('/User/Select_accounting').then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
           this.NewUserName = JSON.parse(localStorage.data)
@@ -326,7 +325,7 @@
         }else{
           add+='user_number='+id
         }
-        this.axios.get(url.selectSerch+add).then(res=>{
+        this.axios.get('/User/Select_accounting'+add).then(res=>{
           this.list_model_search(res)
           this.all_model_money(res)
         })
@@ -343,7 +342,7 @@
             add+='&user_number='+this.userName
           }
         }
-        this.axios.get(url.selectSerch+add).then(res=>{
+        this.axios.get('/User/Select_accounting'+add).then(res=>{
             this.imgUrl_loading = false
             this.list_model_search(res)
             this.all_model_money(res)

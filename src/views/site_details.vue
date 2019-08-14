@@ -16,112 +16,110 @@
     </div>
     <!--form-->
     <div class="mui-content app">
-      <form class="mui-input-group" v-for="item in projet">
+      <form class="mui-input-group">
         <div class="mui-input-row">
-          <label>客户名称</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_name" placeholder="input" disabled="disabled">
+          <label>工地名称</label>
+          <input type="text" class="mui-input-clear" v-model="customer_name" placeholder="input" disabled="disabled">
         </div>
         <div class="mui-input-row">
-          <label>联系人</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_linkman" placeholder="input" disabled="disabled">
+          <label>负责人</label>
+          <input type="text" class="mui-input-clear" v-model="customer_linkman" placeholder="input">
         </div>
         <div class="mui-input-row">
-          <label>联系方式</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_connect" placeholder="input" disabled="disabled">
-        </div>
-        <div class="mui-input-row">
-          <label>责任人</label>
-          <input type="text" class="mui-input-clear" v-model="item.customer_stylist" placeholder="input" disabled="disabled">
+          <label>分类</label>
+          <input type="text" class="mui-input-clear" v-model="customer_connect" placeholder="input">
         </div>
         <div class="mui-input-row money-input">
-          <label>甲方预算</label>
-          <input type="text" class="mui-input-clear" v-model="item.Customer_DecorateJia" disabled="disabled">
+          <label>甲方</label>
+          <input type="text" class="mui-input-clear" v-model="Customer_DecorateJia">
           <span class="span-money">{{Customer_DecorateJia | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row money-input">
-          <label>乙方预算</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入预算金额" v-model="item.customer_DecorateYi" disabled="disabled">
+          <label>乙方</label>
+          <input type="text" class="mui-input-clear" placeholder="请输入预算金额" v-model="Customer_DecorateYi">
           <span class="span-money">{{Customer_DecorateYi | MoneyFormat}}</span>
         </div>
+        <div class="mui-input-row money-input">
+          <label>工人</label>
+          <input type="text" class="mui-input-clear" placeholder="请输入预算金额" v-model="worker">
+          <span class="span-money">{{worker | MoneyFormat}}</span>
+        </div>
         <div class="mui-input-row">
-          <label>项目时间</label>
-          <input type="text" class="mui-input-clear" :value="item.customer_Date | data" disabled="disabled">
+          <label>总金额</label>
+          <input type="text" class="mui-input-clear" v-model="customer_all" disabled="disabled">
         </div>
         <div class="mui-input-row">
           <label>报修时间</label>
-          <input type="text" class="mui-input-clear" :value="item.customer_baoxiushijian | data" disabled="disabled">
+          <el-date-picker v-model="customer_baoxiushijian" type="date" placeholder="选择日期时间"></el-date-picker>
         </div>
         <div class="mui-input-row">
           <label>预计完成</label>
-          <input type="text" class="mui-input-clear" :value="item.customer_yujiwanchengshijian | data" disabled="disabled">
+          <el-date-picker v-model="customer_yujiwanchengshijian" type="date" placeholder="选择日期时间"></el-date-picker>
         </div>
         <div class="mui-input-row">
-          <label>保质期</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入保质期" v-model="item.customer_baozhiqi" disabled="disabled">
-        </div>
-        <div class="mui-input-row all-row">
-          <label>所属类型</label>
-          <input type="text" class="mui-input-clear row-input" v-model="item.customer_type" disabled="disabled">
-          <div class="mui-input-row mui-radio mui-left mui-chech" name="">
-            <label>家装</label>
-            <input name="Customer_form" type="radio" value="家装" checked="a" disabled="disabled">
-          </div>
-          <div class="mui-input-row mui-radio mui-left mui-heck">
-            <label>工装</label>
-            <input name="Customer_form" type="radio" value="工装" checked="b" disabled="disabled">
-          </div>
+          <label>质保截止</label>
+          <el-date-picker v-model="customer_baozhiqi" type="date" placeholder="选择日期时间"></el-date-picker>
         </div>
         <div class="mui-input-row all-row textreap">
-          <label>客户需求</label>
-          <label>{{item.customer_demand}}</label>
+          <label>问题描述</label>
+          <input type="text" v-model="customer_demand">
         </div>
-      </form>
-      <!--第二个form-->
-      <form class="mui-input-group form-pab form-padding" v-for="item in stageName">
-        <div class="mui-content">
-          <div class="row-box">
-            <div class="mui-input-row">
-              <label>建单时间</label>
-              <input type="text" class="mui-input-clear" id="stageData" :value="item.stage_measure | data" placeholder="2019-01-14" disabled="disabled">
-            </div>
-            <div class="mui-input-row">
-              <label>已建单</label>
-              <input type="text" class="mui-input-clear" :value="item.stage_day" id="day" disabled="disabled">
-            </div>
-          </div>
-          <div class="row-box">
-            <div class="mui-input-row">
-              <label>当前阶段</label>
-              <input type="text" class="mui-input-clear" :value="item.stage_name" id="stipulate" disabled="disabled">
-            </div>
-            <div class="mui-input-row">
-              <label>限时</label>
-              <input type="text" class="mui-input-clear" :value="item.stage_stipulate" id="stage_name" disabled="disabled">
-            </div>
-          </div>
-          <div class="row-box">
-            <div class="mui-input-row">
-              <label>开始时间</label>
-              <input type="text" class="mui-input-clear" id="goData" :value="item.stage_startdate | data" placeholder="2019-01-12" disabled="disabled">
-            </div>
-            <p v-show="false">{{listtime | data}}</p>
-            <div class="mui-input-row item-time">
-              <label>倒计时</label>
-              <label>{{time(item.stage_startdate,item.stage_stipulate)}}</label>
-            </div>
+        <div class="mui-input-row ImgUrl">
+          <label>售后图片</label>
+          <div class="imgWid">
+            <img :src="getImgUrl(ItemImgUrl)" @click="imgClick" alt="loading">
           </div>
         </div>
       </form>
+      <div class="mui-input-row update-btn">
+        <div>
+          <button type="button" class="mui-btn mui-btn-black" @click="UpdateCustomer">信息修改</button>
+        </div>
+      </div>
       <!--跟进记录-->
       <form class="mui-input-group form-pad box-h4">
-        <h4>跟进记录</h4>
-        <div class="box"  v-for="item in stage">
-          <div class="mui-input-row jin">
-            <div class="gen">
-              {{item.follow_person}}
+        <div class="box3">
+          <div>
+            <h4>问题反馈及进度</h4>
+          </div>
+          <div class="mui-input-row go-nai">
+            <label>跟进人员</label>
+            <select name="" v-model="follow_person" :class="{classGray:follow_person=='',classBlack:follow_person !=''}">
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in profetName" :value="item.fund_person_id">{{item.fund_person}}</option>
+            </select>
+          </div>
+          <div class="mui-input-row go-nai">
+            <label>跟进状态</label>
+            <select name="" v-model="follow_loading" :class="{classGray:follow_loading=='',classBlack:follow_loading !=''}">
+              <option value="" selected="selected">请选择</option>
+              <option v-for="item in list_follow_loading" :value="item.text">{{item.text}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="box">
+          <div class="row-go">
+            <div class="mui-input-row row-textarea">
+              <textarea name="" rows="" cols="" placeholder="请输入跟进记录" v-model="list_text"></textarea>
             </div>
+            <div class="go-add">
+              <button type="button" @click="add">反馈记录</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <form class="mui-input-group form-pad box-h4">
+        <h4>跟进记录</h4>
+        <div class="box" v-for="item in undata">
+          <div class="mui-input-row jin">
             <div class="jin-date">
               <p>{{item.follow_date | data}}</p>
+            </div>
+            <div class="gen">
+              {{item.fund_person}}
+            </div>
+            <div class="gen">
+              {{item.follow_stage}}
             </div>
           </div>
           <div class="row-go">
@@ -131,48 +129,55 @@
           </div>
         </div>
       </form>
-      <form class="mui-input-group form-pad box-h4 botton-mar">
-        <h4>修改记录</h4>
-        <div class="box" v-for="item in undata">
-          <div class="mui-input-row jin">
-            <div class="gen">
-              {{item.follow_person}}
-            </div>
-            <div class="jin-date">
-              <p>{{item.update_date | data}}</p>
-              <p>修改人：{{item.update_user_id}}</p>
-            </div>
-          </div>
-          <div class="row-go">
-            <div class="mui-input-row row-textarea">
-              <textarea name="" rows="" cols="" :value="item.update_text" disabled="disabled"></textarea>
-            </div>
-          </div>
-        </div>
-      </form>
       <div class="form-botton">
-        <button type="button" class="mui-btn mui-btn-black">开工</button>
         <button type="button" class="mui-btn mui-btn-black" @click="dele">删除</button>
-        <button type="button" class="mui-btn mui-btn-black" @click="UpdateCustomer">修改</button>
+      </div>
+    </div>
+    <div class="tests" v-show="Imgtest" @click="cancel">
+      <div class="imgWid" :class="{active: isActive, test: hasError}">
+        <img :src="getImgUrl(ItemImgUrl)" alt="loading">
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'site_details',
   data () {
     return {
       imgUrl_loading:false,
-      projet: '', // 项目
+      Imgtest:false,
+      customer_name: '', // 项目
+      customer_linkman:'',//负责人
+      customer_connect:'',//分类
+      Customer_DecorateJia:'',//甲方
+      Customer_DecorateYi:'',//乙方
+      worker:'',//工人
+      customer_all:'',//总金额
+      customer_baoxiushijian:'',//报修时间
+      customer_yujiwanchengshijian:'',//预计完成
+      customer_baozhiqi:'',//质保截止
+      customer_demand:'',//问题描述
+      ItemImgUrl:'',
+      follow_person:'',//跟进人员
+      profetName:'',//跟进人员列表
+      follow_loading:'',//跟进状态
+      list_follow_loading:[ //跟进内容
+        {text:'待查看'},
+        {text:'协商安排'},
+        {text:'维修中'},
+        {text:'观察期'},
+        {text:'维修完工'},
+      ],
+      isActive: true,
+      hasError: false,
+      list_text:'',//跟进内容
       stageName: '', // 第二个form
       listtime: '', // 倒计时
       stage: '', // 修改记录
       undata: '',// 修改记录
-      Customer_DecorateJia:'',
-      Customer_DecorateYi:'',
+      list:'',
     }
   },
   created () {
@@ -180,69 +185,123 @@ export default {
       var a = new Date()
       this.listtime = a
     }, 1000)
-
-    var loc = location.href
-    var n1 = loc.length// 地址的总长度
-    var n2 = loc.indexOf('=')// 取得=号的位置
-    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
-    // 查询客户项目信息
-    this.customer_id = id
-    this.axios.get(url.AfterSiteDetails+'?Customer=' + id).then(res => {
-      this.projet = res.data
-      if (this.projet.Customer_form == '家装') {
-        this.a = true
-        this.b = true
-      } else {
-        this.a = false
-        this.b = true
-      }
-    })
-    // 客户信息
-    this.axios.get(url.AfterSiteSlectStage+'?Customer=' + id).then(res => {
-      this.stageName = res.data
-      if (res.data == '') {
-        var k = [{
-          stage_measure: '',
-          stage_day: '',
-          stage_stipulate: '',
-          stage_name: '',
-          stage_startdate: ''
-        }]
-        this.stageName = k
-      }
-    })
-    // 查询项目的跟进信息
-    this.axios.get(url.AfterSiteFollow+'?Customer_id=' + id).then(res => {
-      this.stage = res.data
-    })
-    //	修改记录
-    this.axios.get(url.AfterSiteUpdate).then(info => {
-      this.undata = info.data.data
+    console.log(JSON.parse(localStorage.AfterSale_statistics))
+    this.customer_name  = JSON.parse(localStorage.AfterSale_statistics).customer_name
+    this.customer_linkman  = JSON.parse(localStorage.AfterSale_statistics).afterSale_person
+    this.customer_connect  = JSON.parse(localStorage.AfterSale_statistics).afterSale_type
+    this.Customer_DecorateJia  = JSON.parse(localStorage.AfterSale_statistics).afterSale_jia
+    this.Customer_DecorateYi  = JSON.parse(localStorage.AfterSale_statistics).afterSale_yi
+    this.worker  = JSON.parse(localStorage.AfterSale_statistics).afterSale_worker
+    this.customer_all  = JSON.parse(localStorage.AfterSale_statistics).afterSale_yi + JSON.parse(localStorage.AfterSale_statistics).afterSale_jia + JSON.parse(localStorage.AfterSale_statistics).afterSale_worker
+    this.customer_baoxiushijian  = JSON.parse(localStorage.AfterSale_statistics).afterSale_date
+    this.ItemImgUrl  = JSON.parse(localStorage.AfterSale_statistics).afterSale_img
+    this.customer_yujiwanchengshijian  = JSON.parse(localStorage.AfterSale_statistics).afterSale_pre_date
+    this.customer_baozhiqi  = JSON.parse(localStorage.AfterSale_statistics).afterSale_date_close
+    this.customer_demand  = JSON.parse(localStorage.AfterSale_statistics).afterSale_text
+    //  跟进人员
+    this.axios.get('/select_follow_person'+'?fund_person_state=4').then(res => {
+      this.profetName = res.data.data
     })
   },
   methods: {
+    //图片解析
+    getImgUrl(val){
+      var url = 'https://formattingclub.com/static/YiNuo/'+val
+      return url
+    },
+    //点击放大
+    imgClick(){
+      this.Imgtest = true
+      this.isActive = false
+      this.hasError = true
+      var mo=function(e){e.preventDefault();};
+      document.body.style.overflow='hidden';
+      document.addEventListener("touchmove",mo,false);//禁止页面滑动
+
+      //判断页面的高度
+      /*var scrollTop=0;
+      if(document.documentElement&&document.documentElement.scrollTop)
+      {
+        scrollTop=document.documentElement.scrollTop;
+      }
+      else if(document.body)
+      {
+        scrollTop=document.body.scrollTop;
+      }
+      console.log(scrollTop)
+       if (scrollTop >100){
+          console.log('123')
+       }*/
+    },
+    //图片放大后取消
+    cancel(){
+      this.Imgtest = false
+      var mo=function(e){e.preventDefault();};
+      document.body.style.overflow='';//出现滚动条
+      document.removeEventListener("touchmove",mo,false);
+    },
     // 修改
-    UpdateCustomer () {
-      this.$router.push({ path: 'siteModify', query: { id: this.customer_id } })
+    UpdateCustomer() {
+      // this.$router.push({ path: 'siteModify', query: { id: this.customer_id } })
+      var then =this
+      var add = '?AfterSale_id='+JSON.parse(localStorage.AfterSale_statistics).afterSale_id
+      if (this.customer_linkman != JSON.parse(localStorage.AfterSale_statistics).afterSale_person) {
+        add+='&AfterSale_person='+this.customer_linkman
+      }
+      if (this.customer_connect != JSON.parse(localStorage.AfterSale_statistics).afterSale_type) {
+        add+='&AfterSale_type='+this.customer_connect
+      }
+      if (this.worker != JSON.parse(localStorage.AfterSale_statistics).afterSale_worker) {
+        add+='&AfterSale_worker='+this.worker
+      }
+      if (this.Customer_DecorateJia != JSON.parse(localStorage.AfterSale_statistics).afterSale_jia) {
+        add+='&AfterSale_jia='+this.Customer_DecorateJia
+      }
+      if (this.Customer_DecorateYi != JSON.parse(localStorage.AfterSale_statistics).afterSale_yi) {
+        add+='&AfterSale_yi='+this.Customer_DecorateYi
+      }
+      if (this.customer_baoxiushijian != JSON.parse(localStorage.AfterSale_statistics).afterSale_date) {
+        add+='&AfterSale_date='+this.customer_baoxiushijian
+      }
+      if (this.customer_yujiwanchengshijian != JSON.parse(localStorage.AfterSale_statistics).afterSale_pre_date) {
+        add+='&AfterSale_pre_date='+this.customer_yujiwanchengshijian
+      }
+      if (this.customer_baozhiqi != JSON.parse(localStorage.AfterSale_statistics).afterSale_date_close) {
+        add+='&AfterSale_date_close='+this.customer_baozhiqi
+      }
+      if (this.customer_demand != JSON.parse(localStorage.AfterSale_statistics).afterSale_text) {
+        add+='&AfterSale_text='+this.customer_demand
+      }
+      this.imgUrl_loading = true
+      this.axios.post('/AfterSale/Update_AfterSale'+add).then(res=>{
+        if (res.status === 200) {
+          this.imgUrl_loading = false
+          mui.alert(res.data.data,function () {
+            then.$router.push({name:'After_sales_statistics'})
+          })
+        }
+      })
+    },
+    //解析图片
+    //记录保存
+    add(){
+
     },
     //  删除
     dele () {
       var then = this
       var va = this.customer_id
       this.imgUrl_loading = true
-      this.axios.get(url.AfterSiteDelete+'?Customer=' + va).then(res => {
+      this.axios.post('/AfterSale/Delete_AfterSale'+'?AfterSale_id=' + JSON.parse(localStorage.AfterSale_statistics).afterSale_id).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-          if (res.data == '删除成功') {
-            mui.alert('删除成功', function () {
-              then.$router.push({ path: 'After_sales_statistics' })
-            })
-          } else {
-            alert('删除失败')
-          }
+          mui.alert(res.data.data,function () {
+            then.$router.push({name:'After_sales_statistics'})
+          })
         }
       })
     },
+
     //  倒计时
     time: function (date, day) {
       if (date == null) {
@@ -273,20 +332,25 @@ export default {
 
 <style scoped>
   @import "../css/public.css";
+  *{touch-action: pan-y;}
+  /deep/input::-webkit-input-placeholder{color: #818181}
   .mui-input-group{background-color: transparent}
+  .classGray{color: gray}
+  .classBlack{color: black}
+  select{font-size: 15px}
+  img{width: 100%}
   /*form与form之间的差距*/
-  .form-pab{margin-bottom: 15px;}
   .all-row{display: flex;}
   .all-row input{font-size: 14px!important;}
   .all-row label:nth-child(1){flex: 1}
   .all-row label:nth-child(2){flex:4;overflow: auto}
-  .textreap{height: 80px!important;}
-  .textreap label:nth-child(1){line-height: 58px}
-  /*form2-label*/
-  #app{padding-top: 0;}
-  .row-flex label{width: 50%;}
-  .row-flex input{width: 50%!important;font-size: 12px;}
-  .flex-mm div{width: 50%;}
+  /*img*/
+  .ImgUrl{padding-bottom: 128px}
+  .ImgUrl label{width: 100%!important;}
+  .ImgUrl .imgWid{width: 120px;padding-left: 11px}
+  .ImgUrl .imgWid img{width: 100%}
+  .tests{position: absolute;top: 0%;left: 0;right: 0;bottom: 0;width: 100% !important;height:100%;background-color: rgba(51, 51, 51, 0.5)}
+  .tests .test{position: relative;top: 47%}
   /*记录*/
   .jin{display: flex;line-height: 40px;}
   .jin-date{display: flex;width: 100%}
@@ -296,22 +360,13 @@ export default {
   .jin-date p:nth-child(2){text-align: right;padding-right: 16px;}
   .row-textarea{height: 100px!important;}
   .row-textarea textarea{padding-left: 13px!important;font-size: 14px;}
-  .box-h4 h4{line-height: 40px;padding-left: 14px;border-bottom: 1px solid #DADADA;}
-
-  /*form尺量*/
-  .row-box{display: flex;}
-  .row-box div label{width: 50%}
-  .row-box div input{width: 50%;padding-left: 14px;}
-  .row-box .mui-input-row{width: 50%}
-  .row-box:nth-last-child(1) .mui-input-row:nth-child(2) label:nth-child(1){width: 40%}
-  .item-time label:nth-child(2){padding-left: 0;}
+  .box-h4 h4:nth-child(1){line-height: 28px;border-bottom: 2px solid black;font-size: 15px;width: 95%;margin-left: 14px}
   /*按钮*/
-  .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
+  .go-add{text-align: center;}
+  .go-add button{background-color: black;color: white;width: 38%;margin-top: 17px}
+  .update-btn{text-align: center;margin-top: 12px}
+  .update-btn button{width: 38%;line-height: 10px;float:inherit}
+  .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width:38%;}
   .form-botton{text-align: center;}
-  .botton-mar{margin-bottom: 27px;}
-  .mui-chech{white-space: normal}
-  .mui-chech label{width: 21%;}
-  .mui-heck{position: relative;right: 9px;}
-  .mui-chech label,.mui-heck label{padding-left: 48px!important;width: 131%}
-  .row-input{flex: 1;padding-left: 21px!important;}
+  /deep/.el-input__prefix{display: none}
 </style>

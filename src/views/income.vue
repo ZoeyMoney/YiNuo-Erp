@@ -132,7 +132,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'income',
   data () {
@@ -186,7 +185,7 @@ export default {
   created () {
     this.imgUrl_loading = true
     /* table */
-    this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=0').then(res => {
+    this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_stale=0').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
       this.list_fund_name_type = res.data.fund_name_type
@@ -198,7 +197,7 @@ export default {
       })
     })
     /* 银行卡 */
-    this.axios.get(url.bankCard).then(res => {
+    this.axios.get('/fund/select_bank').then(res => {
       this.bank_card = res.data
       var chu = []
       var xin = []
@@ -224,11 +223,6 @@ export default {
       this.XinYongKa = Math.floor(y*100)/100
       all += this.chuXuKa+this.XinYongKa
       this.allTotal = Math.floor(all*100) /100
-    }, error => {
-      var then = this
-      mui.alert('您无权访问', function () {
-        then.$router.push({ name: 'index' })
-      })
     });
     /*var loc = location.href
     var n1 = loc.length// 地址的总长度
@@ -273,7 +267,7 @@ export default {
     //一级查询
     fund_deId(id){
       this.fund_nameso = id
-      this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -288,17 +282,12 @@ export default {
           this.relevant_people = true
           this.site_projet = true
         }
-      }, error => {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
       })
     },
     //二级查询
     list_fund_nameas(id){
       this.fund_name = id
-      this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -309,24 +298,14 @@ export default {
           this.relevant_people = true
           this.site_projet = true
         }
-      }, error => {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
       })
     },
     //三级查询
     list_fund_namea(id){
-      this.axios.get(url.ClassSelect+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name+'&fund_name'+id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name+'&fund_name'+id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
-      }, error => {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
       })
     },
     // 左滑动
@@ -355,7 +334,7 @@ export default {
         add+='&bank_number='+number
       }
       var transfer = 'transfer'
-      this.axios.get(url.moneyRunning+add).then(res=>{
+      this.axios.get('/fund/select_detail'+add).then(res=>{
         window.transfer = res.data.list_moey
         this.$router.push({path:'running_money',query:{transfer:transfer}})
         // console.log(res.data.list_moey)
@@ -434,7 +413,7 @@ export default {
       }
       add+='&money='+this.money+'&fund_text='+this.clearBei+'&bank_id='+this.mongey_bank_id+'&shiji_money='+money_all+'&date='+dd
       if (this.checkbox === true) {
-        this.axios.post(url.moneyOutEnter + add).then(res => {
+        this.axios.post('/fund/Add_out_enter' + add).then(res => {
           var id = ''
           for (var index in this.listProjet) {
             if (this.listProjet[index].customer_id === this.site) {
@@ -449,7 +428,7 @@ export default {
           }
         })
       } else {
-        this.axios.post(url.moneyOutEnter + add).then(res => {
+        this.axios.post('/fund/Add_out_enter' + add).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
           if (res.data.data === '录入成功') {

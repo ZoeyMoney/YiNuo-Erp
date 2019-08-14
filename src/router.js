@@ -60,7 +60,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/login',
+      meta:{
+        index:1,
+        isCheckLogin:true
+      }
     },{
       path: '/Login',
       name: 'Login',

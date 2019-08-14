@@ -182,7 +182,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'projet_modify',
     data(){
@@ -218,7 +217,7 @@
       this.pre_enter = this.list.pre_enter
       this.all_out = parseFloat(this.already_out)+parseFloat(this.pre_out)  //总支出
       this.all_enter = parseFloat(this.already_enter)+parseFloat(this.pre_enter)  //总收入
-      this.axios.get(url.moneyModify+'?customer_id='+this.list.customer_id).then(res=>{
+      this.axios.get('/fund/Select_sum_details'+'?customer_id='+this.list.customer_id).then(res=>{
         this.list_already_out = res.data.already_out //已支出
         this.list_pre_out = res.data.pre_out //预支出
         this.list_already_enter = res.data.already_enter //已收入

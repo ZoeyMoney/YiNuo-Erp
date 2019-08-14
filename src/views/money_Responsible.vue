@@ -41,7 +41,7 @@ export default {
     add () {
       var then = this
       this.imgUrl_loading = true
-      this.axios.get(url.AfterlistAdd+'?Customer_stylist=' + this.name + '&Customer_aftersale=1').then(res => {
+      this.axios.get('/AfterSale/addCustomer_stylist'+'?Customer_stylist=' + this.name + '&Customer_aftersale=1').then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
         mui.alert(res.data.msg, function () {

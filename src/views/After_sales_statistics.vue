@@ -38,26 +38,7 @@
             </select>
           </div>
         </div>
-        <!--table-->
-        <!--<table border="0">
-          <tr>
-            <th :style="projet">工地名称</th>
-            <th>分类</th>
-            <th>状态</th>
-            <th>阶段</th>
-            <th>倒计时</th>
-          </tr>
-          <tr v-for="item in list" :style="ostyle">
-            <td @click="mername(item.customer_id)" :value="item.customer_id"><span :style="projet">{{item.customer_name}}</span></td>
-            <td>分类</td>
-            <td>状态</td>
-            <td><span>{{item.stage_name}}</span></td>
-            <td :style="listRad" v-if="time(item.stage_startdate,item.stage_stipulate) === '已逾期'">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
-            <td :style="listStyle" v-else-if="time(item.stage_startdate,item.stage_stipulate) === '未开始'">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
-            <td :style="listBlue" v-else-if="time(item.stage_startdate,item.stage_stipulate)">{{time(item.stage_startdate,item.stage_stipulate)}}</td>
-          </tr>
-        </table>-->
-        <table class="table_all">
+        <!--<table class="table_all">
            <tr>
              <th :style="projet"><span>工地名称</span></th>
              <th><span>分类</span></th>
@@ -76,6 +57,25 @@
               <span v-else-if="time(item.stage_startdate,item.stage_stipulate)">{{time(item.stage_startdate,item.stage_stipulate)}}</span>
             </td>
           </tr>
+        </table>-->
+        <table border="0">
+          <tr>
+            <th><span :style="lefta">工地名称</span></th>
+            <th><span>负责人</span></th>
+            <th><span>分类</span></th>
+            <th><span>总金额</span></th>
+            <th><span>状态</span></th>
+          </tr>
+          <tr v-for="item in list_serach" @click="mername(item.customer_id)">
+            <td><span :style="lefta">{{item.customer_name}}</span></td>
+            <td><span>{{item.afterSale_person}}</span></td>
+            <td><span>{{item.afterSale_type}}</span></td>
+            <td><span>￥{{all_money(item.afterSale_jia,item.afterSale_yi,item.afterSale_worker)}}</span></td>
+            <td>
+              <span v-if="item.afterSale_date >= item.afterSale_date_close">已过保</span>
+              <span v-if="item.afterSale_date <= item.AfterSale_date_close">在保</span>
+            </td>
+          </tr>
         </table>
       </div>
       <!--底部-->
@@ -92,9 +92,8 @@
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
-  name: 'customer_statistics',
+  name: 'AfterSale_statistics',
   data () {
     return {
       imgUrl_loading:false,
@@ -103,38 +102,26 @@ export default {
       stage_name: '', // 阶段
       listName: '',
       stageName: '',
-      list: '', // table
+      list: [], // table
       stage_stipulate: '',
       add: '', // 钱总
       /* table的最后一个td */
-      listStyle: {
-        color: 'blue',
-        fontWeight: 'bold'
+      lefta:{
+        paddingLeft:'10px'
       },
       listRad: {
         color: 'red',
         fontWeight: 'bold'
       },
-      listBlue: {
-        color: 'green',
-        fontWeight: 'bold'
-      },
-      projet: {
-        width: '93px',
-        paddingLeft: '10px'
-      },
-      paLift: {
-        paddingLeft: '3px'
-      }
     }
   },
   created () {
     this.imgUrl_loading = true
     // table数据
-    this.axios.get(url.AfterStatistics).then(res => {
+    this.axios.get('/AfterSale/Select_AfterSale').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
-        this.list = res.data
+        this.list = res.data.data
       } else {
         console.log('获取失败')
       }
@@ -146,15 +133,6 @@ export default {
       }
       this.add = b
     })
-
-    // 设计师
-    this.axios.get(url.AfterListName).then(res => {
-      this.listName = res.data
-    })
-    //  阶段
-    this.axios.get(url.AfterStage).then(res => {
-      this.stageName = res.data
-    })
     //  倒计时
     setInterval(() => {
       var a = new Date()
@@ -162,11 +140,34 @@ export default {
     }, 1000)
   },
   computed: {
+    list_serach(){
+      var then = this
+      var newList = []
+      then.list.map(function (item) {
+        if (item.customer_name.search(then.customer_name) != -1) {
+          newList.push(item)
+        }
+      })
+      return newList
+    }
   },
   methods: {
+    all_money:function(jia,yi,worker){
+      var money = parseFloat(jia)+parseFloat(yi)+parseFloat(worker)
+      return money
+    },
     // 页面传参
     mername (id) {
-      this.$router.push({ path: 'site_details', query: { id: id } })
+      // this.$router.push({ path: 'site_details', query: { id: id } })
+      var lists = {}
+      for (var index in this.list) {
+        if (id == this.list[index].customer_id) {
+          lists = this.list[index]
+        }
+      }
+      localStorage.AfterSale_statistics = JSON.stringify(lists)
+      console.log(lists)
+      this.$router.push({name:'site_details',query:{lists}})
     },
     // 倒计时
     time: function (date, day) {
@@ -215,18 +216,14 @@ export default {
   .row-flex label{flex: 1;line-height: 40px;padding-left:13px;font-size: 15px;flex: 1;}
   .row-flex select{padding: 9px 15px!important;margin-bottom: 0;flex: 4;}
   /*table*/
-  .table_all{width: 100%;display: block;overflow: auto;white-space: nowrap;font-size: 14px;padding: 10px 0;line-height: 28px}
-  .table_all tr:nth-child(1){width: 100%;display: block;background-color: #dadada}
-  .table_all tr:nth-child(2){width: 100%;display: block}
-  .table_all tr th{text-align: left;background-color: #dadada}
-  .table_all tr th:nth-child(1){text-align: left;min-width: 120px}
-  .table_all tr th:nth-child(2),.table_all tr th:nth-child(3){text-align: left;min-width: 52px}
-  .table_all tr th:nth-child(4){text-align: left;min-width: 68px}
-  .table_all tr td:nth-child(1){padding-left: 10px;min-width: 120px}
-  .table_all tr td:nth-child(2),.table_all tr td:nth-child(3){min-width: 52px}
-  .table_all tr td:nth-child(4){text-align: left;min-width: 68px}
-  .table_all tr td:nth-child(5){min-width: 80px}
-  .table_all tr td{border-bottom: 1px solid #dadada}
+  table{width:100%;font-size: 14px;display: block;text-align: left;white-space: nowrap;margin-bottom: 100px}
+  table tr th{background-color: #dadada;line-height: 27px}
+  table tr th:nth-child(1){width: 50%;min-width: 130px}
+  table tr th:nth-child(2),table tr th:nth-child(3){min-width: 55px;width: 14%}
+  table tr th:nth-child(4){min-width: 30px;width: 17%}
+  table tr th:nth-child(5){width: 15%}
+  table tr td:nth-child(1) span{display: block;overflow: hidden;width: 160px;text-overflow: ellipsis}
+  table tr{border-bottom: 1px solid #dadada;line-height: 28px}
   /*底部*/
   .footer{background-color: #dedcdc;position: fixed;width: 100%;bottom: 0;display: flex;padding-top: 10px;}
   .footer .footer-botton:nth-child(1){flex: 1;padding-left: 8px;}

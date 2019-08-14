@@ -28,7 +28,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'Follow_up',
     data(){
@@ -41,7 +40,7 @@
       add(){
         var then = this
         this.imgUrl_loading = true
-        this.axios.get(url.AfterPersonAdd+'?Follow_person=' + this.name + '&Customer_aftersale=1').then(res => {
+        this.axios.get('/AfterSale/Add_Follow_person'+'?Follow_person=' + this.name + '&Customer_aftersale=1').then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
           mui.alert(res.data.msg, function () {

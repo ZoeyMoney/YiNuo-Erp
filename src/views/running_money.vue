@@ -17,7 +17,7 @@
         <form class="mui-input-group">
         <div class="mui-input-row">
           <label>输入关键字</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入关键字">
+          <input type="text" class="mui-input-clear" placeholder="请输入关键字" v-model="search">
         </div>
           <ul class="mui-table-view">
             <li class="mui-table-view-cell mui-collapse" @click="search_fa">
@@ -94,7 +94,7 @@
           <div>日期</div>
         </div>
         <div class="div-table">
-        <div class="div-tr" v-for="item in list_moey" v-if="al_projet">
+        <div class="div-tr" v-for="item in list_moeys" v-if="al_projet">
           <div>{{item.bank_person}}</div>
           <div>{{item.bank_bank}}</div>
           <!--<div>
@@ -153,13 +153,13 @@
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'running_money',
   data () {
     return {
       imgUrl_loading:false,
       keyword: '',	// 关键字
+      search:'',
       fund_nameo:'',
       showData:true,
       list_fund_name_type:'',
@@ -185,7 +185,7 @@ export default {
       list_moey_two:'',
       dateStart:'',
       dateEnter:'',
-      list_moey:'',
+      list_moey:[],
       customer_name: '',
       list_customer_name: '', // 项目名称
       list: [], // 总
@@ -222,15 +222,24 @@ export default {
       }
     }
   },
-  component:{
-
+  computed:{
+    list_moeys(){
+      var then = this
+      var newList = []
+      then.list_moey.map(function (item) {
+        if (item.bank_person.search(then.search) != -1) {
+          newList.push(item)
+        }
+      })
+      return newList
+    }
   },
   created () {
     this.imgUrl_loading = true
     //获取前两天时间
     var sh_data = this.GetDateStr(-2)
     //传给后台时间
-    this.axios.get(url.moneyRunning+'?DateStart='+sh_data).then(res => {
+    this.axios.get('/fund/select_detail'+'?DateStart='+sh_data).then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
       }
@@ -335,7 +344,7 @@ export default {
     //户主
     bankPerson(id){
       this.bankPerson_id = id
-      this.axios.get(url.moneyRunning+'?bank_person='+id).then(res => {
+      this.axios.get('/fund/select_detail'+'?bank_person='+id).then(res => {
         this.package(res)
       })
     },
@@ -346,14 +355,14 @@ export default {
       if (this.bankPerson_id !== '' && this.bankPerson_id !== undefined) {
         add+='bank_person='+this.bankPerson_id
       }
-      this.axios.get(url.moneyRunning+add+ '&bank_bank='+id).then(res => {
+      this.axios.get('/fund/select_detail'+add+ '&bank_bank='+id).then(res => {
         this.package(res)
       })
     },
     //  尾号
     bankNumber(id){
       this.bankNumber_id = id
-      this.axios.get(url.moneyRunning+'?bank_person='+this.bankPerson_id + '&bank_bank='+this.bankBank_id + '&bank_number='+ id).then(res => {
+      this.axios.get('/fund/select_detail'+'?bank_person='+this.bankPerson_id + '&bank_bank='+this.bankBank_id + '&bank_number='+ id).then(res => {
         this.package(res)
       })
     },
@@ -373,14 +382,14 @@ export default {
       if (this.dataB !== '' && this.dataB !== undefined) {
         add+='&DateEnd='+this.dataB
       }
-      this.axios.get(url.moneyRunning + add + '&fund_name_type=' + id).then(res => {
+      this.axios.get('/fund/select_detail' + add + '&fund_name_type=' + id).then(res => {
         this.package(res)
       })
     },
     //类别名称
     list_fund_nameas(id){
       this.listFund_name_id = id
-      this.axios.get(url.moneyRunning + '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+id).then(res => {
+      this.axios.get('/fund/select_detail' + '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+id).then(res => {
         this.package(res)
       })
     },
@@ -394,7 +403,7 @@ export default {
       if (this.listFund_name_id !== '' && this.listFund_name_id !== undefined) {
         add+= '&fund_names='+this.listFund_name_id
       }
-      this.axios.get(url.moneyRunning +add+'&Customer_id='+id).then(res => {
+      this.axios.get('/fund/select_detail' +add+'&Customer_id='+id).then(res => {
         this.package(res)
       })
     },
@@ -417,7 +426,7 @@ export default {
       if (this.customerName_id !== '' && this.customerName_id !== undefined) {
         add+='&Customer_id='+this.customerName_id
       }
-      this.axios.get(url.moneyRunning + add + '&DateStart='+id).then(res => {
+      this.axios.get('/fund/select_detail' + add + '&DateStart='+id).then(res => {
         this.package(res)
       })
     },
@@ -437,7 +446,7 @@ export default {
       if (this.dataA !==''&& this.dataA!==undefined){
         add+='&DateStart='+this.dataA
       }
-      this.axios.get(url.moneyRunning + add +'&DateEnd='+id).then(res => {
+      this.axios.get('/fund/select_detail' + add +'&DateEnd='+id).then(res => {
         this.package(res)
       })
     }

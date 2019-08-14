@@ -67,7 +67,7 @@
     created(){
 
     },
-    component:{
+    computed:{
       Newitems() {
         var _this = this;
         var Newitems = [];
@@ -83,14 +83,9 @@
       }
     },
     methods:{
-      /*asg(text){
-        var listall = []
-        this.list.forEach(item=>{
-          if (item.text.indexOf(text) != -1) {
-            listall.push(item)
-          }
-        })
-        this.list = listall
+      /*asd(id){
+        // console.log(id)
+        this.$router.push(`/customer_follow_up/${id}`)
       }*/
     }
   }

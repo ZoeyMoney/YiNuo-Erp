@@ -28,9 +28,9 @@
             </div>
             <div class="mui-input-row">
               <label>设计师</label>
-              <select name="" id="" v-model="Customer_stylist">
+              <select name="" id="" v-model="Customer_stylist" :class="{classGray:Customer_stylist == '',classBlack:Customer_stylist!=''}">
                 <option value="" selected="selected">请选择</option>
-                <option v-for="item in listName" :value="item">{{item}}</option>
+                <option v-for="item in listName" :value="item.fund_person_id">{{item.fund_person}}</option>
               </select>
             </div>
             <div class="mui-input-row">
@@ -46,20 +46,32 @@
               <input type="text" class="mui-input-clear" id="budgedt" v-model="Customer_budget" name="Customer_budget" placeholder="￥">
               <span class="span-money">{{Customer_budget | MoneyFormat}}</span>
             </div>
-            <div class="mui-input-row radio-form">
-              <div class="mui-input-row mui-radio mui-left go-label">
+            <div class="mui-input-row">
+              <label>客户级别</label>
+              <select name="" v-model="level" :class="{classGray:level =='',classBlack: level!=''}">
+                <option value="">请选择</option>
+                <option v-for="item in listLevel" :value="item.text">{{item.text}}</option>
+              </select>
+            </div>
+            <div class="row-left">
+              <div class="row-left-on">
                 <label>所属类型</label>
-                <input type="text" class="mui-input-clear" v-model="Customer_type" name="Customer_type" id="Customer_type" placeholder="所属类型">
+                <select name="" v-model="Customer_type" :class="{classGray:Customer_type =='',classBlack: Customer_type!=''}">
+                  <option value="">请选择</option>
+                  <option v-for="item in list_type" :value="item.text">{{item.text}}</option>
+                </select>
               </div>
-              <div class="mui-input-row mui-radio mui-left mui-chech" v-for="(item,index) in Customer_formList">
-                <label>{{item.value}}</label>
-                <input name="Customer_form" type="radio" :value="item.value" v-model="Customer_form">
+              <div class="radio-left">
+                <div class="mui-input-row mui-radio mui-left" v-for="item in Customer_formList">
+                  <label>{{item.value}}</label>
+                  <input name="radio1" type="radio" v-model="Customer_form" :value="item.value">
+                </div>
               </div>
             </div>
-            <div class="mui-input-row form-textarea row-textarea">
-              <label>客户需求</label>
-              <textarea name="Customer_demand" rows="" cols="" v-model="Customer_demand" id="Customer_demand" placeholder="请填写需求"></textarea>
-            </div>
+             <div class="mui-input-row form-textarea row-textarea">
+               <label>客户需求</label>
+               <textarea name="Customer_demand" rows="" cols="" v-model="Customer_demand" id="Customer_demand" placeholder="请填写需求"></textarea>
+             </div>
           </form>
         <button-save @click.native="go"></button-save>
       </div>
@@ -67,7 +79,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'customer_entry',
   data () {
@@ -82,17 +93,36 @@ export default {
       Customer_referrer: '', // 推荐人
       Customer_budget: '', // 项目预算
       Customer_type: '', // 所属类型
+      level:'A',//级别
+      listLevel:[
+        {text:'A'},
+        {text:'B'},
+        {text:'C'},
+      ],
       Customer_form: '工装', // 家装或工装'=
       Customer_formList: [
         { value: '家装' },
         { value: '工装' }
       ],
+      list_type:[
+        {text:'餐饮'},
+        {text:'服装'},
+        {text:'办公'},
+        {text:'健身'},
+        {text:'美容'},
+        {text:'娱乐'},
+        {text:'教育'},
+        {text:'医疗'},
+        {text:'销售'},
+        {text:'小区'},
+      ],
       Customer_demand: ''// 客户需求
     }
   },
   created () {
-    this.axios.get(url.listName).then(customName => {
-      this.listName = customName.data
+    //设计师
+    this.axios.get('/select_follow_person'+'?fund_person_state=3').then(customName => {
+      this.listName = customName.data.data
     })
   },
   computed: {
@@ -183,13 +213,18 @@ export default {
       /* 录入数据 */
       var add = '?Customer_name=' + this.Customer_name + '&Customer_linkman=' + this.Customer_linkman + '&Customer_connect=' + this.Customer_connect +
             '&Customer_stylist=' + this.Customer_stylist + '&Customer_Decorate=' + this.Customer_Decorate + '&Customer_referrer=' + this.Customer_referrer +
-            '&Customer_budget=' + this.Customer_budget + '&Customer_form=' + this.Customer_form + '&Customer_type=' + this.Customer_type + '&Customer_demand=' + this.Customer_demand
-      this.axios.get(url.clientAdd + add).then(res => {
+            '&Customer_budget=' + this.Customer_budget + '&Customer_form=' + this.Customer_form + '&Customer_type=' + this.Customer_type + '&Customer_demand=' + this.Customer_demand+
+            '&Customer_grade='+this.level
+      this.axios.get('/Customer/AddCustomer'+add).then(res=>{
         if (res.status === 200) {
           this.imgUrl_loading = false
-          mui.alert(res.data, function () {
-            _this.$router.push('customer_management')
-          })
+          if (res.data == '项目名称重复') {
+            mui.alert('项目名称重复')
+          }else{
+            mui.alert(res.data, function () {
+              _this.$router.push('customer_management')
+            })
+          }
         }
       })
     }
@@ -200,31 +235,36 @@ export default {
 <style scoped>
 @import "../css/public.css";
 /*表单*/
-select,input::-webkit-input-placeholder{color: #6e6e6e}
+input::-webkit-input-placeholder{color: #6e6e6e}
+.classBlack{color: black}
+.classGray{color: #6e6e6e}
 /*    x */
 .mui-icon-clear{display: none!important;}
 form div select{font-size: 15px!important;}
 .mui-input-row label{width: 30%;}
 .mui-input-row label~input, .mui-input-row label~select, .mui-input-row label~textarea{width: 70%;}
-.radio-form{display: flex;}
-.go-label label{width: 50%;}
-.go-label input{width: 48%!important;}
+textarea{padding-left: 0!important;}
 /*平方米*/
 .square{display: flex;}
 .square input{width: 55%!important;}
 .square div{line-height: 38px;border-left: 1px solid #DADADA;width: 15%;padding-left: 19px;font-weight: 600}
-.mui-checkbox.mui-left label, .mui-radio.mui-left label{padding-left: 16px}
+.mui-checkbox.mui-left label, .mui-radio.mui-left label{padding-left: 23px;white-space: nowrap}
 .mui-input-row select{background-color: #efeff4;}
-.mui-select{flex: 2;padding-left: 25px}
-.mui-chech{white-space: normal}
-.mui-chech label{width: 21%;}
-.mui-heck{position: relative;right: 9px;}
-.mui-chech label,.mui-heck label{padding-left: 48px!important;width: 131%}
 /*所属类型*/
-.money-input{display: flex;}
-.money-input label{flex: 1;width: 30%}
-.money-input input{flex: 1.6;width: 40%}
+.row-textarea label{width: 26% !important;line-height: 20px!important;}
+.row-left{font-size: 15px;display: flex;}
+.row-left-on{flex: 1;display: flex;}
+.row-left-on:nth-child(1) label{padding: 10px 15px;line-height: 25px;white-space: nowrap}
+.row-left-on:nth-child(1) select{margin-left: 10px;margin-bottom: 0}
+.radio-left{display: flex;position: relative;right: 18px;top: 6px}
+.row-textarea{border-top: 1px solid #dadada;}
+.money-input{display: flex}
+.money-input input{flex: 1}
+.money-input span{flex: 1}
+.mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: -2px!important;}
+.mui-input-row{overflow: unset}
 .span-money{display: block;line-height: 43px;font-size: 13px;width: 30%;}
 .mui-select:before{display: none}
 .mui-input-group:after,.mui-input-row:nth-last-child(1):after{background-color: transparent;}
+.mui-checkbox input[type=checkbox], .mui-radio input[type=radio]{top: 8px!important;}
 </style>

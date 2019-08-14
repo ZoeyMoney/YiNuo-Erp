@@ -33,7 +33,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
   export default {
     name: 'receive_data',
     data(){
@@ -89,7 +88,7 @@
         }
         this.imgUrl_loading = true
         var add = '?person_id=' + this.fund_people_name + '&customer_id='+this.test_id+'&moneyA='+this.paid_money +'&moneyB='+this.no_paid_money
-        this.axios.get(url.add_customer_person_fund+add).then(res=>{
+        this.axios.get('/fund/add_customer_person_fund'+add).then(res=>{
           if (res.status === 200) {
             this.imgUrl_loading = false
           mui.alert(res.data.data,function () {

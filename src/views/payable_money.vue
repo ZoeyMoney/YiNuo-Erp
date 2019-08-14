@@ -48,6 +48,13 @@
             <option v-for="item in list_customer_name" :value="item.customer_name">{{item.customer_name}}</option>
           </select>
         </div>
+        <div class="mui-input-row">
+          <label>相关人</label>
+          <select name="" v-model="Related" @change="relatedSearch(Related)">
+            <option value="" selected="selected">请选择</option>
+            <option v-for="item in list_person" :value="item.fund_person_id">{{item.fund_person}}</option>
+          </select>
+        </div>
         <div class="mui-input-row goOver">
           <label>起始时间</label>
           <input type="date" class="mui-input-clear" v-model="date_list" @change="dateList(date_list)">
@@ -102,6 +109,8 @@ export default {
       fund_nameo: '', // 类别选择
       allMoney:'',//总金额
       customer_name: '',
+      Related:'',//相关人
+      list_person:'',//相关人数组
       list_fund_names: '', // table
       money_plus: require('../image/plus.png'),
       listTable: '', // table
@@ -159,7 +168,7 @@ export default {
   created () {
     this.imgUrl_loading = true
     /* table */
-    this.axios.get(url.moneyReceivable+'?fund_type=1').then(res => {
+    this.axios.get('/fund/select_fund_sum'+'?fund_type=1').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
         this.package(res)
@@ -176,13 +185,7 @@ export default {
         return Date.parse(a.dates) - Date.parse(b.dates)
       }
       console.log(this.listTable.sort(sortnew))*/
-    }, error => {
-      var then = this
-      mui.alert('您无权访问', function () {
-        then.$router.push({ name: 'index' })
-      })
     })
-
     /*data*/
     var data = new Date()
     var dt = new Date(data)
@@ -217,22 +220,18 @@ export default {
       this.list_fund_names = res.data.list_fund_names
       this.list_customer_name = res.data.list_customer_name
       this.list_fund_name = res.data.list_fund_name
+      this.list_person = res.data.list_fund_person
     },
     // 类别选择
     fund_namesa (id) {
       this.fund_nameso = id
-      this.axios.get(url.moneyReceivable+'?fund_type=1&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_name_type=' + this.fund_nameso).then(res => {
         this.package(res)
         if (this.fund_nameo === '个人') {
           this.list_slime_all = false
         }else if (this.fund_nameo === '公司') {
           this.list_slime_all = true
         }
-      }, error => {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
       })
     },
     // 类别名称
@@ -242,19 +241,14 @@ export default {
           this.fund_name = this.list_fund_names[index].fund_name
         }
       }
-      this.axios.get(url.moneyReceivable+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.package(res)
-      }, error => {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
       })
     },
     // 类别详细
     list_slim_name(id){
       this.list_fund_slim_id = id
-      this.axios.get(url.moneyReceivable+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name='+id).then(res=>{
+      this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name='+id).then(res=>{
         this.package(res)
       })
     },
@@ -267,36 +261,28 @@ export default {
       }else{
         fund_name+='&fund_name='+this.fund_name
       }*/
-      this.axios.get(url.moneyReceivable+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_name=' + this.fund_name +'&fund_names=' + this.list_fund_namea + '&Customer_name=' + id).then(res => {
+      this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_name=' + this.fund_name +'&fund_names=' + this.list_fund_namea + '&Customer_name=' + id).then(res => {
         this.package(res)
-      }, error => {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
+      })
+    },
+    //相关人
+    relatedSearch(id){
+      this.reald_person = id
+      this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_person_id='+id).then(res=>{
+        this.package(res)
       })
     },
     //  时间
     dateList (id) {
       this.deteList = id
-      this.axios.get(url.moneyReceivable+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' +this.fund_name  + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + id + '&dateB=' + this.dateB).then(res => {
+      this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' +this.fund_name  + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + id + '&dateB=' + this.dateB).then(res => {
         this.package(res)
-      }, error => {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
       })
     },
     date_list_two_change (id) {
       this.dateB = id
-      this.axios.get(url.moneyReceivable+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea  + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + this.deteList + '&dateB=' + id).then(res => {
+      this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea  + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + this.deteList + '&dateB=' + id).then(res => {
         this.package(res)
-      }, error => {
-        var then = this
-        mui.alert('您无权访问', function () {
-          then.$router.push({ name: 'index' })
-        })
       })
     }
   }
@@ -318,7 +304,7 @@ form{margin-bottom: 20px;}
 .goOver .go-span{width: 20px;height: 2px;background-color: black;position: relative;top: 50%;right: 23px;}
 .goOver input{flex: 1;}
 /*table*/
-table{width: 100%;text-align: left;font-size: 13px;display: block;overflow: auto}
+table{width: 100%;text-align: left;font-size: 13px;overflow: auto}
 table tr {line-height: 29px;border-bottom: 1px solid #DADADA}
 table th{text-align: left;background-color: #DADADA;line-height: 32px;white-space: nowrap}
   /*底部*/

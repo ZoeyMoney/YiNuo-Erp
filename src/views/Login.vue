@@ -23,8 +23,6 @@
     </div>
 </template>
 <script>
-  import url from '../components/config'
-
 export default {
   name: 'Login',
   data () {
@@ -47,12 +45,14 @@ export default {
       } else {
         var _this = this
         this.imgUrl_loading = true
-        // const all = {name:this.name,pwd:this.pwd}
-        this.axios.post(url.Login+'?name=' + this.name + '&pwd=' + this.pwd).then(res => {
+        this.axios.post('/Login'+'?name=' + this.name + '&pwd=' + this.pwd).then(res=>{
           if (res.status === 200) {
             this.imgUrl_loading = false
             if (res.data.msg === '登录成功') {
-              localStorage.data = JSON.stringify(res.data.role)
+              localStorage.data = JSON.stringify(res.data)
+              // console.log(res.data.token)
+              // this.$store.commit('token',res.data.token)
+              // console.log(this.state.token)
               mui.alert(res.data.msg, function () {
                 _this.$router.push('index')
               })

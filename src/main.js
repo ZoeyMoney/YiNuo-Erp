@@ -23,9 +23,40 @@ Vue.use(dataValue)
 Vue.use(element)
 Vue.use(VueTouch, {name: 'v-touch'})
 Vue.use(Vuex)
-Vue.use(Vueaxios, axios)
+// Vue.use(Vueaxios, axios)
+const ser = Vue.prototype.axios = axios.create({
+  baseURL:'https://formattingclub.com/YiNuoLogin',
+  timeout:20000,//请求事件
+  crossDomain:true,//设置cross跨域
+  withCredentials:true //设置cross跨域 并设置访问权限 允许跨域携带cookie信息
+})
 
-// 解决token session 被拦截
+
+ser.interceptors.request.use(function (config) {
+  return config
+},function (error) {
+  console.log(error)
+  return Promise.reject(error)
+})
+
+//http response 拦截器
+/*ser.interceptors.response.use(response =>{
+    if (response.data.errno === 999) {
+      router.replace('/Login')
+      console.log('token过期')
+    }else if (response.data === 406) {
+      router.replace('/Login')
+      console.log('数据异常')
+    }else if (response.data === 404) {
+      router.replace('/Login')
+      console.log('404')
+    }
+    return response
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)*/
 axios.defaults.withCredentials = true
 new Vue({
   router,

@@ -64,6 +64,9 @@ export default {
     this.axios.get(url.clientFollowPerson).then(res => {
       this.profetName = res.data
     })
+    /*this.axios.get(`customer_follow_up/${this.$route.params.id}`).then(res=>{
+      console.log(res)
+    })*/
   },
   methods: {
     go () {

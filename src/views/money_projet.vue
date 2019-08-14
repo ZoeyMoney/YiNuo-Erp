@@ -30,7 +30,6 @@
 </template>
 
 <script>
-  import url from '../components/config'
 export default {
   name: 'money_projet',
   data () {
@@ -43,7 +42,7 @@ export default {
     add () {
       var then = this
       this.imgUrl_loading = true
-      this.axios.get(url.projetAdd+'?Customr_name=' + this.site_projet).then(res => {
+      this.axios.get('/AfterSale/addCustomer_name'+'?Customr_name=' + this.site_projet).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
         mui.alert(res.data.msg, function () {
