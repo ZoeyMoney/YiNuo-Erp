@@ -71,7 +71,7 @@
           <th>相关人</th>
           <th>金额</th>
         </tr>
-        <tr v-for="item in listTable"  @click="msg(item.fund_details_id)" :class="{clasred:item.dates <= datesdm,}">
+        <tr v-for="item in listTable"  @click="msg(item.fund_details_id,item.fund_person_id)" :class="{clasred:item.dates <= datesdm,}">
           <td>
             <span v-if="item.dates" :style="paLft">{{item.dates}}</span>
             <span v-if="item.fund_details_date===undefined" :style="paLft">待定</span>
@@ -121,6 +121,7 @@ export default {
       date_list_two: '',
       list_fund_name_type:'',
       list_slime_all:true,
+      shaix:'',//筛选
       slim:'',
       paLft: {
         display: 'block',
@@ -171,12 +172,14 @@ export default {
     this.axios.get('/fund/select_fund_sum'+'?fund_type=1').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
+        if (this.shaix == '') {
         this.package(res)
         var allMoney = 0
         for (var index in this.listTable) {
           allMoney+=this.listTable[index].fund_details_money
         }
         this.allMoney = Math.floor(allMoney*100) / 100
+        }
       }
       /*function sortnew (a,b) {  //反序
         return Date.parse(b.dates) - Date.parse(a.dates)
@@ -185,7 +188,11 @@ export default {
         return Date.parse(a.dates) - Date.parse(b.dates)
       }
       console.log(this.listTable.sort(sortnew))*/
-    })
+     })
+    /*this.shaix = JSON.parse(localStorage.fan)
+    this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_person_id='+this.shaix).then(res=>{
+      this.package(res)
+    })*/
     /*data*/
     var data = new Date()
     var dt = new Date(data)
@@ -200,9 +207,17 @@ export default {
     }
     var dd  = y+'-'+mm+'-'+d
     this.datesdm = dd
+
+
   },
   methods: {
-    msg (id) {
+    /*goto(){
+      this.$router.push({name:'money_management'})
+      // localStorage.clear()
+      localStorage.removeItem('shou')
+    },*/
+    //详情
+    msg (id,prosen) {
       // this.$router.push({ path: 'payable_entry', query: { id: id } })
       var payable_entry = {}
       for (var index in this.listTable) {
@@ -211,7 +226,7 @@ export default {
         }
       }
       localStorage.payable_entry = JSON.stringify(payable_entry)
-      this.$router.push({ path: 'payable_entry', query: { id: payable_entry } })
+      this.$router.push({ path: 'payable_entry', query: { id: payable_entry} })
     },
     //封装model
     package(res){

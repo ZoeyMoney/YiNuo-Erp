@@ -63,7 +63,7 @@
             <th><span :style="lefta">工地名称</span></th>
             <th><span>负责人</span></th>
             <th><span>分类</span></th>
-            <th><span>总金额</span></th>
+            <th><span>时间</span></th>
             <th><span>状态</span></th>
           </tr>
           <tr v-for="item in list_serach" @click="mername(item.customer_id)">

@@ -140,7 +140,7 @@ export default {
   },
   created () {
     //接收应收详情数据
-    // console.log(JSON.parse(localStorage.payable_entry))
+    console.log(JSON.parse(localStorage.payable_entry))
     this.projet = JSON.parse(localStorage.payable_entry)
     this.customer_name = this.projet.customer_name
     this.fund_person = this.projet.fund_person
@@ -161,6 +161,12 @@ export default {
     })
   },
   methods: {
+    //返回
+    /*gono(){
+      var fan = this.projet.fund_person_id
+      localStorage.fan = JSON.stringify(fan)
+      this.$router.push({name:'payable_money',query:{fan:fan}})
+    },*/
     //收款
     add(){
       var then = this

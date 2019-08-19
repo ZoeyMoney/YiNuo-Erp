@@ -25,7 +25,7 @@
         <div class="mui-content label-flex">
           <div class="mui-input-row">
             <label>设计师</label>
-            <select v-model="customer_stylist" :class="{classGary:customer_stylist=='',classBlack:customer_stylist!=''}">
+            <select v-model="customer_stylist" :class="{classGary:customer_stylist=='',classBlack:customer_stylist!=''}" @change="styleClick">
               <option value="" selected="selected">请选择</option>
               <option v-for="(item,index) in listName" :value="item.fund_person">{{item.fund_person}}</option>
             </select>
@@ -222,6 +222,17 @@ export default {
     }, 1000)
   },
   methods: {
+    //设计师
+    styleClick(){
+      var then = this
+      var newList = []
+      then.lists.map(function (item) {
+        if (item.fund_person.search(then.customer_stylist) != -1) {
+          newList.push(item)
+        }
+      })
+      this.list = newList
+    },
     // 页面传参
     mername (id) {
       var lists = {}

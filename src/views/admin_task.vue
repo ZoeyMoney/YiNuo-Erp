@@ -31,16 +31,16 @@
         <form class="mui-input-group black_mui">
           <div class="mui-input-row">
             <label>下达人</label>
-            <select name="" v-model="Release" @click="releaseClick(Release)">
+            <select name="" v-model="Release" @change="releaseClick(Release)">
               <option value="">请选择</option>
-              <option v-for="item in list_tesl" :value="item.fund_person_id">{{item.fund_person}}</option>
+              <option v-for="item in list_inform" :value="item.approve_inform_person_id">{{item.approve_inform_person}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>任务人</label>
-            <select name="" v-model="task" @click="teskClick(task)">
+            <select name="" v-model="task" @change="teskClick(task)">
               <option value="">请选择</option>
-              <option v-for="item in list_tesl" :value="item.fund_person_id">{{item.fund_person}}</option>
+              <option v-for="item in list_make" :value="item.approve_make_person_id">{{item.approve_make_person}}</option>
             </select>
           </div>
           <div class="mui-input-row goOver">
@@ -51,25 +51,24 @@
           </div>
           <div class="mui-input-row">
             <label>状态</label>
-            <select name="">
+            <select name="" v-model="radio">
               <option value="">请选择</option>
-              <option v-for="item in list_data" :value="item.text">{{item.text}}</option>
+              <option v-for="item in list_data" :value="item.id">{{item.text}}</option>
             </select>
           </div>
         </form>
+
         <table>
           <tr>
             <th><span :style="peopleTenLeft">任务人</span></th>
             <th><span :style="peopleTenLeft">下达人</span></th>
             <th><span :style="leftPx">时间</span></th>
-            <th><span :style="leftPx">天数</span></th>
             <th><span :style="leftPx">状态</span></th>
           </tr>
-          <tr v-for="item in listTables" @click="tableClick(item.mission_id)">
+          <tr v-for="item in listTable" @click="tableClick(item.mission_id)">
             <td><span :style="tenPx">{{item.mission_inform_person}}</span></td>
             <td><span :style="tenPx">{{item.mission_make_person}}</span></td>
             <td><span>{{dates(item.mission_startDate)}}</span></td>
-            <td><span>{{item.mission_day}}</span></td>
             <td>
               <div v-show="item.mission_state == '0'">进行中</div>
               <div v-show="item.mission_state == '1'">已完成</div>
@@ -84,7 +83,7 @@
             <i class="el-icon-close" @click="closeClick"></i>
           </div>
         </div>
-        <form class="mui-input-group">
+        <form class="mui-input-group" v-show="internal_content">
           <div class="mui-input-row">
             <label>下达人</label>
             <input type="text" class="mui-input-clear" :value="item.mission_inform_person" placeholder="无" disabled="disabled">
@@ -94,13 +93,13 @@
             <input type="text" class="mui-input-clear" :value="item.mission_make_person" placeholder="无" disabled="disabled">
           </div>
           <div class="mui-input-row">
-            <label>期限</label>
+            <label>完成时间</label>
             <div>{{dates(item.mission_startDate)}}</div>
           </div>
-          <div class="mui-input-row">
+          <!--<div class="mui-input-row">
             <label>天数</label>
             <input type="text" class="mui-input-clear" :value="item.mission_day" placeholder="无" disabled="disabled">
-          </div>
+          </div>-->
           <div class="mui-input-row">
             <label>状态</label>
             <div v-show="item.mission_state == '0'">进行中</div>
@@ -112,9 +111,19 @@
             <input type="text" class="mui-input-clear" :value="item.mission_text" placeholder="无" disabled="disabled">
           </div>
         </form>
-        <div class="mui-input-row form-btn">
+        <div class="mui-input-row form-btn" v-show="btn_no">
           <button type="button" class="mui-btn mui-btn-blue" @click="del(item.mission_id,item.mission_inform_person)">删除</button>
           <button type="button" class="mui-btn mui-btn-blue" @click="add" v-if="item.mission_state =='0'">提交审批</button>
+        </div>
+        <form class="mui-input-group" v-if="text_ad">
+          <div class="mui-input-row">
+            <label>备注</label>
+            <input type="text" class="mui-input-clear" placeholder="请输入备注" v-model="text_admin">
+          </div>
+        </form>
+        <div class="mui-input-row form-btn" v-show="btn_yes">
+          <button type="button" class="mui-btn mui-btn-blue" @click="cancel">取消</button>
+          <button type="button" class="mui-btn mui-btn-blue" @click="yes">确定</button>
         </div>
       </div>
     </div>
@@ -126,6 +135,9 @@
     data(){
       return{
         customer_name:'',
+        admin:'',//总权限设置
+        user:'',//登录名称
+        radio:'',//radio按钮
         imgUrl_loading:false,//加载图片
         money_plus: require('../image/plus.png'),
         list_tesl:[
@@ -137,15 +149,21 @@
         Release:'',//下达人
         task:'',//任务人
         list_data:[
-          {text:'进行中'},
-          {text:'完成'},
-          {text:'已超时'},
-          {text:'超时完成'},
+          {text:'进行中',id:'0'},
+          {text:'审批中',id:'2'},
+          {text:'已完成',id:'1'},
           ],
         listTable: [], // table数据
         msg_box:false,//弹出层
         msg_list:'',//弹出层数据
         msg_add:true,//提交审批
+        list_inform:'',
+        list_make:'',
+        internal_content:true,//内部信息
+        btn_no:true,//按钮
+        text_ad:false,//备注
+        text_admin:'',//备注model
+        btn_yes:false,
         tenPx:{
           display:'block',
           paddingLeft:'10px'
@@ -162,18 +180,20 @@
       }
     },
     created(){
-      //  下达人 任务人
-      this.axios.get('/fund/Select_fund_person'+'?fund_person_state_A=2').then(res=>{
-        this.list_tesl = res.data.data
-      })
+      //权限分配
+      var adminnostorm = JSON.parse(localStorage.data).role
+      this.admin = adminnostorm[0].role_name
+      this.user = JSON.parse(localStorage.data).userNumber
     //  table数据
       this.axios.get('/Administration/Select_mission').then(res=>{
         this.listTable = res.data.data
+        /*this.list_inform = res.data.list_inform_person
+        this.list_make = res.data.list_make_person*/
       })
     },
     computed:{
       //  关键字查询
-      listTables(){
+      /*listTables(){
         var then = this
         var lists = []
         then.listTable.map(function (item) {
@@ -182,7 +202,7 @@
           }
         })
         return lists
-      }
+      }*/
     },
     methods:{
     //  封装全局
@@ -191,13 +211,18 @@
       },
     //  下达人
       releaseClick(id){
-        this.axios.get(''+'?mission_inform_person='+id).then(res=>{
-
+        this.axios.get('/Administration/Select_approve'+'?approve_inform_person='+id).then(res=>{
+          this.list = res.data.list_administration
+          this.list_inform = res.data.list_inform_person
+          this.list_make = res.data.list_make_person
         })
       },
+      //任务人
       teskClick(id){
-        this.axios.get(''+'?mission_make_person='+id).then(res=>{
-
+        this.axios.get('/Administration/Select_approve'+'?approve_make_person='+id).then(res=>{
+          this.list = res.data.list_administration
+          this.list_inform = res.data.list_inform_person
+          this.list_make = res.data.list_make_person
         })
       },
       //时间转换
@@ -240,6 +265,8 @@
     //  删除
       del(id,prosen){
         var then = this
+        console.log(prosen)
+        if (this.user == prosen) {
         this.imgUrl_loading = true
         this.axios.post('/Administration/Delete_mission'+'?mission_id='+id).then(res=>{
           if (res.status === 200) {
@@ -249,25 +276,56 @@
             })
           }
         })
+        }else{
+          mui.alert('您不是下达人所以无法删除')
+        }
       },
     //  提交审批
       add(){
+        //内容消失
+        this.internal_content = false
+      //  按钮消失
+        this.btn_no = false
+      //  新按钮出现
+        this.btn_yes = true
+      //  备注出现
+        this.text_ad = true
+      },
+    //  取消
+      cancel(){
+        //  新按钮消失
+        this.btn_yes = false
+        //内容出现
+        this.internal_content = true
+        //  按钮出现
+        this.btn_no = true
+        //  备注出现
+        this.text_ad = false
+      },
+    //  确定
+      yes () {
         var then = this
-        var add='?'
+        var _true = true
+        var add = '?'
+        if (this.text_admin == '') {
+          mui.toast('备注不能为空')
+          _true = false
+          return false
+        }
         for (var index in this.msg_list) {
           if (this.msg_list[index].mission_state == '0') {
-          add+='approve_stale=0'+'&approve_make_person='+this.msg_list[index].mission_make_person_id+'&approve_inform_person='+this.msg_list[index].mission_inform_person_id
-          +'&mission_id='+this.msg_list[index].mission_id
+            add += 'approve_stale=0' + '&approve_make_person=' + this.msg_list[index].mission_make_person_id + '&approve_inform_person=' + this.msg_list[index].mission_inform_person_id
+              + '&mission_id=' + this.msg_list[index].mission_id+'&approve_text='+this.text_admin
             this.imgUrl_loading = true
-            this.axios.post('/Administration/Add_Approve'+add).then(res=>{
+            this.axios.post('/Administration/Add_Approve' + add).then(res => {
               if (res.status === 200) {
                 this.imgUrl_loading = false
-                mui.alert(res.data.data,function () {
+                mui.alert(res.data.data, function () {
                   then.$router.go(0)
                 })
               }
             })
-          }else{
+          } else {
             mui.alert('已在进行中')
           }
         }
@@ -275,7 +333,6 @@
     }
   }
 </script>
-
 <style scoped>
   /*header*/
   .customer{flex: 1}
@@ -285,6 +342,8 @@
   select{font-size: 15px}
   /*form*/
   .black_mui{margin-top: 5px;}
+  /*radio*/
+  .radio-left{display: flex;position: relative;right: 7px;white-space: nowrap}
   /*timeData*/
   .goOver{display: flex;}
   .goOver label{flex: 0.8;}

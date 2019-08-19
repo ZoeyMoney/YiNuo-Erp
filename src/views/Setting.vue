@@ -39,6 +39,7 @@ export default {
         if (res.status === 200) {
           this.imgUrl_loading = false
           mui.alert(res.data.msg, function () {
+            localStorage.clear()
             then.$router.push({ name: 'Login' })
           })
         }

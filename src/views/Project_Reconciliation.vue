@@ -228,7 +228,7 @@
       this.axios.get('/User/Select_accounting').then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-          this.NewUserName = JSON.parse(localStorage.data)
+          this.NewUserName = JSON.parse(localStorage.data).role
           // console.log(this.NewUserName)
           for (var index in this.NewUserName) {
             this.projetName = res.data.list_fund_customer_name
@@ -374,6 +374,7 @@
 <style lang="scss">
 @import "../css/public.css";
 .Project_Reconciliation{
+  margin-bottom: 100px;
   .projet-recon{padding-left: 13px}
   .username{display: flex;position: relative;top: 9px;font-weight: bold}
   .clasred{color: red}

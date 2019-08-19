@@ -22,21 +22,6 @@
           <label>负责人</label>
           <input type="text" class="mui-input-clear" placeholder="请输入联系人" v-model="AfterSale_person">
         </div>
-        <!--<div class="mui-input-row">
-          <label>联系方式</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入手机号" v-model="Customer_connect">
-        </div>
-        <div class="mui-input-row">
-          <label>负责人</label>
-          <select name="" v-model="Customer_stylist" :class="{classGary:Customer_stylist==='',classBlack: Customer_stylist!==''}">
-            <option value="">请选择</option>
-            <option v-for="item in SelectStylist" :value="item">{{item}}</option>
-          </select>
-        </div>-->
-        <!--<div class="mui-input-row">
-          <label>质保期</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入保质期" v-model="Customer_baozhiqi">
-        </div>-->
         <div class="mui-input-row">
           <label>分类</label>
           <select name="" v-model="options" :class="{classGary:options==='',classBlack: options!==''}">
@@ -83,17 +68,17 @@
           <span class="increase" @click="increase"><i class="el-icon-plus"></i></span>
         </div>-->
         <div class="mui-input-row money-input">
-          <label>甲方</label>
+          <label>甲方金额</label>
           <input type="text" class="mui-input-clear" placeholder="￥" v-model="Customer_DecorateJia">
           <span class="span-money">{{Customer_DecorateJia | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row money-input">
-          <label>乙方</label>
+          <label>乙方金额</label>
           <input type="text" class="mui-input-clear" placeholder="￥" v-model="Customer_DecorateYi">
           <span class="span-money">{{Customer_DecorateYi | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row money-input">
-          <label>工人</label>
+          <label>工人金额</label>
           <input type="text" class="mui-input-clear" placeholder="￥" v-model="worker">
           <span class="span-money">{{worker | MoneyFormat}}</span>
         </div>
@@ -104,12 +89,10 @@
         <div class="mui-input-row">
           <label>质保截止</label>
           <input type="date" v-model="Customer_Date">
-<!--          <el-date-picker v-model="Customer_Date" type="datetime" placeholder="选择日期时间"></el-date-picker>-->
         </div>
         <div class="mui-input-row">
           <label>报修时间</label>
           <input type="date" v-model="Customer_baoxiushijian">
-<!--          <el-date-picker v-model="Customer_baoxiushijian" type="datetime" placeholder="选择日期时间"></el-date-picker>-->
         </div>
         <div class="mui-input-row">
           <label>状态</label>
@@ -181,14 +164,14 @@
         },
         projet:'',
         SelectStylist:'',
-        worker:'',//工人
+        worker:0,//工人
         Customer_linkman: '', // 联系人
         Customer_connect: '', // 联系方式
         Customer_stylist: '', // 责任人
         Customer_type: '', // 所属类型
         AfterSale_person:'',//负责人
-        Customer_DecorateJia:'',//甲方预算
-        Customer_DecorateYi:'',//一方预算
+        Customer_DecorateJia:0,//甲方预算
+        Customer_DecorateYi:0,//一方预算
         // Customer_baozhiqi:'',//保质期
         Customer_Date:'',//项目时间
         Customer_baoxiushijian:'',
@@ -234,7 +217,7 @@
     computed:{
       //总金额
       all_money() {
-        if (this.Customer_DecorateJia != '' && this.Customer_DecorateYi != '' && this.worker) {
+        /*if (this.Customer_DecorateJia != '' && this.Customer_DecorateYi != '' && this.worker) {
           var a = 0
           a += parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
           return a
@@ -250,7 +233,9 @@
           var d = 0
           d += parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
           return d
-        }
+        }*/
+        var a = parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
+        return a
       },
     //  状态
       statusd(){

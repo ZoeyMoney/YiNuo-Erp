@@ -155,6 +155,11 @@ export default {
     })
   },
   methods: {
+    /*gono(){
+      var fan = this.projet.fund_person_id
+      localStorage.shou = JSON.stringify(fan)
+      this.$router.push({name:'money_receivable',query:{fan:fan}})
+    },*/
      //收款
      add(){
        var then = this

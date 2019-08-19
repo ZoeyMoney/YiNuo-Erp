@@ -224,21 +224,6 @@ export default {
       all += this.chuXuKa+this.XinYongKa
       this.allTotal = Math.floor(all*100) /100
     });
-    /*var loc = location.href
-    var n1 = loc.length// 地址的总长度
-    var n2 = loc.indexOf('=')// 取得=号的位置
-    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
-    this.list = id.split('=')
-    var lists = []
-    for (var index in this.list) {
-      var a1 = this.list[index].indexOf('&')
-      var a2 = this.list[index].slice(0, a1)
-      lists.push(a2)
-    }
-    this.site = lists[1]
-    this.fund_person = lists[2]*/
-    /*this.site = window.test
-    this.fund_person = window.fund_people*/
     this.site = window.test
     this.test_id = window.test_id
     this.listRelevant = window.fund_people

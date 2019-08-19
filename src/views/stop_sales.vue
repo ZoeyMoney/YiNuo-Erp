@@ -25,6 +25,14 @@
           </el-table>
         </template>-->
       </div>
+      <div>
+        <h2>公告栏文字停顿滚动</h2>
+        <div class="textBox">
+          <transition name="slide">
+            <p class="text" :key="text.id">{{text.val}}</p>
+          </transition>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -33,6 +41,12 @@
     name: 'stop_sales',
     data(){
       return{
+        textArr: [
+          '1 第一条公告',
+          '2 第二条公告第二条公告',
+          '3 第三条公告第三条公告第三条公告'
+        ],
+        number: 0,
         imgUrl_loading:false,
         searchData: "",
         items: [
@@ -67,7 +81,16 @@
     created(){
 
     },
+    mounted(){
+      this.startMove()
+    },
     computed:{
+      text () {
+        return {
+          id: this.number,
+          val: this.textArr[this.number]
+        }
+      },
       Newitems() {
         var _this = this;
         var Newitems = [];
@@ -87,6 +110,17 @@
         // console.log(id)
         this.$router.push(`/customer_follow_up/${id}`)
       }*/
+      startMove () {
+        // eslint-disable-next-line
+        let timer = setTimeout(() => {
+          if (this.number === 2) {
+            this.number = 0;
+          } else {
+            this.number += 1;
+          }
+          this.startMove();
+        }, 2000); // 滚动不需要停顿则将2000改成动画持续时间
+      }
     }
   }
 </script>

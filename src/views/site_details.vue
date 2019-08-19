@@ -17,59 +17,69 @@
     <!--form-->
     <div class="mui-content app">
       <form class="mui-input-group">
-        <div class="mui-input-row">
-          <label>工地名称</label>
-          <input type="text" class="mui-input-clear" v-model="customer_name" placeholder="input" disabled="disabled">
-        </div>
-        <div class="mui-input-row">
-          <label>负责人</label>
-          <input type="text" class="mui-input-clear" v-model="customer_linkman" placeholder="input">
-        </div>
-        <div class="mui-input-row">
-          <label>分类</label>
-          <input type="text" class="mui-input-clear" v-model="customer_connect" placeholder="input">
-        </div>
-        <div class="mui-input-row money-input">
-          <label>甲方</label>
-          <input type="text" class="mui-input-clear" v-model="Customer_DecorateJia">
-          <span class="span-money">{{Customer_DecorateJia | MoneyFormat}}</span>
-        </div>
-        <div class="mui-input-row money-input">
-          <label>乙方</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入预算金额" v-model="Customer_DecorateYi">
-          <span class="span-money">{{Customer_DecorateYi | MoneyFormat}}</span>
-        </div>
-        <div class="mui-input-row money-input">
-          <label>工人</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入预算金额" v-model="worker">
-          <span class="span-money">{{worker | MoneyFormat}}</span>
-        </div>
-        <div class="mui-input-row">
-          <label>总金额</label>
-          <input type="text" class="mui-input-clear" v-model="customer_all" disabled="disabled">
-        </div>
-        <div class="mui-input-row">
-          <label>报修时间</label>
-          <el-date-picker v-model="customer_baoxiushijian" type="date" placeholder="选择日期时间"></el-date-picker>
-        </div>
-        <div class="mui-input-row">
-          <label>预计完成</label>
-          <el-date-picker v-model="customer_yujiwanchengshijian" type="date" placeholder="选择日期时间"></el-date-picker>
-        </div>
-        <div class="mui-input-row">
-          <label>质保截止</label>
-          <el-date-picker v-model="customer_baozhiqi" type="date" placeholder="选择日期时间"></el-date-picker>
-        </div>
-        <div class="mui-input-row all-row textreap">
-          <label>问题描述</label>
-          <input type="text" v-model="customer_demand">
-        </div>
-        <div class="mui-input-row ImgUrl">
-          <label>售后图片</label>
-          <div class="imgWid">
-            <img :src="getImgUrl(ItemImgUrl)" @click="imgClick" alt="loading">
-          </div>
-        </div>
+        <ul class="mui-table-view">
+          <li class="mui-table-view-cell mui-collapse">
+            <a class="mui-navigate-right left-mar" href="#">
+              <div class="mui-input-row">
+                <label>工地名称</label>
+                <input type="text" class="mui-input-clear" v-model="customer_name" placeholder="input"
+                       disabled="disabled">
+              </div>
+            </a>
+            <div class="mui-collapse-content">
+              <div class="mui-input-row">
+                <label>负责人</label>
+                <input type="text" class="mui-input-clear" v-model="customer_linkman" placeholder="input">
+              </div>
+              <div class="mui-input-row">
+                <label>分类</label>
+                <input type="text" class="mui-input-clear" v-model="customer_connect" placeholder="input">
+              </div>
+              <div class="mui-input-row money-input">
+                <label>甲方</label>
+                <input type="text" class="mui-input-clear" v-model="Customer_DecorateJia">
+                <span class="span-money">{{Customer_DecorateJia | MoneyFormat}}</span>
+              </div>
+              <div class="mui-input-row money-input">
+                <label>乙方</label>
+                <input type="text" class="mui-input-clear" placeholder="请输入预算金额" v-model="Customer_DecorateYi">
+                <span class="span-money">{{Customer_DecorateYi | MoneyFormat}}</span>
+              </div>
+              <div class="mui-input-row money-input">
+                <label>工人</label>
+                <input type="text" class="mui-input-clear" placeholder="请输入预算金额" v-model="worker">
+                <span class="span-money">{{worker | MoneyFormat}}</span>
+              </div>
+              <div class="mui-input-row">
+                <label>总金额</label>
+                <input type="text" class="mui-input-clear" v-model="customer_all" disabled="disabled">
+              </div>
+              <div class="mui-input-row">
+                <label>报修时间</label>
+                <el-date-picker v-model="customer_baoxiushijian" type="date" placeholder="选择日期时间"></el-date-picker>
+              </div>
+              <div class="mui-input-row">
+                <label>预计完成</label>
+                <el-date-picker v-model="customer_yujiwanchengshijian" type="date"
+                                placeholder="选择日期时间"></el-date-picker>
+              </div>
+              <div class="mui-input-row">
+                <label>质保截止</label>
+                <el-date-picker v-model="customer_baozhiqi" type="date" placeholder="选择日期时间"></el-date-picker>
+              </div>
+              <div class="mui-input-row all-row textreap">
+                <label>问题描述</label>
+                <input type="text" v-model="customer_demand">
+              </div>
+              <div class="mui-input-row ImgUrl">
+                <label>售后图片</label>
+                <div class="imgWid">
+                  <img :src="getImgUrl(ItemImgUrl)" @click="imgClick" alt="loading">
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
       </form>
       <div class="mui-input-row update-btn">
         <div>
@@ -100,7 +110,7 @@
         <div class="box">
           <div class="row-go">
             <div class="mui-input-row row-textarea">
-              <textarea name="" rows="" cols="" placeholder="请输入跟进记录" v-model="list_text"></textarea>
+              <textarea name="" rows="" cols="" placeholder="请输入问题反馈及进度" v-model="list_text"></textarea>
             </div>
             <div class="go-add">
               <button type="button" @click="add">反馈记录</button>
@@ -109,7 +119,7 @@
         </div>
       </form>
       <form class="mui-input-group form-pad box-h4">
-        <h4>跟进记录</h4>
+        <h4>问题记录</h4>
         <div class="box" v-for="item in undata">
           <div class="mui-input-row jin">
             <div class="jin-date">
@@ -123,7 +133,7 @@
             </div>
           </div>
           <div class="row-go">
-            <div class="mui-input-row row-textarea">
+            <div class="mui-input-row row-textarea-two">
               <textarea name="" rows="" cols="" :value="item.follow_text" disabled="disabled"></textarea>
             </div>
           </div>
@@ -133,9 +143,9 @@
         <button type="button" class="mui-btn mui-btn-black" @click="dele">删除</button>
       </div>
     </div>
-    <div class="tests" v-show="Imgtest" @click="cancel">
+    <div class="tests" v-show="Imgtest" @click="cancel" :style="{height:imgW+'px'}">
       <div class="imgWid" :class="{active: isActive, test: hasError}">
-        <img :src="getImgUrl(ItemImgUrl)" alt="loading">
+        <img :src="getImgUrl(ItemImgUrl)"  alt="loading">
       </div>
     </div>
   </div>
@@ -178,6 +188,7 @@ export default {
       stage: '', // 修改记录
       undata: '',// 修改记录
       list:'',
+      imgW:0
     }
   },
   created () {
@@ -202,6 +213,10 @@ export default {
     this.axios.get('/select_follow_person'+'?fund_person_state=4').then(res => {
       this.profetName = res.data.data
     })
+    //问题记录查询
+    this.axios.get('/AfterSale/SelectFollow'+'?Customer_id='+JSON.parse(localStorage.AfterSale_statistics).afterSale_id).then(res =>{
+      this.undata = res.data
+    })
   },
   methods: {
     //图片解析
@@ -218,8 +233,9 @@ export default {
       document.body.style.overflow='hidden';
       document.addEventListener("touchmove",mo,false);//禁止页面滑动
 
+      this.imgW = 100+'100%'
       //判断页面的高度
-      /*var scrollTop=0;
+      var scrollTop=0;
       if(document.documentElement&&document.documentElement.scrollTop)
       {
         scrollTop=document.documentElement.scrollTop;
@@ -230,8 +246,8 @@ export default {
       }
       console.log(scrollTop)
        if (scrollTop >100){
-          console.log('123')
-       }*/
+
+       }
     },
     //图片放大后取消
     cancel(){
@@ -282,10 +298,27 @@ export default {
         }
       })
     },
-    //解析图片
     //记录保存
     add(){
-
+      var then = this
+      var _true = true
+      var add = '?'
+      if (this.follow_person == '' || this.follow_loading == '' || this.list_text == '') {
+        mui.toast('问题反馈不能有空')
+        _true = false
+        return false
+      }
+      add+='follow_person='+this.follow_person+'&follow_text='+this.list_text+'&Customer_name='+JSON.parse(localStorage.AfterSale_statistics).afterSale_id
+      +'&follow_stage='+this.follow_loading
+      this.imgUrl_loading = true
+      this.axios.get('/AfterSale/AddFollow'+add).then(res=>{
+        if (res.status === 200) {
+          this.imgUrl_loading = false
+          mui.alert(res.data,function () {
+            then.$router.push({name:'After_sales_statistics'})
+          })
+        }
+      })
     },
     //  删除
     dele () {
@@ -339,6 +372,7 @@ export default {
   .classBlack{color: black}
   select{font-size: 15px}
   img{width: 100%}
+  .left-mar{padding-left: 0!important;}
   /*form与form之间的差距*/
   .all-row{display: flex;}
   .all-row input{font-size: 14px!important;}
@@ -352,15 +386,16 @@ export default {
   .tests{position: absolute;top: 0%;left: 0;right: 0;bottom: 0;width: 100% !important;height:100%;background-color: rgba(51, 51, 51, 0.5)}
   .tests .test{position: relative;top: 47%}
   /*记录*/
-  .jin{display: flex;line-height: 40px;}
-  .jin-date{display: flex;width: 100%}
-  .gen{flex: 1;text-align: center}
-  .jin-date{flex: 4}
-  .jin-date p{padding-left: 16px;flex: 1;}
-  .jin-date p:nth-child(2){text-align: right;padding-right: 16px;}
+  .jin{line-height: 40px;padding: 6px 15px}
+  .jin-date{float: left;width: 30%}
+  .gen{float: left;font-size: 15px}
+  .gen{width: 26%}
   .row-textarea{height: 100px!important;}
-  .row-textarea textarea{padding-left: 13px!important;font-size: 14px;}
+  .row-textarea-two{height: 100px}
+  .row-textarea textarea:nth-child(1){padding-left: 113px!important;font-size: 14px;}
   .box-h4 h4:nth-child(1){line-height: 28px;border-bottom: 2px solid black;font-size: 15px;width: 95%;margin-left: 14px}
+  .mui-table-view-cell.mui-collapse .mui-collapse-content{background-color: #efeff4;padding: 0}
+  ul{background-color: #efeff4;font-size: 15px}
   /*按钮*/
   .go-add{text-align: center;}
   .go-add button{background-color: black;color: white;width: 38%;margin-top: 17px}

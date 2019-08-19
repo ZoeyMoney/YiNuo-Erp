@@ -120,6 +120,7 @@ export default {
       list_fund_name: '',
       list_fund_namea: '',
       list_person:'',//相关人数组
+      shaix:'',
       date_list: '',
       list_customer_name: '',
       list_fund_name_type:'',
@@ -186,6 +187,10 @@ export default {
         this.allMoney = Math.floor(allMoney * 100) /100
       }
     })
+    /*this.shaix = JSON.parse(localStorage.shou)
+    this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_person_id='+this.shaix).then(res=>{
+      this.package(res)
+    })*/
     /*data*/
     var data = new Date()
     var dt = new Date(data)

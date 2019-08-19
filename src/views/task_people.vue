@@ -26,7 +26,7 @@
             <input type="text" v-model="Release" @click="Release_peopleClick" placeholder="请选择下达人">
           </div>
           <div class="mui-input-row">
-            <label>期限</label>
+            <label>完成时间</label>
             <div class="block">
               <el-date-picker v-model="valueDate" type="date" align="left" placeholder="选择日期时间"></el-date-picker>
             </div>
@@ -35,10 +35,10 @@
             <label>任务详情</label>
             <input type="text" class="mui-input-clear" v-model="task_text" placeholder="请输入任务详情">
           </div>
-          <div class="mui-input-row">
+          <!--<div class="mui-input-row">
             <label>天数</label>
             <input type="text" class="mui-input-clear" v-model="task_day" placeholder="请输入天数">
-          </div>
+          </div>-->
         </form>
         <div class="mui-input-row form-btn">
           <button type="button" class="mui-btn mui-btn-blue" @click="saveName">下达任务</button>
@@ -58,7 +58,7 @@
         Release:'',//下达人
         Release_id:'',//下任达id
         task_text:'',//任务详情
-        task_day:'',//天数
+        // task_day:'',//天数
         imgUrl_loading:false,
         list_tesl:[
           {text:'张三'},
@@ -89,14 +89,19 @@
       },
       saveName(){
         var then = this
-        this.imgUrl_loading = true
+        var _true = true
+        if (this.task_people == '' || this.Release == '' || this.valueDate == '' || this.task_text == '') {
+          mui.toast('任务下达不能为空')
+          _true = false
+          return false
+        }
+        // this.imgUrl_loading = true
         var dates = new Date(this.valueDate)
         var d = dates.getFullYear()
         var m = dates.getMonth() + 1
         var y = dates.getDate()
         var date = d+'-'+m+'-'+y
-        var add = '?mission_make_person='+this.task_people_id+'&mission_inform_person='+this.Release_id+'&mission_text='+this.task_text+'&mission_day='+
-          this.task_day+'&mission_startDate='+date+'&mission_state=0'
+        var add = '?mission_make_person='+this.task_people_id+'&mission_inform_person='+this.Release_id+'&mission_text='+this.task_text+'&mission_startDate='+date+'&mission_state=0'
         this.axios.post('/Administration/Add_Mission'+add).then(res=>{
           if (res.status === 200) {
             this.imgUrl_loading = false
@@ -112,7 +117,8 @@
 
 <style scoped>
     .classGray{color: gray}
-    .classBlack{color: black}
+    .reds{color: red}
+    .classBlack,.blaks{color: black}
     select{font-size: 15px}
     /*data*/
     /deep/.el-input__prefix, .el-input__suffix{display: none}

@@ -19,7 +19,13 @@
         <form class="mui-input-group">
           <ul class="mui-table-view">
             <li class="mui-table-view-cell mui-collapse">
-              <a class="mui-navigate-right" href="#"><label>基本信息</label></a>
+              <a class="mui-navigate-right left-mar" href="#">
+                <div class="mui-input-row">
+                  <label>项目名称</label>
+<!--                  <input type="text" class="mui-input-clear" v-model="customer_name" placeholder="无" disabled="disabled">-->
+                  <div>{{customer_name}}</div>
+                </div>
+              </a>
               <div class="mui-collapse-content">
                 <div class="mui-input-row">
                   <label>项目名称</label>
@@ -55,7 +61,6 @@
                 </div>
                 <div class="mui-input-row">
                   <label>客户等级</label>
-<!--                  <input type="text" class="mui-input-clear" placeholder="无" v-model="Customer_grade">-->
                   <select name="" v-model="Customer_grade" :class="{classGray:Customer_grade =='',classBlack: Customer_grade!=''}">
                     <option value="">请选择</option>
                     <option v-for="item in listLevel" :value="item.text">{{item.text}}</option>
@@ -476,9 +481,11 @@ select{font-size: 15px}
 .row-flex label{width: 50%;}
 .row-flex input{width: 50%!important;font-size: 12px;}
 .flex-mm div{width: 50%;}
+.left-mar{padding-left: 0!important;}
+.left-mar div{line-height: 40px}
 /*记录*/
 .jin{display: flex;line-height: 40px;border-bottom: 1px solid black;width: 95%;margin-left: 15px;margin-bottom: 11px}
-.jin-date{display: flex;}
+.jin-date{display: flex;margin-left: 112px}
 .gen{text-align: left;font-size: 15px;color: gray;padding-left: 43px}
 .jin-date p:nth-child(2){text-align: right;padding-right: 16px;}
 .row-textarea{height: 54px!important;border: 1px solid #dadada;width: 95%;margin-left: 11px}

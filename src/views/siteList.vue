@@ -117,7 +117,7 @@
       this.allProjet = window.expenditure
       var add = '?'
       if (window.expenditure === 'income' || window.expenditure === 'expenditure' || window.expenditure === 'money_entry' || window.expenditure === 'accounts_payable' ||
-        window.expenditure ==='profit_edit' || window.expenditure ==='income_receive' || window.expenditure ==='expenditure_receive'||window.expenditure ==='expenditure_after') {
+        window.expenditure ==='profit_edit' || window.expenditure ==='income_receive' || window.expenditure ==='expenditure_receive'||window.expenditure ==='expenditure_after' || window.expenditure ==='approval') {
         add+='Customer_A=1'+'&Customer_B=2'+'&Customer_C=3'+'&Customer_D=4'
       }else if (window.expenditure === 'paid_data' || window.expenditure === 'receive_data') {
         add+='Customer_A=1'+'&Customer_B=2'+'&Customer_C=3'+'&Customer_D=4'
@@ -293,6 +293,8 @@
           this.$router.push({path:'expenditure_receive'})
         }else if (this.allProjet === 'expenditure_after') {
           this.$router.push({path:'After_sales_entry'})
+        }else if (this.allProjet === 'approval') {
+          this.$router.push({path:'approval'})
         }
       },
       //判断根据跳进来的页面返回不同的页面
@@ -319,6 +321,8 @@
           this.$router.push({path:'expenditure_receive'})
         }else if (this.allProjet === 'expenditure_after') {
           this.$router.push({path:'After_sales_entry'})
+        }else if (this.allProjet === 'approval') {
+          this.$router.push({path:'approval'})
         }
       },
       suteA(id,name){

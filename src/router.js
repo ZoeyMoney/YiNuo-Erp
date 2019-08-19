@@ -349,6 +349,14 @@ export default new Router({
       path: '/paid_data',
       name: 'paid_data',
       component:resolve=>require(['@/views/paid_data'],resolve)
+    }, {
+      path: '/approval',
+      name: 'approval',
+      component:resolve=>require(['@/views/approval'],resolve)
+    }, {
+      path: '/task_admins',
+      name: 'task_admins',
+      component:resolve=>require(['@/views/task_admins'],resolve)
     }
     /* {
       path:'/home',
