@@ -117,7 +117,9 @@
       }
       // console.log(JSON.parse(localStorage.msg))
       this.dates = this.list.dates
-      this.bank_number = this.list.bank_number.replace(reg, "$1 **** **** $2")
+      if (this.list.bank_number != undefined) {
+        this.bank_number = this.list.bank_number.replace(reg, "$1 **** **** $2")
+      }
       this.bank_projet = this.list.customer_name
       this.fund_details_batch = this.list.fund_details_batch
       this.fund_name = this.list.fund_name

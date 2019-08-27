@@ -33,7 +33,7 @@ export default {
       msg: [
         { href: 'After_sales_entry', ImgArr: require('../image/shouhou.png'), text: '售后录入' },
         { href: 'After_sales_statistics', ImgArr: require('../image/tongji.png'), text: '售后统计' },
-        { href: 'Follow_up_after_sale', ImgArr: require('../image/genjin.png'), text: '售后跟进' },
+        // { href: 'Follow_up_after_sale', ImgArr: require('../image/genjin.png'), text: '售后跟进' },
       ]
     }
   }

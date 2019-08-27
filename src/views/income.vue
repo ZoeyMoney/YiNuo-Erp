@@ -228,7 +228,6 @@ export default {
     this.test_id = window.test_id
     this.listRelevant = window.fund_people
     this.listRelevant_id = window.fund_people_name
-
   },
   computed:{
     money_actual:{

@@ -252,23 +252,23 @@ export default {
       var red_all_money = 0
       var red_money = 0
       var fund_transaction_money = 0  //总数 fund_detail_transaction_money
-       for (var index in this.list_moey) {
-         /*判断当fund_detail_transaction_money没有显示bank_deal_money*/
-         if (this.list_moey[index].bank_deal_money === 0) {
-           if (this.list_moey[index].fund_detail_transaction_money > 0) {
-             fund_transaction_money += this.list_moey[index].fund_detail_transaction_money
-           }
-           if (this.list_moey[index].fund_detail_transaction_money < 0) {
-             zero_money += this.list_moey[index].fund_detail_transaction_money
-           }
-         }
-         if (this.list_moey[index].bank_deal_money > 0) {
-           bankDealMoney += this.list_moey[index].bank_deal_money
-         }
-         if (this.list_moey[index].bank_deal_money < 0){
-           red_money += this.list_moey[index].bank_deal_money
-         }
-       }
+      for (var index in this.list_moey) {
+        /*判断当fund_detail_transaction_money没有显示bank_deal_money*/
+        if (this.list_moey[index].bank_deal_money === 0) {
+          if (this.list_moey[index].fund_detail_transaction_money > 0) {
+            fund_transaction_money += this.list_moey[index].fund_detail_transaction_money
+          }
+          if (this.list_moey[index].fund_detail_transaction_money < 0) {
+            zero_money += this.list_moey[index].fund_detail_transaction_money
+          }
+        }
+        if (this.list_moey[index].bank_deal_money > 0) {
+          bankDealMoney += this.list_moey[index].bank_deal_money
+        }
+        if (this.list_moey[index].bank_deal_money < 0) {
+          red_money += this.list_moey[index].bank_deal_money
+        }
+      }
       green_money += parseFloat(bankDealMoney)+parseFloat(fund_transaction_money)
       red_all_money += parseFloat(zero_money)+parseFloat(red_money)
       allMoney += parseFloat(green_money)+parseFloat(red_all_money)

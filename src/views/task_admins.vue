@@ -34,12 +34,18 @@
                 <option v-for="item in list_make" :value="item.approve_make_person_id">{{item.approve_make_person}}</option>
               </select>
             </div>
-            <div class="mui-input-row">
+            <!--<div class="mui-input-row">
               <label>状态</label>
               <select name="" v-model="radio" @change="radioClick(radio)">
                 <option value="">请选择</option>
                 <option v-for="item in list_radio" :value="item.id">{{item.text}}</option>
               </select>
+            </div>-->
+            <div class="mui-input-row dian">
+              <div class="mui-input-row mui-radio dian-a" v-for="item in list_radio">
+                <label>{{item.text}}</label>
+                <input name="radio1" type="radio" checked="a" :value="item.id" v-model="radio" @change="radioClick(radio)">
+              </div>
             </div>
           </form>
           <table border="0">
@@ -127,11 +133,11 @@
         list_inform:'',
         list_make:'',
         Release_id:'',
-        radio:'',
+        radio:'0',
         list_radio:[
-          {text:'已拒绝',id:2},
-          {text:'已同意',id:1},
-          {text:'待审核',id:0},
+          {text:'待审核',id:'0'},
+          {text:'已同意',id:'1'},
+          {text:'已拒绝',id:'2'},
         ],
         list:'',/*table*/
         lefta:{
@@ -145,32 +151,48 @@
         this.Release_if = false
       }
       //table数据
-      this.axios.get('/Administration/Select_approve').then(res=>{
+      this.axios.get('/Administration/Select_approve?approve_stale=0').then(res=>{
         this.list = res.data.list_administration
         this.list_inform = res.data.list_inform_person
         this.list_make = res.data.list_make_person
       })
-
-
       this.task_people = window.fund_people
       this.task_people_id = window.fund_people_name
       this.Release = window.fund_people_huan
       this.Release_id = window.fund_people_huan_name
     },
     methods:{
-      //查询执行人
+      //查询审批
       zhiXClick(id){
-        console.log(id)
-        this.axios.get('/Administration/Select_approve?approve_inform_person='+id).then(res=>{
+        var add = '?'
+        if (this.zhiX != '') {
+          add+='approve_inform_person='+id
+        }
+        if (this.renW != '') {
+          add+='&approve_make_person='+this.renW
+        }
+        if (this.radio != '') {
+          add+='&approve_stale='+this.radio
+        }
+        this.axios.get('/Administration/Select_approve'+add).then(res=>{
           this.list = res.data.list_administration
           this.list_inform = res.data.list_inform_person
           this.list_make = res.data.list_make_person
         })
       },
-      //查询任务人
+      //查询执行
       renWClick(id){
-        console.log(id)
-        this.axios.get('/Administration/Select_approve?approve_make_person='+id).then(res=>{
+        var add = '?'
+        if (this.renW != '') {
+          add+='approve_make_person='+id
+        }
+        if (this.zhiX != '') {
+          add+='&approve_inform_person='+this.zhiX
+        }
+        if (this.radio != '') {
+          add+='&approve_stale='+this.radio
+        }
+        this.axios.get('/Administration/Select_approve'+add).then(res=>{
           this.list = res.data.list_administration
           this.list_inform = res.data.list_inform_person
           this.list_make = res.data.list_make_person
@@ -178,7 +200,14 @@
       },
       //状态
       radioClick(id){
-        this.axios.get('/Administration/Select_approve?approve_stale='+id).then(res=>{
+        var add = '?approve_stale='+id
+        if (this.zhiX != '') {
+          add+='&approve_inform_person='+this.zhiX
+        }
+        if (this.renW != '') {
+          add+='&approve_make_person='+this.renW
+        }
+        this.axios.get('/Administration/Select_approve'+add).then(res=>{
           this.list = res.data.list_administration
           this.list_inform = res.data.list_inform_person
           this.list_make = res.data.list_make_person
@@ -244,7 +273,7 @@
         var then = this
         var _true = true
         this.imgUrl_loading = true
-        this.axios.post('/Administration/Update_approve'+'?approve_id='+id+'&approve_stale=0').then(res=>{
+        this.axios.post('/Administration/Update_approve'+'?approve_id='+id+'&approve_stale=2').then(res=>{
           if (res.status === 200) {
             this.imgUrl_loading = false
             mui.alert(res.data.data,function () {
@@ -273,6 +302,8 @@
   .msgbox .close .close-i{text-align: right;padding-right: 14px;padding-top: 7px}
   .msgbox form .mui-input-row div{font-size: 15px;padding: 11px}
   /deep/.el-icon-close{font-size: 28px}
+  .dian{display: flex;white-space: nowrap;padding-left: 11px}
+  .dian-a{position: relative;right: 11px}
   /*btn*/
   .form-btn button{width: 41%!important;margin: 0 3px!important;}
   .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}

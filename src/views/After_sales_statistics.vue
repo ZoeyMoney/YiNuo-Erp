@@ -38,27 +38,7 @@
             </select>
           </div>
         </div>
-        <!--<table class="table_all">
-           <tr>
-             <th :style="projet"><span>工地名称</span></th>
-             <th><span>分类</span></th>
-             <th><span>状态</span></th>
-             <th><span>阶段</span></th>
-             <th><span>倒计时</span></th>
-           </tr>
-          <tr v-for="item in list" :style="ostyle" @click="mername(item.customer_id)">
-            <td><span>{{item.customer_name}}</span></td>
-            <td><span>分类别</span></td>
-            <td><span>已过保</span></td>
-            <td><span>{{item.stage_name}}</span></td>
-            <td>
-              <span v-if="time(item.stage_startdate,item.stage_stipulate) === '已逾期'">{{time(item.stage_startdate,item.stage_stipulate)}}</span>
-              <span v-else-if="time(item.stage_startdate,item.stage_stipulate) === '未开始'">{{time(item.stage_startdate,item.stage_stipulate)}}</span>
-              <span v-else-if="time(item.stage_startdate,item.stage_stipulate)">{{time(item.stage_startdate,item.stage_stipulate)}}</span>
-            </td>
-          </tr>
-        </table>-->
-        <table border="0">
+        <!--<table border="0">
           <tr>
             <th><span :style="lefta">工地名称</span></th>
             <th><span>负责人</span></th>
@@ -74,6 +54,27 @@
             <td>
               <span v-if="item.afterSale_date >= item.afterSale_date_close">已过保</span>
               <span v-if="item.afterSale_date <= item.AfterSale_date_close">在保</span>
+            </td>
+          </tr>
+        </table>-->
+        <table border="0">
+          <tr>
+            <th><span :style="lefta">工地名称</span></th>
+            <th><span>负责人</span></th>
+            <th><span>分类</span></th>
+            <th><span>时间</span></th>
+            <th><span>状态</span></th>
+          </tr>
+          <tr v-for="item in list_serach" @click="mername(item.customer_id)">
+            <td><span :style="lefta">{{item.customer_name}}</span></td>
+            <td><span>{{item.afterSale_person}}</span></td>
+            <td><span>{{item.afterSale_type}}</span></td>
+            <td><span>{{datas(item.afterSale_pre_date)}}</span></td>
+            <td>
+              <!--<span v-if="item.afterSale_date >= item.afterSale_date_close">已过保</span>
+              <span v-if="item.afterSale_date <= item.afterSale_date_close">在保</span>-->
+              <span v-show="item.follow_stage">{{item.follow_stage}}</span>
+              <span v-show="item.follow_stage ==undefined">无</span>
             </td>
           </tr>
         </table>
@@ -169,6 +170,14 @@ export default {
       console.log(lists)
       this.$router.push({name:'site_details',query:{lists}})
     },
+    datas(datasd){
+      var datas = new Date(datasd)
+      var data = datas.getFullYear()
+      var d = datas.getMonth() + 1
+      var y = datas.getDate()
+      var datas = data+'-'+d+'-'+y
+      return datas
+    },
     // 倒计时
     time: function (date, day) {
       if (date == null) {
@@ -216,14 +225,15 @@ export default {
   .row-flex label{flex: 1;line-height: 40px;padding-left:13px;font-size: 15px;flex: 1;}
   .row-flex select{padding: 9px 15px!important;margin-bottom: 0;flex: 4;}
   /*table*/
-  table{width:100%;font-size: 14px;display: block;text-align: left;white-space: nowrap;margin-bottom: 100px}
+  table{width: 100%;font-size: 14px;text-align: left;white-space: nowrap;margin-bottom: 100px}
   table tr th{background-color: #dadada;line-height: 27px}
-  table tr th:nth-child(1){width: 50%;min-width: 130px}
-  table tr th:nth-child(2),table tr th:nth-child(3){min-width: 55px;width: 14%}
-  table tr th:nth-child(4){min-width: 30px;width: 17%}
-  table tr th:nth-child(5){width: 15%}
-  table tr td:nth-child(1) span{display: block;overflow: hidden;width: 160px;text-overflow: ellipsis}
+  table tr th:nth-child(1){/*min-width: 130px*/width: 30%}
+  table tr th:nth-child(2){/*min-width: 52px*/width: 20%}
+  table tr th:nth-child(3){/*min-width: 66px*/width: 20%}
+  table tr th:nth-child(4){/*min-width: 71px*/width: 20%}
+  table tr th:nth-child(5){min-width: 50px;width: 10%}
   table tr{border-bottom: 1px solid #dadada;line-height: 28px}
+  table tr td:nth-child(1) span{display: block;overflow: hidden;width: 136px;text-overflow: ellipsis}
   /*底部*/
   .footer{background-color: #dedcdc;position: fixed;width: 100%;bottom: 0;display: flex;padding-top: 10px;}
   .footer .footer-botton:nth-child(1){flex: 1;padding-left: 8px;}

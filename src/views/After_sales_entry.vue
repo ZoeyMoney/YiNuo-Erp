@@ -19,8 +19,16 @@
           <input type="text" placeholder="请选择工地名称" v-model="Customer_name" :class="{classGary:Customer_name==='',classBlack: Customer_name!==''}" @click="site">
         </div>
         <div class="mui-input-row">
-          <label>负责人</label>
-          <input type="text" class="mui-input-clear" placeholder="请输入联系人" v-model="AfterSale_person">
+          <label>对接人</label>
+<!--          <input type="text" class="mui-input-clear" placeholder="请输入联系人" v-model="AfterSale_person">-->
+          <select name="" v-model="AfterSale_person" :class="{classGary:AfterSale_person==='',classBlack: AfterSale_person!==''}">
+            <option value="">请选择</option>
+            <option v-for="item in prosenList" :value="item.fund_person_id">{{item.fund_person}}</option>
+          </select>
+        </div>
+        <div class="mui-input-row">
+          <label>联系电话</label>
+          <input type="text" class="mui-input-clear" placeholder="请输入联系电话" v-model="Customer_connect">
         </div>
         <div class="mui-input-row">
           <label>分类</label>
@@ -29,57 +37,19 @@
             <option v-for="item in listOptions" :value="item.text">{{item.text}}</option>
           </select>
         </div>
-<!--        责任人下选-->
-        <!--<table class="all_process">
-          <tr>
-            <th><span>分类</span></th>
-            <th><span>问题描述</span></th>
-            <th><span>责任人</span></th>
-            <th><span>进程</span></th>
-            <th><span>预计完成</span></th>
-            <th><span>报修时间</span></th>
-            <th><span>甲方</span></th>
-            <th><span>乙方</span></th>
-            <th><span>费用</span></th>
-            <th><span>处理方法</span></th>
-          </tr>
-          <tr v-for="item in listInput">
-            <td>
-              <span>
-                <select name="" v-model="item.options" :class="{classGary:item.options==='',classBlack: item.options!==''}">
-                  <option value="">请选择</option>
-                  <option v-for="items in listOptions" :value="items.text">{{items.text}}</option>
-                </select>
-              </span>
-            </td>
-            <td><span><input type="text" v-model="item.text" placeholder="请输入问题"></span></td>
-            <td><span><input type="text" v-model="item.people" placeholder="请输入负责人"></span></td>
-            <td><span><input type="text" v-model="item.process" placeholder="请输入进程"></span></td>
-            <td><span><el-date-picker v-model="item.expected" type="date" placeholder="请输入预计完成"></el-date-picker></span></td>
-            <td><span><el-date-picker v-model="item.dataTime" type="date" placeholder="请输入报修时间"></el-date-picker></span></td>
-            <td><span><input type="text" v-model="item.partyA" placeholder="请输入甲方"></span></td>
-            <td><span><input type="text" v-model="item.partyB" placeholder="请输入乙方"></span></td>
-            <td><span><input type="text" v-model="item.cost" placeholder="请输入费用"></span></td>
-            <td><span><input type="text" v-model="item.method" placeholder="请输入处理方法"></span></td>
-          </tr>
-        </table>
-        <div class="mui-input-row button-del">
-          <span class="increase" @click="del(user)"><i class="el-icon-minus"></i></span>
-          <span class="increase" @click="increase"><i class="el-icon-plus"></i></span>
-        </div>-->
         <div class="mui-input-row money-input">
           <label>甲方金额</label>
-          <input type="text" class="mui-input-clear" placeholder="￥" v-model="Customer_DecorateJia">
+          <input type="text" class="mui-input-clear" placeholder="￥" v-model="Customer_DecorateJia" @click="nojia" @blur="jiaBlur">
           <span class="span-money">{{Customer_DecorateJia | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row money-input">
           <label>乙方金额</label>
-          <input type="text" class="mui-input-clear" placeholder="￥" v-model="Customer_DecorateYi">
+          <input type="text" class="mui-input-clear" placeholder="￥" v-model="Customer_DecorateYi" @click="noyi" @blur="yiBlur">
           <span class="span-money">{{Customer_DecorateYi | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row money-input">
           <label>工人金额</label>
-          <input type="text" class="mui-input-clear" placeholder="￥" v-model="worker">
+          <input type="text" class="mui-input-clear" placeholder="￥" v-model="worker" @click="noworker" @blur="workerBlur">
           <span class="span-money">{{worker | MoneyFormat}}</span>
         </div>
         <div class="mui-input-row money-input">
@@ -97,10 +67,6 @@
         <div class="mui-input-row">
           <label>状态</label>
           <input type="text" class="mui-input-clear" v-model="statusd" placeholder="状态" disabled="disabled">
-          <!--<select name="">
-            <option value="">请选择</option>
-            <option v-for="item in listOptions" :value="item.text">{{item.text}}</option>
-          </select>-->
         </div>
         <div class="mui-input-row">
           <label>预计完成</label>
@@ -111,15 +77,6 @@
           <textarea name="Customer_demand" rows="" cols="" v-model="Customer_demand" id="Customer_demand" placeholder="请填写问题及解决办法"></textarea>
         </div>
           <div class="imgUrl">图片添加</div>
-        <!--<el-upload
-          class="avatar-uploader"
-          action="https://formattingclub.com/YiNuoLogin/AfterSale/uploadImg"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>-->
        <el-upload action="https://formattingclub.com/YiNuoLogin/AfterSale/uploadImg"
                   ref="upload"
                   multiple
@@ -153,10 +110,7 @@
         Customer_name: '', // 项目名称
         Customer_name_id:'',//项目id
         options:'',
-        /*listInput:[
-          {options:'',text:'',people:'',process:'',expected:'',dataTime:'',partyA:'',partyB:'',cost:'',method:''}
-        ],*/
-        // user:'',
+        prosenList:'',//对接人
         ImgBase:'',
         data: {
           multiple:true,
@@ -181,10 +135,6 @@
           { value: '家装' },
           { value: '工装' }
         ],
-        /*listOptions:[
-          {text:'已过保'},
-          {text:'债保'},
-        ],*/
         Customer_demand: '',// 客户需求
         dialogImageUrl: '',
         dialogVisible: false,
@@ -202,15 +152,12 @@
           {text:'人为损坏'},
           {text:'磨损'},
         ],
-        /*list_no:[
-          {text:'勘察'},
-          {text:'维修中'},
-          {text:'维修完毕'},
-          {text:'勘察'},
-        ],*/
       }
     },
     created () {
+      //对接人
+      this.prosenFunction()
+
       this.Customer_name = window.test
       this.Customer_name_id = window.test_id
     },
@@ -262,6 +209,48 @@
       }
     },
     methods: {
+      //对接人
+      prosenFunction(){
+        this.axios.get('/select_follow_person'+'?fund_person_state=2').then(res=>{
+          this.prosenList = res.data.data
+        })
+      },
+      //甲方金额点击初始值为空
+      nojia(){
+        if (this.Customer_DecorateJia <= 0) {
+          this.Customer_DecorateJia = ''
+        }
+      },
+      //甲方失焦如果还是为空则初始值为0
+      jiaBlur(){
+        if (this.Customer_DecorateJia == '') {
+          this.Customer_DecorateJia = 0
+        }
+      },
+      //乙方金额点击初始值为空
+      noyi(){
+        if (this.Customer_DecorateYi <= 0) {
+          this.Customer_DecorateYi = ''
+        }
+      },
+      //乙方失焦如果还是为空则初始值为0
+      yiBlur(){
+        if (this.Customer_DecorateYi == '') {
+          this.Customer_DecorateYi = 0
+        }
+      },
+      //工人金额点击初始值为空
+      noworker(){
+        if (this.worker <= 0) {
+          this.worker = ''
+        }
+      },
+      //工人失焦如果还是为空则初始值为0
+      workerBlur(){
+        if (this.worker == '') {
+          this.worker = 0
+        }
+      },
       //工地
       site () {
         var expenditure = 'expenditure_after'
@@ -279,7 +268,7 @@
       },
       handleAvatarSuccess(response, file) {
         this.ImgBase = response
-        console.log(response)
+        // console.log(response)
       },
       leng(){
         var a = true
@@ -292,7 +281,7 @@
         var _this = this
         var check = true
         var pattern = /^1[0-9]{10}$/ // 验证手机号
-        var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
+        var nameReg = /^[\u4E00-\u9FA5]{2,10}$/ // 验证人的名字
         var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
         var regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
         var nuber = /^\d+(\.\d+)?$/ // 验证数字
@@ -325,7 +314,7 @@
           check = false
           return false
         }*/
-        // this.imgUrl_loading = true
+        this.imgUrl_loading = true
         /* 录入数据 */
         var add = '?Customer_id=' + this.Customer_name_id + '&AfterSale_day=' + this.options + '&AfterSale_jia=' + this.Customer_DecorateJia + '&AfterSale_yi=' + this.Customer_DecorateYi +
           '&AfterSale_worker=' + this.worker + '&AfterSale_date=' + this.Customer_baoxiushijian + '&AfterSale_date_close=' + this.Customer_Date+

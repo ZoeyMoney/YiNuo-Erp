@@ -11,7 +11,7 @@
       <div class="one-noble">
         <div class="one">
           <h2>一诺装饰</h2>
-          <p>版本号：0.2.1</p>
+          <p>版本号：0.3.1</p>
         </div>
         <p class="left-p">Enterprise Resource Planning</p>
       </div>
@@ -20,8 +20,8 @@
 			  <ul class="mui-table-view mui-grid-view mui-grid-9 jiugongge">
 			    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" v-for="item in mgrid" v-if="item.projet">
 			      <router-link :to="item.href">
-              <img :src="item.ImgArr" alt="">
-			        <div class="mui-media-body">{{item.text}}</div>
+                <img :src="item.ImgArr" alt="">
+			          <div class="mui-media-body">{{item.text}}</div>
             </router-link>
 			    </li>
         </ul>
@@ -55,13 +55,13 @@ export default {
         { href: 'Project_Reconciliation', ImgArr: require('../image/xiangmduiz.png'), text: '项目对账',projet:false,},
         { href: 'money_sale', ImgArr: require('../image/souhou.png'), text: '售后信息' ,projet:false},
         { href: 'summary_entry', ImgArr: require('../image/Summary.png'), text: '数据录入' ,projet:false},
+        { href: 'informaction', ImgArr: require('../image/informaction.png'), text: '推进信息' ,projet:true},
       ]
     }
   },
   created () {
+    console.log(this.$store.state.isLogin)
     this.NewUserName = JSON.parse(localStorage.data).role
-    // console.log(this.NewUserName)
-    // console.log(this.mgrid)
     for (var index in this.mgrid) {
       if (this.mgrid[index].text === '售后信息') {
         for (var inde in this.NewUserName) {
@@ -131,6 +131,11 @@ export default {
       }
     }
   },
+  computed:{
+    getToken(){
+      return this.$store.getters.getToken
+    }
+  }
 }
 </script>
 

@@ -23,6 +23,7 @@
     </div>
 </template>
 <script>
+  import config from '../js/index'
 export default {
   name: 'Login',
   data () {
@@ -46,14 +47,15 @@ export default {
         var _this = this
         this.imgUrl_loading = true
         this.axios.post('/Login'+'?name=' + this.name + '&pwd=' + this.pwd).then(res=>{
+          var token = res.data.token
           if (res.status === 200) {
             this.imgUrl_loading = false
             if (res.data.msg === '登录成功') {
-              localStorage.data = JSON.stringify(res.data)
-              // console.log(res.data.token)
-              // this.$store.commit('token',res.data.token)
-              // console.log(this.state.token)
               mui.alert(res.data.msg, function () {
+                sessionStorage.setItem(config.KEY.CACHE_LOGIN_USER,_this.name)
+                sessionStorage.setItem(config.KEY.CACHE_LOGIN_ID,res.data.userid)
+                localStorage.data = JSON.stringify(res.data)
+                _this.$store.commit('isLogin',res.data.userid)
                 _this.$router.push('index')
               })
             }else{
@@ -80,8 +82,5 @@ export default {
   .bcg-form .input-rot{border: 1px solid rgba(159, 159, 159, 0.28);-webkit-border-radius: 41px;-moz-border-radius: 41px;border-radius: 41px;padding: 1px 0;margin-bottom: 11px;}
   .bcg-form .input-rot label{font-size: 15px;color: #464646;width: 20%;padding-left: 27px;}
   .bcg-form .input-rot input{width: 72%;margin-bottom: 0;-webkit-border-radius: 50px;-moz-border-radius: 50px;border-radius: 50px;background-color: transparent!important;border: 0;padding: 0 36px;color: #464646;}
-  .go-btn button{width: 89%;line-height: 28px;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    border-radius: 30px;background-color: rgba(112, 60, 24,0.4);border: 0;color: #464646;letter-spacing: 15px}
+  .go-btn button{width: 89%;line-height: 28px;-webkit-border-radius: 30px;-moz-border-radius: 30px;border-radius: 30px;background-color: rgba(112, 60, 24,0.4);border: 0;color: #464646;letter-spacing: 15px}
 </style>

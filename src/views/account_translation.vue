@@ -25,13 +25,8 @@
             <label>相关人</label>
             <input type="text" class="mui-input-clear" v-model="fund_person" placeholder="无" disabled="disabled">
           </div>
-          <!--<div class="mui-input-row">
-            <label>备注</label>
-            <input type="text" class="mui-input-clear" v-model="fund_details_text" placeholder="无" disabled="disabled">
-          </div>-->
           <div class="mui-input-row">
             <label>预收时间</label>
-<!--            <input type="text" class="mui-input-clear" :value="dates" placeholder="无">-->
             <el-date-picker v-model="dates" type="datetime" placeholder="选择日期时间"></el-date-picker>
           </div>
           <div class="mui-input-row">

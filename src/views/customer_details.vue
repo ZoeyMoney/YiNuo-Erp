@@ -22,7 +22,6 @@
               <a class="mui-navigate-right left-mar" href="#">
                 <div class="mui-input-row">
                   <label>项目名称</label>
-<!--                  <input type="text" class="mui-input-clear" v-model="customer_name" placeholder="无" disabled="disabled">-->
                   <div>{{customer_name}}</div>
                 </div>
               </a>
@@ -41,7 +40,6 @@
                 </div>
                 <div class="mui-input-row">
                   <label>设计师</label>
-<!--                  <input type="text" v-model="customer_stylist">-->
                   <select name="" v-model="customer_stylist">
                     <option value="">请选择</option>
                     <option v-for="item in listName" :value="item.fund_person_id">{{item.fund_person}}</option>
@@ -66,14 +64,6 @@
                     <option v-for="item in listLevel" :value="item.text">{{item.text}}</option>
                   </select>
                 </div>
-                <!--<div class="mui-input-row all-row">
-                  <label>所属类型</label>
-                  <input type="text" class="mui-input-clear row-input" v-model="Customer_type" placeholder="无">
-                  <div class="mui-input-row mui-radio mui-left mui-chech" name="" v-for="item in listRadio">
-                    <label>{{item.text}}</label>
-                    <input name="Customer_form" type="radio" v-model="listRadio_all" :value="item.text" checked="a">
-                  </div>
-                </div>-->
                 <div class="row-left">
                   <div class="row-left-on">
                     <label>所属类型</label>
@@ -102,45 +92,6 @@
             </li>
           </ul>
         </form>
-        <!--第二个form-->
-       <!-- <form class="mui-input-group form-pab form-padding" v-for="item in stageName">
-          <div class="mui-content">
-            <div class="row-box">
-              <div class="mui-input-row">
-                <label>建单时间</label>
-                <input type="text" class="mui-input-clear" id="stageData" :value="item.stage_measure | data"
-                       placeholder="2019-01-14" disabled="disabled">
-              </div>
-              <div class="mui-input-row">
-                <label>已建单</label>
-                <input type="text" class="mui-input-clear" :value="item.stage_day" id="day" disabled="disabled">
-              </div>
-            </div>
-            <div class="row-box">
-              <div class="mui-input-row">
-                <label>当前阶段</label>
-                <input type="text" class="mui-input-clear" :value="item.stage_name" id="stipulate" disabled="disabled">
-              </div>
-              <div class="mui-input-row">
-                <label>限时</label>
-                <input type="text" class="mui-input-clear" :value="item.stage_stipulate" id="stage_name"
-                       disabled="disabled">
-              </div>
-            </div>
-            <div class="row-box">
-              <div class="mui-input-row">
-                <label>开始时间</label>
-                <input type="text" class="mui-input-clear" id="goData" :value="item.stage_startdate | data"
-                       placeholder="2019-01-12" disabled="disabled">
-              </div>
-              <p v-show="false">{{listtime | data}}</p>
-              <div class="mui-input-row item-time">
-                <label>倒计时</label>
-                <label>{{time(item.stage_startdate,item.stage_stipulate)}}</label>
-              </div>
-            </div>
-          </div>
-        </form>-->
         <form class="mui-input-group form-pad box-h4">
           <div class="box3 ">
             <div>
@@ -155,8 +106,8 @@
             </div>
             <div class="mui-input-row go-nai">
               <label>下次跟进</label>
-              <input type="date" v-model="nexDate">
-<!--              <el-date-picker v-model="nexDate" type="date" placeholder="选择日期"></el-date-picker>-->
+<!--              <input type="date" v-model="nexDate">-->
+              <el-date-picker v-model="nexDate" type="date" placeholder="选择日期" @focus="forbid"></el-date-picker>
             </div>
             <div class="mui-input-row go-nai">
               <label>当前阶段</label>
@@ -170,6 +121,20 @@
             <div class="row-go">
               <div class="mui-input-row row-textarea">
                 <textarea name="" rows="" cols="" placeholder="请输入跟进记录" v-model="list_text"></textarea>
+              </div>
+              <div class="mui-input-row update-img">
+                <label>文件上传</label>
+                <el-upload
+                  action="https://formattingclub.com/YiNuoLogin/AfterSale/uploadImg"
+                  list-type="picture-card"
+                  :on-preview="handlePictureCardPreview"
+                  :on-success="handleAvatarSuccess"
+                  :on-remove="handleRemove">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog>
               </div>
               <div class="go-add">
                 <button type="button" @click="add">保存记录</button>
@@ -193,7 +158,11 @@
             </div>
             <div class="row-go">
               <div class="mui-input-row row-textarea">
-                <textarea name="" rows="" cols="" :value="item.follow_text" disabled="disabled"></textarea>
+<!--                <textarea name="" rows="" cols="" :value="item.follow_text" disabled="disabled"></textarea>-->
+                <div>{{item.follow_text}}</div>
+                <div class="div-img">
+                  <img v-show="item.imgsrc" :src="getImgUrl(item.imgsrc)" alt="lodingImg">
+                </div>
               </div>
             </div>
           </div>
@@ -232,6 +201,9 @@ export default {
       nexDate:'',//时间
       profetName:'',//跟进人
       Customer_grade:'',//客户等级
+      dialogImageUrl: '',
+      dialogVisible: false,
+      ImgBase:'',
       list_text:'',
       vstage_name: [
         { stage_name: '未量尺' },
@@ -289,6 +261,7 @@ export default {
     }else if (this.cv.customer_form == '工装') {
       this.listRadio_all = '工装'
     }
+    this.imgsrc = this.cv.imgsrc
     //  跟进人
     this.axios.get('/select_follow_person'+'?fund_person_state=4').then(res => {
       this.profetName = res.data.data
@@ -302,12 +275,30 @@ export default {
     this.axios.get('/select_follow_person'+'?fund_person_state=3').then(res => {
       this.listName = res.data.data
     })
-    //	修改记录
-    /*this.axios.get(url.clientUndata).then(info => {
-      this.undata = info.data.data
-    })*/
   },
   methods: {
+    forbid(){
+      //禁止软键盘弹出
+      document.activeElement.blur();
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleAvatarSuccess(response, file) {
+      this.ImgBase = response
+      console.log(response)
+    },
+    //图片解析
+    getImgUrl(val){
+      if (val != undefined) {
+      var url = 'https://formattingclub.com/static/YiNuo/'+val
+      return url
+      }
+    },
     //记录保存
     add(){
       var then = this
@@ -332,9 +323,15 @@ export default {
         check = false
         return false
       }
+      var dt = new Date(this.nexDate)
+      var y = dt.getFullYear()
+      var m = dt.getMonth() + 1
+      var d = dt.getDate()
+      var dd  = `${y}-${m}-${d}`
+      this.imgUrl_loading = true
       //    录入数据
       var add = '?Customer_name=' + this.cv.customer_id + '&follow_person=' + this.follow_person + '&follow_text=' + this.list_text +'&follow_stage='+this.stage_name
-      + '&follow_Pre_date='+this.nexDate
+      + '&follow_Pre_date='+dd+'&imgsrc='+this.ImgBase
       this.axios.get('/Customer/AddFollow' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
@@ -485,15 +482,18 @@ select{font-size: 15px}
 .left-mar div{line-height: 40px}
 /*记录*/
 .jin{display: flex;line-height: 40px;border-bottom: 1px solid black;width: 95%;margin-left: 15px;margin-bottom: 11px}
-.jin-date{display: flex;margin-left: 112px}
+.jin-date{display: flex;}
 .gen{text-align: left;font-size: 15px;color: gray;padding-left: 43px}
 .jin-date p:nth-child(2){text-align: right;padding-right: 16px;}
-.row-textarea{height: 54px!important;border: 1px solid #dadada;width: 95%;margin-left: 11px}
+.row-textarea{height: auto!important;border: 1px solid #dadada;width: 95%;margin-left: 11px;font-size: 14px}
 .row-textarea textarea{font-size: 14px;color: black;padding-left: 2px!important;padding-top: 3px}
 .box-h4 h4:nth-child(1){line-height: 28px;border-bottom: 2px solid black;font-size: 15px;width: 95%;margin-left: 14px}
+.box{margin-bottom: 20px}
 ul{background-color: #efeff4;font-size: 15px}
 .mui-table-view-cell.mui-collapse .mui-collapse-content{background-color: #efeff4;padding: 0}
 /*按钮*/
+.update-img label{width: 100%}
+.update-img{margin-bottom: 120px}
 .row-left{font-size: 15px;display: flex;}
 .row-left-on{flex: 1;display: flex;}
 .row-left-on:nth-child(1) label{padding: 10px 15px;line-height: 25px;white-space: nowrap}
@@ -516,4 +516,13 @@ ul{background-color: #efeff4;font-size: 15px}
 .row-input{flex: 1;padding-left: 21px!important;}
 .mui-input-group .mui-input-row:after{background-color: transparent}
 /deep/.el-input__prefix{display: none}
+/*  图片上传*/
+/*图片解析*/
+.div-img{width: 30%}
+.div-img img{width: 100%}
+/deep/.el-icon-date:before{content: ''}
+/deep/.el-icon-plus:before{font-size: 26px}
+/deep/.el-icon-minus:before{font-size: 25px;position: relative;top: 1px}
+/deep/.el-upload--picture-card{border: 1px solid #dadada!important;background-color: transparent!important;width: 108px;height: 108px;line-height: 118px;margin-left: 9px}
+/deep/.el-upload-list--picture-card .el-upload-list__item{width: 108px;height: 108px;margin-left: 9px}
 </style>

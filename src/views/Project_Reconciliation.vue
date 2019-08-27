@@ -48,7 +48,7 @@
                   <th><span>金额</span></th>
                   <th :style="lefta"><span>日期</span></th>
                 </tr>
-                <tr v-for="item in yesFu">
+                <tr v-for="item in yesFu" @click="rinningClick(item.fund_details_id)">
                   <td><span>{{item.customer_name}}</span></td>
                   <td>
                     <span v-if="item.fund_details_batch ==='99'" :style="fund_name">质保金</span>
@@ -56,7 +56,11 @@
                     <span v-else-if="item.fund_name===undefined" :style="fund_name">{{item.fund_names}}</span>
                   </td>
                   <td><span :style="money" :class="{clasred:item.fund_details_type === 1}">￥{{item.fund_details_money | negative}}</span></td>
-                  <td><span :style="paLft">{{item.fund_details_date | NoYes}}</span></td>
+<!--                  <td><span :style="paLft">{{item.fund_details_date | NoYes}}</span></td>-->
+                  <td>
+                    <span :style="paLft" v-show="item.fund_details_date">{{item.fund_details_date | NoYes}}</span>
+                    <span :style="paLft" v-show="item.fund_details_date==undefined">待确认</span>
+                  </td>
                 </tr>
               </table>
             </el-tab-pane>
@@ -74,7 +78,7 @@
                   <th><span>金额</span></th>
                   <th :style="lefta"><span>日期</span></th>
                 </tr>
-                <tr v-for="item in listSecond">
+                <tr v-for="item in listSecond" @click="nodeal(item.fund_details_id)">
                   <td><span>{{item.customer_name}}</span></td>
                   <td>
                     <span v-if="item.fund_details_batch ==='99'" :style="fund_name">质保金</span>
@@ -82,7 +86,11 @@
                     <span v-else-if="item.fund_name===undefined" :style="fund_name">{{item.fund_names}}</span>
                   </td>
                   <td><span :style="money" :class="{clasred:item.fund_details_type === 1}">￥{{item.fund_details_money | negative}}</span></td>
-                  <td><span :style="paLft">{{item.fund_details_date | NoYes}}</span></td>
+                  <td>
+                    <span :style="paLft" v-show="item.fund_details_date">{{item.fund_details_date | NoYes}}</span>
+                    <span :style="paLft" v-show="item.fund_details_date==undefined">待确认</span>
+                  </td>
+<!--                  <td><span :style="paLft" v>{{item.fund_details_date | NoYes}}</span></td>-->
                 </tr>
               </table>
             </el-tab-pane>
@@ -271,6 +279,33 @@
 
     },
     methods:{
+      //未处理进入应付详情
+      nodeal(val){
+        var listVal = {}
+        if (JSON.parse(localStorage.data).role[0].role_name == '总权限') {
+          for (var index in this.listSecond) {
+            if (val == this.listSecond[index].fund_details_id) {
+              listVal = this.listSecond[index]
+            }
+          }
+        }
+        localStorage.payable_entry = JSON.stringify(listVal)
+        this.$router.push({ path: 'payable_entry', query: { listVal: listVal} })
+      },
+      //已处理进入流水详情
+      rinningClick(val){
+        var listVal = {}
+        if (JSON.parse(localStorage.data).role[0].role_name == '总权限') {
+          for (var index in this.yesFu) {
+            if (val == this.yesFu[index].fund_details_id) {
+              listVal = this.yesFu[index]
+            }
+          }
+        }
+        localStorage.msg = JSON.stringify(listVal)
+        // console.log(listVal)
+        this.$router.push({ path: 'running_details', query: { listVal: listVal} })
+      },
       //封装筛选总计所有金额
       all_model_money(res){
         //   所有总计金额

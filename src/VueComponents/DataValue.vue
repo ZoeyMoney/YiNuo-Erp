@@ -6,6 +6,7 @@
           <el-date-picker
             v-model="myValue"
             type="datetime"
+            @focus="dataFocus"
             placeholder="选择日期时间">
           </el-date-picker>
           <!--<el-date-picker
@@ -37,6 +38,11 @@
       },
       myValue(newValue){
         this.$emit('input',newValue)
+      }
+    },
+    methods:{
+      dataFocus(){
+        document.activeElement.blur();
       }
     }
   }

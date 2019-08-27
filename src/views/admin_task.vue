@@ -33,28 +33,21 @@
             <label>下达人</label>
             <select name="" v-model="Release" @change="releaseClick(Release)">
               <option value="">请选择</option>
-              <option v-for="item in list_inform" :value="item.approve_inform_person_id">{{item.approve_inform_person}}</option>
+              <option v-for="item in list_inform" :value="item.mission_inform_person_id">{{item.mission_inform_person}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>任务人</label>
             <select name="" v-model="task" @change="teskClick(task)">
               <option value="">请选择</option>
-              <option v-for="item in list_make" :value="item.approve_make_person_id">{{item.approve_make_person}}</option>
+              <option v-for="item in list_make" :value="item.mission_make_person_id">{{item.mission_make_person}}</option>
             </select>
           </div>
-          <div class="mui-input-row goOver">
-            <label>起始时间</label>
-            <input type="date" class="mui-input-clear">
-            <span class="go-span"></span>
-            <input type="date" class="mui-input-clear">
-          </div>
-          <div class="mui-input-row">
-            <label>状态</label>
-            <select name="" v-model="radio">
-              <option value="">请选择</option>
-              <option v-for="item in list_data" :value="item.id">{{item.text}}</option>
-            </select>
+          <div class="mui-input-row dian">
+            <div class="mui-input-row mui-radio dian-a" v-for="item in list_data">
+              <label>{{item.text}}</label>
+              <input name="radio1" type="radio" checked="a" :value="item.id" v-model="radio" @change="radioClick(radio)">
+            </div>
           </div>
         </form>
 
@@ -112,7 +105,7 @@
           </div>
         </form>
         <div class="mui-input-row form-btn" v-show="btn_no">
-          <button type="button" class="mui-btn mui-btn-blue" @click="del(item.mission_id,item.mission_inform_person)">删除</button>
+          <button type="button" class="mui-btn mui-btn-blue" v-show="item.mission_state =='2' || item.mission_state=='0'" @click="del(item.mission_id,item.mission_inform_person)">删除</button>
           <button type="button" class="mui-btn mui-btn-blue" @click="add" v-if="item.mission_state =='0'">提交审批</button>
         </div>
         <form class="mui-input-group" v-if="text_ad">
@@ -137,15 +130,9 @@
         customer_name:'',
         admin:'',//总权限设置
         user:'',//登录名称
-        radio:'',//radio按钮
+        radio:'0',//radio按钮
         imgUrl_loading:false,//加载图片
         money_plus: require('../image/plus.png'),
-        list_tesl:[
-          {text:'张三'},
-          {text:'李四'},
-          {text:'王五'},
-          {text:'奥利弗就会物理'},
-        ],
         Release:'',//下达人
         task:'',//任务人
         list_data:[
@@ -185,10 +172,10 @@
       this.admin = adminnostorm[0].role_name
       this.user = JSON.parse(localStorage.data).userNumber
     //  table数据
-      this.axios.get('/Administration/Select_mission').then(res=>{
-        this.listTable = res.data.data
-        /*this.list_inform = res.data.list_inform_person
-        this.list_make = res.data.list_make_person*/
+      this.axios.get('/Administration/Select_mission'+'?mission_stale='+this.radio).then(res=>{
+        this.listTable = res.data.list_mission
+        this.list_inform = res.data.list_inform_person
+        this.list_make = res.data.list_make_Person
       })
     },
     computed:{
@@ -207,22 +194,53 @@
     methods:{
     //  封装全局
       model_id(res){
-
+        this.listTable = res.data.list_mission
+        this.list_inform = res.data.list_inform_person
+        this.list_make = res.data.list_make_Person
       },
     //  下达人
       releaseClick(id){
-        this.axios.get('/Administration/Select_approve'+'?approve_inform_person='+id).then(res=>{
-          this.list = res.data.list_administration
-          this.list_inform = res.data.list_inform_person
-          this.list_make = res.data.list_make_person
+        var add = '?'
+        if (this.Release != '') {
+          add+='mission_inform_person='+id
+        }
+        if (this.task != '') {
+          add+='&mission_make_person='+this.task
+        }
+        if (this.radio != '') {
+          add+='&mission_stale='+this.radio
+        }
+        this.axios.get('/Administration/Select_mission'+add).then(res=>{
+          this.model_id(res)
         })
       },
       //任务人
       teskClick(id){
-        this.axios.get('/Administration/Select_approve'+'?approve_make_person='+id).then(res=>{
-          this.list = res.data.list_administration
-          this.list_inform = res.data.list_inform_person
-          this.list_make = res.data.list_make_person
+        var add = '?'
+        if (this.task != '') {
+          add+='mission_make_person='+id
+        }
+        if (this.Release != '') {
+          add+='&mission_inform_person='+this.Release
+        }
+        if (this.radio != '') {
+          add+='&mission_stale='+this.radio
+        }
+        this.axios.get('/Administration/Select_mission'+add).then(res=>{
+          this.model_id(res)
+        })
+      },
+      //状态
+      radioClick(id){
+        var add = '?mission_stale='+id
+        if (this.Release != '') {
+          add+='&mission_inform_person='+this.Release
+        }
+        if (this.task != '') {
+          add+='&mission_make_person='+this.task
+        }
+        this.axios.get('/Administration/Select_mission'+add).then(res=>{
+          this.model_id(res)
         })
       },
       //时间转换
@@ -265,8 +283,7 @@
     //  删除
       del(id,prosen){
         var then = this
-        console.log(prosen)
-        if (this.user == prosen) {
+        if (this.user == prosen || this.admin=='总权限') {
         this.imgUrl_loading = true
         this.axios.post('/Administration/Delete_mission'+'?mission_id='+id).then(res=>{
           if (res.status === 200) {
@@ -361,7 +378,10 @@
   .msgbox form .mui-input-row div{font-size: 15px;padding: 11px}
   /*btn*/
   .form-btn button{width: 34%!important;margin: 0 3px!important;}
+  .mui-checkbox input[type=checkbox], .mui-radio input[type=radio]{top: 8px!important;}
   .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
   .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}
   /deep/input::-webkit-input-placeholder{color: #818181}
+  .dian{display: flex;white-space: nowrap;padding-left: 11px}
+  .dian-a{position: relative;right: 11px}
 </style>

@@ -11,7 +11,7 @@
         <form class="mui-input-group setting-botton">
           <div class="mui-input-row">
             <label>用户名</label>
-            <input type="text" class="mui-input-clear" v-model="user_number">
+            <input type="text" class="mui-input-clear" v-model="user_number" placeholder="请输入用户名">
           </div>
           <div class="mui-input-row">
             <label>原密码</label>
@@ -19,7 +19,7 @@
           </div>
           <div class="mui-input-row">
             <label>新密码</label>
-            <input type="password" class="mui-input-password" v-model="user_password" placeholder="请输入密码">
+            <input type="text" class="mui-input-password" v-model="user_password" placeholder="请输入密码">
           </div>
         </form>
         <div class="form-button">
@@ -64,12 +64,12 @@ export default {
         check = false
         return false
       }
-
-      var add = '?user_number=' + this.user_number + '&pwd=' + this.pwd + '&user_password=' + this.user_password
-      this.axios.get('https://formattingclub.com/YiNuoLogin/User/update_user' + add).then(res => {
+      var add = '?user_number=' + this.user_number + '&pwd=' + this.pwd + '&user_password=' + this.user_password+'&user_id='+JSON.parse(localStorage.data).userid
+      this.axios.get('/User/update_user' + add).then(res => {
         if (res.data.msg === '修改成功') {
           mui.alert('修改成功', function () {
-            then.$router.push({ name: 'login' })
+            localStorage.clear()
+            then.$router.push({ path: '/' })
           })
         } else {
           mui.alert('修改失败')

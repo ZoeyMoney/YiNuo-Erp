@@ -133,7 +133,7 @@ export default {
       var _this = this
       var check = true
       var pattern = /^1[0-9]{10}$/ // 验证手机号
-      var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
+      var nameReg = /^[\u4E00-\u9FA5]{2,10}$/ // 验证人的名字
       var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
       var regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
       var nuber = /^[0-9]*$/ // 验证数字

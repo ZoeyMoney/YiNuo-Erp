@@ -55,16 +55,12 @@ import Router from 'vue-router'
 
 
 Vue.use(Router)
-export default new Router({
+const router = new Router({
   // mode:'history',
   routes: [
     {
       path: '/',
       redirect: '/login',
-      meta:{
-        index:1,
-        isCheckLogin:true
-      }
     },{
       path: '/Login',
       name: 'Login',
@@ -357,6 +353,14 @@ export default new Router({
       path: '/task_admins',
       name: 'task_admins',
       component:resolve=>require(['@/views/task_admins'],resolve)
+    }, {
+      path: '/stop_sales_two',
+      name: 'stop_sales_two',
+      component:resolve=>require(['@/views/stop_sales_two'],resolve)
+    }, {
+      path: '/informaction',
+      name: 'informaction',
+      component:resolve=>require(['@/views/informaction'],resolve)
     }
     /* {
       path:'/home',
@@ -377,4 +381,15 @@ export default new Router({
     //   componentVue: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     // }
   ],
+})
+export default router
+import config from './js/index'
+router.beforeEach((to,from,next) =>{
+  // console.log(to)
+  if (to.fullPath != '/Login') {
+    if (!sessionStorage.getItem(config.KEY.CACHE_LOGIN_USER)) {
+      return next("/Login")
+    }
+  }
+  next()
 })

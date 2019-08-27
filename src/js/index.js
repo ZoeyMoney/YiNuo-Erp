@@ -1,0 +1,7 @@
+export default {
+  KEY:{
+    CACHE_LOGIN_USER:'loginUser',
+    CACHE_LOGIN_ID:'loginUserId',
+    CACHE_LOGIN_TOKEN:'loginTOKEN'
+  },
+}

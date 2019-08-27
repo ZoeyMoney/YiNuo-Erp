@@ -115,7 +115,7 @@
     },
     created () {
       // table数据
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageCustomer').then(res => {
+      this.axios.get('/Customer/SelectStageCustomer').then(res => {
         if (res.status === 200) {
           this.list = res.data
         } else {
@@ -131,11 +131,11 @@
       })
 
       // 设计师
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStylist').then(res => {
+      this.axios.get('/Customer/SelectStylist').then(res => {
         this.listName = res.data
       })
       //  阶段
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStageName').then(res => {
+      this.axios.get('/Customer/SelectStageName').then(res => {
         this.stageName = res.data
       })
       //  倒计时

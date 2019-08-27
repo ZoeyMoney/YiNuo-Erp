@@ -18,27 +18,31 @@
       <div class="mui-content app">
         <form class="mui-input-group">
           <div class="mui-input-row">
+            <div class="mui-input-row">
+              <label>下达人</label>
+              <!--            <input type="text" v-model="Release" @click="Release_peopleClick" placehoolder="请选择下达人">-->
+              <select name="" v-model="Release_id" :class="{classGray:Release_id=='',classBlack:Release_id!=''}">
+                <option value="">请选择</option>
+                <option v-for="item in task_people_list" :value="item.fund_person_id">{{item.fund_person}}</option>
+              </select>
+            </div>
             <label>执行人</label>
-            <input type="text" v-model="task_people" @click="task_peopleClick" placeholder="请选择执行人">
-          </div>
-          <div class="mui-input-row">
-            <label>下达人</label>
-            <input type="text" v-model="Release" @click="Release_peopleClick" placeholder="请选择下达人">
+<!--            <input type="text" v-model="task_people" @click="task_peopleClick" placeholder="请选择执行人">-->
+            <select name="" v-model="task_people" :class="{classGray:task_people=='',classBlack:task_people!=''}">
+              <option value="">请选择</option>
+              <option v-for="item in task_people_list" :value="item.fund_person_id">{{item.fund_person}}</option>
+            </select>
           </div>
           <div class="mui-input-row">
             <label>完成时间</label>
             <div class="block">
-              <el-date-picker v-model="valueDate" type="date" align="left" placeholder="选择日期时间"></el-date-picker>
+              <el-date-picker v-model="valueDate" type="date" align="left" placeholder="选择日期时间" @focus="dataFocus"></el-date-picker>
             </div>
           </div>
           <div class="mui-input-row">
             <label>任务详情</label>
             <input type="text" class="mui-input-clear" v-model="task_text" placeholder="请输入任务详情">
           </div>
-          <!--<div class="mui-input-row">
-            <label>天数</label>
-            <input type="text" class="mui-input-clear" v-model="task_day" placeholder="请输入天数">
-          </div>-->
         </form>
         <div class="mui-input-row form-btn">
           <button type="button" class="mui-btn mui-btn-blue" @click="saveName">下达任务</button>
@@ -54,27 +58,38 @@
       return{
         valueDate:'',//期限
         task_people:'',//任务人
-        task_people_id:'',//执行人id
+        // task_people_id:'',//执行人id
+        task_people_list:'',//数据任务人
         Release:'',//下达人
         Release_id:'',//下任达id
         task_text:'',//任务详情
-        // task_day:'',//天数
         imgUrl_loading:false,
-        list_tesl:[
-          {text:'张三'},
-          {text:'李四'},
-          {text:'王五'},
-          {text:'奥利弗就会物理'},
-        ],
+        user:'',
       }
     },
     created(){
-      this.task_people = window.fund_people
-      this.task_people_id = window.fund_people_name
-      this.Release = window.fund_people_huan
-      this.Release_id = window.fund_people_huan_name
+      this.user = JSON.parse(localStorage.data).userNumber
+      this.axios.get('/fund/Select_fund_person'+'?fund_person_state_A=2').then(res=>{
+        var list = {}
+        for (var index in res.data.data) {
+          if (this.user == res.data.data[index].fund_person) {
+            list = res.data.data[index]
+          }
+        }
+        this.Release = list.fund_person
+        this.Release_id = list.fund_person_id
+      })
+
+      //所有人数据
+      this.axios.get('/fund/Select_fund_person'+'?fund_person_state_A=2').then(res=>{
+        this.task_people_list = res.data.data
+      })
     },
     methods:{
+      //禁止键盘弹出
+      dataFocus(){
+        document.activeElement.blur();
+      },
       //执行人
       task_peopleClick(){
         var prosen = 'task_admin'
@@ -95,13 +110,18 @@
           _true = false
           return false
         }
+        if (this.task_people == this.Release) {
+          mui.toast('任务人跟下达人不能相同')
+          _true = false
+          return false
+        }
         // this.imgUrl_loading = true
         var dates = new Date(this.valueDate)
         var d = dates.getFullYear()
         var m = dates.getMonth() + 1
         var y = dates.getDate()
         var date = d+'-'+m+'-'+y
-        var add = '?mission_make_person='+this.task_people_id+'&mission_inform_person='+this.Release_id+'&mission_text='+this.task_text+'&mission_startDate='+date+'&mission_state=0'
+        var add = '?mission_make_person='+this.task_people+'&mission_inform_person='+this.Release_id+'&mission_text='+this.task_text+'&mission_startDate='+date+'&mission_state=0'
         this.axios.post('/Administration/Add_Mission'+add).then(res=>{
           if (res.status === 200) {
             this.imgUrl_loading = false

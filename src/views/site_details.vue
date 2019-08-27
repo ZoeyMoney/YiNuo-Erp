@@ -22,13 +22,12 @@
             <a class="mui-navigate-right left-mar" href="#">
               <div class="mui-input-row">
                 <label>工地名称</label>
-                <input type="text" class="mui-input-clear" v-model="customer_name" placeholder="input"
-                       disabled="disabled">
+                <div>{{customer_name}}</div>
               </div>
             </a>
             <div class="mui-collapse-content">
               <div class="mui-input-row">
-                <label>负责人</label>
+                <label>对接人</label>
                 <input type="text" class="mui-input-clear" v-model="customer_linkman" placeholder="input">
               </div>
               <div class="mui-input-row">
@@ -134,7 +133,8 @@
           </div>
           <div class="row-go">
             <div class="mui-input-row row-textarea-two">
-              <textarea name="" rows="" cols="" :value="item.follow_text" disabled="disabled"></textarea>
+<!--              <textarea name="" rows="" cols="" :value="item.follow_text" disabled="disabled"></textarea>-->
+              <div>{{item.follow_text}}</div>
             </div>
           </div>
         </div>
@@ -143,7 +143,8 @@
         <button type="button" class="mui-btn mui-btn-black" @click="dele">删除</button>
       </div>
     </div>
-    <div class="tests" v-show="Imgtest" @click="cancel" :style="{height:imgW+'px'}">
+<!--     :style="{height:imgW+'px'}"-->
+    <div class="tests" v-show="Imgtest" @click="cancel">
       <div class="imgWid" :class="{active: isActive, test: hasError}">
         <img :src="getImgUrl(ItemImgUrl)"  alt="loading">
       </div>
@@ -233,9 +234,9 @@ export default {
       document.body.style.overflow='hidden';
       document.addEventListener("touchmove",mo,false);//禁止页面滑动
 
-      this.imgW = 100+'100%'
+      // this.imgW = 100+'100%'
       //判断页面的高度
-      var scrollTop=0;
+      /*var scrollTop=0;
       if(document.documentElement&&document.documentElement.scrollTop)
       {
         scrollTop=document.documentElement.scrollTop;
@@ -247,7 +248,7 @@ export default {
       console.log(scrollTop)
        if (scrollTop >100){
 
-       }
+       }*/
     },
     //图片放大后取消
     cancel(){
@@ -276,18 +277,34 @@ export default {
       if (this.Customer_DecorateYi != JSON.parse(localStorage.AfterSale_statistics).afterSale_yi) {
         add+='&AfterSale_yi='+this.Customer_DecorateYi
       }
-      if (this.customer_baoxiushijian != JSON.parse(localStorage.AfterSale_statistics).afterSale_date) {
-        add+='&AfterSale_date='+this.customer_baoxiushijian
-      }
       if (this.customer_yujiwanchengshijian != JSON.parse(localStorage.AfterSale_statistics).afterSale_pre_date) {
-        add+='&AfterSale_pre_date='+this.customer_yujiwanchengshijian
+        var date = new Date(this.customer_yujiwanchengshijian)
+        var dds = date.getFullYear()
+        var yys = date.getMonth() + 1
+        var mms = date. getDate()
+        var dss = dds+'-'+yys+'-'+mms
+        add+='&AfterSale_pre_date='+dss
       }
       if (this.customer_baozhiqi != JSON.parse(localStorage.AfterSale_statistics).afterSale_date_close) {
-        add+='&AfterSale_date_close='+this.customer_baozhiqi
+        var date = new Date(this.customer_baozhiqi)
+        var ddsd = date.getFullYear()
+        var yysd = date.getMonth() + 1
+        var mmsd = date. getDate()
+        var dssd = ddsd+'-'+yysd+'-'+mmsd
+        add+='&AfterSale_date_close='+dssd
       }
       if (this.customer_demand != JSON.parse(localStorage.AfterSale_statistics).afterSale_text) {
         add+='&AfterSale_text='+this.customer_demand
       }
+      if (this.customer_baoxiushijian != JSON.parse(localStorage.AfterSale_statistics).afterSale_date) {
+        var date = new Date(this.customer_baoxiushijian)
+        var dd = date.getFullYear()
+        var yy = date.getMonth() + 1
+        var mm = date. getDate()
+        var ds = dd+'-'+yy+'-'+mm
+        add+='&afterSale_date='+ds
+      }
+
       this.imgUrl_loading = true
       this.axios.post('/AfterSale/Update_AfterSale'+add).then(res=>{
         if (res.status === 200) {
@@ -373,6 +390,7 @@ export default {
   select{font-size: 15px}
   img{width: 100%}
   .left-mar{padding-left: 0!important;}
+  .left-mar div{line-height: 40px}
   /*form与form之间的差距*/
   .all-row{display: flex;}
   .all-row input{font-size: 14px!important;}
@@ -391,11 +409,13 @@ export default {
   .gen{float: left;font-size: 15px}
   .gen{width: 26%}
   .row-textarea{height: 100px!important;}
-  .row-textarea-two{height: 100px}
+  .row-textarea-two{height: auto!important;border: 1px solid #dadada;width: 95%;margin-left: 11px;font-size: 14px}
   .row-textarea textarea:nth-child(1){padding-left: 113px!important;font-size: 14px;}
   .box-h4 h4:nth-child(1){line-height: 28px;border-bottom: 2px solid black;font-size: 15px;width: 95%;margin-left: 14px}
   .mui-table-view-cell.mui-collapse .mui-collapse-content{background-color: #efeff4;padding: 0}
   ul{background-color: #efeff4;font-size: 15px}
+  .mui-input-group:before,.mui-table-view:before,.mui-input-group:after,.mui-table-view:after,.mui-table-view-cell:after,
+  .mui-input-group:after, .mui-input-row:nth-last-child(1):after{background-color: transparent!important;}
   /*按钮*/
   .go-add{text-align: center;}
   .go-add button{background-color: black;color: white;width: 38%;margin-top: 17px}
