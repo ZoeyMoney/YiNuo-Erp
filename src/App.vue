@@ -18,6 +18,11 @@
       }
     },
     created () {
+
+      var p = new Promise(function (resolve, reject) {
+        this.path_id = `ws://formattingclub.com/YiNuoLogin/websocket/`+this.$store.state.isLogin
+      },2000)
+
       if (this.$store.state.isLogin != '') {
         console.log(this.$store.state.isLogin)
       }
@@ -27,7 +32,6 @@
         console.log(this.user_id)
       }
         // this.path_id = 'ws://formattingclub.com/YiNuoLogin/websocket/5'
-      this.path_id = `ws://formattingclub.com/YiNuoLogin/websocket/`+this.$store.state.isLogin
       try {
         document.body.removeChild(document.getElementById('loading'))
         setTimeout(function () {
