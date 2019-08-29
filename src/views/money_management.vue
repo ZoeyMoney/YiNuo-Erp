@@ -39,6 +39,8 @@ export default {
         { href: 'site_stage', listImg: require('../image/site_stage.png'), text: '工地阶段' },
         { href: 'stop_sales', listImg: require('../image/saloe.png'), text: '暂支销账' },
         { href: 'stop_sales_two', listImg: require('../image/saloe.png'), text: '暂支销账12' },
+        { href: 'stop_sales_two', listImg: require('../image/saloe.png'), text: '项目测评' },
+        { href: 'cash_assessment', listImg: require('../image/saloe.png'), text: '现金评估' },
       ]
     }
   }

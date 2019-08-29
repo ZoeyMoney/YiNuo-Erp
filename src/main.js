@@ -18,6 +18,7 @@ import buttonSave from './components/button_save' //组件调用button
 import dataValue from './components/DateValue' //时间控件
 import loginLoading from './components/login_loading' //时间控件
 import VueTouch from 'vue-touch'  //滑动
+
 // import 'vue-xlsx-table/dist/style.css'
 Vue.use(loginLoading)
 Vue.use(buttonSave)
