@@ -48,6 +48,7 @@ export default {
   data () {
     return {
       mgrid: [
+<<<<<<< HEAD
         { href: 'customer_management', ImgArr: require('../image/admin.png'), text: '客户管理', projet: false },
         { href: 'site_management', ImgArr: require('../image/gongdi.png'), text: '工地管理', projet: false },
         { href: 'money_management', ImgArr: require('../image/caiwu.png'), text: '财务管理', projet: false },
@@ -62,6 +63,20 @@ export default {
       ],
       userName:sessionStorage.getItem('loginUser'),//用户名
       imgUser:require('../image/user.png'),
+=======
+        { href: 'customer_management', ImgArr: require('../image/admin.png'), text: '客户管理',projet:false},
+        { href: 'site_management', ImgArr: require('../image/gongdi.png'), text: '工地管理' ,projet:false},
+        { href: 'money_management', ImgArr: require('../image/caiwu.png'), text: '财务管理' ,projet:false},
+        { href: 'administrative', ImgArr: require('../image/xingzheng.png'), text: '行政管理' ,projet:false},
+        { href: '', ImgArr: require('../image/cangku.png'), text: '库存管理' ,projet:false},
+        { href: '', ImgArr: require('../image/data.png'), text: '数据汇总' ,projet:false},
+        { href: 'cash_flow', ImgArr: require('../image/xianjin.png'), text: '现金流水' ,projet:false},
+        { href: 'Project_Reconciliation', ImgArr: require('../image/xiangmduiz.png'), text: '项目对账',projet:false,},
+        { href: 'money_sale', ImgArr: require('../image/souhou.png'), text: '售后信息' ,projet:false},
+        { href: 'summary_entry', ImgArr: require('../image/Summary.png'), text: '数据录入' ,projet:false},
+        { href: 'informaction', ImgArr: require('../image/informaction.png'), text: '袋鼠帮帮' ,projet:true},
+      ]
+>>>>>>> e72c251428cbcf0db14ce838eadfb1f3adb60217
     }
   },
 

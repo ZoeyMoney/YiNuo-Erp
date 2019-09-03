@@ -1,22 +1,32 @@
 <template>
-    <div class="informaction">
+    <div class="site_management">
       <!--返回-->
       <header class="mui-bar mui-bar-nav">
         <router-link :to="{name:'index'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
-        <h1 class="mui-title">推进信息</h1>
-        <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
+        <h1 class="mui-title">袋鼠帮帮</h1>
+        <router-link :to="{name:'index'}" class="mui-action-back mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
-      <login-loading v-if="imgUrl_loading"></login-loading>
-      <!--信息-->
-      <div class="mui-content">
-        <ul class="mui-table-view">
-          <li class="mui-table-view-cell" v-for="item in list_info"><span>大无畏：<i :style="iR">2019-10-90</i></span>{{item}}</li>
-        </ul>
+      <!--菜单-->
+      <div class="one-noble">
+        <h2>袋鼠帮帮</h2>
+        <p>Customer management</p>
+      </div>
+      <!--九宫格-->
+      <div class="mui-content app">
+      <ul class="mui-table-view mui-grid-view mui-grid-9 jiugongge">
+      <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" v-for="item in list">
+          <router-link :to="item.href">
+            <img :src="item.listImg" alt="">
+              <div class="mui-media-body">{{item.name}}</div>
+          </router-link>
+      </li>
+      </ul>
       </div>
     </div>
 </template>
 
 <script>
+<<<<<<< HEAD
 export default {
   name: 'informaction',
   data () {
@@ -76,6 +86,20 @@ export default {
         // 销毁监听
         this.socket.onclose = this.close
       } */
+=======
+  export default {
+   name: 'site_management',
+  data () {
+    return {
+      list: [
+        { name: '工人录入', listImg: require('../image/bi.png'), href: 'workers_enter' },
+        { name: '工人统计', listImg: require('../image/data.png'), href: 'list_workers' },
+        { name: '工地评论', listImg: require('../image/cheliang.png'), href: 'site_Inspection' },
+        { name: '其他', listImg: require('../image/cheliang.png'), href: 'site_Inspection' }
+      ]
+    }
+  },
+>>>>>>> e72c251428cbcf0db14ce838eadfb1f3adb60217
   }
 }
 </script>
