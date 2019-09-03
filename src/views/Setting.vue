@@ -24,12 +24,19 @@ export default {
   name: 'Setting',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       list: [
-        { href: 'SettingName', test: '设置用户名' },
-        { href: 'SettingPwd', test: '设置密码' }
+        { href: 'SettingName', test: '修改用户名' },
+        { href: 'SettingPwd', test: '修改密码' },
+        { href: 'userNameUpdate',test:'个人中心'}
       ]
     }
+  },
+  created () {
+
+  },
+  mounted () {
+    // 初始化
   },
   methods: {
     setting () {
@@ -40,6 +47,7 @@ export default {
           this.imgUrl_loading = false
           mui.alert(res.data.msg, function () {
             localStorage.clear()
+            sessionStorage.clear()
             localStorage.removeItem('isLogin')
             then.$router.push({ name: 'Login' })
           })

@@ -27,19 +27,19 @@
 </template>
 
 <script>
-  export default {
-    name: 'rate',
-    data(){
-      return{
-        rate:'',
-      }
-    },
-    methods:{
-      add(){
-        console.log('345')
-      }
+export default {
+  name: 'rate',
+  data () {
+    return {
+      rate: ''
+    }
+  },
+  methods: {
+    add () {
+      console.log('345')
     }
   }
+}
 </script>
 
 <style scoped>

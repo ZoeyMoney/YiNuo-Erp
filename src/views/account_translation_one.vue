@@ -70,19 +70,19 @@ export default {
   name: 'account_translation_one',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       list: '',
       all_money: '',
-      level:'',
-      whether:'',
-      list_lev:[
-        {text:'A'},
-        {text:'B'},
-        {text:'C'},
+      level: '',
+      whether: '',
+      list_lev: [
+        { text: 'A' },
+        { text: 'B' },
+        { text: 'C' }
       ],
-      list_whether:[
-        {text:'是'},
-        {text:'否'},
+      list_whether: [
+        { text: '是' },
+        { text: '否' }
       ],
       smoney: '',
       cumoterName: '',
@@ -147,19 +147,19 @@ export default {
         return false
       }
       this.imgUrl_loading = true
-      var add = 'money=' + this.smoney + '&fund_details_id=' + this.id + '&date=' + this.date+'&fund_details_level='+this.level
-      //情况
+      var add = 'money=' + this.smoney + '&fund_details_id=' + this.id + '&date=' + this.date + '&fund_details_level=' + this.level
+      // 情况
       if (this.whether === '是') {
-        add+='&fund_details_type=0'
-      }else{
-        add+='&fund_details_type=1'
+        add += '&fund_details_type=0'
+      } else {
+        add += '&fund_details_type=1'
       }
       this.axios.get('/fund/add_fund_details?' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-        mui.alert(res.data, function () {
-          then.$router.push({ name: 'money_receivable' })
-        })
+          mui.alert(res.data, function () {
+            then.$router.push({ name: 'money_receivable' })
+          })
         }
       })
     }

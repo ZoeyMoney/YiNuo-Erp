@@ -44,7 +44,7 @@ export default {
   name: 'announcement_entry',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       notice_title: '', // 标题
       notice_number: '', // 公告编号
       notice_person: '', // 下达人群
@@ -80,14 +80,14 @@ export default {
         return false
       }
       this.imgUrl_loading = true
-      this.axios.get('/notice/addNotice'+'?notice_title=' + this.notice_title + '&notice_number=' + this.notice_number +
+      this.axios.get('/notice/addNotice' + '?notice_title=' + this.notice_title + '&notice_number=' + this.notice_number +
         '&notice_person=' + this.notice_person + '&notice_text=' + this.notice_text).then(res => {
-          if (res.status === 200) {
-            this.imgUrl_loading = false
-              mui.alert(res.data, function () {
-              then.$router.push({ name: 'company_announcement' })
-            })
-          }
+        if (res.status === 200) {
+          this.imgUrl_loading = false
+          mui.alert(res.data, function () {
+            then.$router.push({ name: 'company_announcement' })
+          })
+        }
       })
     }
   }

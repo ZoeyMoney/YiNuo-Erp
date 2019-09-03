@@ -157,52 +157,52 @@ export default {
   name: 'running_money',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       keyword: '',	// 关键字
-      search:'',
-      fund_nameo:'',
-      showData:true,
-      list_fund_name_type:'',
-      list_fund_namea:'',
-      list_fund_names:'',
-      list_slime_all:'',
+      search: '',
+      fund_nameo: '',
+      showData: true,
+      list_fund_name_type: '',
+      list_fund_namea: '',
+      list_fund_names: '',
+      list_slime_all: '',
       bank_person: '', // 户主
       menu_bank_person: '',	// in户主
-      al_projet:true,
-      al_projet_two:false,
+      al_projet: true,
+      al_projet_two: false,
       bank_bank: '',	// 开户行
       menu_bank_bank: '', // in开户行
       bank_number: '',	// 尾号
-      menu_bank_number:'',
+      menu_bank_number: '',
       listNumber: '',		// 后四位数
       listN: '',	// 创建、后四位、空数组
-      menu_fund_name_type:'',//类别选择
-      menu_fund_names:'',//类别名称
-      menu_fund_name:'',//类别详细
-      menu_Customer_name:'',//工地各项
+      menu_fund_name_type: '', // 类别选择
+      menu_fund_names: '', // 类别名称
+      menu_fund_name: '', // 类别详细
+      menu_Customer_name: '', // 工地各项
       date_list: '',	// 起始时间
-      date_list_two:'',//结束时间
-      list_moey_two:'',
-      dateStart:'',
-      dateEnter:'',
-      list_moey:[],
+      date_list_two: '', // 结束时间
+      list_moey_two: '',
+      dateStart: '',
+      dateEnter: '',
+      list_moey: [],
       customer_name: '',
       list_customer_name: '', // 项目名称
       list: [], // 总
       moneyN: '', // 正数
       moneyY: '', // 负数
       moneyNY: '', // 正负总
-      bankPerson_id:'',
-      bankBank_id:'',
-      bankNumber_id:'',
-      fundNamesa_id:'',
-      listFund_name_id:'',
-      customerName_id:'',
-      dataA:'',
-      dataB:'',
-      menuBankNumber:'',
-      fund_details_id:'',//传参id
-      all_all:'',
+      bankPerson_id: '',
+      bankBank_id: '',
+      bankNumber_id: '',
+      fundNamesa_id: '',
+      listFund_name_id: '',
+      customerName_id: '',
+      dataA: '',
+      dataB: '',
+      menuBankNumber: '',
+      fund_details_id: '', // 传参id
+      all_all: '',
       leftshi: {
         paddingLeft: '10px'
       },
@@ -216,14 +216,14 @@ export default {
         overflow: 'hidden',
         textOverflow: 'ellipsis'
       },
-      floorNumber:{
-        color:'gray',
-        paddingLeft:'5px'
+      floorNumber: {
+        color: 'gray',
+        paddingLeft: '5px'
       }
     }
   },
-  computed:{
-    list_moeys(){
+  computed: {
+    list_moeys () {
       var then = this
       var newList = []
       then.list_moey.map(function (item) {
@@ -236,24 +236,24 @@ export default {
   },
   created () {
     this.imgUrl_loading = true
-    //获取前两天时间
+    // 获取前两天时间
     var sh_data = this.GetDateStr(-2)
-    //传给后台时间
-    this.axios.get('/fund/select_detail'+'?DateStart='+sh_data).then(res => {
+    // 传给后台时间
+    this.axios.get('/fund/select_detail' + '?DateStart=' + sh_data).then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
       }
       this.package(res)
-      //去掉-
-      var green_money = 0 //绿色
-      var zero_money = 0  //红色
-      var allMoney = 0 //黑色
-      var bankDealMoney = 0  //正数
+      // 去掉-
+      var green_money = 0 // 绿色
+      var zero_money = 0 // 红色
+      var allMoney = 0 // 黑色
+      var bankDealMoney = 0 // 正数
       var red_all_money = 0
       var red_money = 0
-      var fund_transaction_money = 0  //总数 fund_detail_transaction_money
+      var fund_transaction_money = 0 // 总数 fund_detail_transaction_money
       for (var index in this.list_moey) {
-        /*判断当fund_detail_transaction_money没有显示bank_deal_money*/
+        /* 判断当fund_detail_transaction_money没有显示bank_deal_money */
         if (this.list_moey[index].bank_deal_money === 0) {
           if (this.list_moey[index].fund_detail_transaction_money > 0) {
             fund_transaction_money += this.list_moey[index].fund_detail_transaction_money
@@ -269,12 +269,12 @@ export default {
           red_money += this.list_moey[index].bank_deal_money
         }
       }
-      green_money += parseFloat(bankDealMoney)+parseFloat(fund_transaction_money)
-      red_all_money += parseFloat(zero_money)+parseFloat(red_money)
-      allMoney += parseFloat(green_money)+parseFloat(red_all_money)
-       this.moneyN = Math.floor(green_money*100) /100  //绿色
-        this.moneyY = Math.floor(red_all_money*100)/100 //红色
-        this.moneyNY = Math.floor(allMoney * 100) /100
+      green_money += parseFloat(bankDealMoney) + parseFloat(fund_transaction_money)
+      red_all_money += parseFloat(zero_money) + parseFloat(red_money)
+      allMoney += parseFloat(green_money) + parseFloat(red_all_money)
+      this.moneyN = Math.floor(green_money * 100) / 100 // 绿色
+      this.moneyY = Math.floor(red_all_money * 100) / 100 // 红色
+      this.moneyNY = Math.floor(allMoney * 100) / 100
     })
     var loc = location.href
     var n1 = loc.length// 地址的总长度
@@ -292,44 +292,44 @@ export default {
     }
   },
   methods: {
-    //查询
-    search_fa(){
+    // 查询
+    search_fa () {
       this.al_projet_two = false
       this.al_projet = true
     },
-    //封装前两天时间
-    GetDateStr(AddDayCount) {
-    var dd = new Date();
-    dd.setDate(dd.getDate()+AddDayCount);//获取AddDayCount天后的日期
-    var y = dd.getFullYear();
-    var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0
-    var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0
-    return y+"-"+m+"-"+d;
+    // 封装前两天时间
+    GetDateStr (AddDayCount) {
+      var dd = new Date()
+      dd.setDate(dd.getDate() + AddDayCount)// 获取AddDayCount天后的日期
+      var y = dd.getFullYear()
+      var m = (dd.getMonth() + 1) < 10 ? '0' + (dd.getMonth() + 1) : (dd.getMonth() + 1)// 获取当前月份的日期，不足10补0
+      var d = dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate()// 获取当前几号，不足10补0
+      return y + '-' + m + '-' + d
     },
-    //金额点击
-    person(id){
+    // 金额点击
+    person (id) {
       var list = {}
       if (this.all_all === 'transfer') {
-      for (var index in this.list_moey_two) {
-        if (id === this.list_moey_two[index].fund_detail_transaction_id || id === this.list_moey_two[index].bank_deal_id) {
-          list = this.list_moey_two[index]
+        for (var index in this.list_moey_two) {
+          if (id === this.list_moey_two[index].fund_detail_transaction_id || id === this.list_moey_two[index].bank_deal_id) {
+            list = this.list_moey_two[index]
+          }
         }
-      }
-      }else{
+      } else {
         for (var index in this.list_moey) {
-        if (id === this.list_moey[index].fund_detail_transaction_id || id === this.list_moey[index].bank_deal_id) {
-          list = this.list_moey[index]
+          if (id === this.list_moey[index].fund_detail_transaction_id || id === this.list_moey[index].bank_deal_id) {
+            list = this.list_moey[index]
           }
         }
       }
       localStorage.msg = JSON.stringify(list)
-      this.$router.push({path:'running_details',query:{list:list}})
+      this.$router.push({ path: 'running_details', query: { list: list } })
       // console.log(id)
       // this.$router.push({path:'running_details',query:{id:then.fund_details_id,person:person,bank_bank:bank_bank,bank_deal_date:bank_deal_date,bank_deal_moneya:bank_deal_money,bank_number:bank_number,bank_type:bank_type}})
     },
-    //封装model
-    package(res){
-      this.list_moey = res.data.list_moey //户主
+    // 封装model
+    package (res) {
+      this.list_moey = res.data.list_moey // 户主
       this.menu_bank_person = res.data.menu_bank_person
       this.menu_bank_bank = res.data.menu_bank_bank
       this.menu_bank_number = res.data.menu_bank_number
@@ -341,112 +341,112 @@ export default {
       this.menu_fund_names = res.data.menu_fund_names
       this.menu_Customer_name = res.data.menu_Customer_name
     },
-    //户主
-    bankPerson(id){
+    // 户主
+    bankPerson (id) {
       this.bankPerson_id = id
-      this.axios.get('/fund/select_detail'+'?bank_person='+id).then(res => {
+      this.axios.get('/fund/select_detail' + '?bank_person=' + id).then(res => {
         this.package(res)
       })
     },
-    //开户行
-    bankBank(id){
+    // 开户行
+    bankBank (id) {
       this.bankBank_id = id
       var add = '?'
       if (this.bankPerson_id !== '' && this.bankPerson_id !== undefined) {
-        add+='bank_person='+this.bankPerson_id
+        add += 'bank_person=' + this.bankPerson_id
       }
-      this.axios.get('/fund/select_detail'+add+ '&bank_bank='+id).then(res => {
+      this.axios.get('/fund/select_detail' + add + '&bank_bank=' + id).then(res => {
         this.package(res)
       })
     },
     //  尾号
-    bankNumber(id){
+    bankNumber (id) {
       this.bankNumber_id = id
-      this.axios.get('/fund/select_detail'+'?bank_person='+this.bankPerson_id + '&bank_bank='+this.bankBank_id + '&bank_number='+ id).then(res => {
+      this.axios.get('/fund/select_detail' + '?bank_person=' + this.bankPerson_id + '&bank_bank=' + this.bankBank_id + '&bank_number=' + id).then(res => {
         this.package(res)
       })
     },
-    //类别选择
-    fund_namesa(id){
+    // 类别选择
+    fund_namesa (id) {
       this.fundNamesa_id = id
       var add = '?'
       if (this.bankPerson_id !== '' && this.bankPerson_id !== undefined) {
-        add+='bank_person='+this.bankPerson_id
+        add += 'bank_person=' + this.bankPerson_id
       }
       if (this.bankBank_id !== '' && this.bankBank_id !== undefined) {
-        add+='&bankBank_id='+this.bankBank_id
+        add += '&bankBank_id=' + this.bankBank_id
       }
       if (this.dataA !== '' && this.dataA !== undefined) {
-        add+='&DateStart='+this.dataA
+        add += '&DateStart=' + this.dataA
       }
       if (this.dataB !== '' && this.dataB !== undefined) {
-        add+='&DateEnd='+this.dataB
+        add += '&DateEnd=' + this.dataB
       }
       this.axios.get('/fund/select_detail' + add + '&fund_name_type=' + id).then(res => {
         this.package(res)
       })
     },
-    //类别名称
-    list_fund_nameas(id){
+    // 类别名称
+    list_fund_nameas (id) {
       this.listFund_name_id = id
-      this.axios.get('/fund/select_detail' + '?fund_name_type=' + this.fundNamesa_id + '&fund_names='+id).then(res => {
+      this.axios.get('/fund/select_detail' + '?fund_name_type=' + this.fundNamesa_id + '&fund_names=' + id).then(res => {
         this.package(res)
       })
     },
-    //工地
-    customer_name_list(id){
+    // 工地
+    customer_name_list (id) {
       this.customerName_id = id
       var add = '?'
-      if (this.fundNamesa_id !== '' && this.fundNamesa_id !==undefined){
-        add+= 'fund_name_type='+this.fundNamesa_id
+      if (this.fundNamesa_id !== '' && this.fundNamesa_id !== undefined) {
+        add += 'fund_name_type=' + this.fundNamesa_id
       }
       if (this.listFund_name_id !== '' && this.listFund_name_id !== undefined) {
-        add+= '&fund_names='+this.listFund_name_id
+        add += '&fund_names=' + this.listFund_name_id
       }
-      this.axios.get('/fund/select_detail' +add+'&Customer_id='+id).then(res => {
+      this.axios.get('/fund/select_detail' + add + '&Customer_id=' + id).then(res => {
         this.package(res)
       })
     },
-    //开始时间
-    dateList(id){
+    // 开始时间
+    dateList (id) {
       this.dataA = id
       var add = '?'
       if (this.bankPerson_id !== '' && this.bankPerson_id !== undefined) {
-        add+='bank_person='+this.bankPerson_id
+        add += 'bank_person=' + this.bankPerson_id
       }
       if (this.bankBank_id !== '' && this.bankBank_id !== undefined) {
-        add+='&bank_bank='+this.bankBank_id
+        add += '&bank_bank=' + this.bankBank_id
       }
       if (this.fundNamesa_id !== '' && this.fundNamesa_id !== undefined) {
-        add+='&fund_name_type='+this.fundNamesa_id
+        add += '&fund_name_type=' + this.fundNamesa_id
       }
       if (this.listFund_name_id !== '' && this.listFund_name_id !== undefined) {
-        add+='&fund_names='+this.listFund_name_id
+        add += '&fund_names=' + this.listFund_name_id
       }
       if (this.customerName_id !== '' && this.customerName_id !== undefined) {
-        add+='&Customer_id='+this.customerName_id
+        add += '&Customer_id=' + this.customerName_id
       }
-      this.axios.get('/fund/select_detail' + add + '&DateStart='+id).then(res => {
+      this.axios.get('/fund/select_detail' + add + '&DateStart=' + id).then(res => {
         this.package(res)
       })
     },
-    //结束时间
-    date_list_two_change(id){
+    // 结束时间
+    date_list_two_change (id) {
       this.dataB = id
       var add = '?'
       if (this.fundNamesa_id !== '' && this.fundNamesa_id !== undefined) {
-        add+='fund_name_type='+this.fundNamesa_id
+        add += 'fund_name_type=' + this.fundNamesa_id
       }
       if (this.listFund_name_id !== '' && this.listFund_name_id !== undefined) {
-        add+='&fund_names='+this.listFund_name_id
+        add += '&fund_names=' + this.listFund_name_id
       }
       if (this.customerName_id !== '' && this.customerName_id !== undefined) {
-        add+='&Customer_id='+this.customerName_id
+        add += '&Customer_id=' + this.customerName_id
       }
-      if (this.dataA !==''&& this.dataA!==undefined){
-        add+='&DateStart='+this.dataA
+      if (this.dataA !== '' && this.dataA !== undefined) {
+        add += '&DateStart=' + this.dataA
       }
-      this.axios.get('/fund/select_detail' + add +'&DateEnd='+id).then(res => {
+      this.axios.get('/fund/select_detail' + add + '&DateEnd=' + id).then(res => {
         this.package(res)
       })
     }

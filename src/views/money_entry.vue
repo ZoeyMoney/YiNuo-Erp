@@ -135,64 +135,64 @@ export default {
   name: 'money_entry',
   data () {
     return {
-      imgUrl_loading:false,
-      user:'',
-      all_rate:'',
-      all_id:'',
-      category:true,//隐藏
-      relevant_people:true,//相关人
-      cotrProjet:false,
-      idProjet:true,
-      site_various:true,
-      level:'',//级别
-      whether:'',//情况
-      list_lev:[  //级别说明
-        {text:'A'},
-        {text:'B'},
-        {text:'C'},
+      imgUrl_loading: false,
+      user: '',
+      all_rate: '',
+      all_id: '',
+      category: true, // 隐藏
+      relevant_people: true, // 相关人
+      cotrProjet: false,
+      idProjet: true,
+      site_various: true,
+      level: '', // 级别
+      whether: '', // 情况
+      list_lev: [ // 级别说明
+        { text: 'A' },
+        { text: 'B' },
+        { text: 'C' }
       ],
-      list_whether:[  //情况说明
-        {text:'是'},
-        {text:'否'},
+      list_whether: [ // 情况说明
+        { text: '是' },
+        { text: '否' }
       ],
-      fund_type:'阶段付款',
-      list_fund_name_type:'',
-      fund_nameo:'',
-      fund_debtor:'',
-      fund_debtor_id:'',
-      fund_money:'',
-      list_fund_debtor:[
-        {text:'胡永生'},
-        {text:'邱梅'},
+      fund_type: '阶段付款',
+      list_fund_name_type: '',
+      fund_nameo: '',
+      fund_debtor: '',
+      fund_debtor_id: '',
+      fund_money: '',
+      list_fund_debtor: [
+        { text: '胡永生' },
+        { text: '邱梅' }
       ],
-      fund_person:'',
-      fund_text:'0',
-      list_fund_names:'',
-      list_fund_namea:'',
-      list_fund_name:'',
-      customer_name:'',
-      customer_name_id:'',
-      list_customer_name:'',
-      data_huan:'',
-      fund_name:'',
-      yue:'',
-      qi:'',
+      fund_person: '',
+      fund_text: '0',
+      list_fund_names: '',
+      list_fund_namea: '',
+      list_fund_name: '',
+      customer_name: '',
+      customer_name_id: '',
+      list_customer_name: '',
+      data_huan: '',
+      fund_name: '',
+      yue: '',
+      qi: '',
       list: [
-        { 'fund_details_date': '', 'fund_details_batch': '1'.toString(), 'fund_details_money': '', 'fund_details_text': '' },
+        { 'fund_details_date': '', 'fund_details_batch': '1'.toString(), 'fund_details_money': '', 'fund_details_text': '' }
       ],
-      batch_index:1,
-      list_list:[],
-      padLeft:{
-        padding:'0'
+      batch_index: 1,
+      list_list: [],
+      padLeft: {
+        padding: '0'
       },
-      paRight:{
-        paddingRight:'0'
+      paRight: {
+        paddingRight: '0'
       }
     }
   },
   created () {
     /* table */
-    this.axios.get('/fund/Select_three_fund_name'+'?fund_type=1').then(res => {
+    this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1').then(res => {
       this.list_fund_name_type = res.data.fund_name_type
     })
     this.customer_name = window.test
@@ -201,30 +201,30 @@ export default {
     this.fund_debtor_id = window.fund_people_name
   },
   methods: {
-    formAdd(){
-        this.batch_index++
-        var s = {'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '1', 'fund_details_text': '' }
-        s.fund_details_batch = this.batch_index.toString()
-        this.list.push(s)
+    formAdd () {
+      this.batch_index++
+      var s = { 'fund_details_date': '', 'fund_details_money': '', 'fund_details_batch': '1', 'fund_details_text': '' }
+      s.fund_details_batch = this.batch_index.toString()
+      this.list.push(s)
     },
-    del(user){
+    del (user) {
       if (this.list.length === 0) {
         mui.alert('没有可删除的了')
-      }else{
-        this.list.splice(this.list.indexOf(user),1)
+      } else {
+        this.list.splice(this.list.indexOf(user), 1)
       }
     },
     // 类别选择
     fund_namesa (id) {
       this.fund_nameso = id
-      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
         if (this.fund_nameo === '个人') {
           this.category = false
           this.site_various = false
-        }else if (this.fund_nameo === '公司') {
+        } else if (this.fund_nameo === '公司') {
           this.category = true
           this.cotrProjet = true
           this.idProjet = false
@@ -235,23 +235,23 @@ export default {
     // 类别名称
     list_fund_nameas (id) {
       this.fund_name = id
-      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
-        if (this.fund_name === '外借款'){
+        if (this.fund_name === '外借款') {
           this.site_various = false
           this.relevant_people = true
-        }else if (this.fund_name === '工程') {
+        } else if (this.fund_name === '工程') {
           this.relevant_people = true
           this.site_various = true
         }
       })
     },
-    //类别详细
-    all_rate_name(id){
+    // 类别详细
+    all_rate_name (id) {
       this.all_id = id
-      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -277,19 +277,19 @@ export default {
       btn_form.style.display = 'none'
       data_time.style.display = 'block'
     },
-    //工地
-    siteChange(){
+    // 工地
+    siteChange () {
       var expenditure = 'money_entry'
-      this.$router.push({path:'siteList',})
+      this.$router.push({ path: 'siteList' })
       window.expenditure = expenditure
     },
-    //相关人
-    relecantProsen(){
+    // 相关人
+    relecantProsen () {
       var prosen = 'money_entry'
-      this.$router.push({path:'relevant_people'})
+      this.$router.push({ path: 'relevant_people' })
       window.prosen = prosen
     },
-    add() {
+    add () {
       var then = this
       var nuber = /^[0-9]*$/ // 验证数字
       var nuber_two = /^\d+(\.\d+)?$/ // 验证带点的数字
@@ -301,19 +301,19 @@ export default {
         check = false
         return false
       }
-      //类别详情
+      // 类别详情
       if (this.list_fund_namea == '') {
         mui.toast('类别详情不能为空')
         check = false
         return false
       }
-      //级别
+      // 级别
       if (this.level == '') {
         mui.toast('级别不能为空')
         check = false
         return false
       }
-      //情况
+      // 情况
       if (this.whether == '') {
         mui.toast('情况不能为空')
         check = false
@@ -331,7 +331,7 @@ export default {
         return false
       }
       // 经手人
-      /*if (this.fund_person == '') {
+      /* if (this.fund_person == '') {
         mui.toast('经手人不能为空')
         check = false
         return false
@@ -340,10 +340,10 @@ export default {
         mui.toast('经手人格式错误')
         check = false
         return false
-      }*/
+      } */
       // 判断阶段付款、周期付款
       if (this.fund_type === '阶段付款') {
-        var fund_details_date = document.getElementById('fund_details_date').value //时间
+        var fund_details_date = document.getElementById('fund_details_date').value // 时间
         var data_money = document.getElementById('fund_details_money').value // 金额
         var data_text = document.getElementById('fund_details_batch').value // 批次
         // 金额
@@ -368,14 +368,14 @@ export default {
           check = false
           return false
         }
-        //循环list是否有空
+        // 循环list是否有空
         for (var index in this.list) {
-          /*list时间不能为空*/
-          /*if (this.list[index].fund_details_date == '') {
+          /* list时间不能为空 */
+          /* if (this.list[index].fund_details_date == '') {
             mui.toast('时间不能为空')
             check = false
             return false
-          }*/
+          } */
           if (this.list[index].fund_details_batch == '') {
             mui.toast('批次不能为空')
             check = false
@@ -391,11 +391,11 @@ export default {
             check = false
             return false
           }
-           if (!nuber_two.test(this.list[index].fund_details_money)) {
-             mui.toast('金额只能为数字')
-             check = false
-             return false
-           }
+          if (!nuber_two.test(this.list[index].fund_details_money)) {
+            mui.toast('金额只能为数字')
+            check = false
+            return false
+          }
         }
         // 判断是否总金额大于等于 金额的总和
         var money_all = 0
@@ -410,10 +410,10 @@ export default {
           check = false
           return false
         }
-        //阶段金额相加必须跟总金额相等否则无法通过
+        // 阶段金额相加必须跟总金额相等否则无法通过
         var all_money = 0
         for (var index in this.list) {
-           all_money += parseFloat(this.list[index].fund_details_money)
+          all_money += parseFloat(this.list[index].fund_details_money)
         }
         if (this.fund_money != all_money) {
           mui.toast('总金额与阶段金额总和不同')
@@ -452,14 +452,14 @@ export default {
       var zhouqi = this.yue
       var qishu = this.qi
       var qishu_money = this.fund_money / qishu
-      var date = '';
+      var date = ''
       if (this.fund_type === '周期付款') {
         this.list = []
         if (zhouqi === '按月') {
           for (var i = 0; i <= qishu - 1; i++) {
             var m = data_huan.getMonth() + 1 + i
             date = data_huan.getFullYear() + '-' + m + '-' + data_huan.getDate()
-            var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch':i.toString(), 'fund_details_text': '' }
+            var a = { 'fund_details_date': date, 'fund_details_money': qishu_money.toString(), 'fund_details_batch': i.toString(), 'fund_details_text': '' }
             this.list.push(a)
           }
         } else if (zhouqi === '按年') {
@@ -483,29 +483,29 @@ export default {
       var add = ''
       var list_customer = ''
       var fund_debtor_id = ''
-      var fund_details_type = ''  //情况
+      var fund_details_type = '' // 情况
       if (this.fund_nameo === '个人') {
         add = this.list_fund_namea
-        fund_debtor_id+=this.fund_debtor_id
+        fund_debtor_id += this.fund_debtor_id
         list_customer += '0'
-      }else if (this.fund_nameo === '公司') {
+      } else if (this.fund_nameo === '公司') {
         add = this.all_rate
         if (this.customer_name === undefined) {
-          list_customer+='0'
-        }else{
+          list_customer += '0'
+        } else {
           list_customer += this.customer_name_id
         }
         if (this.fund_debtor === undefined) {
-          fund_debtor_id+='0'
-        }else{
-          fund_debtor_id+=this.fund_debtor_id
+          fund_debtor_id += '0'
+        } else {
+          fund_debtor_id += this.fund_debtor_id
         }
       }
-      //情况
+      // 情况
       if (this.whether === '是') {
-        fund_details_type+='0'
-      }else{
-        fund_details_type+='1'
+        fund_details_type += '0'
+      } else {
+        fund_details_type += '1'
       }
       this.imgUrl_loading = true
       this.axios({
@@ -521,23 +521,23 @@ export default {
           fund_person: fund_debtor_id,
           fund_text: this.fund_text,
           fund_type: this.fund_type,
-          fund_details_level:this.level,
-          fund_details_type:fund_details_type
+          fund_details_level: this.level,
+          fund_details_type: fund_details_type
         },
-        //把json格式编码转为x-www-form-urlencoded
+        // 把json格式编码转为x-www-form-urlencoded
         transformRequest: [function (data) {
           let ret = ''
           for (let it in data) {
             ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
           }
           return ret
-        }],
+        }]
       }).then(res => {
-        if (res.status === 200){
+        if (res.status === 200) {
           this.imgUrl_loading = false
-        mui.alert(res.data, function () {
-          then.$router.push({ path: 'money_receivable' })
-        })
+          mui.alert(res.data, function () {
+            then.$router.push({ path: 'money_receivable' })
+          })
         }
       })
     }

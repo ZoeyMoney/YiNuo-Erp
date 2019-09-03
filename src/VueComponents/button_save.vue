@@ -7,9 +7,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'button_save'
-  }
+export default {
+  name: 'button_save'
+}
 </script>
 
 <style scoped>

@@ -8,14 +8,14 @@
 </template>
 
 <script>
-  export default {
-    name: 'login_loading',
-    data(){
-      return{
-        imgUrl:require('../image/loading-msg.gif'),
-      }
-    },
+export default {
+  name: 'login_loading',
+  data () {
+    return {
+      imgUrl: require('../image/loading-msg.gif')
+    }
   }
+}
 </script>
 
 <style scoped>

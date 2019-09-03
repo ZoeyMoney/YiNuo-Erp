@@ -24,36 +24,36 @@
 </template>
 
 <script>
-  export default {
-    name: 'site_project_inspection',
-    data(){
-      return{
-        Vcheckbox:'',
-          list_checkbox:[
-            {text:'下水口未保护(1分/10分)'},
-            {text:'地漏未保护(1分/10分)'},
-            {text:'进户门地面，电梯门套未使用公司保护膜(1分/10分)'},
-            {text:'铺设完成地砖未使用公司指定塑料保护膜、。。。。。(1分/10分)'},
-            {text:'进户门、室内玻璃窗未使用公司保护膜保护(1分/10分)'},
-            {text:'门、窗、把手未保护(1分/10分)'},
-            {text:'洁具、灯具未做保护(1分/10分)'},
-            {text:'成品、半成品家具未按规定保护(1分/10分)'},
-            {text:'客户自购材料未保护(1分/10分)'},
-            {text:'暗保护盖未做一支(1分/10分)'},
-            {text:'管线走向标识未作(1分/10分)'},
-            {text:'强弱电箱未保护(1分/10分)'},
-          ]
-      }
+export default {
+  name: 'site_project_inspection',
+  data () {
+    return {
+      Vcheckbox: '',
+      list_checkbox: [
+        { text: '下水口未保护(1分/10分)' },
+        { text: '地漏未保护(1分/10分)' },
+        { text: '进户门地面，电梯门套未使用公司保护膜(1分/10分)' },
+        { text: '铺设完成地砖未使用公司指定塑料保护膜、。。。。。(1分/10分)' },
+        { text: '进户门、室内玻璃窗未使用公司保护膜保护(1分/10分)' },
+        { text: '门、窗、把手未保护(1分/10分)' },
+        { text: '洁具、灯具未做保护(1分/10分)' },
+        { text: '成品、半成品家具未按规定保护(1分/10分)' },
+        { text: '客户自购材料未保护(1分/10分)' },
+        { text: '暗保护盖未做一支(1分/10分)' },
+        { text: '管线走向标识未作(1分/10分)' },
+        { text: '强弱电箱未保护(1分/10分)' }
+      ]
+    }
+  },
+  methods: {
+    returnName () {
+      this.$router.push({ name: 'site_statistics' })
     },
-    methods:{
-      returnName(){
-        this.$router.push({name:'site_statistics'})
-      },
-      saveName(){
-        mui.alert('未完成')
-      }
+    saveName () {
+      mui.alert('未完成')
     }
   }
+}
 </script>
 
 <style scoped>

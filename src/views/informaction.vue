@@ -17,71 +17,67 @@
 </template>
 
 <script>
-  export default {
-    name: 'informaction',
-    data(){
-      return{
-        imgUrl_loading:false,
-        user_id:'',
-        path_id:'',
-        list_info:[],
-        iR:{
-          float:'right'
-        }
+export default {
+  name: 'informaction',
+  data () {
+    return {
+      imgUrl_loading: false,
+      user_id: '',
+      path_id: '',
+      list_info: [],
+      iR: {
+        float: 'right'
+      }
+    }
+  },
+  created () {
+    var use = JSON.parse(localStorage.data).userid
+    this.path_id = 'ws://formattingclub.com/YiNuoLogin/websocket/' + use
+
+    this.axios.get('/Customer/Select_information').then(res => {
+      console.log(res)
+    })
+  },
+  mounted () {
+    // 初始化
+    this.init()
+  },
+  methods: {
+    init: function () {
+      if (typeof (WebSocket) === 'undefined') {
+        alert('您的浏览器不支持socket')
+      } else {
+        // 实例化socket
+        this.socket = new WebSocket(this.path_id)
+        // 监听socket连接
+        this.socket.onopen = this.open
+        // 监听socket错误信息
+        this.socket.onerror = this.error
+        // 监听socket消息
+        this.socket.onmessage = this.getMessage
       }
     },
-    created () {
-      var use = JSON.parse(localStorage.data).userid
-      this.path_id = 'ws://formattingclub.com/YiNuoLogin/websocket/'+use
-
-      this.axios.get('/Customer/Select_information').then(res=>{
-        console.log(res)
-      })
+    open: function () {
+      console.log('socket连接成功')
     },
-    destroyed: function() {
-      //页面销毁时关闭长连接
-      this.websocketclose();
+    error: function () {
+      console.log('连接错误')
     },
-    mounted(){
-      // 初始化
-      this.init()
+    getMessage: function (msg) {
+      console.log(msg)
     },
-    methods:{
-      init: function () {
-        if(typeof(WebSocket) === "undefined"){
-          alert("您的浏览器不支持socket")
-        }else{
-          // 实例化socket
-          this.socket = new WebSocket(this.path_id)
-          // 监听socket连接
-          this.socket.onopen = this.open
-          // 监听socket错误信息
-          this.socket.onerror = this.error
-          // 监听socket消息
-          this.socket.onmessage = this.getMessage
-        }
-      },
-      open: function () {
-        console.log("socket连接成功")
-      },
-      error: function () {
-        console.log("连接错误")
-      },
-      getMessage: function (msg) {
-        console.log(msg)
-      },
-      send: function () {
-        this.socket.send()
-      },
-      close: function () {
-        console.log("socket已经关闭")
-      },
-      /*destroyed () {
+    send: function () {
+      this.socket.send()
+    },
+    close: function () {
+      console.log('socket已经关闭')
+    }
+    /* destroyed () {
         // 销毁监听
         this.socket.onclose = this.close
-      }*/
-    }
+      } */
   }
+}
 </script>
 
 <style scoped>

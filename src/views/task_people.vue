@@ -52,87 +52,87 @@
 </template>
 
 <script>
-  export default {
-    name: 'task_people',
-    data(){
-      return{
-        valueDate:'',//期限
-        task_people:'',//任务人
-        // task_people_id:'',//执行人id
-        task_people_list:'',//数据任务人
-        Release:'',//下达人
-        Release_id:'',//下任达id
-        task_text:'',//任务详情
-        imgUrl_loading:false,
-        user:'',
-      }
-    },
-    created(){
-      this.user = JSON.parse(localStorage.data).userNumber
-      this.axios.get('/fund/Select_fund_person'+'?fund_person_state_A=2').then(res=>{
-        var list = {}
-        for (var index in res.data.data) {
-          if (this.user == res.data.data[index].fund_person) {
-            list = res.data.data[index]
-          }
+export default {
+  name: 'task_people',
+  data () {
+    return {
+      valueDate: '', // 期限
+      task_people: '', // 任务人
+      // task_people_id:'',//执行人id
+      task_people_list: '', // 数据任务人
+      Release: '', // 下达人
+      Release_id: '', // 下任达id
+      task_text: '', // 任务详情
+      imgUrl_loading: false,
+      user: ''
+    }
+  },
+  created () {
+    this.user = JSON.parse(localStorage.data).userNumber
+    this.axios.get('/fund/Select_fund_person' + '?fund_person_state_A=2').then(res => {
+      var list = {}
+      for (var index in res.data.data) {
+        if (this.user == res.data.data[index].fund_person) {
+          list = res.data.data[index]
         }
-        this.Release = list.fund_person
-        this.Release_id = list.fund_person_id
-      })
+      }
+      this.Release = list.fund_person
+      this.Release_id = list.fund_person_id
+    })
 
-      //所有人数据
-      this.axios.get('/fund/Select_fund_person'+'?fund_person_state_A=2').then(res=>{
-        this.task_people_list = res.data.data
-      })
+    // 所有人数据
+    this.axios.get('/fund/Select_fund_person' + '?fund_person_state_A=2').then(res => {
+      this.task_people_list = res.data.data
+    })
+  },
+  methods: {
+    // 禁止键盘弹出
+    dataFocus () {
+      document.activeElement.blur()
     },
-    methods:{
-      //禁止键盘弹出
-      dataFocus(){
-        document.activeElement.blur();
-      },
-      //执行人
-      task_peopleClick(){
-        var prosen = 'task_admin'
-        this.$router.push({path:'relevant_people'})
-        window.prosen = prosen
-      },
-      //下任ren
-      Release_peopleClick(){
-        var prosen = 'Release_admin'
-        this.$router.push({path:'relevant_people'})
-        window.prosen = prosen
-      },
-      saveName(){
-        var then = this
-        var _true = true
-        if (this.task_people == '' || this.Release == '' || this.valueDate == '' || this.task_text == '') {
-          mui.toast('任务下达不能为空')
-          _true = false
-          return false
-        }
-        if (this.task_people == this.Release) {
-          mui.toast('任务人跟下达人不能相同')
-          _true = false
-          return false
-        }
-        // this.imgUrl_loading = true
-        var dates = new Date(this.valueDate)
-        var d = dates.getFullYear()
-        var m = dates.getMonth() + 1
-        var y = dates.getDate()
-        var date = d+'-'+m+'-'+y
-        var add = '?mission_make_person='+this.task_people+'&mission_inform_person='+this.Release_id+'&mission_text='+this.task_text+'&mission_startDate='+date+'&mission_state=0'
-        this.axios.post('/Administration/Add_Mission'+add).then(res=>{
-          if (res.status === 200) {
-            this.imgUrl_loading = false
-            mui.alert(res.data.data,function () {
-              then.$router.push({name:'admin_task'})
-            })
-          }
-        })
+    // 执行人
+    task_peopleClick () {
+      var prosen = 'task_admin'
+      this.$router.push({ path: 'relevant_people' })
+      window.prosen = prosen
+    },
+    // 下任ren
+    Release_peopleClick () {
+      var prosen = 'Release_admin'
+      this.$router.push({ path: 'relevant_people' })
+      window.prosen = prosen
+    },
+    saveName () {
+      var then = this
+      var _true = true
+      if (this.task_people == '' || this.Release == '' || this.valueDate == '' || this.task_text == '') {
+        mui.toast('任务下达不能为空')
+        _true = false
+        return false
       }
+      if (this.task_people == this.Release) {
+        mui.toast('任务人跟下达人不能相同')
+        _true = false
+        return false
+      }
+      // this.imgUrl_loading = true
+      var dates = new Date(this.valueDate)
+      var d = dates.getFullYear()
+      var m = dates.getMonth() + 1
+      var y = dates.getDate()
+      var date = d + '-' + m + '-' + y
+      var add = '?mission_make_person=' + this.task_people + '&mission_inform_person=' + this.Release_id + '&mission_text=' + this.task_text + '&mission_startDate=' + date + '&mission_state=0'
+      this.axios.post('/Administration/Add_Mission' + add).then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
+          mui.alert(res.data.data, function () {
+            then.$router.push({ name: 'admin_task' })
+          })
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

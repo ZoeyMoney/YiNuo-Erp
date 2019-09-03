@@ -108,16 +108,16 @@ export default {
   name: 'customer_statistics',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       search: '', // 关键字
       customer_stylist: '', // 设计师
       stage_name: '', // 阶段
-      dates:'',
+      dates: '',
       listName: '',
-      osd:true,
-      optioos:'',
-      list:[],
-      lengths:'',
+      osd: true,
+      optioos: '',
+      list: [],
+      lengths: '',
       add: '', // 钱总
       listtime: '', // 倒计时
       /* table */
@@ -144,14 +144,14 @@ export default {
         width: '93px',
         paddingLeft: '10px'
       },
-      lefta:{
-        paddingLeft:'10px'
+      lefta: {
+        paddingLeft: '10px'
       },
       paLft: {
         display: 'block',
         padding: '0 10px',
-        whiteSpace:'nowrap',
-        width:'138px'
+        whiteSpace: 'nowrap',
+        width: '138px'
       },
       hid: {
         display: 'block',
@@ -160,37 +160,37 @@ export default {
         overflow: 'hidden',
         textOverflow: 'ellipsis'
       },
-      person:{
-        display:'block',
-        width:'62px',
-        whiteSpace:'nowrap',
-        overflow:'hidden',
-        textOverflow:'ellipsis'
+      person: {
+        display: 'block',
+        width: '62px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
       },
-      fund_name:{
-        display:'block',
-        width:'74px',
-        whiteSpace:'nowrap',
-        overflow:'hidden',
-        textOverflow:'ellipsis'
+      fund_name: {
+        display: 'block',
+        width: '74px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
       }
     }
   },
-  computed:{
-    //搜索+统计金额+统计人数的合
-    lists(){
+  computed: {
+    // 搜索+统计金额+统计人数的合
+    lists () {
       var then = this
       var newList = []
       var all = 0
       then.list.map(function (item) {
         if (item.customer_name.search(then.search) != -1 ||
-            item.fund_person.search(then.search) != -1){
+            item.fund_person.search(then.search) != -1) {
           newList.push(item)
         }
       })
       if (newList != '') {
         for (var index in newList) {
-          all+=newList[index].customer_budget
+          all += newList[index].customer_budget
         }
         this.add = Math.floor(all * 100) / 100
         this.lengths = newList.length
@@ -212,7 +212,7 @@ export default {
       }
     })
     // 设计师
-    this.axios.get('/select_follow_person'+'?fund_person_state=3').then(res => {
+    this.axios.get('/select_follow_person' + '?fund_person_state=3').then(res => {
       this.listName = res.data.data
     })
     //  倒计时
@@ -222,8 +222,8 @@ export default {
     }, 1000)
   },
   methods: {
-    //设计师
-    styleClick(){
+    // 设计师
+    styleClick () {
       var then = this
       var newList = []
       then.lists.map(function (item) {
@@ -242,7 +242,7 @@ export default {
         }
       }
       localStorage.customer_statistics = JSON.stringify(lists)
-      this.$router.push({name:'customer_details',query:{lists}})
+      this.$router.push({ name: 'customer_details', query: { lists } })
       // console.log(list)
       // this.$router.push({ path: 'customer_details', query: { id: id.customer_id } })
     },
@@ -272,7 +272,7 @@ export default {
       }
     }
 
-  },
+  }
 }
 </script>
 

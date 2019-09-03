@@ -36,7 +36,7 @@ export default {
         { name: '工地巡检', listImg: require('../image/cheliang.png'), href: 'site_Inspection' }
       ]
     }
-  },
+  }
 }
 </script>
 

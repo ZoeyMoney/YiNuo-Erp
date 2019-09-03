@@ -66,17 +66,17 @@ export default {
   name: 'bank_card',
   data () {
     return {
-      imgUrl_loading:false,
-      persion_if:false,
-      billIf:false,
-      repayment_if:false,
+      imgUrl_loading: false,
+      persion_if: false,
+      billIf: false,
+      repayment_if: false,
       bank_number: '', // 银行卡账户
       bank_bank: '', // 户主
       bank_money: '', // 余额
       bank_person: '', // 开户行
       bank_limit: '', // 额度
-      repayment:'', //还款日
-      bill:'',//账单日
+      repayment: '', // 还款日
+      bill: '', // 账单日
       bank_type: '储蓄卡'
     }
   },
@@ -100,7 +100,6 @@ export default {
       var nameReg = /^[\u4E00-\u9FA5]{2,4}$/ // 验证人的名字
       // var yin = /^(\d{16}|\d{19})$/ // 银行卡验证
       var nuber = /^\d+(\.\d+)?$/ // 验证数字
-
 
       // 开户行
       if (this.bank_person == '') {
@@ -134,16 +133,16 @@ export default {
         add = add + '&bank_limit=0'
       } else if (this.bank_type === '信用卡') {
         // 银行卡账户
-        /*if (this.bank_number == '') {
+        /* if (this.bank_number == '') {
           mui.toast('银行卡账户不能为空')
           check = false
           return false
-        }*/
-        /*if (!yin.test(this.bank_number)) {
+        } */
+        /* if (!yin.test(this.bank_number)) {
           mui.toast('银行卡格式错误')
           check = false
           return false
-        }*/
+        } */
         // 额度
         if (this.bank_limit == '') {
           mui.toast('额度不能为空')
@@ -155,7 +154,7 @@ export default {
           check = false
           return false
         }
-        //账单日
+        // 账单日
         if (this.bill == '') {
           mui.toast('账单日不能为空')
           check = false
@@ -166,7 +165,7 @@ export default {
           check = false
           return false
         }
-        //还款日
+        // 还款日
         if (this.repayment == '') {
           mui.toast('还款日不能为空')
           check = false
@@ -183,11 +182,11 @@ export default {
       this.axios.get('/fund/AddBank' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-        if (res.data === '添加成功') {
-          mui.alert('添加成功', function () {
-            location.reload()
-          })
-        }
+          if (res.data === '添加成功') {
+            mui.alert('添加成功', function () {
+              location.reload()
+            })
+          }
         }
       })
     }

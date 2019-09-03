@@ -111,8 +111,8 @@ export default {
   data () {
     return {
       bank_id: 0,
-      dataValue1:new Date(),
-      imgUrl_loading:false,
+      dataValue1: new Date(),
+      imgUrl_loading: false,
       bank_deal_money: '', // 金额
       bank_deal_rate: '', // 转账费率
       bank_enter_id: '', // 转出
@@ -122,15 +122,15 @@ export default {
       bank_money: '', // 余额
       addMoney: '', // 储蓄卡总额
       xinMoney: '', // 信用卡总额
-      allTotal:'',//合计金额
-      all_money:'',
+      allTotal: '', // 合计金额
+      all_money: '',
       cead: '', // 银行卡
       bank_limit: '', // 额度
-      bank:'',
+      bank: '',
       listD: [
         { Tnumber: 0.6 },
         { Tnumber: 0.55 },
-        { Tnumber: 0.38 },
+        { Tnumber: 0.38 }
       ]
     }
   },
@@ -141,30 +141,30 @@ export default {
       if (res.status === 200) {
         this.imgUrl_loading = false
         this.bank = res.data
-      var chux = []
-      var xin = []
-      var m = 0 // 储蓄卡总额
-      var y = 0 // 信用卡总额
-        var all = 0//合计储蓄卡信用卡总额
-      for (var index in this.bank) {
-        if (this.bank[index].bank_type === '储蓄卡') {
-          m+= this.bank[index].bank_money // 算出储蓄卡总额
-          chux.push(this.bank[index])
-        } else {
-          if (this.bank[index].bank_type === '信用卡') {
-            if (this.bank[index].bank_money > 0) {
-              y += this.bank[index].bank_money
+        var chux = []
+        var xin = []
+        var m = 0 // 储蓄卡总额
+        var y = 0 // 信用卡总额
+        var all = 0// 合计储蓄卡信用卡总额
+        for (var index in this.bank) {
+          if (this.bank[index].bank_type === '储蓄卡') {
+            m += this.bank[index].bank_money // 算出储蓄卡总额
+            chux.push(this.bank[index])
+          } else {
+            if (this.bank[index].bank_type === '信用卡') {
+              if (this.bank[index].bank_money > 0) {
+                y += this.bank[index].bank_money
+              }
+              xin.push(this.bank[index])
             }
-            xin.push(this.bank[index])
           }
         }
-      }
-      this.chuxuka = chux
-      this.xinyong = xin
-      this.addMoney = Math.floor(m*100) / 100
-      this.xinMoney = Math.floor(y*100) / 100
-        all += this.addMoney+this.xinMoney
-        this.allTotal = Math.floor(all*100) /100
+        this.chuxuka = chux
+        this.xinyong = xin
+        this.addMoney = Math.floor(m * 100) / 100
+        this.xinMoney = Math.floor(y * 100) / 100
+        all += this.addMoney + this.xinMoney
+        this.allTotal = Math.floor(all * 100) / 100
       }
     })
     /* 银行卡 */
@@ -175,41 +175,41 @@ export default {
 
   computed: {
     /* 自动计算 */
-    addMoneys:{
-      get:function (){
+    addMoneys: {
+      get: function () {
         if (this.bank_deal_rate === '' || this.bank_deal_rate === undefined) {
           var a = this.bank_deal_money
-         return a
-        }else {
+          return a
+        } else {
           var a = this.bank_deal_money - this.bank_deal_money * this.bank_deal_rate / 100
           var b = Math.floor(a * 100) / 100
           this.all_money = b
           return b
         }
       },
-      set:function (value) {
+      set: function (value) {
         this.all_money = value
-      },
-    },
+      }
+    }
   },
   methods: {
-    msgCu(id,person,number){
-      var add = '?'+'&bank_person='+person+'&bank_bank='+id
+    msgCu (id, person, number) {
+      var add = '?' + '&bank_person=' + person + '&bank_bank=' + id
       if (number !== undefined) {
-        add+='&bank_number='+number
+        add += '&bank_number=' + number
       }
       var transfer = 'transfer'
-      this.axios.get('/fund/select_detail'+add).then(res=>{
+      this.axios.get('/fund/select_detail' + add).then(res => {
         window.transfer = res.data.list_moey
-        this.$router.push({path:'running_money',query:{transfer:transfer}})
+        this.$router.push({ path: 'running_money', query: { transfer: transfer } })
         // console.log(res.data.list_moey)
       })
     },
     // 左滑动
-    onSwipeLeft:function(){
-      this.$router.push({name:'expenditure'})
+    onSwipeLeft: function () {
+      this.$router.push({ name: 'expenditure' })
     },
-    /*bankBank(id){
+    /* bankBank(id){
       var bank_bank={}
       for (var index in this.bank) {
         if (id === this.bank[index].bank_bank) {
@@ -218,7 +218,7 @@ export default {
       }
      localStorage.bank_bank = JSON.stringify(bank_bank)
       this.$router.push({name:'edit_bank',query:{bank_bank:bank_bank}})
-    },*/
+    }, */
     go () {
       var then = this
       var check = true
@@ -251,7 +251,7 @@ export default {
         check = false
         return false
       }
-      /*//金额不能大于储蓄卡金额
+      /* //金额不能大于储蓄卡金额
       for (var index in this.cead) {
         if (this.cead[index].bank_id === this.bank_out_id) {
           if (this.cead[index].bank_limit <= '0') {
@@ -269,24 +269,24 @@ export default {
             }
           }
         }
-      }*/
+      } */
 
-    var dt = new Date(this.dataValue1)
+      var dt = new Date(this.dataValue1)
       var y = dt.getFullYear()
       var m = dt.getMonth() + 1
       var d = dt.getDate()
-      var t = dt.getHours();
-      var MM =dt.getMinutes();
-      var s = dt.getSeconds();
-      var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
+      var t = dt.getHours()
+      var MM = dt.getMinutes()
+      var s = dt.getSeconds()
+      var dd = `${y}-${m}-${d} ${t}:${MM}:${s}`
       this.imgUrl_loading = true
       var all_money = ''
-      if (this.all_money === ''){
-        all_money+=this.bank_deal_money
-      }else{
-        all_money+=this.all_money
+      if (this.all_money === '') {
+        all_money += this.bank_deal_money
+      } else {
+        all_money += this.all_money
       }
-      var all = '?bank_deal_money=' + this.bank_deal_money + '&money=' + all_money + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id+'&date='+dd
+      var all = '?bank_deal_money=' + this.bank_deal_money + '&money=' + all_money + '&bank_enter_id=' + this.bank_enter_id + '&bank_out_id=' + this.bank_out_id + '&date=' + dd
       this.axios.get('/fund/add_bank_deal' + all).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false

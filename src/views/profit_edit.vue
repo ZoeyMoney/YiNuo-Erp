@@ -35,64 +35,64 @@
 </template>
 
 <script>
-  export default {
-    name: 'profit_edit',
-    data(){
-      return{
-        site:'',
-        test_id:'',
-        paid_for:'',
-        Paid_out_for:'',
-      }
+export default {
+  name: 'profit_edit',
+  data () {
+    return {
+      site: '',
+      test_id: '',
+      paid_for: '',
+      Paid_out_for: ''
+    }
+  },
+  created () {
+    this.site = window.test
+    this.test_id = window.test_id
+    this.search_for()
+  },
+  methods: {
+    siteChange () {
+      var expenditure = 'profit_edit'
+      this.$router.push({ path: 'siteList' })
+      window.expenditure = expenditure
     },
-    created(){
-      this.site = window.test
-      this.test_id = window.test_id
-      this.search_for()
-    },
-    methods:{
-      siteChange(){
-        var expenditure = 'profit_edit'
-        this.$router.push({path:'siteList',})
-        window.expenditure = expenditure
-      },
-      //search
-      search_for(){
-        if (this.site !== undefined) {
-          this.axios.get('/SelectAllCustomer'+"?Customer_id="+this.test_id).then(res=>{
-            if (res.status === 200) {
-              this.paid_for = res.data[0].customer_enter_money
-              this.Paid_out_for = res.data[0].customer_out_money
-            }
-          })
-        }
-      },
-      add(){
-        var then = this
-        this.axios({
-          url:'/Customer/Update_Customer',
-          method:'post',
-          data:{
-            Customer_out_money: this.Paid_out_for,//已付
-            Customer_enter_money: this.paid_for,//已收
-            Customer_id: this.test_id//项目名称
-          },
-          //把json格式编码转为x-www-form-urlencoded
-          transformRequest: [function (data) {
-            let ret = ''
-            for (let it in data) {
-              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-            }
-            return ret
-          }],
-        }).then(res=>{
-          mui.alert(res.data.data,function () {
-            then.$router.go(0)
-          })
+    // search
+    search_for () {
+      if (this.site !== undefined) {
+        this.axios.get('/SelectAllCustomer' + '?Customer_id=' + this.test_id).then(res => {
+          if (res.status === 200) {
+            this.paid_for = res.data[0].customer_enter_money
+            this.Paid_out_for = res.data[0].customer_out_money
+          }
         })
       }
+    },
+    add () {
+      var then = this
+      this.axios({
+        url: '/Customer/Update_Customer',
+        method: 'post',
+        data: {
+          Customer_out_money: this.Paid_out_for, // 已付
+          Customer_enter_money: this.paid_for, // 已收
+          Customer_id: this.test_id// 项目名称
+        },
+        // 把json格式编码转为x-www-form-urlencoded
+        transformRequest: [function (data) {
+          let ret = ''
+          for (let it in data) {
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+          }
+          return ret
+        }]
+      }).then(res => {
+        mui.alert(res.data.data, function () {
+          then.$router.go(0)
+        })
+      })
     }
   }
+}
 </script>
 
 <style scoped>

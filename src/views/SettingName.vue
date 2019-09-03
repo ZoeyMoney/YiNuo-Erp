@@ -10,7 +10,7 @@
         <form class="mui-input-group setting-name">
           <div class="mui-input-row">
             <label>用户名</label>
-            <input type="text" class="mui-input-clear" disabled="disabled">
+            <input type="text" class="mui-input-clear" disabled="disabled" v-model="sesName">
           </div>
           <div class="mui-input-row">
             <label>新用户名</label>
@@ -30,6 +30,7 @@ export default {
   name: 'SettingName',
   data () {
     return {
+      sesName:sessionStorage.getItem('loginUser'),
       name: ''// 新用户名
     }
   },

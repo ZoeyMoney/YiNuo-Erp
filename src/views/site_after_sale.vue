@@ -156,57 +156,57 @@
 </template>
 
 <script>
-  export default {
-    name: 'site_after_sale',
-    data(){
-      return{
-        projet: '', // 项目
-        projetManager:'', //项目经理
-        projetText:'',//项目备注
-        contractDate:'',//合同日期
-        constructionOne:'',//开始施工日期
-        constructionTwo:'',//结束施工日期
-        contractMoney:'2000000',//原价合同
-        designMoney:'2000000',//原价设计费
-        list_table_all:[
-          {data:new Date(),money:'300000',text:'设计费',fund:'全额款'},
-          {data:new Date(),money:'300000',text:'设计费',fund:'全额款'},
-          {data:new Date(),money:'300000',text:'设计费',fund:'全额款'},
-          {data:new Date(),money:'300000',text:'设计费',fund:'全额款'},
-        ]
-      }
-    },
-    created () {
-      var loc = location.href
-      var n1 = loc.length// 地址的总长度
-      var n2 = loc.indexOf('=')// 取得=号的位置
-      var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
-      // 查询客户项目信息
-      this.customer_id = id
-      this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectCustomer?Customer=' + id).then(res => {
-        this.projet = res.data
-        if (this.projet.Customer_form == '家装') {
-          this.a = true
-          this.b = true
-        } else {
-          this.a = false
-          this.b = true
-        }
-      })
-    },
-    methods:{
-      //施工进度
-      construction(){},
-      //工地日志
-      log(){
-        var customer_name = this.projet[0].customer_name
-        var customer_demand = this.projet[0].customer_demand
-        this.$router.push({path:'site_log',query:{customer_name:customer_name,customer_demand:customer_demand}})
-      },
-      //工地巡检
-      Inspection(){this.$router.push({name:'site_Inspection'})}
+export default {
+  name: 'site_after_sale',
+  data () {
+    return {
+      projet: '', // 项目
+      projetManager: '', // 项目经理
+      projetText: '', // 项目备注
+      contractDate: '', // 合同日期
+      constructionOne: '', // 开始施工日期
+      constructionTwo: '', // 结束施工日期
+      contractMoney: '2000000', // 原价合同
+      designMoney: '2000000', // 原价设计费
+      list_table_all: [
+        { data: new Date(), money: '300000', text: '设计费', fund: '全额款' },
+        { data: new Date(), money: '300000', text: '设计费', fund: '全额款' },
+        { data: new Date(), money: '300000', text: '设计费', fund: '全额款' },
+        { data: new Date(), money: '300000', text: '设计费', fund: '全额款' }
+      ]
     }
+  },
+  created () {
+    var loc = location.href
+    var n1 = loc.length// 地址的总长度
+    var n2 = loc.indexOf('=')// 取得=号的位置
+    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
+    // 查询客户项目信息
+    this.customer_id = id
+    this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectCustomer?Customer=' + id).then(res => {
+      this.projet = res.data
+      if (this.projet.Customer_form == '家装') {
+        this.a = true
+        this.b = true
+      } else {
+        this.a = false
+        this.b = true
+      }
+    })
+  },
+  methods: {
+    // 施工进度
+    construction () {},
+    // 工地日志
+    log () {
+      var customer_name = this.projet[0].customer_name
+      var customer_demand = this.projet[0].customer_demand
+      this.$router.push({ path: 'site_log', query: { customer_name: customer_name, customer_demand: customer_demand } })
+    },
+    // 工地巡检
+    Inspection () { this.$router.push({ name: 'site_Inspection' }) }
   }
+}
 </script>
 
 <style scoped>

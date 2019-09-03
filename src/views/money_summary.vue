@@ -52,57 +52,56 @@
     </div>
 </template>
 
-
 <script>
-  export default {
-    name: 'money_summary',
-    data(){
-      return{
-        imgUrl_loading:true,
-        ited_name:false,
-        data_time:'',//时间
-        ListData:[
-          {text:'本月'},
-          {text:'本周'},
-          {text:'本日'},
-          {text:'本年'},
-        ],
-        listValue:'',
-        DataValue:'',
-        list:[
-          {text:'收入',money:'￥'+'5000'},
-        ],
-        lists:[
-          {text:'收入',money:'￥'+'5000'},
-        ],
-        listd:[
-          {text:'收入',money:'￥'+'5000'},
-          {text:'收入',money:'￥'+'5000'},
-          {text:'收入',money:'￥'+'5000'},
-        ],
+export default {
+  name: 'money_summary',
+  data () {
+    return {
+      imgUrl_loading: true,
+      ited_name: false,
+      data_time: '', // 时间
+      ListData: [
+        { text: '本月' },
+        { text: '本周' },
+        { text: '本日' },
+        { text: '本年' }
+      ],
+      listValue: '',
+      DataValue: '',
+      list: [
+        { text: '收入', money: '￥' + '5000' }
+      ],
+      lists: [
+        { text: '收入', money: '￥' + '5000' }
+      ],
+      listd: [
+        { text: '收入', money: '￥' + '5000' },
+        { text: '收入', money: '￥' + '5000' },
+        { text: '收入', money: '￥' + '5000' }
+      ]
+    }
+  },
+  prop: {
+    label: Number,
+    prop: Number
+  },
+  created () {
+    this.axios.get('/fund/Select_fund_name_money').then(res => {
+      if (res.status === 200) {
+        this.imgUrl_loading = false
+        this.listValue = res.data.list_fund_name_money
       }
-    },
-    prop:{
-      label:Number,
-      prop:Number
-    },
-    created(){
-      this.axios.get('/fund/Select_fund_name_money').then(res=>{
-        if (res.status === 200) {
-          this.imgUrl_loading = false
-          this.listValue = res.data.list_fund_name_money
-        }
-      })
-    },
-    methods:{
-      /*handlemyclass:function(row, column, rowIndex, columnIndex){
+    })
+  },
+  methods: {
+    /* handlemyclass:function(row, column, rowIndex, columnIndex){
         return 'test'
       },
       ssd(id){
         console.log(id)
-      }*/
-    },
+      } */
   }
+}
 </script>
 
 <style scoped>

@@ -182,49 +182,49 @@
 </template>
 
 <script>
-  export default {
-    name: 'projet_modify',
-    data(){
-      return{
-        list:'',
-        customer_name:'', //工地
-        pre_profit:'',  //预计利润
-        pre_profit_proportion:'',//利润比
-        already_out:'',//已支出
-        pre_out:'',//预支出
-        all_out:'',//总支出
-        already_enter:'',//已收入
-        pre_enter:'',//预收入
-        all_enter:'',//总收入
-        list_already_out:'',//详情
-        list_pre_out:'',//预支出
-        list_already_enter:'',//已收入
-        list_pre_enter:'',//预收入
-        lefzero:{
-          paddingLeft:'0'
-        }
+export default {
+  name: 'projet_modify',
+  data () {
+    return {
+      list: '',
+      customer_name: '', // 工地
+      pre_profit: '', // 预计利润
+      pre_profit_proportion: '', // 利润比
+      already_out: '', // 已支出
+      pre_out: '', // 预支出
+      all_out: '', // 总支出
+      already_enter: '', // 已收入
+      pre_enter: '', // 预收入
+      all_enter: '', // 总收入
+      list_already_out: '', // 详情
+      list_pre_out: '', // 预支出
+      list_already_enter: '', // 已收入
+      list_pre_enter: '', // 预收入
+      lefzero: {
+        paddingLeft: '0'
       }
-    },
-    created () {
-      this.list = JSON.parse(sessionStorage.getItem('listProfit'))
-      // console.log(JSON.parse(sessionStorage.getItem('listProfit')))
-      this.customer_name = this.list.customer_name
-      this.pre_profit = this.list.pre_profit
-      this.pre_profit_proportion = this.list.pre_profit_proportion
-      this.already_out = this.list.already_out
-      this.already_enter = this.list.already_enter
-      this.pre_out = this.list.pre_out
-      this.pre_enter = this.list.pre_enter
-      this.all_out = parseFloat(this.already_out)+parseFloat(this.pre_out)  //总支出
-      this.all_enter = parseFloat(this.already_enter)+parseFloat(this.pre_enter)  //总收入
-      this.axios.get('/fund/Select_sum_details'+'?customer_id='+this.list.customer_id).then(res=>{
-        this.list_already_out = res.data.already_out //已支出
-        this.list_pre_out = res.data.pre_out //预支出
-        this.list_already_enter = res.data.already_enter //已收入
-        this.list_pre_enter = res.data.pre_enter //预收入
-      })
     }
+  },
+  created () {
+    this.list = JSON.parse(sessionStorage.getItem('listProfit'))
+    // console.log(JSON.parse(sessionStorage.getItem('listProfit')))
+    this.customer_name = this.list.customer_name
+    this.pre_profit = this.list.pre_profit
+    this.pre_profit_proportion = this.list.pre_profit_proportion
+    this.already_out = this.list.already_out
+    this.already_enter = this.list.already_enter
+    this.pre_out = this.list.pre_out
+    this.pre_enter = this.list.pre_enter
+    this.all_out = parseFloat(this.already_out) + parseFloat(this.pre_out) // 总支出
+    this.all_enter = parseFloat(this.already_enter) + parseFloat(this.pre_enter) // 总收入
+    this.axios.get('/fund/Select_sum_details' + '?customer_id=' + this.list.customer_id).then(res => {
+      this.list_already_out = res.data.already_out // 已支出
+      this.list_pre_out = res.data.pre_out // 预支出
+      this.list_already_enter = res.data.already_enter // 已收入
+      this.list_pre_enter = res.data.pre_enter // 预收入
+    })
   }
+}
 </script>
 
 <style scoped>

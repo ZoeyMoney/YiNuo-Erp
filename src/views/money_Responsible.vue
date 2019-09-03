@@ -28,25 +28,25 @@
 </template>
 
 <script>
-  import url from '../components/config'
+import url from '../components/config'
 export default {
   name: 'money_Responsible',
   data () {
     return {
-      imgUrl_loading:false,
-      name:''
+      imgUrl_loading: false,
+      name: ''
     }
   },
   methods: {
     add () {
       var then = this
       this.imgUrl_loading = true
-      this.axios.get('/AfterSale/addCustomer_stylist'+'?Customer_stylist=' + this.name + '&Customer_aftersale=1').then(res => {
+      this.axios.get('/AfterSale/addCustomer_stylist' + '?Customer_stylist=' + this.name + '&Customer_aftersale=1').then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-        mui.alert(res.data.msg, function () {
-          then.$router.push({ name: 'money_sale' })
-        })
+          mui.alert(res.data.msg, function () {
+            then.$router.push({ name: 'money_sale' })
+          })
         }
       })
     }

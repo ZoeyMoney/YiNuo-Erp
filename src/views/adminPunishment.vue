@@ -51,33 +51,33 @@
 </template>
 
 <script>
-  export default {
-    name: 'adminPunishment',
-    data(){
-      return{
-        name:'',  //名字
-        listName:[{text:'张三'},{text:'李四'}], //名字
-        punshment:'',//场地
-        listPunshment:[{text:'工地'},{text:'公司'},{text:'其他'}],
-        money:'',//金额
+export default {
+  name: 'adminPunishment',
+  data () {
+    return {
+      name: '', // 名字
+      listName: [{ text: '张三' }, { text: '李四' }], // 名字
+      punshment: '', // 场地
+      listPunshment: [{ text: '工地' }, { text: '公司' }, { text: '其他' }],
+      money: ''// 金额
+    }
+  },
+  created () {
+
+  },
+  methods: {
+    push () {
+      if (this.punshment === '工地') {
+        this.$refs['site'].style.display = 'block'
+      } else if (this.punshment === '公司') {
+        this.$refs['site'].style.display = 'none'
       }
     },
-    created(){
+    add () {
 
-    },
-    methods:{
-      push(){
-        if (this.punshment === '工地') {
-          this.$refs['site'].style.display = 'block'
-        }else if (this.punshment === '公司') {
-          this.$refs['site'].style.display ='none'
-        }
-      },
-      add(){
-
-      }
     }
   }
+}
 </script>
 
 <style scoped>

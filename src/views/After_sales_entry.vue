@@ -99,72 +99,72 @@
 </template>
 
 <script>
-  import url from '../components/config'
-  export default {
-    name: 'After_sales_entry',
-    data () {
-      return {
-        imgUrl_loading:false,
-        imgIf:true,
-        fileLists: [],
-        Customer_name: '', // 项目名称
-        Customer_name_id:'',//项目id
-        options:'',
-        prosenList:'',//对接人
-        ImgBase:'',
-        data: {
-          multiple:true,
-          formDate:""
-        },
-        projet:'',
-        SelectStylist:'',
-        worker:0,//工人
-        Customer_linkman: '', // 联系人
-        Customer_connect: '', // 联系方式
-        Customer_stylist: '', // 责任人
-        Customer_type: '', // 所属类型
-        AfterSale_person:'',//负责人
-        Customer_DecorateJia:0,//甲方预算
-        Customer_DecorateYi:0,//一方预算
-        // Customer_baozhiqi:'',//保质期
-        Customer_Date:'',//项目时间
-        Customer_baoxiushijian:'',
-        Customer_yujiwanchengshijian:'',//
-        Customer_form: '工装', // 家装或工装'=
-        Customer_formList: [
-          { value: '家装' },
-          { value: '工装' }
-        ],
-        Customer_demand: '',// 客户需求
-        dialogImageUrl: '',
-        dialogVisible: false,
-        listOptions:[
-          {text:'防水'},
-          {text:'水电'},
-          {text:'木工'},
-          {text:'瓦工'},
-          {text:'油漆'},
-          {text:'墙漆'},
-          {text:'杂工'},
-          {text:'安装'},
-          {text:'材料'},
-          {text:'原始结构'},
-          {text:'人为损坏'},
-          {text:'磨损'},
-        ],
-      }
-    },
-    created () {
-      //对接人
-      this.prosenFunction()
+import url from '../components/config'
+export default {
+  name: 'After_sales_entry',
+  data () {
+    return {
+      imgUrl_loading: false,
+      imgIf: true,
+      fileLists: [],
+      Customer_name: '', // 项目名称
+      Customer_name_id: '', // 项目id
+      options: '',
+      prosenList: '', // 对接人
+      ImgBase: '',
+      data: {
+        multiple: true,
+        formDate: ''
+      },
+      projet: '',
+      SelectStylist: '',
+      worker: 0, // 工人
+      Customer_linkman: '', // 联系人
+      Customer_connect: '', // 联系方式
+      Customer_stylist: '', // 责任人
+      Customer_type: '', // 所属类型
+      AfterSale_person: '', // 负责人
+      Customer_DecorateJia: 0, // 甲方预算
+      Customer_DecorateYi: 0, // 一方预算
+      // Customer_baozhiqi:'',//保质期
+      Customer_Date: '', // 项目时间
+      Customer_baoxiushijian: '',
+      Customer_yujiwanchengshijian: '', //
+      Customer_form: '工装', // 家装或工装'=
+      Customer_formList: [
+        { value: '家装' },
+        { value: '工装' }
+      ],
+      Customer_demand: '', // 客户需求
+      dialogImageUrl: '',
+      dialogVisible: false,
+      listOptions: [
+        { text: '防水' },
+        { text: '水电' },
+        { text: '木工' },
+        { text: '瓦工' },
+        { text: '油漆' },
+        { text: '墙漆' },
+        { text: '杂工' },
+        { text: '安装' },
+        { text: '材料' },
+        { text: '原始结构' },
+        { text: '人为损坏' },
+        { text: '磨损' }
+      ]
+    }
+  },
+  created () {
+    // 对接人
+    this.prosenFunction()
 
-      this.Customer_name = window.test
-      this.Customer_name_id = window.test_id
-    },
-    computed:{
-      //总金额
-      all_money() {
-        /*if (this.Customer_DecorateJia != '' && this.Customer_DecorateYi != '' && this.worker) {
+    this.Customer_name = window.test
+    this.Customer_name_id = window.test_id
+  },
+  computed: {
+    // 总金额
+    all_money () {
+      /* if (this.Customer_DecorateJia != '' && this.Customer_DecorateYi != '' && this.worker) {
           var a = 0
           a += parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
           return a
@@ -180,113 +180,113 @@
           var d = 0
           d += parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
           return d
-        }*/
-        var a = parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
-        return a
-      },
+        } */
+      var a = parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
+      return a
+    },
     //  状态
-      statusd(){
-        //报修时见大于质保时间则在状态里面自动添加过保 小于等于债保
-        if (this.Customer_Date != '' && this.Customer_baoxiushijian != '') {
-          //报修时间
-            var dates = new Date(this.Customer_baoxiushijian)
-            var ds = dates.getFullYear()
-            var ys = dates.getMonth() + 1
-            var ms = dates.getDate()
-            var dds = ds + '-' + ys + '-' + ms
-          //质保时间
-            var date = new Date(this.Customer_Date)
-            var d = date.getFullYear()
-            var y = date.getMonth() + 1
-            var m = date.getDate()
-            var dd = d + '-' + y + '-' + m
-          if (dds > dd) {
-            return '已过保'
-          } else {
-            return '在保'
-          }
+    statusd () {
+      // 报修时见大于质保时间则在状态里面自动添加过保 小于等于债保
+      if (this.Customer_Date != '' && this.Customer_baoxiushijian != '') {
+        // 报修时间
+        var dates = new Date(this.Customer_baoxiushijian)
+        var ds = dates.getFullYear()
+        var ys = dates.getMonth() + 1
+        var ms = dates.getDate()
+        var dds = ds + '-' + ys + '-' + ms
+        // 质保时间
+        var date = new Date(this.Customer_Date)
+        var d = date.getFullYear()
+        var y = date.getMonth() + 1
+        var m = date.getDate()
+        var dd = d + '-' + y + '-' + m
+        if (dds > dd) {
+          return '已过保'
+        } else {
+          return '在保'
         }
       }
+    }
+  },
+  methods: {
+    // 对接人
+    prosenFunction () {
+      this.axios.get('/select_follow_person' + '?fund_person_state=2').then(res => {
+        this.prosenList = res.data.data
+      })
     },
-    methods: {
-      //对接人
-      prosenFunction(){
-        this.axios.get('/select_follow_person'+'?fund_person_state=2').then(res=>{
-          this.prosenList = res.data.data
-        })
-      },
-      //甲方金额点击初始值为空
-      nojia(){
-        if (this.Customer_DecorateJia <= 0) {
-          this.Customer_DecorateJia = ''
-        }
-      },
-      //甲方失焦如果还是为空则初始值为0
-      jiaBlur(){
-        if (this.Customer_DecorateJia == '') {
-          this.Customer_DecorateJia = 0
-        }
-      },
-      //乙方金额点击初始值为空
-      noyi(){
-        if (this.Customer_DecorateYi <= 0) {
-          this.Customer_DecorateYi = ''
-        }
-      },
-      //乙方失焦如果还是为空则初始值为0
-      yiBlur(){
-        if (this.Customer_DecorateYi == '') {
-          this.Customer_DecorateYi = 0
-        }
-      },
-      //工人金额点击初始值为空
-      noworker(){
-        if (this.worker <= 0) {
-          this.worker = ''
-        }
-      },
-      //工人失焦如果还是为空则初始值为0
-      workerBlur(){
-        if (this.worker == '') {
-          this.worker = 0
-        }
-      },
-      //工地
-      site () {
-        var expenditure = 'expenditure_after'
-        this.$router.push({ path: 'siteList', })
-        window.expenditure = expenditure
-      },
-      //base64图片转换
-      //图片上传
-      handleRemove(file) {
-        console.log(file);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
-      handleAvatarSuccess(response, file) {
-        this.ImgBase = response
-        // console.log(response)
-      },
-      leng(){
-        var a = true
-        mui.toast('最多3张图片')
-        a = false
-        return false
-      },
-      //添加
-      go () {
-        var _this = this
-        var check = true
-        var pattern = /^1[0-9]{10}$/ // 验证手机号
-        var nameReg = /^[\u4E00-\u9FA5]{2,10}$/ // 验证人的名字
-        var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
-        var regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
-        var nuber = /^\d+(\.\d+)?$/ // 验证数字
-        //项目名称
-        /*if (this.Customer_name == '') {
+    // 甲方金额点击初始值为空
+    nojia () {
+      if (this.Customer_DecorateJia <= 0) {
+        this.Customer_DecorateJia = ''
+      }
+    },
+    // 甲方失焦如果还是为空则初始值为0
+    jiaBlur () {
+      if (this.Customer_DecorateJia == '') {
+        this.Customer_DecorateJia = 0
+      }
+    },
+    // 乙方金额点击初始值为空
+    noyi () {
+      if (this.Customer_DecorateYi <= 0) {
+        this.Customer_DecorateYi = ''
+      }
+    },
+    // 乙方失焦如果还是为空则初始值为0
+    yiBlur () {
+      if (this.Customer_DecorateYi == '') {
+        this.Customer_DecorateYi = 0
+      }
+    },
+    // 工人金额点击初始值为空
+    noworker () {
+      if (this.worker <= 0) {
+        this.worker = ''
+      }
+    },
+    // 工人失焦如果还是为空则初始值为0
+    workerBlur () {
+      if (this.worker == '') {
+        this.worker = 0
+      }
+    },
+    // 工地
+    site () {
+      var expenditure = 'expenditure_after'
+      this.$router.push({ path: 'siteList' })
+      window.expenditure = expenditure
+    },
+    // base64图片转换
+    // 图片上传
+    handleRemove (file) {
+      console.log(file)
+    },
+    handlePictureCardPreview (file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handleAvatarSuccess (response, file) {
+      this.ImgBase = response
+      // console.log(response)
+    },
+    leng () {
+      var a = true
+      mui.toast('最多3张图片')
+      a = false
+      return false
+    },
+    // 添加
+    go () {
+      var _this = this
+      var check = true
+      var pattern = /^1[0-9]{10}$/ // 验证手机号
+      var nameReg = /^[\u4E00-\u9FA5]{2,10}$/ // 验证人的名字
+      var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
+      var regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
+      var nuber = /^\d+(\.\d+)?$/ // 验证数字
+      // 项目名称
+      /* if (this.Customer_name == '') {
           mui.toast('项目名称不能为空')
           check = false
           return false
@@ -313,23 +313,23 @@
           mui.toast('预计完成时间不能为空')
           check = false
           return false
-        }*/
-        this.imgUrl_loading = true
-        /* 录入数据 */
-        var add = '?Customer_id=' + this.Customer_name_id + '&AfterSale_day=' + this.options + '&AfterSale_jia=' + this.Customer_DecorateJia + '&AfterSale_yi=' + this.Customer_DecorateYi +
-          '&AfterSale_worker=' + this.worker + '&AfterSale_date=' + this.Customer_baoxiushijian + '&AfterSale_date_close=' + this.Customer_Date+
-          '&AfterSale_pre_date='+this.Customer_yujiwanchengshijian+'&AfterSale_text='+this.Customer_demand+'&AfterSale_img='+this.ImgBase+'&AfterSale_state=0'+'&AfterSale_person='+this.AfterSale_person
-        this.axios.post('/AfterSale/Add_AfterSale' + add).then(res => {
-          if (res.status === 200) {
-            this.imgUrl_loading = false
+        } */
+      this.imgUrl_loading = true
+      /* 录入数据 */
+      var add = '?Customer_id=' + this.Customer_name_id + '&AfterSale_day=' + this.options + '&AfterSale_jia=' + this.Customer_DecorateJia + '&AfterSale_yi=' + this.Customer_DecorateYi +
+          '&AfterSale_worker=' + this.worker + '&AfterSale_date=' + this.Customer_baoxiushijian + '&AfterSale_date_close=' + this.Customer_Date +
+          '&AfterSale_pre_date=' + this.Customer_yujiwanchengshijian + '&AfterSale_text=' + this.Customer_demand + '&AfterSale_img=' + this.ImgBase + '&AfterSale_state=0' + '&AfterSale_person=' + this.AfterSale_person
+      this.axios.post('/AfterSale/Add_AfterSale' + add).then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
           mui.alert(res.data.data, function () {
             _this.$router.push('money_sale')
           })
-          }
-        })
-      }
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

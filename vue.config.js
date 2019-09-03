@@ -2,7 +2,7 @@ module.exports = {
   publicPath: './',
   outputDir: 'YiNuo',
   lintOnSave: true,
-  productionSourceMap:false,
+  productionSourceMap: false,
   runtimeCompiler: true, // 关键点在这
   // 调整内部的 webpack 配置。
   // 查阅 https://github.com/vuejs/vue-doc-zh-cn/vue-cli/webpack.md
@@ -18,6 +18,6 @@ module.exports = {
     // 查阅 https://github.com/vuejs/vue-doc-zh-cn/vue-cli/cli-service.md#配置代理
     proxy: null, // string | Object
     before: app => {}
-  },
+  }
 
 }

@@ -71,12 +71,12 @@
 </template>
 
 <script>
-  import url from '../components/config'
+import url from '../components/config'
 export default {
   name: 'site_modify',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       projet: '', // 项目
       selet_aa: '', // 复制项目
       listName: '', // 设计师
@@ -103,7 +103,7 @@ export default {
     var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
     // 查询客户项目信息
     this.customer_id = id
-    this.axios.get(url.AfterSiteDetails+'?Customer=' + id).then(res => {
+    this.axios.get(url.AfterSiteDetails + '?Customer=' + id).then(res => {
       this.projet = res.data
       this.select_aa = JSON.parse(JSON.stringify(res.data))
     })

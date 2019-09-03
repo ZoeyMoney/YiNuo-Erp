@@ -13,58 +13,59 @@ import data from './components/data' // 年月日
 import tosDate from './components/tosDate' // 年月日-1天
 import NoYes from './components/NoYes' // 待确认
 import MoneyFormat from './components/comma' // 货币逗号分行
-import negative from './components/negative'  //过滤减号特殊字符
-import buttonSave from './components/button_save' //组件调用button
-import dataValue from './components/DateValue' //时间控件
-import loginLoading from './components/login_loading' //时间控件
-import VueTouch from 'vue-touch'  //滑动
-
+import negative from './components/negative' // 过滤减号特殊字符
+import buttonSave from './components/button_save' // 组件调用button
+import dataValue from './components/DateValue' // 时间控件
+import loginLoading from './components/login_loading' // 时间控件
+import VueTouch from 'vue-touch' // 滑动
 // import 'vue-xlsx-table/dist/style.css'
 Vue.use(loginLoading)
 Vue.use(buttonSave)
 Vue.use(dataValue)
 Vue.use(element)
-Vue.use(VueTouch, {name: 'v-touch'})
+Vue.use(VueTouch, { name: 'v-touch' })
 Vue.use(Vuex)
 // Vue.use(Vueaxios, axios)
 const ser = Vue.prototype.axios = axios.create({
-  baseURL:'https://formattingclub.com/YiNuoLogin',
-  timeout:20000,//请求事件
-  crossDomain:true,//设置cross跨域
-  withCredentials:true //设置cross跨域 并设置访问权限 允许跨域携带cookie信息
+  baseURL: 'https://formattingclub.com/YiNuoLogin',
+  timeout: 20000, // 请求事件
+  crossDomain: true, // 设置cross跨域
+  withCredentials: true // 设置cross跨域 并设置访问权限 允许跨域携带cookie信息
 })
-//添加请求拦截器
-ser.interceptors.request.use(config=>{
+// 添加请求拦截器
+ser.interceptors.request.use(config => {
   return config
-},error => {
+}, error => {
   return Promise.reject(error)
 })
-//添加响应拦截器
-ser.interceptors.response.use((response)=>{
+// 添加响应拦截器
+ser.interceptors.response.use((response) => {
   // console.log(response)
   return response
-},error => {
+}, error => {
   // console.log(error)
   if (error.response.status) {
     switch (error.response.status) {
       case 404:
-        mui.toast('服务器已挂');
-        break;
+        mui.toast('服务器已挂')
+        break
       case 500:
-        mui.toast('客户端无法修复服务器');
-        break;
+        mui.toast('客户端无法修复服务器')
+        break
       case 301:
-        mui.toast('禁止浏览器重定向');
-        break;
+        mui.toast('禁止浏览器重定向')
+        break
       case 406:
-        mui.toast('我解析不了');
-        break;
+        mui.toast('我解析不了')
+        break
       case 400:
-        mui.toast('服务器解析错误');
-        break;
+        mui.toast('服务器解析错误')
+        break
       case 401:
-        mui.toast('请使用正确的认证正数');
-        break;
+        mui.toast('请使用正确的认证正数')
+        break
+      case 101:
+        mui.toast('请切换到http的新版本')
     }
   }
   return Promise.reject(error)
@@ -78,7 +79,7 @@ new Vue({
   render: h => h(App),
   created () {
     if (localStorage.getItem('isLogin') === null) {
-      localStorage.setItem('isLogin','')
+      localStorage.setItem('isLogin', '')
     }
     this.$store.state.isLogin = localStorage.getItem('isLogin')
   }

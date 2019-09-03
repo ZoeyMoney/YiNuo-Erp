@@ -166,104 +166,104 @@
 </template>
 
 <script>
-  export default {
-    name: 'Project_Reconciliation',
-    data(){
-      return{
-        imgUrl_loading:false,
-        AdminName:false,
-        divinput:false,
-        activeName: 'first',
-        projetName:'',
-        value: '',
-        // NewUserName:'',
-        userName:'',
-        list:'',
-        first:'',
-        hos:'已付款',
-        listHos:'',
-        second:'未付款',
-        name_num:'',
-        listSecond:'',
-        yesFu:'',
-        paid_for:true,
-        divname:'',
-        listPaid_for:'',
-        Uncollected:'',
-        listUncollected:'',
-        userName_id:'',
-        all_money:'0',//总计金额
-        all_paid:'0',//已付金额
-        no_paid:'0',//质保金额
-        ou_paid:0,
-        enter_paid:'0',//应付金额
-        paLft: {
-          display: 'block',
-          padding: '0 10px',
-          width:'150px',
-          whiteSpace:'nowrap',
-          overflow:'hidden',
-          textOverflow:'ellipsis'
-        },
-        lefta: {
-          paddingLeft: '10px',
-          minWidth:'85px'
-        },
-        money: {
-          display: 'block',
-          width: '72px',
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis'
-        },
-        fund_name:{
-          display:'block',
-          width:'57px',
-          whiteSpace:'nowrap',
-          overflow:'hidden',
-          textOverflow:'ellipsis',
-          paddingLeft:'10px'
-        }
+export default {
+  name: 'Project_Reconciliation',
+  data () {
+    return {
+      imgUrl_loading: false,
+      AdminName: false,
+      divinput: false,
+      activeName: 'first',
+      projetName: '',
+      value: '',
+      // NewUserName:'',
+      userName: '',
+      list: '',
+      first: '',
+      hos: '已付款',
+      listHos: '',
+      second: '未付款',
+      name_num: '',
+      listSecond: '',
+      yesFu: '',
+      paid_for: true,
+      divname: '',
+      listPaid_for: '',
+      Uncollected: '',
+      listUncollected: '',
+      userName_id: '',
+      all_money: '0', // 总计金额
+      all_paid: '0', // 已付金额
+      no_paid: '0', // 质保金额
+      ou_paid: 0,
+      enter_paid: '0', // 应付金额
+      paLft: {
+        display: 'block',
+        padding: '0 10px',
+        width: '150px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      },
+      lefta: {
+        paddingLeft: '10px',
+        minWidth: '85px'
+      },
+      money: {
+        display: 'block',
+        width: '72px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+      },
+      fund_name: {
+        display: 'block',
+        width: '57px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        paddingLeft: '10px'
       }
-    },
-    created(){
-      //  接收返回来的参数
-        /*this.userName = window.fund_people
-        this.userName_id = window.fund_people_name*/
-        this.imgUrl_loading = true
-      //查询
-      var then = this
-      this.axios.get('/User/Select_accounting').then(res => {
-        if (res.status === 200) {
-          this.imgUrl_loading = false
-          this.NewUserName = JSON.parse(localStorage.data).role
-          // console.log(this.NewUserName)
-          for (var index in this.NewUserName) {
-            this.projetName = res.data.list_fund_customer_name
-            if (this.NewUserName[index].jurisdiction_name === '项目对账') {
-              if (this.NewUserName[index].role_name === '总权限') {
-                this.AdminName = true
-                this.divinput = false
-              } else {
-                this.divname = res.data.name
-                this.yesFu = res.data.list_fund_Already_out
-                this.listSecond = res.data.list_fund_pre_out
-                this.divinput = true
-                this.AdminName = false
-              }
-              this.listHos = res.data.list_fund_user_number
-              if (this.userName != '') {
-                this.yesFu = res.data.list_fund_Already_out
-                this.listSecond = res.data.list_fund_pre_out
-                this.listPaid_for = res.data.list_fund_Already_enter
-                this.listUncollected = res.data.list_fund_pre_enter
-              }
+    }
+  },
+  created () {
+    //  接收返回来的参数
+    /* this.userName = window.fund_people
+        this.userName_id = window.fund_people_name */
+    this.imgUrl_loading = true
+    // 查询
+    var then = this
+    this.axios.get('/User/Select_accounting').then(res => {
+      if (res.status === 200) {
+        this.imgUrl_loading = false
+        this.NewUserName = JSON.parse(localStorage.data).role
+        // console.log(this.NewUserName)
+        for (var index in this.NewUserName) {
+          this.projetName = res.data.list_fund_customer_name
+          if (this.NewUserName[index].jurisdiction_name === '项目对账') {
+            if (this.NewUserName[index].role_name === '总权限') {
+              this.AdminName = true
+              this.divinput = false
+            } else {
+              this.divname = res.data.name
+              this.yesFu = res.data.list_fund_Already_out
+              this.listSecond = res.data.list_fund_pre_out
+              this.divinput = true
+              this.AdminName = false
+            }
+            this.listHos = res.data.list_fund_user_number
+            if (this.userName != '') {
+              this.yesFu = res.data.list_fund_Already_out
+              this.listSecond = res.data.list_fund_pre_out
+              this.listPaid_for = res.data.list_fund_Already_enter
+              this.listUncollected = res.data.list_fund_pre_enter
             }
           }
         }
-      })
-//  相关人查询
-      /*if (this.userName != undefined) {
+      }
+    })
+    //  相关人查询
+    /* if (this.userName != undefined) {
         var add = '?'
         if (this.userName_id == '') {
           add+= 'user_number=0'
@@ -274,117 +274,115 @@
           this.list_model_search(res)
           this.all_model_money(res)
         })
-      }*/
-
-
+      } */
+  },
+  methods: {
+    // 未处理进入应付详情
+    nodeal (val) {
+      var listVal = {}
+      if (JSON.parse(localStorage.data).role[0].role_name == '总权限') {
+        for (var index in this.listSecond) {
+          if (val == this.listSecond[index].fund_details_id) {
+            listVal = this.listSecond[index]
+          }
+        }
+      }
+      localStorage.payable_entry = JSON.stringify(listVal)
+      this.$router.push({ path: 'payable_entry', query: { listVal: listVal } })
     },
-    methods:{
-      //未处理进入应付详情
-      nodeal(val){
-        var listVal = {}
-        if (JSON.parse(localStorage.data).role[0].role_name == '总权限') {
-          for (var index in this.listSecond) {
-            if (val == this.listSecond[index].fund_details_id) {
-              listVal = this.listSecond[index]
-            }
+    // 已处理进入流水详情
+    rinningClick (val) {
+      var listVal = {}
+      if (JSON.parse(localStorage.data).role[0].role_name == '总权限') {
+        for (var index in this.yesFu) {
+          if (val == this.yesFu[index].fund_details_id) {
+            listVal = this.yesFu[index]
           }
         }
-        localStorage.payable_entry = JSON.stringify(listVal)
-        this.$router.push({ path: 'payable_entry', query: { listVal: listVal} })
-      },
-      //已处理进入流水详情
-      rinningClick(val){
-        var listVal = {}
-        if (JSON.parse(localStorage.data).role[0].role_name == '总权限') {
-          for (var index in this.yesFu) {
-            if (val == this.yesFu[index].fund_details_id) {
-              listVal = this.yesFu[index]
-            }
-          }
+      }
+      localStorage.msg = JSON.stringify(listVal)
+      // console.log(listVal)
+      this.$router.push({ path: 'running_details', query: { listVal: listVal } })
+    },
+    // 封装筛选总计所有金额
+    all_model_money (res) {
+      //   所有总计金额
+      var enter = 0 // 已付款总计金额
+      var out = 0 // 未付款总计金额
+      var no_paid = 0 // 未付款总计金额
+      var enter_paid = 0 // 应付总计金额
+      // 已处理
+      for (var index in res.data.list_fund_Already_out) {
+        enter += res.data.list_fund_Already_out[index].fund_details_money
+      }
+      // 未处理
+      for (var index in res.data.list_fund_pre_out) {
+        out += res.data.list_fund_pre_out[index].fund_details_money
+      }
+      // 质保金
+      for (var index in res.data.list_fund_pre_out) {
+        // 质保金
+        if (res.data.list_fund_pre_out[index].fund_details_batch === '99') {
+          no_paid += res.data.list_fund_pre_out[index].fund_details_money
         }
-        localStorage.msg = JSON.stringify(listVal)
-        // console.log(listVal)
-        this.$router.push({ path: 'running_details', query: { listVal: listVal} })
-      },
-      //封装筛选总计所有金额
-      all_model_money(res){
-        //   所有总计金额
-        var enter = 0 //已付款总计金额
-        var out = 0   //未付款总计金额
-        var no_paid = 0 //未付款总计金额
-        var enter_paid = 0 //应付总计金额
-        //已处理
-        for (var index in res.data.list_fund_Already_out) {
-          enter+=res.data.list_fund_Already_out[index].fund_details_money
+        // 应付
+        if (res.data.list_fund_pre_out[index].fund_details_batch !== '99') {
+          enter_paid += res.data.list_fund_pre_out[index].fund_details_money
         }
-        //未处理
-        for (var index in res.data.list_fund_pre_out) {
-          out+=res.data.list_fund_pre_out[index].fund_details_money
-        }
-        //质保金
-        for (var index in res.data.list_fund_pre_out) {
-          //质保金
-          if (res.data.list_fund_pre_out[index].fund_details_batch === '99') {
-            no_paid+=res.data.list_fund_pre_out[index].fund_details_money
-          }
-          //应付
-          if (res.data.list_fund_pre_out[index].fund_details_batch !== '99') {
-            enter_paid+=res.data.list_fund_pre_out[index].fund_details_money
-          }
-        }
-        this.all_money = parseFloat(enter)+parseFloat(out)  //总计金额相加
-        this.all_paid = enter //已处理金额
-        this.ou_paid = out
-        this.no_paid = no_paid //质保
-        this.enter_paid = enter_paid  //应付
-      },
-      //封装分类
-      list_model_search(res){
-        this.yesFu = res.data.list_fund_Already_out
-        this.listSecond = res.data.list_fund_pre_out
-        this.listPaid_for = res.data.list_fund_Already_enter
-        this.listUncollected = res.data.list_fund_pre_enter
-        this.projetName = res.data.list_fund_customer_name
-      },
-      /*userNameClick(){
+      }
+      this.all_money = parseFloat(enter) + parseFloat(out) // 总计金额相加
+      this.all_paid = enter // 已处理金额
+      this.ou_paid = out
+      this.no_paid = no_paid // 质保
+      this.enter_paid = enter_paid // 应付
+    },
+    // 封装分类
+    list_model_search (res) {
+      this.yesFu = res.data.list_fund_Already_out
+      this.listSecond = res.data.list_fund_pre_out
+      this.listPaid_for = res.data.list_fund_Already_enter
+      this.listUncollected = res.data.list_fund_pre_enter
+      this.projetName = res.data.list_fund_customer_name
+    },
+    /* userNameClick(){
         var prosen = 'Project_Reconciliation'
         this.$router.push({path:'relevant_people'})
         window.prosen = prosen
-      },*/
+      }, */
 
-      //账号选择
-      userClick(id){
-        var add = '?'
-        if (id == '') {
-          add+= 'user_number=0'
-        }else{
-          add+='user_number='+id
+    // 账号选择
+    userClick (id) {
+      var add = '?'
+      if (id == '') {
+        add += 'user_number=0'
+      } else {
+        add += 'user_number=' + id
+      }
+      this.axios.get('/User/Select_accounting' + add).then(res => {
+        this.list_model_search(res)
+        this.all_model_money(res)
+      })
+    },
+    // 筛选
+    projetClick (id) {
+      var add = '?'
+      if (this.userName == '') {
+        add += 'Customer_name=' + id
+      } else {
+        if (this.value != '') {
+          add += '&Customer_name=' + id + '&user_number=' + this.userName
+        } else {
+          add += '&user_number=' + this.userName
         }
-        this.axios.get('/User/Select_accounting'+add).then(res=>{
-          this.list_model_search(res)
-          this.all_model_money(res)
-        })
-      },
-      //筛选
-      projetClick(id){
-        var add='?'
-        if (this.userName == '') {
-          add+='Customer_name='+id
-        }else{
-          if (this.value != '') {
-            add+='&Customer_name='+id+'&user_number='+this.userName
-          }else{
-            add+='&user_number='+this.userName
-          }
-        }
-        this.axios.get('/User/Select_accounting'+add).then(res=>{
-            this.imgUrl_loading = false
-            this.list_model_search(res)
-            this.all_model_money(res)
-        })
-      },
-      first_hos(tab){
-        /*if (tab.index === '0') {
+      }
+      this.axios.get('/User/Select_accounting' + add).then(res => {
+        this.imgUrl_loading = false
+        this.list_model_search(res)
+        this.all_model_money(res)
+      })
+    },
+    first_hos (tab) {
+      /* if (tab.index === '0') {
           this.axios.get(url.selectSerch+'?fund_details_state=1').then(res=>{
             this.listHos = res.data.data
           })
@@ -400,10 +398,10 @@
           this.axios.get(url.selectSerch+'?fund_details_state=1&fund_details_money=0').then(res=>{
             this.listUncollected = res.data.data
           })
-        }*/
-      },
+        } */
     }
   }
+}
 </script>
 
 <style lang="scss">

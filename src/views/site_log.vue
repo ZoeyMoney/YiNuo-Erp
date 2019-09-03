@@ -56,63 +56,63 @@
 </template>
 
 <script>
-  export default {
-    name: 'site_log',
-    data(){
-      return{
-        name:'',
-        list:'',
-        fund_details_id:'',
-        dialogImageUrl: '',
-        dialogVisible: false,
-        imgURL:[],
-        projetImg:require('../image/projet_all.png'),
-        textrate:'',
-      };
+export default {
+  name: 'site_log',
+  data () {
+    return {
+      name: '',
+      list: '',
+      fund_details_id: '',
+      dialogImageUrl: '',
+      dialogVisible: false,
+      imgURL: [],
+      projetImg: require('../image/projet_all.png'),
+      textrate: ''
+    }
+  },
+  created () {
+    var loc = location.href
+    var n1 = loc.length// 地址的总长度
+    var n2 = loc.indexOf('=')// 取得=号的位置
+    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
+    this.fund_details_id = id
+    this.list = id.split('=')
+    var lists = []
+    for (var index in this.list) {
+      var a2 = this.list[index].slice(0)
+      lists.push(a2)
+    }
+    this.name = lists[0]
+    this.textrate = lists[1]
+  },
+  methods: {
+    handleRemove (file, fileList) {
+      console.log(file, fileList)
     },
-    created () {
-      var loc = location.href
-      var n1 = loc.length// 地址的总长度
-      var n2 = loc.indexOf('=')// 取得=号的位置
-      var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
-      this.fund_details_id = id
-      this.list = id.split('=')
-      var lists = []
-      for (var index in this.list) {
-        var a2 = this.list[index].slice(0)
-        lists.push(a2)
-      }
-      this.name = lists[0]
-      this.textrate = lists[1]
+    handlePictureCardPreview (file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     },
-    methods:{
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
-      customUpload(val){
-        console.log(val.file)
-      },
-      /*imgLength*/
-      leng(){
-        var a = true
-        mui.toast('最多6张图片')
-        a = false
-        return false
-      },
-      /*return*/
-      returnName(){
-        this.$router.push({name:'site_statistics'})
-      },
-      /*save*/
-      saveName(){
-        mui.alert('未完成')
-      }
+    customUpload (val) {
+      console.log(val.file)
+    },
+    /* imgLength */
+    leng () {
+      var a = true
+      mui.toast('最多6张图片')
+      a = false
+      return false
+    },
+    /* return */
+    returnName () {
+      this.$router.push({ name: 'site_statistics' })
+    },
+    /* save */
+    saveName () {
+      mui.alert('未完成')
     }
   }
+}
 </script>
 
 <style scoped>

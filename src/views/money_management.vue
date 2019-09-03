@@ -40,7 +40,7 @@ export default {
         { href: 'stop_sales', listImg: require('../image/saloe.png'), text: '暂支销账' },
         { href: 'stop_sales_two', listImg: require('../image/saloe.png'), text: '暂支销账12' },
         { href: 'stop_sales_two', listImg: require('../image/saloe.png'), text: '项目测评' },
-        { href: 'cash_assessment', listImg: require('../image/saloe.png'), text: '现金评估' },
+        { href: 'cash_assessment', listImg: require('../image/saloe.png'), text: '现金评估' }
       ]
     }
   }

@@ -97,7 +97,7 @@ export default {
   name: 'AfterSale_statistics',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       customer_name: '', // 关键字
       customer_stylist: '', // 设计师
       stage_name: '', // 阶段
@@ -107,13 +107,13 @@ export default {
       stage_stipulate: '',
       add: '', // 钱总
       /* table的最后一个td */
-      lefta:{
-        paddingLeft:'10px'
+      lefta: {
+        paddingLeft: '10px'
       },
       listRad: {
         color: 'red',
         fontWeight: 'bold'
-      },
+      }
     }
   },
   created () {
@@ -141,7 +141,7 @@ export default {
     }, 1000)
   },
   computed: {
-    list_serach(){
+    list_serach () {
       var then = this
       var newList = []
       then.list.map(function (item) {
@@ -153,8 +153,8 @@ export default {
     }
   },
   methods: {
-    all_money:function(jia,yi,worker){
-      var money = parseFloat(jia)+parseFloat(yi)+parseFloat(worker)
+    all_money: function (jia, yi, worker) {
+      var money = parseFloat(jia) + parseFloat(yi) + parseFloat(worker)
       return money
     },
     // 页面传参
@@ -168,14 +168,14 @@ export default {
       }
       localStorage.AfterSale_statistics = JSON.stringify(lists)
       console.log(lists)
-      this.$router.push({name:'site_details',query:{lists}})
+      this.$router.push({ name: 'site_details', query: { lists } })
     },
-    datas(datasd){
+    datas (datasd) {
       var datas = new Date(datasd)
       var data = datas.getFullYear()
       var d = datas.getMonth() + 1
       var y = datas.getDate()
-      var datas = data+'-'+d+'-'+y
+      var datas = data + '-' + d + '-' + y
       return datas
     },
     // 倒计时

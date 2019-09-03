@@ -12,5 +12,4 @@ Vue.filter('data', function (data) {
               var s = dt.getSeconds(); */
     return `${y}-${m}-${d}`
   }
-
 })

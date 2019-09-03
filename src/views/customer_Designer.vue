@@ -32,7 +32,7 @@ export default {
   name: 'customer_Designer',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       name: ''
     }
   },
@@ -40,12 +40,12 @@ export default {
     add () {
       var then = this
       this.imgUrl_loading = true
-      this.axios.get('/Customer/addCustomer_stylist'+'?Customer_stylist=' + this.name + '&Customer_aftersale=0').then(res => {
+      this.axios.get('/Customer/addCustomer_stylist' + '?Customer_stylist=' + this.name + '&Customer_aftersale=0').then(res => {
         if (res.status === 200) {
-          this.imgUrl_loading=false
-        mui.alert(res.data.msg, function () {
-          then.$router.push({ name: 'customer_management' })
-        })
+          this.imgUrl_loading = false
+          mui.alert(res.data.msg, function () {
+            then.$router.push({ name: 'customer_management' })
+          })
         }
       })
     }

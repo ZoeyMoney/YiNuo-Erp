@@ -37,10 +37,10 @@ export default {
         { href: '', listImg: require('../image/chufa.png'), text: '处罚统计' },
         { href: '', listImg: require('../image/sj.png'), text: '周三事件' },
         { href: 'approval', listImg: require('../image/sp.png'), text: '审批管理' },
-        { href: 'admin_nameUpdate', listImg: require('../image/r.png'), text: '个人中心' },
         { href: 'adminPunishment', listImg: require('../image/chuaf.png'), text: '行政处罚' },
         { href: 'NewUserName', listImg: require('../image/newname.png'), text: '添加账户' },
         { href: 'task_admins', listImg: require('../image/renwu.png'), text: '审批统计' },
+        { href: 'admin_log', listImg: require('../image/log.png'), text: '工作日志' },
       ]
     }
   },

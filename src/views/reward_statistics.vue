@@ -24,19 +24,19 @@
 </template>
 
 <script>
-  export default {
-    name: 'reward_statistics',
-    data(){
-      return{
-        money_plus: require('../image/plus.png'),
-      }
-    },
-    methods:{
-      add(){
-        console.log('123')
-      }
+export default {
+  name: 'reward_statistics',
+  data () {
+    return {
+      money_plus: require('../image/plus.png')
+    }
+  },
+  methods: {
+    add () {
+      console.log('123')
     }
   }
+}
 </script>
 
 <style scoped>

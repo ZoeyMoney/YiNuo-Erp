@@ -28,24 +28,24 @@
 </template>
 
 <script>
-  export default {
-    name: 'summary_entry',
-    data(){
-      return{
-        msg: [
-          { href: 'customer_Designer', ImgArr: require('../image/Designer.png'), text: '设计师添加' },
-          { href: 'bank_card', ImgArr: require('../image/bank_card.png'), text: '银行卡录入' },
-          { href: 'rate', ImgArr: require('../image/rate.png'), text: '费率录入' },
-          { href: 'money_projet', ImgArr: require('../image/shouhou.png'), text: '项目录入' },
-          { href: 'money_Responsible', ImgArr: require('../image/Responsible.png'), text: '责任人录入' },
-          { href: 'Follow_up', ImgArr: require('../image/Responsible.png'), text: '跟进人录入' },
-          { href: 'profit_edit', ImgArr: require('../image/profit_edit.png'), text: '利润修改' },
-          { href: 'receive_data', ImgArr: require('../image/yishou.png'), text: '已收数据' },
-          { href: 'paid_data', ImgArr: require('../image/yifu.png'), text: '已付数据' },
-        ]
-      }
-    },
+export default {
+  name: 'summary_entry',
+  data () {
+    return {
+      msg: [
+        { href: 'customer_Designer', ImgArr: require('../image/Designer.png'), text: '设计师添加' },
+        { href: 'bank_card', ImgArr: require('../image/bank_card.png'), text: '银行卡录入' },
+        { href: 'rate', ImgArr: require('../image/rate.png'), text: '费率录入' },
+        { href: 'money_projet', ImgArr: require('../image/shouhou.png'), text: '项目录入' },
+        { href: 'money_Responsible', ImgArr: require('../image/Responsible.png'), text: '责任人录入' },
+        { href: 'Follow_up', ImgArr: require('../image/Responsible.png'), text: '跟进人录入' },
+        { href: 'profit_edit', ImgArr: require('../image/profit_edit.png'), text: '利润修改' },
+        { href: 'receive_data', ImgArr: require('../image/yishou.png'), text: '已收数据' },
+        { href: 'paid_data', ImgArr: require('../image/yifu.png'), text: '已付数据' }
+      ]
+    }
   }
+}
 </script>
 
 <style scoped>

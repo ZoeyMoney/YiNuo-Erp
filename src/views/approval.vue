@@ -61,49 +61,48 @@
 </template>
 
 <script>
-  export default {
-    name: 'approval',
-    data(){
-      return{
-        imgUrl_loading:false,
-        // category:'',//类别选择
-        projet:'',//项目名称
-        projet_id:'',//项目id
-        Application:'',//申请人
-        totalMoney:'',//总金额
-        paymentDate:'',//付款日期
-        ReceiptPeople:'',//收款人
-        userName:'',//账户
-        DetailMoney:'',//费用明细
-      }
+export default {
+  name: 'approval',
+  data () {
+    return {
+      imgUrl_loading: false,
+      // category:'',//类别选择
+      projet: '', // 项目名称
+      projet_id: '', // 项目id
+      Application: '', // 申请人
+      totalMoney: '', // 总金额
+      paymentDate: '', // 付款日期
+      ReceiptPeople: '', // 收款人
+      userName: '', // 账户
+      DetailMoney: ''// 费用明细
+    }
+  },
+  created () {
+    // 接收工地参数
+    this.projet = window.test
+    this.projet_id = window.test_id
+  },
+  methods: {
+    // 项目名称传参
+    projetClick () {
+      var expenditure = 'approval'
+      this.$router.push({ path: 'siteList' })
+      window.expenditure = expenditure
     },
-    created () {
 
-      //接收工地参数
-      this.projet = window.test
-      this.projet_id = window.test_id
-    },
-    methods:{
-      //项目名称传参
-      projetClick(){
-        var expenditure = 'approval'
-        this.$router.push({path:'siteList'})
-        window.expenditure = expenditure
-      },
-
-      //保存
-      saveName(){
-        var then = this
-        var _true = true
-        if (this.category == '' || this.projet == '' || this.Application == '' || this.totalMoney == '' || this.paymentDate == ''
-          || this.ReceiptPeople == '' || this.userName == '' || this.DetailMoney == '') {
-          mui.toast('所有资料不能为空')
-          _true = false
-          return false
-        }
+    // 保存
+    saveName () {
+      var then = this
+      var _true = true
+      if (this.category == '' || this.projet == '' || this.Application == '' || this.totalMoney == '' || this.paymentDate == '' ||
+          this.ReceiptPeople == '' || this.userName == '' || this.DetailMoney == '') {
+        mui.toast('所有资料不能为空')
+        _true = false
+        return false
       }
     }
   }
+}
 </script>
 
 <style scoped>

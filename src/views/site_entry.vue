@@ -97,30 +97,6 @@
             <input type="date" class="mui-input-clear" v-model="constructionTwo">
           </div>
         </form>
-        <!--第四个form-->
-        <form class="mui-input-group">
-          <div class="two">
-            <div class="mui-input-row">
-              <label>合同金额</label>
-            </div>
-            <div class="mui-input-row">
-              <label>设计费</label>
-            </div>
-          </div>
-            <table border="0">
-              <tr>
-                <td :style="Ywith"><span>原价</span></td>
-                <td :style="inClerar"><span><input type="text" class="mui-input-clear allmoney" v-model="originMoney" placeholder="请输入金额"></span></td>
-                <td :style="inClerar"><span><input type="text" class="mui-input-clear allmoney" v-model="originOffer" placeholder="请输入金额"></span></td>
-              </tr>
-              <tr>
-                <td :style="Ywith"><span>优惠率</span></td>
-                <td :style="inClerar"><span><input type="text" class="mui-input-clear allmoney" v-model="OfferMoney" placeholder="请输入金额"></span></td>
-                <td :style="inClerar"><span><input type="text" class="mui-input-clear allmoney" v-model="Offer" placeholder="请输入金额"></span></td>
-              </tr>
-            </table>
-          <div :style="Ybai">费用共计：<span :style="YbaiMony">￥{{allMoney | MoneyFormat}}</span></div>
-        </form>
         <div class="mui-input-row form-btn">
           <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">保存</button>
         </div>
@@ -133,54 +109,34 @@ export default {
   name: 'site_entry',
   data () {
     return {
-      projetName:'',
-      listName:'',  //项目名称
-      psName:'',
-      ps:'',    //设计师
-      clasN:'',
-      people:'',//联系人
-      mobilePeople:'',//联系方式
-      decoration:'',//装修面积
-      recommendPeople:'',//推荐人
-      Customer_type:'',//属性
-      client:'',//客户需求
-      projetManager:'',//项目经理
-      projetText:'',//项目备注
-      className:'工装',
-      csName:[
-        {text:'家装'},
-        {text:'工装'},
+      projetName: '',
+      listName: '', // 项目名称
+      psName: '',
+      ps: '', // 设计师
+      clasN: '',
+      people: '', // 联系人
+      mobilePeople: '', // 联系方式
+      decoration: '', // 装修面积
+      recommendPeople: '', // 推荐人
+      Customer_type: '', // 属性
+      client: '', // 客户需求
+      projetManager: '', // 项目经理
+      projetText: '', // 项目备注
+      className: '工装',
+      csName: [
+        { text: '家装' },
+        { text: '工装' }
       ],
-      contractDate:'',//合同日期
-      constructionOne:'',//施工开始时间
-      constructionTwo:'',//施工结束时间
-      constructList:[
-        {text:'原价'},
-        {text:'合同价'},
-        {text:'优惠率'},
+      contractDate: '', // 合同日期
+      constructionOne: '', // 施工开始时间
+      constructionTwo: '', // 施工结束时间
+      constructList: [
+        { text: '原价' },
+        { text: '合同价' },
+        { text: '优惠率' }
       ],
-      originMoney:'',//原价金额
-      originOffer:'',//原价设计费
-      contractMoney:'',//合同金额
-      contractOffer:'',//合同费用
-      OfferMoney:'',//优惠率合同
-      Offer:'',//优惠率设计费
-      Ywith:{
-        width:'30%',
-        textAlign:'center',
-      },
-      inClerar:{
-        width:'35%',
-      },
-      Ybai:{
-        width:'100%',
-        fontSize:'15px',
-        paddingLeft:'20px',
-        paddingBottom:'9px'
-      },
-      YbaiMony:{
-        paddingLeft:'15px'
-      }
+      contractMoney: '', // 合同金额
+      contractOffer: ''// 合同费用
     }
   },
   created () {
@@ -188,22 +144,18 @@ export default {
     this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectAllCustomer').then(res => {
       this.listName = res.data
     })
-  //  设计师
+    //  设计师
     this.axios.get('https://formattingclub.com/YiNuoLogin/Customer/SelectStylist').then(customName => {
       this.ps = customName.data
     })
   },
-  computed:{
-    /*费用共计*/
-    allMoney(){
-      var a = parseInt(this.contractMoney) + parseInt(this.contractOffer)
-      return a
-    }
+  computed: {
+
   },
   methods: {
-      add(){
-        console.log(this.className)
-      }
+    add () {
+      console.log(this.className)
+    }
   }
 }
 </script>
@@ -234,10 +186,6 @@ export default {
   /*table*/
   table{font-size: 15px}
   .allmoney{padding-left: 0}
-  /*two*/
-  .two{display: flex}
-  .two .mui-input-row{flex: 1}
-  .two .mui-input-row label{width: 100%;text-align: center;background-color: #373737;color: white;}
   /*按钮*/
   .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
   .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}

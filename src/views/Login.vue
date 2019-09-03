@@ -23,15 +23,15 @@
     </div>
 </template>
 <script>
-  import config from '../js/index'
+import config from '../js/index'
 export default {
   name: 'Login',
   data () {
     return {
       name: '',
       pwd: '',
-      imgUrl_loading:false,
-      imgSrc:require('../image/2146070222.jpg')
+      imgUrl_loading: false,
+      imgSrc: require('../image/2146070222.jpg')
     }
   },
   created () {
@@ -46,26 +46,28 @@ export default {
       } else {
         var _this = this
         this.imgUrl_loading = true
-        this.axios.post('/Login'+'?name=' + this.name + '&pwd=' + this.pwd).then(res=>{
-          var token = res.data.token
+        this.axios.post('/Login' + '?name=' + this.name + '&pwd=' + this.pwd).then(res => {
+          var ree = 'ws://formattingclub.com/YiNuoLogin/websocket/' + res.data.userid
           if (res.status === 200) {
             this.imgUrl_loading = false
             if (res.data.msg === '登录成功') {
               mui.alert(res.data.msg, function () {
-                sessionStorage.setItem(config.KEY.CACHE_LOGIN_USER,_this.name)
-                sessionStorage.setItem(config.KEY.CACHE_LOGIN_ID,res.data.userid)
+                sessionStorage.setItem(config.KEY.CACHE_LOGIN_USER, _this.name)
+                sessionStorage.setItem(config.KEY.CACHE_LOGIN_ID, res.data.userid)
+                sessionStorage.setItem(config.KEY.CACHE_LOGIN_NAME,res.data.userNumber)
                 localStorage.data = JSON.stringify(res.data)
-                _this.$store.commit('isLogin',res.data.userid)
-                _this.$router.push('index')
+                _this.$store.commit('isLogin', res.data.userid)
+                // _this.$router.push('index')
+                _this.$router.push({ name: 'index' })
               })
-            }else{
+            } else {
               mui.alert('账号或密码错误')
             }
           }
         })
       }
     }
-  },
+  }
 }
 </script>
 

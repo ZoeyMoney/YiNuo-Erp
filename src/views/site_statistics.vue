@@ -72,111 +72,111 @@
 </template>
 
 <script>
-  export default {
-    name: 'site_statistics',
-    data () {
-      return {
-        customer_name: '', // 关键字
-        customer_stylist: '', // 设计师
-        stage_name: '', // 阶段
-        listName: '',
-        stageName: '',
-        list: '', // table
-        stage_stipulate: '',
-        add: '', // 钱总
-        listtime: '', // 倒计时
-        /* table */
-        ostyle: {
-          fontSize: '12px',
-          borderBottom: '1px solid #dadada',
-          lineHeight: '30px'
-        },
-        /* table的最后一个td */
-        listStyle: {
-          color: 'blue',
-          fontWeight: 'bold'
-        },
-        listRad: {
-          color: 'red',
-          fontWeight: 'bold'
-        },
-        listBlue: {
-          color: 'green',
-          fontWeight: 'bold'
-        },
-        projet: {
-          width: '93px',
-          paddingLeft: '10px'
-        },
-        paLift: {
-          paddingLeft: '3px'
-        }
-      }
-    },
-    created () {
-      // table数据
-      this.axios.get('/Customer/SelectStageCustomer').then(res => {
-        if (res.status === 200) {
-          this.list = res.data
-        } else {
-          console.log('获取失败')
-        }
-        // 求钱的总和
-        var a = 0
-        for (var index in this.list) {
-          a += this.list[index].customer_budget
-          var b = a / 10000
-        }
-        this.add = b
-      })
-
-      // 设计师
-      this.axios.get('/Customer/SelectStylist').then(res => {
-        this.listName = res.data
-      })
-      //  阶段
-      this.axios.get('/Customer/SelectStageName').then(res => {
-        this.stageName = res.data
-      })
-      //  倒计时
-      setInterval(() => {
-        var a = new Date()
-        this.listtime = a
-      }, 1000)
-    },
-    methods: {
-      // 页面传参
-      mername (id) {
-        this.$router.push({ path: 'site_after_sale', query: { id: id } })
+export default {
+  name: 'site_statistics',
+  data () {
+    return {
+      customer_name: '', // 关键字
+      customer_stylist: '', // 设计师
+      stage_name: '', // 阶段
+      listName: '',
+      stageName: '',
+      list: '', // table
+      stage_stipulate: '',
+      add: '', // 钱总
+      listtime: '', // 倒计时
+      /* table */
+      ostyle: {
+        fontSize: '12px',
+        borderBottom: '1px solid #dadada',
+        lineHeight: '30px'
       },
-      // 倒计时
-      time: function (date, day) {
-        if (date == null) {
-          return '未开始'
-        } else {
-          var startDate = new Date(date)
-          startDate.setDate(startDate.getDate() + day)
-          var m = startDate.getMonth() + 1
-          var end = startDate.getFullYear() + '-' + m + '-' + startDate.getDate() + '-' + startDate.getHours() + ':' +
-            startDate.getMinutes() + ':' + startDate.getSeconds()
-          var endDate = new Date(end)
-          var start = new Date()
-          var rightTime = endDate - start // 截止时间减去当前时间
-          if (rightTime > 0) { // 判断剩余倒计时时间如果大于0就执行倒计时否则就结束
-            var dd = Math.floor(rightTime / 1000 / 60 / 60 / 24)
-            var hh = Math.floor((rightTime / 1000 / 60 / 60) % 24)
-            var mm = Math.floor((rightTime / 1000 / 60) % 60)
-            var ss = Math.floor((rightTime / 1000) % 60)
-            var showTime = dd + ':' + hh + ':' + mm + ':' + ss
-          } else {
-            var showTime = '已逾期'
-          }
-          return showTime
-        }
+      /* table的最后一个td */
+      listStyle: {
+        color: 'blue',
+        fontWeight: 'bold'
+      },
+      listRad: {
+        color: 'red',
+        fontWeight: 'bold'
+      },
+      listBlue: {
+        color: 'green',
+        fontWeight: 'bold'
+      },
+      projet: {
+        width: '93px',
+        paddingLeft: '10px'
+      },
+      paLift: {
+        paddingLeft: '3px'
       }
+    }
+  },
+  created () {
+    // table数据
+    this.axios.get('/Customer/SelectStageCustomer').then(res => {
+      if (res.status === 200) {
+        this.list = res.data
+      } else {
+        console.log('获取失败')
+      }
+      // 求钱的总和
+      var a = 0
+      for (var index in this.list) {
+        a += this.list[index].customer_budget
+        var b = a / 10000
+      }
+      this.add = b
+    })
 
+    // 设计师
+    this.axios.get('/Customer/SelectStylist').then(res => {
+      this.listName = res.data
+    })
+    //  阶段
+    this.axios.get('/Customer/SelectStageName').then(res => {
+      this.stageName = res.data
+    })
+    //  倒计时
+    setInterval(() => {
+      var a = new Date()
+      this.listtime = a
+    }, 1000)
+  },
+  methods: {
+    // 页面传参
+    mername (id) {
+      this.$router.push({ path: 'site_after_sale', query: { id: id } })
     },
+    // 倒计时
+    time: function (date, day) {
+      if (date == null) {
+        return '未开始'
+      } else {
+        var startDate = new Date(date)
+        startDate.setDate(startDate.getDate() + day)
+        var m = startDate.getMonth() + 1
+        var end = startDate.getFullYear() + '-' + m + '-' + startDate.getDate() + '-' + startDate.getHours() + ':' +
+            startDate.getMinutes() + ':' + startDate.getSeconds()
+        var endDate = new Date(end)
+        var start = new Date()
+        var rightTime = endDate - start // 截止时间减去当前时间
+        if (rightTime > 0) { // 判断剩余倒计时时间如果大于0就执行倒计时否则就结束
+          var dd = Math.floor(rightTime / 1000 / 60 / 60 / 24)
+          var hh = Math.floor((rightTime / 1000 / 60 / 60) % 24)
+          var mm = Math.floor((rightTime / 1000 / 60) % 60)
+          var ss = Math.floor((rightTime / 1000) % 60)
+          var showTime = dd + ':' + hh + ':' + mm + ':' + ss
+        } else {
+          var showTime = '已逾期'
+        }
+        return showTime
+      }
+    }
+
   }
+}
 </script>
 
 <style scoped>

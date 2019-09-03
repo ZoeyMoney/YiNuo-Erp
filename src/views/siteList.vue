@@ -72,60 +72,60 @@
 </template>
 
 <script>
-  export default {
-    name: 'siteList',
-    data(){
-      return{
-        imgUrl_loading:false,
-        allperson:false,
-        listProjet:'',
-        site_A:'',
-        site_B:'',
-        site_C:'',
-        site_D:'',
-        site_E:'',
-        site_F:'',
-        site_G:'',
-        site_H:'',
-        site_J:'',
-        site_K:'',
-        site_L:'',
-        site_M:'',
-        site_W:'',
-        site_N:'',
-        site_O:'',
-        site_P:'',
-        site_Q:'',
-        site_T:'',
-        site_R:'',
-        site_S:'',
-        site_Y:'',
-        site_X:'',
-        site_Z:'',
-        site_I:'',
-        site_V:'',
-        site_U:'',
-        AZ:[],
-        codeSite:'',
-        codeE:'',
-        allProjet:'',
-      }
-    },
-    created () {
-      this.imgUrl_loading = true
-      this.allperson = false
-      this.allProjet = window.expenditure
-      var add = '?'
-      if (window.expenditure === 'income' || window.expenditure === 'expenditure' || window.expenditure === 'money_entry' || window.expenditure === 'accounts_payable' ||
-        window.expenditure ==='profit_edit' || window.expenditure ==='income_receive' || window.expenditure ==='expenditure_receive'||window.expenditure ==='expenditure_after' || window.expenditure ==='approval') {
-        add+='Customer_A=1'+'&Customer_B=2'+'&Customer_C=3'+'&Customer_D=4'
-      }else if (window.expenditure === 'paid_data' || window.expenditure === 'receive_data') {
-        add+='Customer_A=1'+'&Customer_B=2'+'&Customer_C=3'+'&Customer_D=4'
-      }
-      this.axios.get('/SelectAllCustomer'+add).then(res=>{
-        if (res.status === 200) {
-          this.imgUrl_loading = false
-          this.allperson = true
+export default {
+  name: 'siteList',
+  data () {
+    return {
+      imgUrl_loading: false,
+      allperson: false,
+      listProjet: '',
+      site_A: '',
+      site_B: '',
+      site_C: '',
+      site_D: '',
+      site_E: '',
+      site_F: '',
+      site_G: '',
+      site_H: '',
+      site_J: '',
+      site_K: '',
+      site_L: '',
+      site_M: '',
+      site_W: '',
+      site_N: '',
+      site_O: '',
+      site_P: '',
+      site_Q: '',
+      site_T: '',
+      site_R: '',
+      site_S: '',
+      site_Y: '',
+      site_X: '',
+      site_Z: '',
+      site_I: '',
+      site_V: '',
+      site_U: '',
+      AZ: [],
+      codeSite: '',
+      codeE: '',
+      allProjet: ''
+    }
+  },
+  created () {
+    this.imgUrl_loading = true
+    this.allperson = false
+    this.allProjet = window.expenditure
+    var add = '?'
+    if (window.expenditure === 'income' || window.expenditure === 'expenditure' || window.expenditure === 'money_entry' || window.expenditure === 'accounts_payable' ||
+        window.expenditure === 'profit_edit' || window.expenditure === 'income_receive' || window.expenditure === 'expenditure_receive' || window.expenditure === 'expenditure_after' || window.expenditure === 'approval') {
+      add += 'Customer_A=1' + '&Customer_B=2' + '&Customer_C=3' + '&Customer_D=4'
+    } else if (window.expenditure === 'paid_data' || window.expenditure === 'receive_data') {
+      add += 'Customer_A=1' + '&Customer_B=2' + '&Customer_C=3' + '&Customer_D=4'
+    }
+    this.axios.get('/SelectAllCustomer' + add).then(res => {
+      if (res.status === 200) {
+        this.imgUrl_loading = false
+        this.allperson = true
         var siteA = []
         var siteB = []
         var siteC = []
@@ -154,7 +154,7 @@
         var siteV = []
         for (var index in res.data.data) {
           if (res.data.data[index].firstChar === 'a') {
-            siteA.push( res.data.data[index])
+            siteA.push(res.data.data[index])
           }
           if (res.data.data[index].firstChar === 'b') {
             siteB.push(res.data.data[index])
@@ -258,144 +258,144 @@
         this.site_U = siteU
         this.site_V = siteV
         this.site_I = siteI
-        }
-      })
-      var az = []
-      for (var i = 0; i < 26; i++) {
-        az.push(String.fromCharCode((65+i)))
-        }
-      this.AZ = az
-      },
-    methods:{
-      /*给字母加上锚点*/
-      siteAZ(id){
-        document.querySelector('#'+id).scrollIntoView(true)
-      },
-      //返回上一页根据不同的页面跳不同的页面
-      hrefGo(){
-        if (this.allProjet === 'expenditure') {
-          this.$router.push({path:'expenditure'})
-        }else if (this.allProjet === 'income') {
-          this.$router.push({path:'income'})
-        }else if (this.allProjet === 'money_entry') {
-          this.$router.push({path:'money_entry'})
-        }else if (this.allProjet === 'accounts_payable') {
-          this.$router.push({path:'accounts_payable'})
-        }else if (this.allProjet === 'profit_edit') {
-          this.$router.push({path:'profit_edit'})
-        }else if (this.allProjet === 'paid_data') {
-          this.$router.push({path:'paid_data'})
-        }else if (this.allProjet === 'receive_data') {
-          this.$router.push({path:'receive_data'})
-        }else if (this.allProjet === 'income_receive') {
-          this.$router.push({path:'income_receive'})
-        }else if (this.allProjet === 'expenditure_receive') {
-          this.$router.push({path:'expenditure_receive'})
-        }else if (this.allProjet === 'expenditure_after') {
-          this.$router.push({path:'After_sales_entry'})
-        }else if (this.allProjet === 'approval') {
-          this.$router.push({path:'approval'})
-        }
-      },
-      //判断根据跳进来的页面返回不同的页面
-      all_sute(id,name){
-        window.test = id
-        window.test_id = name
-        if (this.allProjet === 'expenditure') {
-          this.$router.push({path:'expenditure'})
-        }else if (this.allProjet === 'income') {
-          this.$router.push({path:'income'})
-        }else if (this.allProjet === 'money_entry') {
-          this.$router.push({path:'money_entry'})
-        }else if (this.allProjet === 'accounts_payable') {
-          this.$router.push({path:'accounts_payable'})
-        }else if (this.allProjet === 'profit_edit') {
-          this.$router.push({path:'profit_edit'})
-        }else if (this.allProjet === 'paid_data') {
-          this.$router.push({path:'paid_data'})
-        }else if (this.allProjet === 'receive_data') {
-          this.$router.push({path:'receive_data'})
-        }else if (this.allProjet === 'income_receive') {
-          this.$router.push({path:'income_receive'})
-        }else if (this.allProjet === 'expenditure_receive') {
-          this.$router.push({path:'expenditure_receive'})
-        }else if (this.allProjet === 'expenditure_after') {
-          this.$router.push({path:'After_sales_entry'})
-        }else if (this.allProjet === 'approval') {
-          this.$router.push({path:'approval'})
-        }
-      },
-      suteA(id,name){
-        this.all_sute(id,name)
-      },
-      suteB(id,name){
-        this.all_sute(id,name)
-      },
-      suteC(id,name){
-        this.all_sute(id,name)
-      },
-      suteD(id,name){
-        this.all_sute(id,name)
-      },
-      suteE(id,name){
-        this.all_sute(id,name)
-      },
-      suteF(id,name){
-        this.all_sute(id,name)
-      },
-      suteG(id,name){
-        this.all_sute(id,name)
-      },
-      suteH(id,name){
-        this.all_sute(id,name)
-      },
-      suteJ(id,name){
-        this.all_sute(id,name)
-      },
-      suteK(id,name){
-        this.all_sute(id,name)
-      },
-      suteL(id,name){
-        this.all_sute(id,name)
-      },
-      suteM(id,name){
-        this.all_sute(id,name)
-      },
-      suteN(id,name){
-        this.all_sute(id,name)
-      },
-      suteO(id,name){
-        this.all_sute(id,name)
-      },
-      suteP(id,name){
-        this.all_sute(id,name)
-      },
-      suteQ(id,name){
-        this.all_sute(id,name)
-      },
-      suteR(id,name){
-        this.all_sute(id,name)
-      },
-      suteS(id,name){
-        this.all_sute(id,name)
-      },
-      suteT(id,name){
-        this.all_sute(id,name)
-      },
-      suteW(id,name){
-        this.all_sute(id,name)
-      },
-      suteX(id,name){
-        this.all_sute(id,name)
-      },
-      suteY(id,name){
-        this.all_sute(id,name)
-      },
-      suteZ(id,name){
-        this.all_sute(id,name)
       }
+    })
+    var az = []
+    for (var i = 0; i < 26; i++) {
+      az.push(String.fromCharCode((65 + i)))
+    }
+    this.AZ = az
+  },
+  methods: {
+    /* 给字母加上锚点 */
+    siteAZ (id) {
+      document.querySelector('#' + id).scrollIntoView(true)
+    },
+    // 返回上一页根据不同的页面跳不同的页面
+    hrefGo () {
+      if (this.allProjet === 'expenditure') {
+        this.$router.push({ path: 'expenditure' })
+      } else if (this.allProjet === 'income') {
+        this.$router.push({ path: 'income' })
+      } else if (this.allProjet === 'money_entry') {
+        this.$router.push({ path: 'money_entry' })
+      } else if (this.allProjet === 'accounts_payable') {
+        this.$router.push({ path: 'accounts_payable' })
+      } else if (this.allProjet === 'profit_edit') {
+        this.$router.push({ path: 'profit_edit' })
+      } else if (this.allProjet === 'paid_data') {
+        this.$router.push({ path: 'paid_data' })
+      } else if (this.allProjet === 'receive_data') {
+        this.$router.push({ path: 'receive_data' })
+      } else if (this.allProjet === 'income_receive') {
+        this.$router.push({ path: 'income_receive' })
+      } else if (this.allProjet === 'expenditure_receive') {
+        this.$router.push({ path: 'expenditure_receive' })
+      } else if (this.allProjet === 'expenditure_after') {
+        this.$router.push({ path: 'After_sales_entry' })
+      } else if (this.allProjet === 'approval') {
+        this.$router.push({ path: 'approval' })
+      }
+    },
+    // 判断根据跳进来的页面返回不同的页面
+    all_sute (id, name) {
+      window.test = id
+      window.test_id = name
+      if (this.allProjet === 'expenditure') {
+        this.$router.push({ path: 'expenditure' })
+      } else if (this.allProjet === 'income') {
+        this.$router.push({ path: 'income' })
+      } else if (this.allProjet === 'money_entry') {
+        this.$router.push({ path: 'money_entry' })
+      } else if (this.allProjet === 'accounts_payable') {
+        this.$router.push({ path: 'accounts_payable' })
+      } else if (this.allProjet === 'profit_edit') {
+        this.$router.push({ path: 'profit_edit' })
+      } else if (this.allProjet === 'paid_data') {
+        this.$router.push({ path: 'paid_data' })
+      } else if (this.allProjet === 'receive_data') {
+        this.$router.push({ path: 'receive_data' })
+      } else if (this.allProjet === 'income_receive') {
+        this.$router.push({ path: 'income_receive' })
+      } else if (this.allProjet === 'expenditure_receive') {
+        this.$router.push({ path: 'expenditure_receive' })
+      } else if (this.allProjet === 'expenditure_after') {
+        this.$router.push({ path: 'After_sales_entry' })
+      } else if (this.allProjet === 'approval') {
+        this.$router.push({ path: 'approval' })
+      }
+    },
+    suteA (id, name) {
+      this.all_sute(id, name)
+    },
+    suteB (id, name) {
+      this.all_sute(id, name)
+    },
+    suteC (id, name) {
+      this.all_sute(id, name)
+    },
+    suteD (id, name) {
+      this.all_sute(id, name)
+    },
+    suteE (id, name) {
+      this.all_sute(id, name)
+    },
+    suteF (id, name) {
+      this.all_sute(id, name)
+    },
+    suteG (id, name) {
+      this.all_sute(id, name)
+    },
+    suteH (id, name) {
+      this.all_sute(id, name)
+    },
+    suteJ (id, name) {
+      this.all_sute(id, name)
+    },
+    suteK (id, name) {
+      this.all_sute(id, name)
+    },
+    suteL (id, name) {
+      this.all_sute(id, name)
+    },
+    suteM (id, name) {
+      this.all_sute(id, name)
+    },
+    suteN (id, name) {
+      this.all_sute(id, name)
+    },
+    suteO (id, name) {
+      this.all_sute(id, name)
+    },
+    suteP (id, name) {
+      this.all_sute(id, name)
+    },
+    suteQ (id, name) {
+      this.all_sute(id, name)
+    },
+    suteR (id, name) {
+      this.all_sute(id, name)
+    },
+    suteS (id, name) {
+      this.all_sute(id, name)
+    },
+    suteT (id, name) {
+      this.all_sute(id, name)
+    },
+    suteW (id, name) {
+      this.all_sute(id, name)
+    },
+    suteX (id, name) {
+      this.all_sute(id, name)
+    },
+    suteY (id, name) {
+      this.all_sute(id, name)
+    },
+    suteZ (id, name) {
+      this.all_sute(id, name)
     }
   }
+}
 </script>
 
 <style scoped>

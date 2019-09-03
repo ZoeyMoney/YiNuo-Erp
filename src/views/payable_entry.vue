@@ -108,38 +108,38 @@ export default {
   name: 'payable_entry',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       projet: '', // 项目
       checkBox: '', // 复选框
       money: '', // 实际转账
       funn_data: '', // 时间
       fund_details_id: '', // 传参ID
       fund_bank: '', // 银行卡
-      income_y: '',// 银行卡
-      fund_details_money:'',//金额
-      fund_details_text:'',//备注
-      DateValue:new Date(),//时间修改
-      ab:'',
-      dian:[
-        {text:'是',name:'情况A'},
-        {text:'否',name:'情况B'},
+      income_y: '', // 银行卡
+      fund_details_money: '', // 金额
+      fund_details_text: '', // 备注
+      DateValue: new Date(), // 时间修改
+      ab: '',
+      dian: [
+        { text: '是', name: '情况A' },
+        { text: '否', name: '情况B' }
       ],
-      level:'',//级别
-      whether:'',//情况
-      list_lev:[  //级别说明
-        {text:'A'},
-        {text:'B'},
-        {text:'C'},
+      level: '', // 级别
+      whether: '', // 情况
+      list_lev: [ // 级别说明
+        { text: 'A' },
+        { text: 'B' },
+        { text: 'C' }
       ],
-      list_whether:[  //情况说明
-        {text:'是'},
-        {text:'否'},
+      list_whether: [ // 情况说明
+        { text: '是' },
+        { text: '否' }
       ],
-      dates:''
+      dates: ''
     }
   },
   created () {
-    //接收应收详情数据
+    // 接收应收详情数据
     console.log(JSON.parse(localStorage.payable_entry))
     this.projet = JSON.parse(localStorage.payable_entry)
     this.customer_name = this.projet.customer_name
@@ -152,7 +152,7 @@ export default {
     this.whether = this.projet.fund_details_type
     if (this.projet.fund_details_type == 1) {
       this.ab = '1'
-    }else if (this.projet.fund_details_type == 0) {
+    } else if (this.projet.fund_details_type == 0) {
       this.ab = '0'
     }
     // 银行卡
@@ -161,14 +161,14 @@ export default {
     })
   },
   methods: {
-    //返回
-    /*gono(){
+    // 返回
+    /* gono(){
       var fan = this.projet.fund_person_id
       localStorage.fan = JSON.stringify(fan)
       this.$router.push({name:'payable_money',query:{fan:fan}})
-    },*/
-    //收款
-    add(){
+    }, */
+    // 收款
+    add () {
       var then = this
       var check = true
       var nuber = /^\d+(\.\d+)?$/ // 验证数字
@@ -197,11 +197,11 @@ export default {
       var y = dt.getFullYear()
       var m = dt.getMonth() + 1
       var d = dt.getDate()
-      var t = dt.getHours();
-      var MM =dt.getMinutes();
-      var s = dt.getSeconds();
-      var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
-      var add = '?fund_details_id=' + this.fund_details_id +'&money='+this.money*(-1)+'&fund_details_date='+dd+'&bank_id='+this.fund_bank+'&fund_details_type='+this.ab
+      var t = dt.getHours()
+      var MM = dt.getMinutes()
+      var s = dt.getSeconds()
+      var dd = `${y}-${m}-${d} ${t}:${MM}:${s}`
+      var add = '?fund_details_id=' + this.fund_details_id + '&money=' + this.money * (-1) + '&fund_details_date=' + dd + '&bank_id=' + this.fund_bank + '&fund_details_type=' + this.ab
       if (this.checkBox === true) {
         // console.log('点住')
         var fund_money = this.projet.fund_details_money
@@ -216,7 +216,7 @@ export default {
           if (res.status === 200) {
             this.imgUrl_loading = false
             then.$router.push({ path: 'payable_pay', query: { id: then.fund_details_id, money: money, cumoterName: cumoterName, person: person, text: text, datas: datas } })
-          }else if (res.status === 406) {
+          } else if (res.status === 406) {
             mui.alert('数据异常')
           }
         })
@@ -236,26 +236,26 @@ export default {
         })
       }
     },
-    //删除
-    dele(){
+    // 删除
+    dele () {
       var then = this
       this.imgUrl_loading = true
-      this.axios('/fund/Delete_fund_details'+'?fund_details_id='+this.fund_details_id).then(res=>{
-        if (res.status ===200){
+      this.axios('/fund/Delete_fund_details' + '?fund_details_id=' + this.fund_details_id).then(res => {
+        if (res.status === 200) {
           this.imgUrl_loading = false
-          mui.alert(res.data.data,function () {
-            then.$router.push({path:'payable_money'})
+          mui.alert(res.data.data, function () {
+            then.$router.push({ path: 'payable_money' })
           })
         }
       })
     },
-    //修改
+    // 修改
     update () {
       var then = this
       var check = true
       var nuber = /^\d+(\.\d+)?$/ // 验证数字
-      //预收时间
-      /*if (this.dates == '') {
+      // 预收时间
+      /* if (this.dates == '') {
         mui.toast('收款时间不能为空')
         check = false
         return false
@@ -264,44 +264,44 @@ export default {
         mui.toast('实际转账必须纯数字')
         check = false
         return false
-      }*/
+      } */
       this.imgUrl_loading = true
       var dt = new Date(this.dates)
       var y = dt.getFullYear()
       var m = dt.getMonth() + 1
       var d = dt.getDate()
-      var t = dt.getHours();
-      var MM =dt.getMinutes();
-      var s = dt.getSeconds();
-      var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
-      this.money = ~this.money+1
-      var add = '?fund_details_id=' + this.fund_details_id +'&fund_id='+this.projet.fund_id+'&text='+this.fund_details_text+'&fund_details_type='+this.ab
-      //情况
+      var t = dt.getHours()
+      var MM = dt.getMinutes()
+      var s = dt.getSeconds()
+      var dd = `${y}-${m}-${d} ${t}:${MM}:${s}`
+      this.money = ~this.money + 1
+      var add = '?fund_details_id=' + this.fund_details_id + '&fund_id=' + this.projet.fund_id + '&text=' + this.fund_details_text + '&fund_details_type=' + this.ab
+      // 情况
       if (this.whether === '是') {
-        add+='&fund_details_type=0'
-      }else{
-        add+='&fund_details_type=1'
+        add += '&fund_details_type=0'
+      } else {
+        add += '&fund_details_type=1'
       }
       if (this.dates !== null) {
-        add+='&date='+dd
+        add += '&date=' + dd
       }
-      if (this.fund_details_money !== this.projet.fund_details_money){
-        add+='&money='+this.fund_details_money
+      if (this.fund_details_money !== this.projet.fund_details_money) {
+        add += '&money=' + this.fund_details_money
       }
-        this.axios.get('/fund/Update_fund_detail' + add).then(res => {
-          if (res.status === 200) {
-            this.imgUrl_loading = false
-            if (this.dates !== this.projet.dates || this.fund_details_id !== this.projet.fund_details_id || this.fund_details_money !== this.projet.fund_details_money || this.fund_details_type!==this.projet.fund_details_type) {
-              mui.alert(res.data.data, function () {
-                then.$router.push({ path: 'payable_money' })
-              })
-            }else{
-              mui.alert('您什么都未修改哦!')
-            }
-          }else if (res.status === 406) {
-            mui.alert('数据异常')
+      this.axios.get('/fund/Update_fund_detail' + add).then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
+          if (this.dates !== this.projet.dates || this.fund_details_id !== this.projet.fund_details_id || this.fund_details_money !== this.projet.fund_details_money || this.fund_details_type !== this.projet.fund_details_type) {
+            mui.alert(res.data.data, function () {
+              then.$router.push({ path: 'payable_money' })
+            })
+          } else {
+            mui.alert('您什么都未修改哦!')
           }
-        })
+        } else if (res.status === 406) {
+          mui.alert('数据异常')
+        }
+      })
     }
   }
 }

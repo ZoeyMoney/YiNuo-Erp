@@ -28,74 +28,74 @@
 </template>
 
 <script>
-  export default {
-    name: 'exit_money',
-    data(){
-      return{
-        imgUrl_loading:false,
-        list:'',
-        dataValue1:new Date(),
-        fund_detail_transaction_money:'',
-        fund_text:'',
-        fund_detail_transaction_id:''
-      }
-    },
-    created () {
-      this.list = JSON.parse(localStorage.msg)
-      if (this.list.fund_detail_transaction_money < 0) {
-        var a  = this.list.fund_detail_transaction_money
-        this.fund_detail_transaction_money = Math.abs(a)
-      }else{
-        this.fund_detail_transaction_money = this.list.fund_detail_transaction_money
-      }
-      this.fund_text = this.list.fund_text
-      this.fund_detail_transaction_id = this.list.fund_detail_transaction_id
-    },
-    methods:{
-      add(){
-        var then = this
-        var check = true
-        var dt = new Date(this.dataValue1)
-        var y = dt.getFullYear()
-        var m = dt.getMonth() + 1
-        var d = dt.getDate()
-        var t = dt.getHours();
-        var MM =dt.getMinutes();
-        var s = dt.getSeconds();
-        var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
-        var number = ''
-        if (this.list.fund_detail_transaction_money > 0) {
-          number+=this.fund_detail_transaction_money*(-1)
-          if (this.fund_detail_transaction_money > this.list.fund_detail_transaction_money) {
-            mui.toast('退款金额不能大于交易金额')
-            check = false
-            return false
-          }
-        }else{
-          number+=Math.abs(this.fund_detail_transaction_money)
-          if (this.fund_detail_transaction_money < this.list.fund_detail_transaction_money) {
-            mui.toast('退款金额不能大于交易金额')
-            check = false
-            return false
-          }
+export default {
+  name: 'exit_money',
+  data () {
+    return {
+      imgUrl_loading: false,
+      list: '',
+      dataValue1: new Date(),
+      fund_detail_transaction_money: '',
+      fund_text: '',
+      fund_detail_transaction_id: ''
+    }
+  },
+  created () {
+    this.list = JSON.parse(localStorage.msg)
+    if (this.list.fund_detail_transaction_money < 0) {
+      var a = this.list.fund_detail_transaction_money
+      this.fund_detail_transaction_money = Math.abs(a)
+    } else {
+      this.fund_detail_transaction_money = this.list.fund_detail_transaction_money
+    }
+    this.fund_text = this.list.fund_text
+    this.fund_detail_transaction_id = this.list.fund_detail_transaction_id
+  },
+  methods: {
+    add () {
+      var then = this
+      var check = true
+      var dt = new Date(this.dataValue1)
+      var y = dt.getFullYear()
+      var m = dt.getMonth() + 1
+      var d = dt.getDate()
+      var t = dt.getHours()
+      var MM = dt.getMinutes()
+      var s = dt.getSeconds()
+      var dd = `${y}-${m}-${d} ${t}:${MM}:${s}`
+      var number = ''
+      if (this.list.fund_detail_transaction_money > 0) {
+        number += this.fund_detail_transaction_money * (-1)
+        if (this.fund_detail_transaction_money > this.list.fund_detail_transaction_money) {
+          mui.toast('退款金额不能大于交易金额')
+          check = false
+          return false
         }
-        this.imgUrl_loading = true
-        if (this.fund_detail_transaction_money !== this.list.fund_detail_transaction_money || this.fund_text !== this.list.fund_text) {
-          this.axios.get('/fund/money_refund'+'?date='+dd+'&money='+number+'&fund_detail_transaction_id='+this.fund_detail_transaction_id+'&text='+this.fund_text).then(res=>{
-            if (res.status === 200) {
-              this.imgUrl_loading = false
-              mui.alert(res.data,function () {
-                then.$router.push({name:'running_money'})
-              })
-            }
-          })
-        }else{
-          mui.alert('您什么都未修改！')
-          this.imgUrl_loading = false
+      } else {
+        number += Math.abs(this.fund_detail_transaction_money)
+        if (this.fund_detail_transaction_money < this.list.fund_detail_transaction_money) {
+          mui.toast('退款金额不能大于交易金额')
+          check = false
+          return false
         }
+      }
+      this.imgUrl_loading = true
+      if (this.fund_detail_transaction_money !== this.list.fund_detail_transaction_money || this.fund_text !== this.list.fund_text) {
+        this.axios.get('/fund/money_refund' + '?date=' + dd + '&money=' + number + '&fund_detail_transaction_id=' + this.fund_detail_transaction_id + '&text=' + this.fund_text).then(res => {
+          if (res.status === 200) {
+            this.imgUrl_loading = false
+            mui.alert(res.data, function () {
+              then.$router.push({ name: 'running_money' })
+            })
+          }
+        })
+      } else {
+        mui.alert('您什么都未修改！')
+        this.imgUrl_loading = false
       }
     }
   }
+}
 </script>
 
 <style scoped>

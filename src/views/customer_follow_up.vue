@@ -42,12 +42,12 @@
 </template>
 
 <script>
-  import url from '../components/config'
+import url from '../components/config'
 export default {
   name: 'customer_follow_up',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       customer_name: '', // 项目名称
       follow_person: '', // 跟进人
       follow_text: '', // 跟进信息
@@ -64,9 +64,9 @@ export default {
     this.axios.get(url.clientFollowPerson).then(res => {
       this.profetName = res.data
     })
-    /*this.axios.get(`customer_follow_up/${this.$route.params.id}`).then(res=>{
+    /* this.axios.get(`customer_follow_up/${this.$route.params.id}`).then(res=>{
       console.log(res)
-    })*/
+    }) */
   },
   methods: {
     go () {

@@ -20,32 +20,32 @@
 </template>
 
 <script>
-  export default {
-    name: 'DataValue',
-    props:{
-      value:{
-        type:null
-      }
+export default {
+  name: 'DataValue',
+  props: {
+    value: {
+      type: null
+    }
+  },
+  data () {
+    return {
+      myValue: this.value
+    }
+  },
+  watch: {
+    value (newValue) {
+      this.myValue = newValue.toString()
     },
-    data(){
-      return{
-        myValue:this.value
-      }
-    },
-    watch:{
-      value(newValue){
-        this.myValue = newValue.toString()
-      },
-      myValue(newValue){
-        this.$emit('input',newValue)
-      }
-    },
-    methods:{
-      dataFocus(){
-        document.activeElement.blur();
-      }
+    myValue (newValue) {
+      this.$emit('input', newValue)
+    }
+  },
+  methods: {
+    dataFocus () {
+      document.activeElement.blur()
     }
   }
+}
 </script>
 
 <style lang="scss">

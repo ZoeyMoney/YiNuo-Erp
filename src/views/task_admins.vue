@@ -115,175 +115,175 @@
 </template>
 
 <script>
-  export default {
-    name: 'task_admins',
-    data(){
-      return{
-        imgUrl_loading:false,
-        task_people_if:true,
-        zhiX:'',//执行人查询
-        renW:'',//任务人查询
-        task_people:'',//执行人
-        task_people_id:'',
-        Release_if:true,
-        msg_box:false,//弹出层
-        internal_content:true,//内部信息
-        msg_list:'',//弹出层数据
-        Release:'',//下达人
-        list_inform:'',
-        list_make:'',
-        Release_id:'',
-        radio:'0',
-        list_radio:[
-          {text:'待审核',id:'0'},
-          {text:'已同意',id:'1'},
-          {text:'已拒绝',id:'2'},
-        ],
-        list:'',/*table*/
-        lefta:{
-          paddingLeft:'17px'
-        },
+export default {
+  name: 'task_admins',
+  data () {
+    return {
+      imgUrl_loading: false,
+      task_people_if: true,
+      zhiX: '', // 执行人查询
+      renW: '', // 任务人查询
+      task_people: '', // 执行人
+      task_people_id: '',
+      Release_if: true,
+      msg_box: false, // 弹出层
+      internal_content: true, // 内部信息
+      msg_list: '', // 弹出层数据
+      Release: '', // 下达人
+      list_inform: '',
+      list_make: '',
+      Release_id: '',
+      radio: '0',
+      list_radio: [
+        { text: '待审核', id: '0' },
+        { text: '已同意', id: '1' },
+        { text: '已拒绝', id: '2' }
+      ],
+      list: '', /* table */
+      lefta: {
+        paddingLeft: '17px'
       }
-    },
-    created(){
-      if (JSON.parse(localStorage.data).role[0].role_name != '总权限') {
-        this.task_people_if = false
-        this.Release_if = false
+    }
+  },
+  created () {
+    if (JSON.parse(localStorage.data).role[0].role_name != '总权限') {
+      this.task_people_if = false
+      this.Release_if = false
+    }
+    // table数据
+    this.axios.get('/Administration/Select_approve?approve_stale=0').then(res => {
+      this.list = res.data.list_administration
+      this.list_inform = res.data.list_inform_person
+      this.list_make = res.data.list_make_person
+    })
+    this.task_people = window.fund_people
+    this.task_people_id = window.fund_people_name
+    this.Release = window.fund_people_huan
+    this.Release_id = window.fund_people_huan_name
+  },
+  methods: {
+    // 查询审批
+    zhiXClick (id) {
+      var add = '?'
+      if (this.zhiX != '') {
+        add += 'approve_inform_person=' + id
       }
-      //table数据
-      this.axios.get('/Administration/Select_approve?approve_stale=0').then(res=>{
+      if (this.renW != '') {
+        add += '&approve_make_person=' + this.renW
+      }
+      if (this.radio != '') {
+        add += '&approve_stale=' + this.radio
+      }
+      this.axios.get('/Administration/Select_approve' + add).then(res => {
         this.list = res.data.list_administration
         this.list_inform = res.data.list_inform_person
         this.list_make = res.data.list_make_person
       })
-      this.task_people = window.fund_people
-      this.task_people_id = window.fund_people_name
-      this.Release = window.fund_people_huan
-      this.Release_id = window.fund_people_huan_name
     },
-    methods:{
-      //查询审批
-      zhiXClick(id){
-        var add = '?'
-        if (this.zhiX != '') {
-          add+='approve_inform_person='+id
-        }
-        if (this.renW != '') {
-          add+='&approve_make_person='+this.renW
-        }
-        if (this.radio != '') {
-          add+='&approve_stale='+this.radio
-        }
-        this.axios.get('/Administration/Select_approve'+add).then(res=>{
-          this.list = res.data.list_administration
-          this.list_inform = res.data.list_inform_person
-          this.list_make = res.data.list_make_person
-        })
-      },
-      //查询执行
-      renWClick(id){
-        var add = '?'
-        if (this.renW != '') {
-          add+='approve_make_person='+id
-        }
-        if (this.zhiX != '') {
-          add+='&approve_inform_person='+this.zhiX
-        }
-        if (this.radio != '') {
-          add+='&approve_stale='+this.radio
-        }
-        this.axios.get('/Administration/Select_approve'+add).then(res=>{
-          this.list = res.data.list_administration
-          this.list_inform = res.data.list_inform_person
-          this.list_make = res.data.list_make_person
-        })
-      },
-      //状态
-      radioClick(id){
-        var add = '?approve_stale='+id
-        if (this.zhiX != '') {
-          add+='&approve_inform_person='+this.zhiX
-        }
-        if (this.renW != '') {
-          add+='&approve_make_person='+this.renW
-        }
-        this.axios.get('/Administration/Select_approve'+add).then(res=>{
-          this.list = res.data.list_administration
-          this.list_inform = res.data.list_inform_person
-          this.list_make = res.data.list_make_person
-        })
-      },
-      //执行人
-      task_peopleClick(){
-        var prosen = 'task_admins_user'
-        this.$router.push({path:'relevant_people'})
-        window.prosen = prosen
-      },
-      //下达人
-      Release_peopleClick(){
-        var prosen = 'Release_admins_user'
-        this.$router.push({path:'relevant_people'})
-        window.prosen = prosen
-      },
-    //  覆盖页
-      idClick(id){
-        this.msg_box = true
-        //传入点入的数据
-        var list = []
-        for (var index in this.list) {
-          if (id == this.list[index].approve_id) {
-            list.push(this.list[index])
-          }
-        }
-        this.msg_list = list
-        // console.log(this.msg_list)
-        //打开后后禁止页面滑动
-        var mo = function (e) {
-          e.preventDefault()
-        }
-        document.body.style.overflow = 'hidden'
-        document.removeEventListener("touchmove",mo,true)
-      },
-      //弹出层关闭
-      closeClick(){
-        this.msg_box = false
-        //关闭后后打开页面滑动
-        var mo = function (e) {
-          e.preventDefault()
-        }
-        document.body.style.overflow = ''
-        document.removeEventListener("touchmove",mo,false)
-      },
-    //  同意
-      add(id){
-        var then = this
-        var _true = true
-        this.imgUrl_loading = true
-        this.axios.post('/Administration/Update_approve'+'?approve_id='+id+'&approve_stale=1').then(res=>{
-          if (res.status === 200) {
-            this.imgUrl_loading = false
-            mui.alert(res.data.data,function () {
-              then.$router.go(0)
-            })
-          }
-        })
-      },
-    //  拒绝
-      on_no(id){
-        var then = this
-        var _true = true
-        this.imgUrl_loading = true
-        this.axios.post('/Administration/Update_approve'+'?approve_id='+id+'&approve_stale=2').then(res=>{
-          if (res.status === 200) {
-            this.imgUrl_loading = false
-            mui.alert(res.data.data,function () {
-              then.$router.go(0)
-            })
-          }
-        })
+    // 查询执行
+    renWClick (id) {
+      var add = '?'
+      if (this.renW != '') {
+        add += 'approve_make_person=' + id
       }
+      if (this.zhiX != '') {
+        add += '&approve_inform_person=' + this.zhiX
+      }
+      if (this.radio != '') {
+        add += '&approve_stale=' + this.radio
+      }
+      this.axios.get('/Administration/Select_approve' + add).then(res => {
+        this.list = res.data.list_administration
+        this.list_inform = res.data.list_inform_person
+        this.list_make = res.data.list_make_person
+      })
+    },
+    // 状态
+    radioClick (id) {
+      var add = '?approve_stale=' + id
+      if (this.zhiX != '') {
+        add += '&approve_inform_person=' + this.zhiX
+      }
+      if (this.renW != '') {
+        add += '&approve_make_person=' + this.renW
+      }
+      this.axios.get('/Administration/Select_approve' + add).then(res => {
+        this.list = res.data.list_administration
+        this.list_inform = res.data.list_inform_person
+        this.list_make = res.data.list_make_person
+      })
+    },
+    // 执行人
+    task_peopleClick () {
+      var prosen = 'task_admins_user'
+      this.$router.push({ path: 'relevant_people' })
+      window.prosen = prosen
+    },
+    // 下达人
+    Release_peopleClick () {
+      var prosen = 'Release_admins_user'
+      this.$router.push({ path: 'relevant_people' })
+      window.prosen = prosen
+    },
+    //  覆盖页
+    idClick (id) {
+      this.msg_box = true
+      // 传入点入的数据
+      var list = []
+      for (var index in this.list) {
+        if (id == this.list[index].approve_id) {
+          list.push(this.list[index])
+        }
+      }
+      this.msg_list = list
+      // console.log(this.msg_list)
+      // 打开后后禁止页面滑动
+      var mo = function (e) {
+        e.preventDefault()
+      }
+      document.body.style.overflow = 'hidden'
+      document.removeEventListener('touchmove', mo, true)
+    },
+    // 弹出层关闭
+    closeClick () {
+      this.msg_box = false
+      // 关闭后后打开页面滑动
+      var mo = function (e) {
+        e.preventDefault()
+      }
+      document.body.style.overflow = ''
+      document.removeEventListener('touchmove', mo, false)
+    },
+    //  同意
+    add (id) {
+      var then = this
+      var _true = true
+      this.imgUrl_loading = true
+      this.axios.post('/Administration/Update_approve' + '?approve_id=' + id + '&approve_stale=1').then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
+          mui.alert(res.data.data, function () {
+            then.$router.go(0)
+          })
+        }
+      })
+    },
+    //  拒绝
+    on_no (id) {
+      var then = this
+      var _true = true
+      this.imgUrl_loading = true
+      this.axios.post('/Administration/Update_approve' + '?approve_id=' + id + '&approve_stale=2').then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
+          mui.alert(res.data.data, function () {
+            then.$router.go(0)
+          })
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

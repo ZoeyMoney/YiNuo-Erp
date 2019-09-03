@@ -5,26 +5,29 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    state:{
-      isLogin:'',
-      userid:'',
-    }
+    isLogin: '',
+    userid: ''
   },
-  getters:{
-    isLogin(state){
+  getters: {
+    isLogin (state) {
       if (!state.isLogin) {
         state.isLogin = sessionStorage.getItem(config.KEY.CACHE_LOGIN_ID)
       }
       return state.isLogin
+    },
+    userid (state) {
+      if (!state.userid) {
+        state.userid = sessionStorage.getItem(config.KEY.CACHE_LOGIN_ID)
+      }
     }
   },
   mutations: {
-    newAuthor(state,msg){
+    newAuthor (state, msg) {
       state.author = msg
     },
-    isLogin(state,msg){
+    isLogin (state, msg) {
       state.isLogin = msg
-      localStorage.setItem('isLogin',msg)
+      localStorage.setItem('isLogin', msg)
     }
   },
   actions: {

@@ -28,29 +28,29 @@
 </template>
 
 <script>
-  export default {
-    name: 'Follow_up',
-    data(){
-      return{
-        imgUrl_loading:false,
-        name:''
-      }
-    },
-    methods:{
-      add(){
-        var then = this
-        this.imgUrl_loading = true
-        this.axios.get('/AfterSale/Add_Follow_person'+'?Follow_person=' + this.name + '&Customer_aftersale=1').then(res => {
-          if (res.status === 200) {
-            this.imgUrl_loading = false
+export default {
+  name: 'Follow_up',
+  data () {
+    return {
+      imgUrl_loading: false,
+      name: ''
+    }
+  },
+  methods: {
+    add () {
+      var then = this
+      this.imgUrl_loading = true
+      this.axios.get('/AfterSale/Add_Follow_person' + '?Follow_person=' + this.name + '&Customer_aftersale=1').then(res => {
+        if (res.status === 200) {
+          this.imgUrl_loading = false
           mui.alert(res.data.msg, function () {
             then.$router.push({ name: 'money_sale' })
           })
-          }
-        })
-      }
+        }
+      })
     }
   }
+}
 </script>
 
 <style scoped>

@@ -10,10 +10,6 @@
       <div class="mui-content">
         <form class="mui-input-group setting-botton">
           <div class="mui-input-row">
-            <label>用户名</label>
-            <input type="text" class="mui-input-clear" v-model="user_number" placeholder="请输入用户名">
-          </div>
-          <div class="mui-input-row">
             <label>原密码</label>
             <input type="text" class="mui-input-clear" v-model="pwd" placeholder="请输入密码">
           </div>
@@ -34,7 +30,6 @@ export default {
   name: 'SettingPwd',
   data () {
     return {
-      user_number: '', // 用户名
       pwd: '', // 原密码
       user_password: ''// 新密码
     }
@@ -44,11 +39,6 @@ export default {
       var then = this
       var check = true
       var reg = /^[^\s]*$/ // 不能有空格
-      if (this.user_number == '') {
-        mui.toast('用户名不能为空')
-        check = false
-        return false
-      }
       if (this.pwd == '') {
         mui.toast('原密码不能为空')
         check = false
@@ -64,7 +54,7 @@ export default {
         check = false
         return false
       }
-      var add = '?user_number=' + this.user_number + '&pwd=' + this.pwd + '&user_password=' + this.user_password+'&user_id='+JSON.parse(localStorage.data).userid
+      var add = '?pwd=' + this.pwd + '&user_password=' + this.user_password + '&user_id=' + JSON.parse(localStorage.data).userid
       this.axios.get('/User/update_user' + add).then(res => {
         if (res.data.msg === '修改成功') {
           mui.alert('修改成功', function () {

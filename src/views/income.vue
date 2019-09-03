@@ -136,59 +136,59 @@ export default {
   name: 'income',
   data () {
     return {
-      imgUrl_loading:false,
-      category:true,
-      cotrProjet:false,
-      idProjet:true,
-      relevant_people:true, //相关人
-      site_projet:true,//工地名称
-      dataValue1:new Date().toString(),
+      imgUrl_loading: false,
+      category: true,
+      cotrProjet: false,
+      idProjet: true,
+      relevant_people: true, // 相关人
+      site_projet: true, // 工地名称
+      dataValue1: new Date().toString(),
       bank_id: 0, // id
-      sitePrihet:'',
-      mongey_bank_id:'',
-      list_fund_name_type: [],//个人公司
-      detailed: '',  //类别详细
-      list_fund_names: [],//红包工资
-      slim: '',  //类别详细
-      list_fund_name: [],  //设计费
-      listRelevant: '',//相关人下拉
-      listRelevant_id: '',//相关人ID
-      list_bank_card_person:[
-        {text:'胡永生'},
-        {text:'邱梅'},
+      sitePrihet: '',
+      mongey_bank_id: '',
+      list_fund_name_type: [], // 个人公司
+      detailed: '', // 类别详细
+      list_fund_names: [], // 红包工资
+      slim: '', // 类别详细
+      list_fund_name: [], // 设计费
+      listRelevant: '', // 相关人下拉
+      listRelevant_id: '', // 相关人ID
+      list_bank_card_person: [
+        { text: '胡永生' },
+        { text: '邱梅' }
       ],
       // fund_person:'',//收款人
-      site: '',//工地
-      money: '',//金额
-      money_rate:'',//手续费
-      list_money_rate:[
-        {text:0.6},
-        {text:0.55},
-        {text:0.38},
+      site: '', // 工地
+      money: '', // 金额
+      money_rate: '', // 手续费
+      list_money_rate: [
+        { text: 0.6 },
+        { text: 0.55 },
+        { text: 0.38 }
       ],
-      money_get:'',
-      account: '',//账户
-      clearBei: '',//备注
-      checkbox: '',//复选框
+      money_get: '',
+      account: '', // 账户
+      clearBei: '', // 备注
+      checkbox: '', // 复选框
       fund_detail_id: '',		// 工程款
       bank_card: '', // 银行卡
       chuXu: '',	// 储蓄卡
       xinY: '',	// 信用卡
       chuXuKa: '', // 储蓄卡总额
       XinYongKa: '', // 储蓄卡总额
-      allTotal:'',//合计金额
-      list_fund_names:'', //二级查询
-      list_fund_name:'',  //三级查询
-      test_id:'',
+      allTotal: '', // 合计金额
+      list_fund_names: '', // 二级查询
+      list_fund_name: '', // 三级查询
+      test_id: ''
     }
   },
   created () {
     this.imgUrl_loading = true
     /* table */
-    this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_stale=0').then(res => {
+    this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
-      this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_name_type = res.data.fund_name_type
       }
     }, error => {
       var then = this
@@ -203,7 +203,7 @@ export default {
       var xin = []
       var m = 0
       var y = 0
-      var all = 0//合计储蓄卡信用卡总额
+      var all = 0// 合计储蓄卡信用卡总额
       for (var index in res.data) {
         if (res.data[index].bank_type === '储蓄卡') {
           m += res.data[index].bank_money // 储蓄卡总额
@@ -219,39 +219,39 @@ export default {
       }
       this.chuXu = chu
       this.xinY = xin
-      this.chuXuKa = Math.floor(m*100)/100
-      this.XinYongKa = Math.floor(y*100)/100
-      all += this.chuXuKa+this.XinYongKa
-      this.allTotal = Math.floor(all*100) /100
-    });
+      this.chuXuKa = Math.floor(m * 100) / 100
+      this.XinYongKa = Math.floor(y * 100) / 100
+      all += this.chuXuKa + this.XinYongKa
+      this.allTotal = Math.floor(all * 100) / 100
+    })
     this.site = window.test
     this.test_id = window.test_id
     this.listRelevant = window.fund_people
     this.listRelevant_id = window.fund_people_name
   },
-  computed:{
-    money_actual:{
-      get:function () {
+  computed: {
+    money_actual: {
+      get: function () {
         if (this.money_rate === '' || this.money_rate === undefined) {
           var a = this.money
           return a
-        }else{
-        var a = this.money -this.money * this.money_rate / 100
-        var b = Math.floor(a*100) /100
-        this.money_get = b
-        return b
+        } else {
+          var a = this.money - this.money * this.money_rate / 100
+          var b = Math.floor(a * 100) / 100
+          this.money_get = b
+          return b
         }
       },
-      set:function (value) {
+      set: function (value) {
         this.money_get = value
       }
     }
   },
   methods: {
-    //一级查询
-    fund_deId(id){
+    // 一级查询
+    fund_deId (id) {
       this.fund_nameso = id
-      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -259,7 +259,7 @@ export default {
           this.category = false
           this.site_projet = false
           this.relevant_people = true
-        }else if (this.fund_detail_id === '公司') {
+        } else if (this.fund_detail_id === '公司') {
           this.category = true
           this.cotrProjet = true
           this.idProjet = false
@@ -268,63 +268,63 @@ export default {
         }
       })
     },
-    //二级查询
-    list_fund_nameas(id){
+    // 二级查询
+    list_fund_nameas (id) {
       this.fund_name = id
-      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
-        if (this.detailed === '外借款'){
+        if (this.detailed === '外借款') {
           this.site_projet = false
           this.relevant_people = true
-        }else if (this.detailed === '工程') {
+        } else if (this.detailed === '工程') {
           this.relevant_people = true
           this.site_projet = true
         }
       })
     },
-    //三级查询
-    list_fund_namea(id){
-      this.axios.get('/fund/Select_three_fund_name'+'?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name+'&fund_name'+id).then(res => {
+    // 三级查询
+    list_fund_namea (id) {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name + '&fund_name' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
       })
     },
     // 左滑动
-   onSwipeLeft:function(){
-      this.$router.push({name:'expenditure'})
+    onSwipeLeft: function () {
+      this.$router.push({ name: 'expenditure' })
     },
     // 右滑动
-    onSwipeRight:function(){
-      this.$router.push({name:'transfer_money'})
+    onSwipeRight: function () {
+      this.$router.push({ name: 'transfer_money' })
     },
-    //工地传参
-    siteChange(){
+    // 工地传参
+    siteChange () {
       var expenditure = 'income'
-      this.$router.push({path:'siteList'})
+      this.$router.push({ path: 'siteList' })
       window.expenditure = expenditure
     },
-    //相关人传参
-    relecantProsen(){
+    // 相关人传参
+    relecantProsen () {
       var prosen = 'income'
-      this.$router.push({path:'relevant_people'})
+      this.$router.push({ path: 'relevant_people' })
       window.prosen = prosen
     },
-    msgCu(id,person,number){
-      var add = '?'+'&bank_person='+person+'&bank_bank='+id
+    msgCu (id, person, number) {
+      var add = '?' + '&bank_person=' + person + '&bank_bank=' + id
       if (number !== undefined) {
-        add+='&bank_number='+number
+        add += '&bank_number=' + number
       }
       var transfer = 'transfer'
-      this.axios.get('/fund/select_detail'+add).then(res=>{
+      this.axios.get('/fund/select_detail' + add).then(res => {
         window.transfer = res.data.list_moey
-        this.$router.push({path:'running_money',query:{transfer:transfer}})
+        this.$router.push({ path: 'running_money', query: { transfer: transfer } })
         // console.log(res.data.list_moey)
       })
     },
-    //添加
+    // 添加
     add () {
       var then = this
       var check = true
@@ -335,18 +335,18 @@ export default {
         check = false
         return false
       }
-      if (this.site !== undefined && this.test_id !==undefined) {
-        add+='customer_id='+this.test_id
+      if (this.site !== undefined && this.test_id !== undefined) {
+        add += 'customer_id=' + this.test_id
       }
-      if (this.listRelevant !== undefined && this.listRelevant_id !== undefined){
-        add+='&fund_person='+this.listRelevant_id
+      if (this.listRelevant !== undefined && this.listRelevant_id !== undefined) {
+        add += '&fund_person=' + this.listRelevant_id
       }
       if (this.fund_detail_id === '个人') {
-        add+='fund_name='+this.detailed
-      }else if (this.fund_detail_id === '公司') {
-        add+='&fund_name='+this.slim
+        add += 'fund_name=' + this.detailed
+      } else if (this.fund_detail_id === '公司') {
+        add += '&fund_name=' + this.slim
       }
-      /*金额*/
+      /* 金额 */
       if (this.money == '') {
         mui.toast('金额不能为空')
         check = false
@@ -363,7 +363,7 @@ export default {
         check = false
         return false
       }
-      /*for (var index in this.bank_card) {
+      /* for (var index in this.bank_card) {
         if (this.bank_card[index].bank_id === this.mongey_bank_id) {
           if (this.money_actual > this.bank_card[index].bank_money) {
             mui.toast('卡内余额不能大于交易余额')
@@ -379,23 +379,23 @@ export default {
             }
           }
         }
-      }*/
+      } */
       var dt = new Date(this.dataValue1)
       var y = dt.getFullYear()
       var m = dt.getMonth() + 1
       var d = dt.getDate()
-      var t = dt.getHours();
-      var MM =dt.getMinutes();
-      var s = dt.getSeconds();
-      var dd  = `${y}-${m}-${d} ${t}:${MM}:${s}`
+      var t = dt.getHours()
+      var MM = dt.getMinutes()
+      var s = dt.getSeconds()
+      var dd = `${y}-${m}-${d} ${t}:${MM}:${s}`
       this.imgUrl_loading = true
       var money_all = ''
       if (this.money_get === '') {
-        money_all+=this.money
-      }else{
-        money_all+=this.money_get
+        money_all += this.money
+      } else {
+        money_all += this.money_get
       }
-      add+='&money='+this.money+'&fund_text='+this.clearBei+'&bank_id='+this.mongey_bank_id+'&shiji_money='+money_all+'&date='+dd
+      add += '&money=' + this.money + '&fund_text=' + this.clearBei + '&bank_id=' + this.mongey_bank_id + '&shiji_money=' + money_all + '&date=' + dd
       if (this.checkbox === true) {
         this.axios.post('/fund/Add_out_enter' + add).then(res => {
           var id = ''
@@ -415,9 +415,9 @@ export default {
         this.axios.post('/fund/Add_out_enter' + add).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
-          if (res.data.data === '录入成功') {
-            mui.alert('录入成功', function () {
-              then.$router.go(0)
+            if (res.data.data === '录入成功') {
+              mui.alert('录入成功', function () {
+                then.$router.go(0)
               })
             }
           }

@@ -103,36 +103,36 @@ export default {
   name: 'money_receivable',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       fund_nameso: '',
       fund_nameo: '', // 项目类别
-      datesdm:'',
+      datesdm: '',
       fund_name: '',
-      list_slime_all:true,
+      list_slime_all: true,
       customer_name: '', // 项目名称
       fund_names: '',
       listTable: '', // table
-      Related:'',//相关人
+      Related: '', // 相关人
       customer_name_list_one: '',
       date_list_two: '',
       deteList: '',
       list_fund_names: '', // 类别选择
       list_fund_name: '',
       list_fund_namea: '',
-      list_person:'',//相关人数组
-      shaix:'',
+      list_person: '', // 相关人数组
+      shaix: '',
       date_list: '',
       list_customer_name: '',
-      list_fund_name_type:'',
-      allMoney:'',
-      slim:'',
+      list_fund_name_type: '',
+      allMoney: '',
+      slim: '',
       dateB: '',
-      list_fund_slim_id:'',
+      list_fund_slim_id: '',
       money_plus: require('../image/plus.png'),
       paLft: {
         display: 'block',
         padding: '0 10px',
-        whiteSpace:'nowrap'
+        whiteSpace: 'nowrap'
       },
       hid: {
         display: 'block',
@@ -151,59 +151,59 @@ export default {
       lefta: {
         paddingLeft: '10px'
       },
-      boder:{
-        border:'1px solid #565656',
-        display:'block',
-        width:'63px',
+      boder: {
+        border: '1px solid #565656',
+        display: 'block',
+        width: '63px'
 
       },
-      person:{
-        display:'block',
-        width:'62px',
-        whiteSpace:'nowrap',
-        overflow:'hidden',
-        textOverflow:'ellipsis'
+      person: {
+        display: 'block',
+        width: '62px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
       },
-      fund_name:{
-        display:'block',
-        width:'74px',
-        whiteSpace:'nowrap',
-        overflow:'hidden',
-        textOverflow:'ellipsis'
+      fund_name: {
+        display: 'block',
+        width: '74px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
       }
     }
   },
   created () {
     this.imgUrl_loading = true
     /* table */
-    this.axios.get('/fund/select_fund_sum'+'?fund_type=0').then(res => {
+    this.axios.get('/fund/select_fund_sum' + '?fund_type=0').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
         this.package(res)
         var allMoney = 0
         for (var index in this.listTable) {
-          allMoney+=this.listTable[index].fund_details_money
+          allMoney += this.listTable[index].fund_details_money
         }
-        this.allMoney = Math.floor(allMoney * 100) /100
+        this.allMoney = Math.floor(allMoney * 100) / 100
       }
     })
-    /*this.shaix = JSON.parse(localStorage.shou)
+    /* this.shaix = JSON.parse(localStorage.shou)
     this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_person_id='+this.shaix).then(res=>{
       this.package(res)
-    })*/
-    /*data*/
+    }) */
+    /* data */
     var data = new Date()
     var dt = new Date(data)
     var y = dt.getFullYear()
     var mm = dt.getMonth() + 1
     var d = dt.getDate()
     if (mm < 10) {
-      mm = '0'+mm
+      mm = '0' + mm
     }
     if (d < 10) {
-      d = '0'+d
+      d = '0' + d
     }
-    var dd  = y+'-'+mm+'-'+d
+    var dd = y + '-' + mm + '-' + d
     this.datesdm = dd
   },
   methods: {
@@ -217,8 +217,8 @@ export default {
       localStorage.account_translation = JSON.stringify(account_translation)
       this.$router.push({ path: 'account_translation', query: { id: account_translation } })
     },
-    //封装model
-    package(res){
+    // 封装model
+    package (res) {
       this.listTable = res.data.list_fund
       this.list_fund_name_type = res.data.list_fund_name_type
       this.list_fund_names = res.data.list_fund_names
@@ -229,11 +229,11 @@ export default {
     // 类别选择
     fund_namesa (id) {
       this.fund_nameso = id
-      this.axios.get('/fund/select_fund_sum'+'?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
         this.package(res)
         if (this.fund_nameo === '个人') {
           this.list_slime_all = false
-        }else if (this.fund_nameo === '公司') {
+        } else if (this.fund_nameo === '公司') {
           this.list_slime_all = true
         }
       })
@@ -245,41 +245,41 @@ export default {
           this.fund_name = this.list_fund_names[index].fund_name
         }
       }
-      this.axios.get('/fund/select_fund_sum'+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.package(res)
       })
     },
     // 类别详细
-    list_slim_name(id){
+    list_slim_name (id) {
       this.list_fund_slim_id = id
-      this.axios.get('/fund/select_fund_sum'+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name='+id).then(res=>{
+      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' + id).then(res => {
         this.package(res)
       })
     },
     //  项目名称
     customer_name_list (id) {
       this.customer_name_list_one = id
-      this.axios.get('/fund/select_fund_sum'+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_name=' + this.fund_name +'&fund_names=' + this.list_fund_namea + '&Customer_name=' + id).then(res => {
+      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_name=' + this.fund_name + '&fund_names=' + this.list_fund_namea + '&Customer_name=' + id).then(res => {
         this.package(res)
       })
     },
-    //相关人
-    relatedSearch(id){
+    // 相关人
+    relatedSearch (id) {
       this.reald_person = id
-      this.axios.get('/fund/select_fund_sum'+'?fund_type=0&fund_person_id='+id).then(res=>{
+      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_person_id=' + id).then(res => {
         this.package(res)
       })
     },
     //  时间
     dateList (id) {
       this.deteList = id
-      this.axios.get('/fund/select_fund_sum'+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' +this.fund_name  + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + id + '&dateB=' + this.dateB).then(res => {
+      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + id + '&dateB=' + this.dateB).then(res => {
         this.package(res)
       })
     },
     date_list_two_change (id) {
       this.dateB = id
-      this.axios.get('/fund/select_fund_sum'+'?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea  + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + this.deteList + '&dateB=' + id).then(res => {
+      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + this.deteList + '&dateB=' + id).then(res => {
         this.package(res)
       })
     }

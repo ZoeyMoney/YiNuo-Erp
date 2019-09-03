@@ -34,7 +34,7 @@ export default {
   name: 'money_projet',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       site_projet: ''// 项目名称录入
     }
   },
@@ -42,12 +42,12 @@ export default {
     add () {
       var then = this
       this.imgUrl_loading = true
-      this.axios.get('/AfterSale/addCustomer_name'+'?Customr_name=' + this.site_projet).then(res => {
+      this.axios.get('/AfterSale/addCustomer_name' + '?Customr_name=' + this.site_projet).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-        mui.alert(res.data.msg, function () {
-          then.$router.push({ name: 'money_sale' })
-        })
+          mui.alert(res.data.msg, function () {
+            then.$router.push({ name: 'money_sale' })
+          })
         }
       })
     }

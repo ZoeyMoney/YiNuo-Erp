@@ -44,12 +44,12 @@
 </template>
 
 <script>
-  import url from '../components/config'
+import url from '../components/config'
 export default {
   name: 'customer_follow_up',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       customer_name: '', // 项目名称
       follow_person: '', // 跟进人
       follow_text: '', // 跟进信息

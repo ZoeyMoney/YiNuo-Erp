@@ -20,17 +20,17 @@
 </template>
 
 <script>
-  export default {
-    name: 'edit_bank',
-    data(){
-      return{
+export default {
+  name: 'edit_bank',
+  data () {
+    return {
 
-      }
-    },
-    created () {
-      console.log(JSON.parse(localStorage.bank_bank))
     }
+  },
+  created () {
+    console.log(JSON.parse(localStorage.bank_bank))
   }
+}
 </script>
 
 <style scoped>

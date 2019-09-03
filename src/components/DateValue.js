@@ -1,6 +1,6 @@
 import dateValue from '../VueComponents/DataValue'
 const dataValue = {
-  install:function (Vue) {
+  install: function (Vue) {
     Vue.component('dataValue', dateValue)
   }
 }

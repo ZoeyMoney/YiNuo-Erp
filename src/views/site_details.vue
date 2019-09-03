@@ -157,86 +157,86 @@ export default {
   name: 'site_details',
   data () {
     return {
-      imgUrl_loading:false,
-      Imgtest:false,
+      imgUrl_loading: false,
+      Imgtest: false,
       customer_name: '', // 项目
-      customer_linkman:'',//负责人
-      customer_connect:'',//分类
-      Customer_DecorateJia:'',//甲方
-      Customer_DecorateYi:'',//乙方
-      worker:'',//工人
-      customer_all:'',//总金额
-      customer_baoxiushijian:'',//报修时间
-      customer_yujiwanchengshijian:'',//预计完成
-      customer_baozhiqi:'',//质保截止
-      customer_demand:'',//问题描述
-      ItemImgUrl:'',
-      follow_person:'',//跟进人员
-      profetName:'',//跟进人员列表
-      follow_loading:'',//跟进状态
-      list_follow_loading:[ //跟进内容
-        {text:'待查看'},
-        {text:'协商安排'},
-        {text:'维修中'},
-        {text:'观察期'},
-        {text:'维修完工'},
+      customer_linkman: '', // 负责人
+      customer_connect: '', // 分类
+      Customer_DecorateJia: '', // 甲方
+      Customer_DecorateYi: '', // 乙方
+      worker: '', // 工人
+      customer_all: '', // 总金额
+      customer_baoxiushijian: '', // 报修时间
+      customer_yujiwanchengshijian: '', // 预计完成
+      customer_baozhiqi: '', // 质保截止
+      customer_demand: '', // 问题描述
+      ItemImgUrl: '',
+      follow_person: '', // 跟进人员
+      profetName: '', // 跟进人员列表
+      follow_loading: '', // 跟进状态
+      list_follow_loading: [ // 跟进内容
+        { text: '待查看' },
+        { text: '协商安排' },
+        { text: '维修中' },
+        { text: '观察期' },
+        { text: '维修完工' }
       ],
       isActive: true,
       hasError: false,
-      list_text:'',//跟进内容
+      list_text: '', // 跟进内容
       stageName: '', // 第二个form
       listtime: '', // 倒计时
       stage: '', // 修改记录
-      undata: '',// 修改记录
-      list:'',
-      imgW:0
+      undata: '', // 修改记录
+      list: '',
+      imgW: 0
     }
   },
   created () {
-    setInterval(() => {
+   /* setInterval(() => {
       var a = new Date()
       this.listtime = a
-    }, 1000)
-    console.log(JSON.parse(localStorage.AfterSale_statistics))
-    this.customer_name  = JSON.parse(localStorage.AfterSale_statistics).customer_name
-    this.customer_linkman  = JSON.parse(localStorage.AfterSale_statistics).afterSale_person
-    this.customer_connect  = JSON.parse(localStorage.AfterSale_statistics).afterSale_type
-    this.Customer_DecorateJia  = JSON.parse(localStorage.AfterSale_statistics).afterSale_jia
-    this.Customer_DecorateYi  = JSON.parse(localStorage.AfterSale_statistics).afterSale_yi
-    this.worker  = JSON.parse(localStorage.AfterSale_statistics).afterSale_worker
-    this.customer_all  = JSON.parse(localStorage.AfterSale_statistics).afterSale_yi + JSON.parse(localStorage.AfterSale_statistics).afterSale_jia + JSON.parse(localStorage.AfterSale_statistics).afterSale_worker
-    this.customer_baoxiushijian  = JSON.parse(localStorage.AfterSale_statistics).afterSale_date
-    this.ItemImgUrl  = JSON.parse(localStorage.AfterSale_statistics).afterSale_img
-    this.customer_yujiwanchengshijian  = JSON.parse(localStorage.AfterSale_statistics).afterSale_pre_date
-    this.customer_baozhiqi  = JSON.parse(localStorage.AfterSale_statistics).afterSale_date_close
-    this.customer_demand  = JSON.parse(localStorage.AfterSale_statistics).afterSale_text
+    }, 1000)*/
+    // console.log(JSON.parse(localStorage.AfterSale_statistics))
+    this.customer_name = JSON.parse(localStorage.AfterSale_statistics).customer_name
+    this.customer_linkman = JSON.parse(localStorage.AfterSale_statistics).afterSale_person
+    this.customer_connect = JSON.parse(localStorage.AfterSale_statistics).afterSale_type
+    this.Customer_DecorateJia = JSON.parse(localStorage.AfterSale_statistics).afterSale_jia
+    this.Customer_DecorateYi = JSON.parse(localStorage.AfterSale_statistics).afterSale_yi
+    this.worker = JSON.parse(localStorage.AfterSale_statistics).afterSale_worker
+    this.customer_all = JSON.parse(localStorage.AfterSale_statistics).afterSale_yi + JSON.parse(localStorage.AfterSale_statistics).afterSale_jia + JSON.parse(localStorage.AfterSale_statistics).afterSale_worker
+    this.customer_baoxiushijian = JSON.parse(localStorage.AfterSale_statistics).afterSale_date
+    this.ItemImgUrl = JSON.parse(localStorage.AfterSale_statistics).afterSale_img
+    this.customer_yujiwanchengshijian = JSON.parse(localStorage.AfterSale_statistics).afterSale_pre_date
+    this.customer_baozhiqi = JSON.parse(localStorage.AfterSale_statistics).afterSale_date_close
+    this.customer_demand = JSON.parse(localStorage.AfterSale_statistics).afterSale_text
     //  跟进人员
-    this.axios.get('/select_follow_person'+'?fund_person_state=4').then(res => {
+    this.axios.get('/select_follow_person' + '?fund_person_state=4').then(res => {
       this.profetName = res.data.data
     })
-    //问题记录查询
-    this.axios.get('/AfterSale/SelectFollow'+'?Customer_id='+JSON.parse(localStorage.AfterSale_statistics).afterSale_id).then(res =>{
+    // 问题记录查询
+    this.axios.get('/AfterSale/SelectFollow' + '?Customer_id=' + JSON.parse(localStorage.AfterSale_statistics).afterSale_id).then(res => {
       this.undata = res.data
     })
   },
   methods: {
-    //图片解析
-    getImgUrl(val){
-      var url = 'https://formattingclub.com/static/YiNuo/'+val
+    // 图片解析
+    getImgUrl (val) {
+      var url = 'https://formattingclub.com/static/YiNuo/' + val
       return url
     },
-    //点击放大
-    imgClick(){
+    // 点击放大
+    imgClick () {
       this.Imgtest = true
       this.isActive = false
       this.hasError = true
-      var mo=function(e){e.preventDefault();};
-      document.body.style.overflow='hidden';
-      document.addEventListener("touchmove",mo,false);//禁止页面滑动
+      var mo = function (e) { e.preventDefault() }
+      document.body.style.overflow = 'hidden'
+      document.addEventListener('touchmove', mo, false)// 禁止页面滑动
 
       // this.imgW = 100+'100%'
-      //判断页面的高度
-      /*var scrollTop=0;
+      // 判断页面的高度
+      /* var scrollTop=0;
       if(document.documentElement&&document.documentElement.scrollTop)
       {
         scrollTop=document.documentElement.scrollTop;
@@ -248,75 +248,75 @@ export default {
       console.log(scrollTop)
        if (scrollTop >100){
 
-       }*/
+       } */
     },
-    //图片放大后取消
-    cancel(){
+    // 图片放大后取消
+    cancel () {
       this.Imgtest = false
-      var mo=function(e){e.preventDefault();};
-      document.body.style.overflow='';//出现滚动条
-      document.removeEventListener("touchmove",mo,false);
+      var mo = function (e) { e.preventDefault() }
+      document.body.style.overflow = ''// 出现滚动条
+      document.removeEventListener('touchmove', mo, false)
     },
     // 修改
-    UpdateCustomer() {
+    UpdateCustomer () {
       // this.$router.push({ path: 'siteModify', query: { id: this.customer_id } })
-      var then =this
-      var add = '?AfterSale_id='+JSON.parse(localStorage.AfterSale_statistics).afterSale_id
+      var then = this
+      var add = '?AfterSale_id=' + JSON.parse(localStorage.AfterSale_statistics).afterSale_id
       if (this.customer_linkman != JSON.parse(localStorage.AfterSale_statistics).afterSale_person) {
-        add+='&AfterSale_person='+this.customer_linkman
+        add += '&AfterSale_person=' + this.customer_linkman
       }
       if (this.customer_connect != JSON.parse(localStorage.AfterSale_statistics).afterSale_type) {
-        add+='&AfterSale_type='+this.customer_connect
+        add += '&AfterSale_type=' + this.customer_connect
       }
       if (this.worker != JSON.parse(localStorage.AfterSale_statistics).afterSale_worker) {
-        add+='&AfterSale_worker='+this.worker
+        add += '&AfterSale_worker=' + this.worker
       }
       if (this.Customer_DecorateJia != JSON.parse(localStorage.AfterSale_statistics).afterSale_jia) {
-        add+='&AfterSale_jia='+this.Customer_DecorateJia
+        add += '&AfterSale_jia=' + this.Customer_DecorateJia
       }
       if (this.Customer_DecorateYi != JSON.parse(localStorage.AfterSale_statistics).afterSale_yi) {
-        add+='&AfterSale_yi='+this.Customer_DecorateYi
+        add += '&AfterSale_yi=' + this.Customer_DecorateYi
       }
       if (this.customer_yujiwanchengshijian != JSON.parse(localStorage.AfterSale_statistics).afterSale_pre_date) {
         var date = new Date(this.customer_yujiwanchengshijian)
         var dds = date.getFullYear()
         var yys = date.getMonth() + 1
-        var mms = date. getDate()
-        var dss = dds+'-'+yys+'-'+mms
-        add+='&AfterSale_pre_date='+dss
+        var mms = date.getDate()
+        var dss = dds + '-' + yys + '-' + mms
+        add += '&AfterSale_pre_date=' + dss
       }
       if (this.customer_baozhiqi != JSON.parse(localStorage.AfterSale_statistics).afterSale_date_close) {
         var date = new Date(this.customer_baozhiqi)
         var ddsd = date.getFullYear()
         var yysd = date.getMonth() + 1
-        var mmsd = date. getDate()
-        var dssd = ddsd+'-'+yysd+'-'+mmsd
-        add+='&AfterSale_date_close='+dssd
+        var mmsd = date.getDate()
+        var dssd = ddsd + '-' + yysd + '-' + mmsd
+        add += '&AfterSale_date_close=' + dssd
       }
       if (this.customer_demand != JSON.parse(localStorage.AfterSale_statistics).afterSale_text) {
-        add+='&AfterSale_text='+this.customer_demand
+        add += '&AfterSale_text=' + this.customer_demand
       }
       if (this.customer_baoxiushijian != JSON.parse(localStorage.AfterSale_statistics).afterSale_date) {
         var date = new Date(this.customer_baoxiushijian)
         var dd = date.getFullYear()
         var yy = date.getMonth() + 1
-        var mm = date. getDate()
-        var ds = dd+'-'+yy+'-'+mm
-        add+='&afterSale_date='+ds
+        var mm = date.getDate()
+        var ds = dd + '-' + yy + '-' + mm
+        add += '&afterSale_date=' + ds
       }
 
       this.imgUrl_loading = true
-      this.axios.post('/AfterSale/Update_AfterSale'+add).then(res=>{
+      this.axios.post('/AfterSale/Update_AfterSale' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-          mui.alert(res.data.data,function () {
-            then.$router.push({name:'After_sales_statistics'})
+          mui.alert(res.data.data, function () {
+            then.$router.push({ name: 'After_sales_statistics' })
           })
         }
       })
     },
-    //记录保存
-    add(){
+    // 记录保存
+    add () {
       var then = this
       var _true = true
       var add = '?'
@@ -325,14 +325,14 @@ export default {
         _true = false
         return false
       }
-      add+='follow_person='+this.follow_person+'&follow_text='+this.list_text+'&Customer_name='+JSON.parse(localStorage.AfterSale_statistics).afterSale_id
-      +'&follow_stage='+this.follow_loading
+      add += 'follow_person=' + this.follow_person + '&follow_text=' + this.list_text + '&Customer_name=' + JSON.parse(localStorage.AfterSale_statistics).afterSale_id +
+      '&follow_stage=' + this.follow_loading
       this.imgUrl_loading = true
-      this.axios.get('/AfterSale/AddFollow'+add).then(res=>{
+      this.axios.get('/AfterSale/AddFollow' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-          mui.alert(res.data,function () {
-            then.$router.push({name:'After_sales_statistics'})
+          mui.alert(res.data, function () {
+            then.$router.push({ name: 'After_sales_statistics' })
           })
         }
       })
@@ -342,11 +342,11 @@ export default {
       var then = this
       var va = this.customer_id
       this.imgUrl_loading = true
-      this.axios.post('/AfterSale/Delete_AfterSale'+'?AfterSale_id=' + JSON.parse(localStorage.AfterSale_statistics).afterSale_id).then(res => {
+      this.axios.post('/AfterSale/Delete_AfterSale' + '?AfterSale_id=' + JSON.parse(localStorage.AfterSale_statistics).afterSale_id).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-          mui.alert(res.data.data,function () {
-            then.$router.push({name:'After_sales_statistics'})
+          mui.alert(res.data.data, function () {
+            then.$router.push({ name: 'After_sales_statistics' })
           })
         }
       })

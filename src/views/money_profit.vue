@@ -62,50 +62,50 @@ export default {
   name: 'money_profit',
   data () {
     return {
-      imgUrl_loading:false,
-      moneyNY:'',
-      search:'',
+      imgUrl_loading: false,
+      moneyNY: '',
+      search: '',
       radio: '2',
       list: [{
-          customer_name:'',
-          already_out:'',
-          already_enter:'',
-          pre_profit:'',
-          pre_profit_proportion:'',
-          customer_id:''
-        }],
-      siteSlect:{
-        paddingLeft:'10px'
+        customer_name: '',
+        already_out: '',
+        already_enter: '',
+        pre_profit: '',
+        pre_profit_proportion: '',
+        customer_id: ''
+      }],
+      siteSlect: {
+        paddingLeft: '10px'
       },
-      lefProjet:{
-        display:'block',
-        width:'122px',
-        whiteSpace:'nowrap',
-        overflow:'hidden',
-        paddingLeft:'10px'
+      lefProjet: {
+        display: 'block',
+        width: '122px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        paddingLeft: '10px'
       },
-      widCate:{
+      widCate: {
         width: '67px',
         overflow: 'hidden',
         textOverflow: 'ellipsis'
       }
     }
   },
-  created(){
+  created () {
     this.imgUrl_loading = true
-    this.axios.get('/fund/Select_profits').then(res=>{
+    this.axios.get('/fund/Select_profits').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
-      this.list = res.data.data
+        this.list = res.data.data
       }
     })
   },
-  computed:{
-    lists(){
+  computed: {
+    lists () {
       var then = this
       var newList = []
       then.list.map(function (item) {
-        if (item.customer_name.search(then.search) != -1){
+        if (item.customer_name.search(then.search) != -1) {
           newList.push(item)
         }
       })
@@ -113,14 +113,14 @@ export default {
     }
   },
   methods: {
-    getClass({row, column, rowIndex, columnIndex}){
+    getClass ({ row, column, rowIndex, columnIndex }) {
       if (rowIndex === 0) {
         return 'background: #F2F2F2 '
       } else {
         return ''
       }
-      },
-    projet_modify(id){
+    },
+    projet_modify (id) {
       var list = {}
       for (var index in this.list) {
         if (id.customer_id === this.list[index].customer_id) {
@@ -128,8 +128,8 @@ export default {
         }
       }
       // localStorage.msg = JSON.stringify(list)
-      sessionStorage.setItem('listProfit',JSON.stringify(list))
-      this.$router.push({path:'projet_modify',query:{list:list}})
+      sessionStorage.setItem('listProfit', JSON.stringify(list))
+      this.$router.push({ path: 'projet_modify', query: { list: list } })
     }
   }
 }

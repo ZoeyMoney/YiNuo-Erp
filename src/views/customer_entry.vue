@@ -83,7 +83,7 @@ export default {
   name: 'customer_entry',
   data () {
     return {
-      imgUrl_loading:false,
+      imgUrl_loading: false,
       Customer_name: '', // 项目名称
       Customer_linkman: '', // 联系人
       Customer_connect: '', // 联系方式
@@ -93,35 +93,35 @@ export default {
       Customer_referrer: '', // 推荐人
       Customer_budget: '', // 项目预算
       Customer_type: '', // 所属类型
-      level:'A',//级别
-      listLevel:[
-        {text:'A'},
-        {text:'B'},
-        {text:'C'},
+      level: 'A', // 级别
+      listLevel: [
+        { text: 'A' },
+        { text: 'B' },
+        { text: 'C' }
       ],
       Customer_form: '工装', // 家装或工装'=
       Customer_formList: [
         { value: '家装' },
         { value: '工装' }
       ],
-      list_type:[
-        {text:'餐饮'},
-        {text:'服装'},
-        {text:'办公'},
-        {text:'健身'},
-        {text:'美容'},
-        {text:'娱乐'},
-        {text:'教育'},
-        {text:'医疗'},
-        {text:'销售'},
-        {text:'小区'},
+      list_type: [
+        { text: '餐饮' },
+        { text: '服装' },
+        { text: '办公' },
+        { text: '健身' },
+        { text: '美容' },
+        { text: '娱乐' },
+        { text: '教育' },
+        { text: '医疗' },
+        { text: '销售' },
+        { text: '小区' }
       ],
       Customer_demand: ''// 客户需求
     }
   },
   created () {
-    //设计师
-    this.axios.get('/select_follow_person'+'?fund_person_state=3').then(customName => {
+    // 设计师
+    this.axios.get('/select_follow_person' + '?fund_person_state=3').then(customName => {
       this.listName = customName.data.data
     })
   },
@@ -134,9 +134,9 @@ export default {
       var check = true
       var pattern = /^1[0-9]{10}$/ // 验证手机号
       var nameReg = /^[\u4E00-\u9FA5]{2,10}$/ // 验证人的名字
+      var nuber = /^[0-9]*$/ // 验证数字
       var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
       var regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
-      var nuber = /^[0-9]*$/ // 验证数字
       //  项目名称
       if (this.Customer_name == '') {
         mui.toast('项目名称不能为空')
@@ -213,14 +213,14 @@ export default {
       /* 录入数据 */
       var add = '?Customer_name=' + this.Customer_name + '&Customer_linkman=' + this.Customer_linkman + '&Customer_connect=' + this.Customer_connect +
             '&Customer_stylist=' + this.Customer_stylist + '&Customer_Decorate=' + this.Customer_Decorate + '&Customer_referrer=' + this.Customer_referrer +
-            '&Customer_budget=' + this.Customer_budget + '&Customer_form=' + this.Customer_form + '&Customer_type=' + this.Customer_type + '&Customer_demand=' + this.Customer_demand+
-            '&Customer_grade='+this.level
-      this.axios.get('/Customer/AddCustomer'+add).then(res=>{
+            '&Customer_budget=' + this.Customer_budget + '&Customer_form=' + this.Customer_form + '&Customer_type=' + this.Customer_type + '&Customer_demand=' + this.Customer_demand +
+            '&Customer_grade=' + this.level
+      this.axios.get('/Customer/AddCustomer' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
           if (res.data == '项目名称重复') {
             mui.alert('项目名称重复')
-          }else{
+          } else {
             mui.alert(res.data, function () {
               _this.$router.push('customer_management')
             })

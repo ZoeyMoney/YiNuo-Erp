@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import config from './js/index'
 // import Login from './views/Login.vue' // 登录界面
 // import Index from './views/Index.vue' // 九宫格
 // import summary_entry from './views/summary_entry.vue' // 九宫格
@@ -53,318 +54,321 @@ import Router from 'vue-router'
 // import announcement_entry from './views/announcement_entry' // 公告录入
 // import Project_Reconciliation from './views/Project_Reconciliation' // 项目对账
 
-
 Vue.use(Router)
 const router = new Router({
   // mode:'history',
   routes: [
     {
       path: '/',
-      redirect: '/login',
-    },{
+      redirect: '/login'
+    }, {
       path: '/Login',
       name: 'Login',
-     component:resolve=>require(['@/views/Login'],resolve)
+      component: resolve => require(['@/views/Login'], resolve)
     }, {
       path: '/Index',
       name: 'index',
-      component:resolve=>require(['@/views/Index'],resolve)
+      component: resolve => require(['@/views/Index'], resolve)
     }, {
       path: '/summary_entry',
       name: 'summary_entry',
-      component:resolve=>require(['@/views/summary_entry'],resolve)
+      component: resolve => require(['@/views/summary_entry'], resolve)
     }, {
       path: '/Setting',
       name: 'Setting',
-      component:resolve=>require(['@/views/Setting'],resolve)
+      component: resolve => require(['@/views/Setting'], resolve)
     }, {
       path: '/SettingPwd',
       name: 'SettingPwd',
-      component:resolve=>require(['@/views/SettingPwd'],resolve)
+      component: resolve => require(['@/views/SettingPwd'], resolve)
     }, {
       path: '/SettingName',
       name: 'SettingName',
-      component:resolve=>require(['@/views/SettingName'],resolve)
+      component: resolve => require(['@/views/SettingName'], resolve)
     }, {
       path: '/customer_management',
       name: 'customer_management',
-      component:resolve=>require(['@/views/customer_management'],resolve)
+      component: resolve => require(['@/views/customer_management'], resolve)
     }, {
       path: '/customer_entry',
       name: 'customer_entry',
-      component:resolve=>require(['@/views/customer_entry'],resolve)
+      component: resolve => require(['@/views/customer_entry'], resolve)
     }, {
       path: '/customer_statistics',
       name: 'customer_statistics',
-      component:resolve=>require(['@/views/customer_statistics'],resolve)
+      component: resolve => require(['@/views/customer_statistics'], resolve)
     }, {
       path: '/customer_follow_up',
       name: 'customer_follow_up',
-      component:resolve=>require(['@/views/customer_follow_up'],resolve)
+      component: resolve => require(['@/views/customer_follow_up'], resolve)
     }, {
       path: '/customer_Designer',
       name: 'customer_Designer',
-      component:resolve=>require(['@/views/customer_Designer'],resolve)
+      component: resolve => require(['@/views/customer_Designer'], resolve)
     }, {
       path: '/site_management',
       name: 'site_management',
-      component:resolve=>require(['@/views/site_management'],resolve)
+      component: resolve => require(['@/views/site_management'], resolve)
     }, {
       path: '/site_log',
       name: 'site_log',
-      component:resolve=>require(['@/views/site_log'],resolve)
+      component: resolve => require(['@/views/site_log'], resolve)
     }, {
       path: '/site_entry',
       name: 'site_entry',
-      component:resolve=>require(['@/views/site_entry'],resolve)
+      component: resolve => require(['@/views/site_entry'], resolve)
     }, {
       path: '/site_project_inspection',
       name: 'site_project_inspection',
-      component: resolve=>require(['@/views/site_project_inspection'],resolve)
+      component: resolve => require(['@/views/site_project_inspection'], resolve)
     }, {
       path: '/customer_details',
       name: 'customer_details',
-      component:resolve=>require(['@/views/customer_details'],resolve)
+      component: resolve => require(['@/views/customer_details'], resolve)
     }, {
       path: '/site_modify',
       name: 'site_modify',
-      component:resolve=>require(['@/views/site_modify'],resolve)
+      component: resolve => require(['@/views/site_modify'], resolve)
     }, {
       path: '/site_after_sale',
       name: 'site_after_sale',
-      component:resolve=>require(['@/views/site_after_sale'],resolve)
+      component: resolve => require(['@/views/site_after_sale'], resolve)
     }, {
       path: '/money_management',
       name: 'money_management',
-      component:resolve=>require(['@/views/money_management'],resolve)
+      component: resolve => require(['@/views/money_management'], resolve)
     }, {
       path: '/money_profit',
       name: 'money_profit',
-      component:resolve=>require(['@/views/money_profit'],resolve)
+      component: resolve => require(['@/views/money_profit'], resolve)
     }, {
       path: '/money_receivable',
       name: 'money_receivable',
-      component:resolve=>require(['@/views/money_receivable'],resolve)
+      component: resolve => require(['@/views/money_receivable'], resolve)
     }, {
       path: '/Follow_up',
       name: 'Follow_up',
-      component:resolve=>require(['@/views/Follow_up'],resolve)
+      component: resolve => require(['@/views/Follow_up'], resolve)
     }, {
       path: '/money_entry',
       name: 'money_entry',
-      component:resolve=>require(['@/views/money_entry'],resolve)
+      component: resolve => require(['@/views/money_entry'], resolve)
     }, {
       path: '/account_translation',
       name: 'account_translation',
-      component:resolve=>require(['@/views/account_translation'],resolve)
+      component: resolve => require(['@/views/account_translation'], resolve)
     }, {
       path: '/account_translation_one',
       name: 'account_translation_one',
-      component:resolve=>require(['@/views/account_translation_one'],resolve)
+      component: resolve => require(['@/views/account_translation_one'], resolve)
     }, {
       path: '/money_sale',
       name: 'money_sale',
-      component:resolve=>require(['@/views/money_sale'],resolve)
+      component: resolve => require(['@/views/money_sale'], resolve)
     }, {
       path: '/After_sales_entry',
       name: 'After_sales_entry',
-      component:resolve=>require(['@/views/After_sales_entry'],resolve)
+      component: resolve => require(['@/views/After_sales_entry'], resolve)
     }, {
       path: '/After_sales_statistics',
       name: 'After_sales_statistics',
-      component:resolve=>require(['@/views/After_sales_statistics'],resolve)
+      component: resolve => require(['@/views/After_sales_statistics'], resolve)
     }, {
       path: '/Follow_up_after_sale',
       name: 'Follow_up_after_sale',
-      component:resolve=>require(['@/views/Follow_up_after_sale'],resolve)
+      component: resolve => require(['@/views/Follow_up_after_sale'], resolve)
     }, {
       path: '/money_Responsible',
       name: 'money_Responsible',
-      component:resolve=>require(['@/views/money_Responsible'],resolve)
+      component: resolve => require(['@/views/money_Responsible'], resolve)
     }, {
       path: '/payable_money',
       name: 'payable_money',
-      component:resolve=>require(['@/views/payable_money'],resolve)
+      component: resolve => require(['@/views/payable_money'], resolve)
     }, {
       path: '/accounts_payable',
       name: 'accounts_payable',
-      component:resolve=>require(['@/views/accounts_payable'],resolve)
+      component: resolve => require(['@/views/accounts_payable'], resolve)
     }, {
       path: '/payable_entry',
       name: 'payable_entry',
-      component:resolve=>require(['@/views/payable_entry'],resolve)
+      component: resolve => require(['@/views/payable_entry'], resolve)
     }, {
       path: '/payable_pay',
       name: 'payable_pay',
-      component:resolve=>require(['@/views/payable_pay'],resolve)
+      component: resolve => require(['@/views/payable_pay'], resolve)
     }, {
       path: '/cash_flow',
       name: 'cash_flow',
-      component:resolve=>require(['@/views/cash_flow'],resolve)
+      component: resolve => require(['@/views/cash_flow'], resolve)
     }, {
       path: '/running_money',
       name: 'running_money',
-      component:resolve=>require(['@/views/running_money'],resolve)
+      component: resolve => require(['@/views/running_money'], resolve)
     }, {
       path: '/running_details',
       name: 'running_details',
-      component:resolve=>require(['@/views/running_details'],resolve)
+      component: resolve => require(['@/views/running_details'], resolve)
     }, {
       path: '/transfer_money',
       name: 'transfer_money',
-      component:resolve=>require(['@/views/transfer_money'],resolve)
+      component: resolve => require(['@/views/transfer_money'], resolve)
     }, {
       path: '/income',
       name: 'income',
-      component:resolve=>require(['@/views/income'],resolve)
+      component: resolve => require(['@/views/income'], resolve)
     }, {
       path: '/income_receive',
       name: 'income_receive',
-      component:resolve=>require(['@/views/income_receive'],resolve)
+      component: resolve => require(['@/views/income_receive'], resolve)
     }, {
       path: '/expenditure',
       name: 'expenditure',
-      component:resolve=>require(['@/views/expenditure'],resolve)
+      component: resolve => require(['@/views/expenditure'], resolve)
     }, {
       path: '/rate',
       name: 'rate',
-      component:resolve=>require(['@/views/rate'],resolve)
+      component: resolve => require(['@/views/rate'], resolve)
     }, {
       path: '/expenditure_receive',
       name: 'expenditure_receive',
-      component:resolve=>require(['@/views/expenditure_receive'],resolve)
+      component: resolve => require(['@/views/expenditure_receive'], resolve)
     }, {
       path: '/bank_card',
       name: 'bank_card',
-      component:resolve=>require(['@/views/bank_card'],resolve)
+      component: resolve => require(['@/views/bank_card'], resolve)
     }, {
       path: '/site_details',
       name: 'site_details',
-      component:resolve=>require(['@/views/site_details'],resolve)
+      component: resolve => require(['@/views/site_details'], resolve)
     }, {
       path: '/siteModify',
       name: 'siteModify',
-      component:resolve=>require(['@/views/siteModify'],resolve)
+      component: resolve => require(['@/views/siteModify'], resolve)
     }, {
       path: '/site_statistics',
       name: 'site_statistics',
-      component:resolve=>require(['@/views/site_statistics'],resolve)
+      component: resolve => require(['@/views/site_statistics'], resolve)
     }, {
       path: '/site_Inspection',
       name: 'site_Inspection',
-      component:resolve=>require(['@/views/site_Inspection'],resolve)
+      component: resolve => require(['@/views/site_Inspection'], resolve)
     }, {
       path: '/money_projet',
       name: 'money_projet',
-      component:resolve=>require(['@/views/money_projet'],resolve)
+      component: resolve => require(['@/views/money_projet'], resolve)
     }, {
       path: '/administrative',
       name: 'administrative',
-      component:resolve=>require(['@/views/administrative'],resolve)
+      component: resolve => require(['@/views/administrative'], resolve)
     }, {
       path: '/adminPunishment',
       name: 'adminPunishment',
-      component:resolve=>require(['@/views/adminPunishment'],resolve)
+      component: resolve => require(['@/views/adminPunishment'], resolve)
     }, {
       path: '/company_announcement',
       name: 'company_announcement',
-      component:resolve=>require(['@/views/company_announcement'],resolve)
+      component: resolve => require(['@/views/company_announcement'], resolve)
     }, {
       path: '/announcement_entry',
       name: 'announcement_entry',
-      component:resolve=>require(['@/views/announcement_entry'],resolve)
+      component: resolve => require(['@/views/announcement_entry'], resolve)
     }, {
       path: '/Project_Reconciliation',
       name: 'Project_Reconciliation',
-      component:resolve=>require(['@/views/Project_Reconciliation'],resolve)
+      component: resolve => require(['@/views/Project_Reconciliation'], resolve)
     }, {
       path: '/admin_task',
       name: 'admin_task',
-      component:resolve=>require(['@/views/admin_task'],resolve)
+      component: resolve => require(['@/views/admin_task'], resolve)
     }, {
       path: '/task_people',
       name: 'task_people',
-      component:resolve=>require(['@/views/task_people'],resolve)
+      component: resolve => require(['@/views/task_people'], resolve)
     }, {
       path: '/reward_statistics',
       name: 'reward_statistics',
-      component:resolve=>require(['@/views/reward_statistics'],resolve)
+      component: resolve => require(['@/views/reward_statistics'], resolve)
     }, {
       path: '/projet_modify',
       name: 'projet_modify',
-      component:resolve=>require(['@/views/projet_modify'],resolve)
-    }, {
-      path: '/admin_nameUpdate',
-      name: 'admin_nameUpdate',
-      component:resolve=>require(['@/views/admin_nameUpdate'],resolve)
+      component: resolve => require(['@/views/projet_modify'], resolve)
     }, {
       path: '/userNameUpdate',
       name: 'userNameUpdate',
-      component:resolve=>require(['@/views/userNameUpdate'],resolve)
+      component: resolve => require(['@/views/userNameUpdate'], resolve)
     }, {
       path: '/siteList',
       name: 'siteList',
-      component:resolve=>require(['@/views/siteList'],resolve)
+      component: resolve => require(['@/views/siteList'], resolve)
     }, {
       path: '/relevant_people',
       name: 'relevant_people',
-      component:resolve=>require(['@/views/relevant_people'],resolve)
+      component: resolve => require(['@/views/relevant_people'], resolve)
     }, {
       path: '/edit_bank',
       name: 'edit_bank',
-      component:resolve=>require(['@/views/edit_bank'],resolve)
+      component: resolve => require(['@/views/edit_bank'], resolve)
     }, {
       path: '/profit_edit',
       name: 'profit_edit',
-      component:resolve=>require(['@/views/profit_edit'],resolve)
+      component: resolve => require(['@/views/profit_edit'], resolve)
     }, {
       path: '/money_summary',
       name: 'money_summary',
-      component:resolve=>require(['@/views/money_summary'],resolve)
+      component: resolve => require(['@/views/money_summary'], resolve)
     }, {
       path: '/site_stage',
       name: 'site_stage',
-      component:resolve=>require(['@/views/site_stage'],resolve)
+      component: resolve => require(['@/views/site_stage'], resolve)
     }, {
       path: '/exit_money',
       name: 'exit_money',
-      component:resolve=>require(['@/views/exit_money'],resolve)
+      component: resolve => require(['@/views/exit_money'], resolve)
     }, {
       path: '/NewUserName',
       name: 'NewUserName',
-      component:resolve=>require(['@/views/NewUserName'],resolve)
+      component: resolve => require(['@/views/NewUserName'], resolve)
     }, {
       path: '/stop_sales',
       name: 'stop_sales',
-      component:resolve=>require(['@/views/stop_sales'],resolve)
+      component: resolve => require(['@/views/stop_sales'], resolve)
     }, {
       path: '/receive_data',
       name: 'receive_data',
-      component:resolve=>require(['@/views/receive_data'],resolve)
+      component: resolve => require(['@/views/receive_data'], resolve)
     }, {
       path: '/paid_data',
       name: 'paid_data',
-      component:resolve=>require(['@/views/paid_data'],resolve)
+      component: resolve => require(['@/views/paid_data'], resolve)
     }, {
       path: '/approval',
       name: 'approval',
-      component:resolve=>require(['@/views/approval'],resolve)
+      component: resolve => require(['@/views/approval'], resolve)
     }, {
       path: '/task_admins',
       name: 'task_admins',
-      component:resolve=>require(['@/views/task_admins'],resolve)
+      component: resolve => require(['@/views/task_admins'], resolve)
     }, {
       path: '/stop_sales_two',
       name: 'stop_sales_two',
-      component:resolve=>require(['@/views/stop_sales_two'],resolve)
+      component: resolve => require(['@/views/stop_sales_two'], resolve)
     }, {
       path: '/informaction',
       name: 'informaction',
-      component:resolve=>require(['@/views/informaction'],resolve)
+      component: resolve => require(['@/views/informaction'], resolve)
     }, {
       path: '/cash_assessment',
       name: 'cash_assessment',
-      component:resolve=>require(['@/views/cash_assessment'],resolve)
+      component: resolve => require(['@/views/cash_assessment'], resolve)
+    }, {
+      path: '/admin_log',
+      name: 'admin_log',
+      component: resolve => require(['@/views/admin_log'], resolve)
+    }, {
+      path: '/Plan_to_increase',
+      name: 'Plan_to_increase',
+      component: resolve => require(['@/views/Plan_to_increase'], resolve)
     }
     /* {
       path:'/home',
@@ -384,15 +388,14 @@ const router = new Router({
     //   // which is lazy-loaded when the route is visited.
     //   componentVue: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     // }
-  ],
+  ]
 })
 export default router
-import config from './js/index'
-router.beforeEach((to,from,next) =>{
+router.beforeEach((to, from, next) => {
   // console.log(to)
   if (to.fullPath != '/Login') {
     if (!sessionStorage.getItem(config.KEY.CACHE_LOGIN_USER)) {
-      return next("/Login")
+      return next('/Login')
     }
   }
   next()

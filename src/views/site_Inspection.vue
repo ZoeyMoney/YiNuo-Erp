@@ -53,26 +53,25 @@
 </template>
 
 <script>
-  export default {
-    name: 'site_Inspection',
-    data(){
-      return{
-        checkList: ['选中且禁用','复选框 A']
-      }
-    },
-    created(){
+export default {
+  name: 'site_Inspection',
+  data () {
+    return {
+      checkList: ['选中且禁用', '复选框 A']
+    }
+  },
+  created () {
 
+  },
+  methods: {
+    axcc (id) {
+      console.log(id)
     },
-    methods:{
-      axcc(id){
-        console.log(id)
-      },
-      ac(){
-
-        console.log(x)
-      }
+    ac () {
+      console.log(x)
     }
   }
+}
 </script>
 
 <style scoped>
