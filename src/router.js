@@ -377,6 +377,14 @@ const router = new Router({
       path: '/list_workers',
       name: 'list_workers',
       component:resolve=>require(['@/views/list_workers'],resolve)
+    }, {
+      path: '/log_admin',
+      name: 'log_admin',
+      component:resolve=>require(['@/views/log_admin'],resolve)
+    }, {
+      path: '/log_statistics',
+      name: 'log_statistics',
+      component:resolve=>require(['@/views/log_statistics'],resolve)
     }
     /* {
       path:'/home',

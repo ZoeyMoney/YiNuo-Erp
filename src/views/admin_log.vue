@@ -2,7 +2,7 @@
     <div class="admin_log">
       <!--返回-->
       <header class="mui-bar mui-bar-nav">
-        <router-link :to="{name:'administrative'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+        <router-link :to="{name:'log_admin'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
         <h1 class="mui-title">工作日志</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
@@ -43,14 +43,6 @@
             {{today}}
           </div>
         </el-card>
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>明日计划</span>
-          </div>
-          <div class="text item">
-            {{tomorrow}}
-          </div>
-        </el-card>
         <div class="text-input">
           <el-input
             type="textarea"
@@ -64,6 +56,14 @@
         <div class="btn-add">
           <el-button type="success" @click="add">{{dates}}工作汇报</el-button>
         </div>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>明日计划</span>
+          </div>
+          <div class="text item">
+            {{tomorrow}}
+          </div>
+        </el-card>
       </div>
     </div>
 </template>
