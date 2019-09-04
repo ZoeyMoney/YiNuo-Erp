@@ -58,7 +58,7 @@ export default {
         { href: 'Project_Reconciliation', ImgArr: require('../image/xiangmduiz.png'), text: '项目对账', projet: false },
         { href: 'money_sale', ImgArr: require('../image/souhou.png'), text: '售后信息', projet: false },
         { href: 'summary_entry', ImgArr: require('../image/Summary.png'), text: '数据录入', projet: false },
-        { href: 'informaction', ImgArr: require('../image/informaction.png'), text: '推进信息', projet: true }
+        { href: 'informaction', ImgArr: require('../image/informaction.png'), text: '袋鼠帮帮', projet: true }
       ],
       userName:sessionStorage.getItem('loginUser'),//用户名
       imgUser:require('../image/user.png'),

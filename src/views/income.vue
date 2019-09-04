@@ -99,7 +99,7 @@
         <table class="all-saving" border="0" cellspacing="" cellpadding="">
           <tr>
             <td style="width: 21%">开户行</td>
-            <td style="width: 15%">户主</td>
+            <td style="width: 15%">户主</td> 
             <td>余额</td>
           </tr>
           <tr v-for="item in chuXu" @click="msgCu(item.bank_bank,item.bank_person,item.number)">
