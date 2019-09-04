@@ -26,7 +26,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 export default {
   name: 'informaction',
   data () {
@@ -35,72 +34,21 @@ export default {
       user_id: '',
       path_id: '',
       list_info: [],
-      iR: {
-        float: 'right'
-      }
-    }
-  },
-  created () {
-    var use = JSON.parse(localStorage.data).userid
-    this.path_id = 'ws://formattingclub.com/YiNuoLogin/websocket/' + use
-
-    this.axios.get('/Customer/Select_information').then(res => {
-      console.log(res)
-    })
-  },
-  mounted () {
-    // 初始化
-    this.init()
-  },
-  methods: {
-    init: function () {
-      if (typeof (WebSocket) === 'undefined') {
-        alert('您的浏览器不支持socket')
-      } else {
-        // 实例化socket
-        this.socket = new WebSocket(this.path_id)
-        // 监听socket连接
-        this.socket.onopen = this.open
-        // 监听socket错误信息
-        this.socket.onerror = this.error
-        // 监听socket消息
-        this.socket.onmessage = this.getMessage
-      }
-    },
-    open: function () {
-      console.log('socket连接成功')
-    },
-    error: function () {
-      console.log('连接错误')
-    },
-    getMessage: function (msg) {
-      console.log(msg)
-    },
-    send: function () {
-      this.socket.send()
-    },
-    close: function () {
-      console.log('socket已经关闭')
-    }
-    /* destroyed () {
-        // 销毁监听
-        this.socket.onclose = this.close
-      } */
-=======
-  export default {
-   name: 'site_management',
-  data () {
-    return {
       list: [
         { name: '工人录入', listImg: require('../image/bi.png'), href: 'workers_enter' },
         { name: '工人统计', listImg: require('../image/data.png'), href: 'list_workers' },
         { name: '工地评论', listImg: require('../image/cheliang.png'), href: 'site_Inspection' },
         { name: '其他', listImg: require('../image/cheliang.png'), href: 'site_Inspection' }
-      ]
-    }
-  },
->>>>>>> e72c251428cbcf0db14ce838eadfb1f3adb60217
+      ],
+      iR: {
+        float: 'right'
+      }
   }
+  },
+  created () {
+
+  },
+  methods: {}
 }
 </script>
 

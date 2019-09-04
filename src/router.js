@@ -360,7 +360,6 @@ const router = new Router({
     }, {
       path: '/cash_assessment',
       name: 'cash_assessment',
-<<<<<<< HEAD
       component: resolve => require(['@/views/cash_assessment'], resolve)
     }, {
       path: '/admin_log',
@@ -370,8 +369,6 @@ const router = new Router({
       path: '/Plan_to_increase',
       name: 'Plan_to_increase',
       component: resolve => require(['@/views/Plan_to_increase'], resolve)
-=======
-      component:resolve=>require(['@/views/cash_assessment'],resolve)
     }, {
       path: '/workers_enter',
       name: 'workers_enter',
@@ -380,7 +377,6 @@ const router = new Router({
       path: '/list_workers',
       name: 'list_workers',
       component:resolve=>require(['@/views/list_workers'],resolve)
->>>>>>> e72c251428cbcf0db14ce838eadfb1f3adb60217
     }
     /* {
       path:'/home',
