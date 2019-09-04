@@ -18,20 +18,8 @@
       </div>
       <!--内容-->
       <div class="mui-content app">
-        <div class="text-input">
-          <el-input
-            type="textarea"
-            :rows="5"
-            placeholder="汇报内容"
-            :maxlength="150"
-            :minlength="50"
-            v-model="textarea"
-            :show-word-limit="true"></el-input>
-        </div>
-        <div class="btn-add">
-          <el-button type="success" @click="add">{{dates}}工作汇报</el-button>
-        </div>
-        <div class="box">
+
+       <!-- <div class="box">
           <div class="box-text box-one" v-for="item in text">
             <div class="data-box">
               {{item.date}}
@@ -46,8 +34,36 @@
               <div v-else>{{item.plan_over}}</div>
             </div>
           </div>
+        </div>-->
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>今日计划</span>
+          </div>
+          <div class="text item">
+            {{today}}
+          </div>
+        </el-card>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>明日计划</span>
+          </div>
+          <div class="text item">
+            {{tomorrow}}
+          </div>
+        </el-card>
+        <div class="text-input">
+          <el-input
+            type="textarea"
+            :rows="5"
+            placeholder="汇报内容"
+            :maxlength="150"
+            :minlength="50"
+            v-model="textarea"
+            :show-word-limit="true"></el-input>
         </div>
-
+        <div class="btn-add">
+          <el-button type="success" @click="add">{{dates}}工作汇报</el-button>
+        </div>
       </div>
     </div>
 </template>
@@ -105,13 +121,13 @@
           }
         }
         var add = '?plan_over='+this.textarea+'&plan_id='+id
-        if (t < '18') {
-          mui.toast('六点后才可以汇报')
+        if (this.textarea.length < 50) {
+          mui.toast('汇报内容不能低于50字')
           _true = false
           return false
         }
-        if (this.textarea.length < 50) {
-          mui.toast('汇报内容不能低于50字')
+        if (t < '18') {
+          mui.toast('六点后才可以汇报')
           _true = false
           return false
         }
@@ -129,10 +145,35 @@
       search_text(){
         this.axios.get('/Administration/Select_Plan').then(res=>{
           this.text = res.data.data
-          this.list_data(res.data.data)
+          // this.list_data(res.data.data)
+          var id =''
+          var datesd = ''
+          var data = new Date()
+          var y = data.getFullYear()
+          var m = data.getMonth() + 1
+          if (m < 10) {
+            m='0'+m
+          }
+          var d = data.getDate()
+          if (d < 10) {
+            d='0'+d
+          }
+          var t = data.getHours();
+          var MM =data.getMinutes();
+          var s = data.getSeconds();
+          var ds = y+'-'+m+'-'+d
+          var dd = y+'-'+m+'-'+d+' '+t+':'+MM+':'+s
+          for (var index in this.text) {
+            datesd = this.text[index].date.split(' ')[0]
+            if (ds == datesd) {
+              this.today = this.text[index].plan_text
+            }else if (ds > datesd) {
+              this.tomorrow = this.text[index].plan_text
+            }
+          }
         })
       },
-      list_data(text){
+      /*list_data(text){
         var id =''
         var data = new Date()
         var y = data.getFullYear()
@@ -168,7 +209,7 @@
             }
           }
         }
-      }
+      }*/
     },
     created () {
       this.search_text()
@@ -182,7 +223,7 @@
   .mui-img{width: 36px;padding-top: 9%;padding-right: 9px;}
   .mui-img a img{width: 100%;}
   /*表*/
-  .box{float: left;height: 100px;width: 100%;font-size: 15px;margin-bottom: 243px}
+  /*.box{float: left;height: 100px;width: 100%;font-size: 15px;margin-bottom: 243px}
   .box div{float: left;width: 100%}
   .box-plan{text-align: center;}
   .plan{line-height: 39px;height: 40%;background-color: black;color: white}
@@ -193,7 +234,13 @@
   .box-s:nth-child(2){border-bottom: 1px solid black}
   .box-s div:nth-child(1){flex: 1;text-align: center;line-height: 145px;}
   .box-s div:nth-child(2){flex: 2;padding: 20px}
-  .data-box{text-align: center;font-weight: 600;padding-top: 5px;padding-bottom: 10px;background-color: black;color: white}
+  .data-box{text-align: center;font-weight: 600;padding-top: 5px;padding-bottom: 10px;background-color: black;color: white}*/
+  /deep/.el-card__header{background-color: black;color: white;padding: 10px 20px}
+  /deep/.text {font-size: 14px;}
+  /deep/.item {margin-bottom: 18px;}
+  /deep/.clearfix:before, .clearfix:after {display: table;content: "";}
+  /deep/.clearfix:after {clear: both}
+  /deep/.box-card {width: 100%;margin-bottom: 20px}
   /*按钮*/
   .btn-add{float: left;text-align: center;width: 100%;margin-bottom: 30px;margin-top: 15px}
   /deep/.el-button--success{width: 80%}
