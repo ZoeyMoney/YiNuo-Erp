@@ -11,7 +11,7 @@
       <div class="mui-content one-img">
         <div class="customer">
           <h2>任务统计</h2>
-          <p>Statistics on incentives</p>
+          <p>/Statistics on incentives</p>
         </div>
         <div class="mui-img">
           <div class="money_img">
@@ -50,7 +50,6 @@
             </div>
           </div>
         </form>
-
         <table>
           <tr>
             <th><span :style="peopleTenLeft">任务人</span></th>

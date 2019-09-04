@@ -10,7 +10,7 @@
       <!--客户详情-->
       <div class="mui-content">
         <div class="customer">
-          <h2>明日计划</h2>
+          <h2>{{titleData}}</h2>
           <p>/Plan_to_increase</p>
         </div>
       </div>
@@ -36,8 +36,10 @@
     name: 'Plan_to_increase',
     data(){
       return{
-        textarea:'',
-        imgUrl_loading:false,
+        textarea:'',  //内容
+        imgUrl_loading:false, //加载动画
+        list:'',  //查询数据
+        titleData:'',//标题时间
       }
     },
     methods:{
@@ -60,6 +62,35 @@
            }
         })
       }
+    },
+    created () {
+      this.axios.get('/Administration/Select_Plan').then(res=>{
+        this.list = res.data.data
+        var dates = ''
+        var data = new Date()
+        var y = data.getFullYear()
+        var m = data.getMonth() + 1
+        if (m < 10) {
+          m = '0'+m
+        }
+        var d = data.getDate()
+        if (d < 10) {
+          d = '0'+d
+        }
+        var dd = y+'-'+m+'-'+d
+        for (var index in this.list) {
+          dates = this.list[index.length - 1].date.split(' ')[0]
+        }
+        if (dd > dates) {
+          var dad = new Date(dates)
+          var yy = dad.getFullYear()
+          var mm = dad.getMonth() + 1
+          var dd = dad.getDate() + 1
+          var alldata = yy+'年'+mm+'月'+dd+'日'
+          console.log(alldata)
+          this.titleData = alldata
+        }
+      })
     }
   }
 </script>

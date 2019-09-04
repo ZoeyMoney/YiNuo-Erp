@@ -17,7 +17,6 @@
       <!--center-->
       <div class="mui-content app">
         <form class="mui-input-group">
-          <div class="mui-input-row">
             <div class="mui-input-row">
               <label>下达人</label>
               <!--            <input type="text" v-model="Release" @click="Release_peopleClick" placehoolder="请选择下达人">-->
@@ -26,6 +25,7 @@
                 <option v-for="item in task_people_list" :value="item.fund_person_id">{{item.fund_person}}</option>
               </select>
             </div>
+            <div class="mui-input-row">
             <label>执行人</label>
 <!--            <input type="text" v-model="task_people" @click="task_peopleClick" placeholder="请选择执行人">-->
             <select name="" v-model="task_people" :class="{classGray:task_people=='',classBlack:task_people!=''}">
@@ -76,8 +76,6 @@ export default {
           list = res.data.data[index]
         }
       }
-      this.Release = list.fund_person
-      this.Release_id = list.fund_person_id
     })
 
     // 所有人数据
@@ -105,7 +103,7 @@ export default {
     saveName () {
       var then = this
       var _true = true
-      if (this.task_people == '' || this.Release == '' || this.valueDate == '' || this.task_text == '') {
+      if (this.task_people == '' || this.Release_id == '' || this.valueDate == '' || this.task_text == '') {
         mui.toast('任务下达不能为空')
         _true = false
         return false

@@ -10,7 +10,7 @@
       <div class="mui-content one-img">
         <div class="customer">
           <h2>工作日志</h2>
-          <p>projet log</p>
+          <p>/projet log</p>
         </div>
         <div class="mui-img" v-if="tomorrow ==''">
           <router-link :to="{name:'Plan_to_increase'}"><img :src="money_plus" alt="增加"></router-link>
@@ -37,33 +37,37 @@
         </div>-->
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>今日计划</span>
+            <span v-if="today_data">{{today_data}}</span>
+            <span v-if="today_data ==''">无</span>
           </div>
           <div class="text item">
-            {{today}}
+            <div v-if="today">{{today}}</div>
+            <div v-if="today ==''">无</div>
           </div>
         </el-card>
         <div class="text-input">
           <el-input
             type="textarea"
             :rows="5"
-            placeholder="汇报内容"
+            placeholder="完成情况"
             :maxlength="150"
             :minlength="50"
             v-model="textarea"
             :show-word-limit="true"></el-input>
         </div>
-        <div class="btn-add">
-          <el-button type="success" @click="add">{{dates}}工作汇报</el-button>
-        </div>
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>明日计划</span>
+            <span v-if="tomorrow_data">{{tomorrow_data}}</span>
+            <span v-if="tomorrow_data ==''">无</span>
           </div>
           <div class="text item">
-            {{tomorrow}}
+            <div v-if="tomorrow">{{tomorrow}}</div>
+            <div v-if="tomorrow ==''">无</div>
           </div>
         </el-card>
+        <div class="form-botton">
+          <button type="button" class="mui-btn mui-btn-black" @click="add">提交</button>
+        </div>
       </div>
     </div>
 </template>
@@ -76,7 +80,9 @@
         money_plus: require('../image/plus.png'),
         text:'',
         today:'',//今日
+        today_data:'',//今日时间
         tomorrow:'',//明日
+        tomorrow_data:'',//明日时间
         Yesterday:'',//昨日
         textarea:'',//汇报内容
         dates:''
@@ -167,8 +173,10 @@
             datesd = this.text[index].date.split(' ')[0]
             if (ds == datesd) {
               this.today = this.text[index].plan_text
-            }else if (ds > datesd) {
+              this.today_data = datesd
+            }else if (ds < datesd) {
               this.tomorrow = this.text[index].plan_text
+              this.tomorrow_data = datesd
             }
           }
         })
@@ -240,9 +248,14 @@
   /deep/.item {margin-bottom: 18px;}
   /deep/.clearfix:before, .clearfix:after {display: table;content: "";}
   /deep/.clearfix:after {clear: both}
-  /deep/.box-card {width: 100%;margin-bottom: 20px}
+  /deep/.box-card {width: 100%;}
+  /deep/.box-card:nth-child(2){margin-bottom: 20px}
   /*按钮*/
   .btn-add{float: left;text-align: center;width: 100%;margin-bottom: 30px;margin-top: 15px}
   /deep/.el-button--success{width: 80%}
   /deep/.el-textarea .el-input__count{bottom: 21px}
+  .form-botton{text-align: center}
+  .form-botton button{width: 80%;margin-top: 30px}
+  .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;margin-left: 18px}
+
 </style>

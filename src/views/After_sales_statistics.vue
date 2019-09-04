@@ -23,13 +23,6 @@
         </div>
         <!--表格-->
         <div class="mui-content label-flex">
-          <!--<div class="mui-row row-flex">
-            <label>责任人</label>
-            <select v-model="customer_stylist">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="(item,index) in listName" :value="item">{{item}}</option>
-            </select>
-          </div>-->
           <div class="mui-row row-flex">
             <label>工地名称</label>
             <select v-model="stage_name">
@@ -38,25 +31,6 @@
             </select>
           </div>
         </div>
-        <!--<table border="0">
-          <tr>
-            <th><span :style="lefta">工地名称</span></th>
-            <th><span>负责人</span></th>
-            <th><span>分类</span></th>
-            <th><span>时间</span></th>
-            <th><span>状态</span></th>
-          </tr>
-          <tr v-for="item in list_serach" @click="mername(item.customer_id)">
-            <td><span :style="lefta">{{item.customer_name}}</span></td>
-            <td><span>{{item.afterSale_person}}</span></td>
-            <td><span>{{item.afterSale_type}}</span></td>
-            <td><span>￥{{all_money(item.afterSale_jia,item.afterSale_yi,item.afterSale_worker)}}</span></td>
-            <td>
-              <span v-if="item.afterSale_date >= item.afterSale_date_close">已过保</span>
-              <span v-if="item.afterSale_date <= item.AfterSale_date_close">在保</span>
-            </td>
-          </tr>
-        </table>-->
         <table border="0">
           <tr>
             <th><span :style="lefta">工地名称</span></th>
@@ -65,14 +39,12 @@
             <th><span>时间</span></th>
             <th><span>状态</span></th>
           </tr>
-          <tr v-for="item in list_serach" @click="mername(item.customer_id)">
+          <tr v-for="item in list_serach" @click="mername(item.afterSale_id)">
             <td><span :style="lefta">{{item.customer_name}}</span></td>
             <td><span>{{item.afterSale_person}}</span></td>
             <td><span>{{item.afterSale_type}}</span></td>
             <td><span>{{datas(item.afterSale_pre_date)}}</span></td>
             <td>
-              <!--<span v-if="item.afterSale_date >= item.afterSale_date_close">已过保</span>
-              <span v-if="item.afterSale_date <= item.afterSale_date_close">在保</span>-->
               <span v-show="item.follow_stage">{{item.follow_stage}}</span>
               <span v-show="item.follow_stage ==undefined">无</span>
             </td>
@@ -162,12 +134,11 @@ export default {
       // this.$router.push({ path: 'site_details', query: { id: id } })
       var lists = {}
       for (var index in this.list) {
-        if (id == this.list[index].customer_id) {
+        if (id == this.list[index].afterSale_id) {
           lists = this.list[index]
         }
       }
       localStorage.AfterSale_statistics = JSON.stringify(lists)
-      console.log(lists)
       this.$router.push({ name: 'site_details', query: { lists } })
     },
     datas (datasd) {
