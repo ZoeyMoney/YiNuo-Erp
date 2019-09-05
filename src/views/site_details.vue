@@ -145,8 +145,8 @@
     </div>
 <!--     :style="{height:imgW+'px'}"-->
     <div class="tests" v-show="Imgtest" @click="cancel">
-      <div class="imgWid" :class="{active: isActive, test: hasError}">
-        <img :src="getImgUrl(ItemImgUrl)"  alt="loading">
+      <div class="imgWid" ref="imgCC" :class="{active: isActive, test: hasError}">
+        <img :src="getImgUrl(ItemImgUrl)" alt="loading">
       </div>
     </div>
   </div>
@@ -233,22 +233,6 @@ export default {
       var mo = function (e) { e.preventDefault() }
       document.body.style.overflow = 'hidden'
       document.addEventListener('touchmove', mo, false)// 禁止页面滑动
-
-      // this.imgW = 100+'100%'
-      // 判断页面的高度
-      /* var scrollTop=0;
-      if(document.documentElement&&document.documentElement.scrollTop)
-      {
-        scrollTop=document.documentElement.scrollTop;
-      }
-      else if(document.body)
-      {
-        scrollTop=document.body.scrollTop;
-      }
-      console.log(scrollTop)
-       if (scrollTop >100){
-
-       } */
     },
     // 图片放大后取消
     cancel () {
@@ -401,8 +385,8 @@ export default {
   .ImgUrl label{width: 100%!important;}
   .ImgUrl .imgWid{width: 120px;padding-left: 11px}
   .ImgUrl .imgWid img{width: 100%}
-  .tests{position: absolute;top: 0%;left: 0;right: 0;bottom: 0;width: 100% !important;height:100%;background-color: rgba(51, 51, 51, 0.5)}
-  .tests .test{position: relative;top: 47%}
+  .tests{position: absolute;top: 0%;left: 0;right: 0;bottom: 0;width: 100% !important;height:200%;background-color: rgba(51, 51, 51, 0.5)}
+  .tests .test{position: relative;top: 7%}
   /*记录*/
   .jin{line-height: 40px;padding: 6px 15px}
   .jin-date{float: left;width: 30%}

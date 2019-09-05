@@ -12,29 +12,9 @@
           <h2>工作日志</h2>
           <p>/projet log</p>
         </div>
-        <div class="mui-img" v-if="tomorrow ==''">
-          <router-link :to="{name:'Plan_to_increase'}"><img :src="money_plus" alt="增加"></router-link>
-        </div>
       </div>
       <!--内容-->
       <div class="mui-content app">
-
-       <!-- <div class="box">
-          <div class="box-text box-one" v-for="item in text">
-            <div class="data-box">
-              {{item.date}}
-            </div>
-            <div class="box-s">
-              <div>计划内容：</div>
-              <div>{{item.plan_text}}</div>
-            </div>
-            <div class="box-s">
-              <div>完成情况：</div>
-              <div v-if="item.plan_over == undefined">待汇报</div>
-              <div v-else>{{item.plan_over}}</div>
-            </div>
-          </div>
-        </div>-->
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span v-if="today_data">{{today_data}}</span>
@@ -55,16 +35,26 @@
             v-model="textarea"
             :show-word-limit="true"></el-input>
         </div>
+        <div class="textrate">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span v-if="tomorrow_data">{{tomorrow_data}}</span>
-            <span v-if="tomorrow_data ==''">无</span>
+            <span v-if="tomorrow_data ==''">{{tomorrow_dates}}</span>
           </div>
           <div class="text item">
-            <div v-if="tomorrow">{{tomorrow}}</div>
-            <div v-if="tomorrow ==''">无</div>
+            <div>{{tomorrow}}</div>
+            <el-input
+              type="textarea"
+              :rows="5"
+              placeholder="请输入明日计划"
+              :maxlength="150"
+              :minlength="50"
+              v-model="textareaval"
+              :show-word-limit="true"
+            :disabled="fasl"></el-input>
           </div>
         </el-card>
+        </div>
         <div class="form-botton">
           <button type="button" class="mui-btn mui-btn-black" @click="add">提交</button>
         </div>
@@ -77,15 +67,17 @@
     name: 'admin_log',
     data(){
       return{
-        money_plus: require('../image/plus.png'),
         text:'',
         today:'',//今日
         today_data:'',//今日时间
         tomorrow:'',//明日
         tomorrow_data:'',//明日时间
+        tomorrow_dates:'',
         Yesterday:'',//昨日
         textarea:'',//汇报内容
-        dates:''
+        dates:'',
+        textareaval:'',
+        fasl:false
       }
     },
     methods:{
@@ -126,17 +118,23 @@
             }
           }
         }
-        var add = '?plan_over='+this.textarea+'&plan_id='+id
-        if (this.textarea.length < 50) {
-          mui.toast('汇报内容不能低于50字')
-          _true = false
-          return false
-        }
-        if (t < '18') {
+        /*if (t < '18') {
           mui.toast('六点后才可以汇报')
           _true = false
           return false
-        }
+        }*/
+        if (this.tomorrow == '') {
+          if (this.textarea.length < 50) {
+            mui.toast('汇报内容不能低于50字')
+            _true = false
+            return false
+          }
+          if (this.textareaval.length < '50') {
+            mui.toast('明日计划不能低于50字')
+            _true = false
+            return false
+          }
+          var add = '?plan_over='+this.textarea+'&plan_id='+id
         this.imgUrl_loading = true
         this.axios.post('/Administration/Update_Plan'+add).then(res=>{
           if (res.status === 200) {
@@ -145,15 +143,41 @@
               then.$router.go(0)
             })
           }
-        })
+          })
+        var adds = '?plan_text='+this.textareaval
+        this.axios.post('/Administration/Add_Plan'+adds).then(res=>{
+          /*if (res.status === 200) {
+            mui.alert('执行成功',function () {
+              then.$router.push({name:'admin_log'})
+            })
+          }*/
+          })
+        }else if (this.tomorrow != '') {
+          if (this.textarea.length < 50) {
+            mui.toast('汇报内容不能低于50字')
+            _true = false
+            return false
+          }
+          var add = '?plan_over='+this.textarea+'&plan_id='+id
+          this.imgUrl_loading = true
+          this.axios.post('/Administration/Update_Plan'+add).then(res=>{
+            if (res.status === 200) {
+              this.imgUrl_loading = false
+              mui.alert('汇报完成',function () {
+                then.$router.go(0)
+              })
+            }
+          })
+        }
       },
       //查询信息
       search_text(){
+
         this.axios.get('/Administration/Select_Plan').then(res=>{
           this.text = res.data.data
           // this.list_data(res.data.data)
-          var id =''
           var datesd = ''
+          var dier = ''
           var data = new Date()
           var y = data.getFullYear()
           var m = data.getMonth() + 1
@@ -175,53 +199,35 @@
               this.today = this.text[index].plan_text
               this.today_data = datesd
             }else if (ds < datesd) {
-              this.tomorrow = this.text[index].plan_text
               this.tomorrow_data = datesd
+              this.tomorrow = this.text[index].plan_text
             }
+            var dier = this.text[index.length-1].date.split(' ')[0]
+            if (this.tomorrow_data == '') {
+              var dad = new Date(dier)
+              var yy = dad.getFullYear()
+              var mm = dad.getMonth() + 1
+              if (mm < 10) {
+                mm='0'+mm
+              }
+              var dds = dad.getDate() + 1
+              if (dds < 10) {
+                dds='0'+dds
+              }
+              this.tomorrow_data = yy+'-'+mm+'-'+dds
+            }
+          }
+          if (this.tomorrow == '') {
+            this.fasl = false
+          }else{
+            this.fasl = true
           }
         })
       },
-      /*list_data(text){
-        var id =''
-        var data = new Date()
-        var y = data.getFullYear()
-        var m = data.getMonth() + 1
-        if (m < 10) {
-          m='0'+m
-        }
-        var d = data.getDate()
-        if (d < 10) {
-          d='0'+d
-        }
-        var t = data.getHours();
-        var MM =data.getMinutes();
-        var s = data.getSeconds();
-        var ds = y+'-'+m+'-'+d
-        var dd = y+'-'+m+'-'+d+' '+t+':'+MM+':'+s
-        var datesd = ''
-        var fa = false
-        for (var index in text) {
-          datesd = text[index].date.split(' ')[0]
-          if (ds == datesd) {
-            this.dates = text[index].date
-            id = text[index].plan_id
-            fa = true
-          }
-        }
-        if (fa = true) {
-          for (var index in text) {
-            if (text[index].plan_over == undefined) {
-              this.dates = text[index].date
-              id = text[index].plan_id
-              break
-            }
-          }
-        }
-      }*/
     },
     created () {
       this.search_text()
-    }
+    },
   }
 </script>
 
@@ -231,18 +237,9 @@
   .mui-img{width: 36px;padding-top: 9%;padding-right: 9px;}
   .mui-img a img{width: 100%;}
   /*表*/
-  /*.box{float: left;height: 100px;width: 100%;font-size: 15px;margin-bottom: 243px}
-  .box div{float: left;width: 100%}
-  .box-plan{text-align: center;}
-  .plan{line-height: 39px;height: 40%;background-color: black;color: white}
-  .box-one{border: 1px solid #a2a2a2;}
-  .text{word-break: break-all}
-  .box-text{overflow: auto;height: 330px;margin-bottom: 20px;border-radius: 11px}
-  .box-s{display: flex}
-  .box-s:nth-child(2){border-bottom: 1px solid black}
-  .box-s div:nth-child(1){flex: 1;text-align: center;line-height: 145px;}
-  .box-s div:nth-child(2){flex: 2;padding: 20px}
-  .data-box{text-align: center;font-weight: 600;padding-top: 5px;padding-bottom: 10px;background-color: black;color: white}*/
+  .textrate /deep/.el-card__body{padding: 0}
+  .textrate .item{margin-bottom: 0}
+  .textrate textarea{margin-bottom: 0}
   /deep/.el-card__header{background-color: black;color: white;padding: 10px 20px}
   /deep/.text {font-size: 14px;}
   /deep/.item {margin-bottom: 18px;}
@@ -250,6 +247,7 @@
   /deep/.clearfix:after {clear: both}
   /deep/.box-card {width: 100%;}
   /deep/.box-card:nth-child(2){margin-bottom: 20px}
+  .textrate .item div:nth-child(1){padding: 20px}
   /*按钮*/
   .btn-add{float: left;text-align: center;width: 100%;margin-bottom: 30px;margin-top: 15px}
   /deep/.el-button--success{width: 80%}

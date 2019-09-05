@@ -366,10 +366,6 @@ const router = new Router({
       name: 'admin_log',
       component: resolve => require(['@/views/admin_log'], resolve)
     }, {
-      path: '/Plan_to_increase',
-      name: 'Plan_to_increase',
-      component: resolve => require(['@/views/Plan_to_increase'], resolve)
-    }, {
       path: '/workers_enter',
       name: 'workers_enter',
       component:resolve=>require(['@/views/workers_enter'],resolve)
