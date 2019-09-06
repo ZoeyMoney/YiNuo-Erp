@@ -479,7 +479,7 @@ export default {
 
 <style scoped>
   /*#A,#B,#C,#D,#E,#F,#G,#H,#I,#G,#Q,#O,#M,#N,#O,#P,#Q,#R,#S,#U,#V,#W,#S,#Y,#Z,#T{padding-top: 47px}*/
-  .right{list-style: none;position: fixed;right: 0px;line-height: 26px;top: 5%;padding: 0 13px;/*height: 416px;overflow: auto*/}
+  .right{list-style: none;position: fixed;right: 0px;line-height: 26px;top: 5%;padding: 0 20px;/*height: 416px;overflow: auto*/}
   .mui-bar-nav~.mui-content{padding-top: 31px!important;}
   .mui-table-view{position: absolute;width: 100%}
   .app{margin-bottom: 0}

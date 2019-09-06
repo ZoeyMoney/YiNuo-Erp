@@ -3,8 +3,8 @@
       <!-- 头部 -->
       <div>
         <header class="mui-bar mui-bar-nav header-top">
-          <div class="username">{{userName}}</div>
           <h1 class="mui-title">一诺装饰</h1>
+          <div class="username">{{userName}}</div>
           <router-link :to="{name:'Setting'}" class="imgUser"><img :src="imgUser" alt="user"></router-link>
         </header>
       </div>
@@ -58,10 +58,12 @@ export default {
         { href: 'Project_Reconciliation', ImgArr: require('../image/xiangmduiz.png'), text: '项目对账', projet: false },
         { href: 'money_sale', ImgArr: require('../image/souhou.png'), text: '售后信息', projet: false },
         { href: 'summary_entry', ImgArr: require('../image/Summary.png'), text: '数据录入', projet: false },
-        { href: 'informaction', ImgArr: require('../image/informaction.png'), text: '袋鼠帮帮', projet: true }
+        { href: 'informaction', ImgArr: require('../image/informaction.png'), text: '袋鼠帮帮', projet: true },
+        { href: 'log_admin', ImgArr: require('../image/621.png'), text: '工作日志', projet: true },
       ],
       userName:sessionStorage.getItem('loginUser'),//用户名
       imgUser:require('../image/user.png'),
+      log:require('../image/621.png'),
     }
   },
 
@@ -175,6 +177,7 @@ export default {
   .botton-top h5{line-height: 1px;}
   .botton-top ul{padding-left: 26px;}
   .botton-top ul li{font-size: 15px;color: #848484;line-height: 20px;}
+  .leftd{float: left!important;}
   .username{float: left;padding-top: 12px;width: 90%;overflow: hidden;text-overflow: ellipsis;text-align: right}
   .imgUser{width: 25px;display: block;float: right;padding-top: 12px}
   .imgUser img{width: 100%}

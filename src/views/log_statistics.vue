@@ -33,7 +33,7 @@
           <div class="text item">
             {{item.plan_text}}
           </div>
-          <div>无</div>
+          <div>{{item.plan_over}}</div>
         </el-card>
       </div>
     </div>

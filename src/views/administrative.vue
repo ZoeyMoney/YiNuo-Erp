@@ -40,7 +40,6 @@ export default {
         { href: 'adminPunishment', listImg: require('../image/chuaf.png'), text: '行政处罚' },
         { href: 'NewUserName', listImg: require('../image/newname.png'), text: '添加账户' },
         { href: 'task_admins', listImg: require('../image/renwu.png'), text: '审批统计' },
-        { href: 'log_admin', listImg: require('../image/log_admin.png'), text: '日志管理' },
       ]
     }
   },

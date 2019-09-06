@@ -15,34 +15,45 @@
       </div>
       <!--内容-->
       <div class="mui-content app">
-        <el-card class="box-card">
+        <el-card class="box-card" v-for="(item,index) in text" :key="index" v-if="index == 0">
           <div slot="header" class="clearfix">
-            <span v-if="today_data">{{today_data}}</span>
-            <span v-if="today_data ==''">无</span>
+            <span>{{item.date}}</span>
           </div>
           <div class="text item">
-            <div v-if="today">{{today}}</div>
-            <div v-if="today ==''">无</div>
+            {{item.plan_text}}
+          </div>
+          <div class="text-input">
+            <el-input
+              type="textarea"
+              :rows="5"
+              placeholder="完成情况"
+              :maxlength="150"
+              :minlength="50"
+              v-model="textarea"
+              :show-word-limit="true"></el-input>
           </div>
         </el-card>
-        <div class="text-input">
-          <el-input
-            type="textarea"
-            :rows="5"
-            placeholder="完成情况"
-            :maxlength="150"
-            :minlength="50"
-            v-model="textarea"
-            :show-word-limit="true"></el-input>
-        </div>
-        <div class="textrate">
-        <el-card class="box-card">
+        <el-card class="box-card" v-if="text.length>0">
           <div slot="header" class="clearfix">
-            <span v-if="tomorrow_data">{{tomorrow_data}}</span>
-            <span v-if="tomorrow_data ==''">{{tomorrow_dates}}</span>
+            <span>{{datessd}}</span>
           </div>
           <div class="text item">
-            <div>{{tomorrow}}</div>
+            <el-input
+              type="textarea"
+              :rows="5"
+              :placeholder="datas_s"
+              :maxlength="150"
+              :minlength="50"
+              v-model="textareaval"
+              :show-word-limit="true"
+              :disabled="fasl"></el-input>
+          </div>
+        </el-card>
+        <el-card class="box-card" v-if="text.length ==0">
+          <div slot="header" class="clearfix">
+            <span>{{datass}}</span>
+          </div>
+          <div class="text item">
             <el-input
               type="textarea"
               :rows="5"
@@ -54,7 +65,6 @@
             :disabled="fasl"></el-input>
           </div>
         </el-card>
-        </div>
         <div class="form-botton">
           <button type="button" class="mui-btn mui-btn-black" @click="add">提交</button>
         </div>
@@ -77,32 +87,41 @@
         textarea:'',//汇报内容
         dates:'',
         textareaval:'',
-        fasl:false
+        fasl:false,
+        over:'',
+        datas_s:'',
+        datass:'',
+        datessd:''
       }
     },
-    methods:{
+    methods: {
       //工作提交
-      add(){
+      add () {
         var _true = true
         var then = this
-        var id =''
+        var id = ''
         var data = new Date()
         var y = data.getFullYear()
         var m = data.getMonth() + 1
         if (m < 10) {
-          m='0'+m
+          m = '0' + m
         }
         var d = data.getDate()
         if (d < 10) {
-          d='0'+d
+          d = '0' + d
         }
         var t = data.getHours();
-        var MM =data.getMinutes();
+        var MM = data.getMinutes();
         var s = data.getSeconds();
-        var ds = y+'-'+m+'-'+d
-        var dd = y+'-'+m+'-'+d+' '+t+':'+MM+':'+s
+        var ds = y + '-' + m + '-' + d
+        var dd = y + '-' + m + '-' + d + ' ' + t + ':' + MM + ':' + s
         var datesd = ''
         var fa = false
+        if (this.textareaval.length < 80) {
+          mui.toast('汇报内容不能低于80字')
+          _true = false
+          return false
+        }
         for (var index in this.text) {
           datesd = this.text[index].date.split(' ')[0]
           if (ds == datesd) {
@@ -123,47 +142,46 @@
           _true = false
           return false
         }*/
-        if (this.tomorrow == '') {
-          if (this.textarea.length < 50) {
+        /* if (this.textarea.length < 100) {
             mui.toast('汇报内容不能低于50字')
             _true = false
             return false
-          }
-          if (this.textareaval.length < '50') {
+          }*/
+        /*if (this.textareaval.length < '50') {
             mui.toast('明日计划不能低于50字')
             _true = false
             return false
-          }
-          var add = '?plan_over='+this.textarea+'&plan_id='+id
+          }*/
+        var add = '?plan_over=' + this.textarea + '&plan_id=' + id
         this.imgUrl_loading = true
-        this.axios.post('/Administration/Update_Plan'+add).then(res=>{
+        this.axios.post('/Administration/Update_Plan' + add).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
-            mui.alert('汇报完成',function () {
+            mui.alert('汇报完成', function () {
               then.$router.go(0)
             })
           }
-          })
-        var adds = '?plan_text='+this.textareaval
-        this.axios.post('/Administration/Add_Plan'+adds).then(res=>{
+        })
+        var adds = '?plan_text=' + this.textareaval
+        this.axios.post('/Administration/Add_Plan' + adds).then(res => {
           /*if (res.status === 200) {
             mui.alert('执行成功',function () {
               then.$router.push({name:'admin_log'})
             })
           }*/
-          })
-        }else if (this.tomorrow != '') {
-          if (this.textarea.length < 50) {
-            mui.toast('汇报内容不能低于50字')
+        })
+        if(this.textarea != '') {
+          if (this.textarea.length < 80) {
+            mui.toast('汇报内容不能低于80字')
             _true = false
             return false
           }
-          var add = '?plan_over='+this.textarea+'&plan_id='+id
+          var add = '?plan_over=' + this.textarea + '&plan_id=' + id
           this.imgUrl_loading = true
-          this.axios.post('/Administration/Update_Plan'+add).then(res=>{
+          this.axios.post('/Administration/Update_Plan' + add).then(res => {
             if (res.status === 200) {
               this.imgUrl_loading = false
-              mui.alert('汇报完成',function () {
+              mui.alert('汇报完成', function () {
                 then.$router.go(0)
               })
             }
@@ -172,7 +190,6 @@
       },
       //查询信息
       search_text(){
-
         this.axios.get('/Administration/Select_Plan').then(res=>{
           this.text = res.data.data
           // this.list_data(res.data.data)
@@ -192,16 +209,24 @@
           var MM =data.getMinutes();
           var s = data.getSeconds();
           var ds = y+'-'+m+'-'+d
+          this.dates = ds
           var dd = y+'-'+m+'-'+d+' '+t+':'+MM+':'+s
           for (var index in this.text) {
             datesd = this.text[index].date.split(' ')[0]
             if (ds == datesd) {
               this.today = this.text[index].plan_text
               this.today_data = datesd
+              if (this.text[index].plan_over != undefined) {
+                this.over = this.text[index].plan_over
+              }
             }else if (ds < datesd) {
               this.tomorrow_data = datesd
               this.tomorrow = this.text[index].plan_text
+              if (this.text[index].plan_over != undefined) {
+                this.over = this.text[index].plan_over
+              }
             }
+
             var dier = this.text[index.length-1].date.split(' ')[0]
             if (this.tomorrow_data == '') {
               var dad = new Date(dier)
@@ -217,16 +242,45 @@
               this.tomorrow_data = yy+'-'+mm+'-'+dds
             }
           }
-          if (this.tomorrow == '') {
-            this.fasl = false
-          }else{
+
+          if(ds < dier)  {
             this.fasl = true
+            console.log('123')
+          }else{
+            this.fasl = false
+          }
+          console.log(ds)
+          console.log(dier)
+          if (res.data.data.length != '0') {
+          var datat = new Date(res.data.data[0].date)
+          var ys = datat.getFullYear()
+          var ms = datat.getMonth() + 1
+          if (ms < 10) {
+            ms='0'+ms
+          }
+          var ds = datat.getDate() + 1
+          if (ds < 10) {
+            ds='0'+ds
+          }
+          this.datas_s = '请输入'+ys+'-'+ms+'-'+ds+'计划'
+          this.datessd = ys+'-'+ms+'-'+ds
           }
         })
       },
     },
     created () {
       this.search_text()
+      var datat = new Date()
+      var ys = datat.getFullYear()
+      var ms = datat.getMonth() + 1
+      if (ms < 10) {
+        ms='0'+ms
+      }
+      var ds = datat.getDate() + 1
+      if (ds < 10) {
+        ds='0'+ds
+      }
+      this.datass = ys+'-'+ms+'-'+ds
     },
   }
 </script>
@@ -242,10 +296,10 @@
   .textrate textarea{margin-bottom: 0}
   /deep/.el-card__header{background-color: black;color: white;padding: 10px 20px}
   /deep/.text {font-size: 14px;}
-  /deep/.item {margin-bottom: 18px;}
+  /deep/.item {margin-bottom: 18px;word-break: break-all}
   /deep/.clearfix:before, .clearfix:after {display: table;content: "";}
   /deep/.clearfix:after {clear: both}
-  /deep/.box-card {width: 100%;}
+  /deep/.box-card {width: 100%;margin-bottom: 20px}
   /deep/.box-card:nth-child(2){margin-bottom: 20px}
   .textrate .item div:nth-child(1){padding: 20px}
   /*按钮*/

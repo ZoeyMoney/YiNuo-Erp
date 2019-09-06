@@ -81,7 +81,8 @@
                 </div>
                 <div class="mui-input-row all-row textreap">
                   <label>客户需求</label>
-                  <input type="text" v-model="customer_demand">
+<!--                  <input type="text" v-model="customer_demand">-->
+                  <textarea name="Customer_demand" rows="" cols="" v-model="customer_demand"></textarea>
                 </div>
                 <div class="mui-input-row update-btn">
                   <div>
@@ -639,6 +640,7 @@ ul{background-color: #efeff4;font-size: 15px}
 .input-commit button{float: left;width: 15%;padding: 2px;height: 26px;}
 .text-follow{font-weight: 600;margin-bottom: 10px}
 .commint-text{margin-bottom: 12px}
+.textreap{height: 100px}
 /*按钮*/
 .update-img label{width: 100%}
 .update-img{margin-bottom: 120px}
