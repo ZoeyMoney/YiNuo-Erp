@@ -39,12 +39,20 @@ export default {
   },
   methods: {
     go () {
+      var _this = this
+      var check = true
+      var regEn = /[`~!@#$%^&*()_+<>?:"{},.\\/;'[\]]/im,
+        regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im;
       if (this.name == '' || this.pwd == '') {
         mui.alert('请输入用户名或密码', function () {
           location.href = ''
         })
       } else {
-        var _this = this
+        if (regEn.test(this.name) || regCn.test(this.name)) {
+          mui.toast('不能含有特殊字符')
+          check = false
+          return false
+        }
         this.imgUrl_loading = true
         this.axios.post('/Login' + '?name=' + this.name + '&pwd=' + this.pwd).then(res => {
           var ree = 'ws://formattingclub.com/YiNuoLogin/websocket/' + res.data.userid
