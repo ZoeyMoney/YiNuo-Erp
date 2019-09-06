@@ -6,9 +6,9 @@
         <h1 class="mui-title">袋鼠帮帮</h1>
         <router-link :to="{name:'index'}" class="mui-action-back mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
-      <!--菜单-->
+      <!--菜单-->·
       <div class="one-noble">
-        <h2>袋鼠帮帮</h2>
+        <h2 >袋鼠帮帮</h2>
         <p>Customer management</p>
       </div>
       <!--九宫格-->
@@ -54,6 +54,5 @@ export default {
 
 <style scoped>
   .mui-bar-nav~.mui-content{padding-top: 31px}
-  *{font-size: 15px}
   span{display: block}
 </style>

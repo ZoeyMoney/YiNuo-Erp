@@ -23,15 +23,31 @@
               <input type="text" class="mui-input-clear" placeholder="请输入手机号" v-model="Customer_connect">
             </div>
             
-            <div class="row-left">
+            <div class="mui-input-row">
               <div class="row-left-on">
-                <label>所属类型</label>
+                <label>推荐人</label>
                 <select name="" v-model="Customer_type" :class="{classGray:Customer_type =='',classBlack: Customer_type!=''}">
                   <option value="">请选择</option>
                   <option v-for="item in list_type" :value="item.text">{{item.text}}</option>
                 </select>
               </div>
-             
+            </div>
+            <!-- <div class="block">
+                <span class="demonstration">工种</span>
+                <label>工种</label>
+                <el-cascader
+                  :options="options"
+                  :props="props"
+                  clearable></el-cascader>
+              </div> -->
+            <div class="row-left">
+              <div class="row-left-on">
+                <label>工种</label>
+                <el-cascader
+                  :options="options"
+                  :props="props"
+                  clearable></el-cascader>
+              </div>
             </div>
           </form>
         <button-save @click.native="go"></button-save>
@@ -45,16 +61,68 @@ export default {
   data () {
     return {
       imgUrl_loading:false,
-      Customer_name: '', // 项目名称
+      Customer_name: '', // 工人名称
       Customer_linkman: '', // 联系人
       Customer_connect: '', // 联系方式
       Customer_stylist: '', // 设计师
       listName: '', // 设计师集合
-      Customer_Decorate: '', // 装修面积
       Customer_referrer: '', // 推荐人
       Customer_budget: '', // 项目预算
-      Customer_type: '', // 所属类型
+      Customer_type: '', // 工种类型
       level:'A',//级别
+      
+       props: { multiple: true },//多选下拉框
+       options: [{
+          value: 1,
+          label: '水电',
+          children: [{
+            value: 2,
+            label: '上海',
+            children: [
+              { value: 3, label: '普陀' },
+              { value: 4, label: '黄埔' },
+              { value: 5, label: '徐汇' }
+            ]
+          }, {
+            value: 7,
+            label: '木工',
+            children: [
+              { value: 8, label: '南京' },
+              { value: 9, label: '苏州' },
+              { value: 10, label: '无锡' }
+            ]
+          }, {
+            value: 12,
+            label: '杂工',
+            children: [
+              { value: 13, label: '杭州' },
+              { value: 14, label: '宁波' },
+              { value: 15, label: '嘉兴' }
+            ]
+          }]
+        }, {
+          value: 17,
+          label: '西北',
+          children: [{
+            value: 18,
+            label: '陕西',
+            children: [
+              { value: 19, label: '西安' },
+              { value: 20, label: '延安' }
+            ]
+          }, {
+            value: 21,
+            label: '新疆维吾尔族自治区',
+            children: [
+              { value: 22, label: '乌鲁木齐' },
+              { value: 23, label: '克拉玛依' }
+            ]
+          }]
+        }],
+
+
+
+        
       listLevel:[
         {text:'A'},
         {text:'B'},
