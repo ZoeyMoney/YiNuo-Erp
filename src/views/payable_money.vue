@@ -99,7 +99,6 @@
 </template>
 
 <script>
-import url from '../components/config'
 export default {
   name: 'payable_money',
   data () {

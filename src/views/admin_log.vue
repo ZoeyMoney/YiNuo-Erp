@@ -75,23 +75,23 @@
 <script>
   export default {
     name: 'admin_log',
-    data(){
-      return{
-        text:'',
-        today:'',//今日
-        today_data:'',//今日时间
-        tomorrow:'',//明日
-        tomorrow_data:'',//明日时间
-        tomorrow_dates:'',
-        Yesterday:'',//昨日
-        textarea:'',//汇报内容
-        dates:'',
-        textareaval:'',
-        fasl:false,
-        over:'',
-        datas_s:'',
-        datass:'',
-        datessd:''
+    data () {
+      return {
+        text: '',
+        today: '',//今日
+        today_data: '',//今日时间
+        tomorrow: '',//明日
+        tomorrow_data: '',//明日时间
+        tomorrow_dates: '',
+        Yesterday: '',//昨日
+        textarea: '',//汇报内容
+        dates: '',
+        textareaval: '',
+        fasl: false,
+        over: '',
+        datas_s: '',
+        datass: '',
+        datessd: ''
       }
     },
     methods: {
@@ -117,12 +117,12 @@
         var dd = y + '-' + m + '-' + d + ' ' + t + ':' + MM + ':' + s
         var datesd = ''
         var fa = false
-        if (this.textareaval.length < 80) {
+        /*if (this.textarea.length < 80) {
           mui.toast('汇报内容不能低于80字')
           _true = false
           return false
-        }
-        for (var index in this.text) {
+        }*/
+        /*for (var index in this.text) {
           datesd = this.text[index].date.split(' ')[0]
           if (ds == datesd) {
             id = this.text[index].plan_id
@@ -136,6 +136,52 @@
               break
             }
           }
+        }*/
+
+        if (this.text.length == '0') {
+          if (this.textareaval.length < '80') {
+            mui.toast('汇报内容不能低于80字')
+            _true = false
+            return false
+          }
+          var adds = '?plan_text=' + this.textareaval
+          this.axios.post('/Administration/Add_Plan' + adds).then(res => {
+            if (res.status === 200) {
+            mui.alert('提交成功',function () {
+              then.$router.go(0)
+            })
+          }
+        })
+        }else if (this.text.length != '0') {
+            id = this.text[0].plan_id
+            if (this.textarea.length < '80') {
+              mui.toast('完成情况不能低于80字')
+              _true = false
+              return false
+            }
+            var add = '?plan_over=' + this.textarea + '&plan_id=' + id
+            this.imgUrl_loading = true
+            this.axios.post('/Administration/Update_Plan' + add).then(res => {
+              if (res.status === 200) {
+                this.imgUrl_loading = false
+                mui.alert('汇报完成', function () {
+                  then.$router.go(0)
+                })
+              }
+            })
+          if (this.textareaval.length < '80') {
+            mui.toast('汇报内容不能低于80字')
+            _true = false
+            return false
+          }
+          var adds = '?plan_text=' + this.textareaval
+          this.axios.post('/Administration/Add_Plan' + adds).then(res => {
+            if (res.status === 200) {
+              mui.alert('提交成功', function () {
+                then.$router.go(0)
+              })
+            }
+          })
         }
         /*if (t < '18') {
           mui.toast('六点后才可以汇报')
@@ -152,7 +198,7 @@
             _true = false
             return false
           }*/
-        var add = '?plan_over=' + this.textarea + '&plan_id=' + id
+        /*var add = '?plan_over=' + this.textarea + '&plan_id=' + id
         this.imgUrl_loading = true
         this.axios.post('/Administration/Update_Plan' + add).then(res => {
           if (res.status === 200) {
@@ -164,14 +210,14 @@
         })
         var adds = '?plan_text=' + this.textareaval
         this.axios.post('/Administration/Add_Plan' + adds).then(res => {
-          /*if (res.status === 200) {
+          /!*if (res.status === 200) {
             mui.alert('执行成功',function () {
               then.$router.push({name:'admin_log'})
             })
-          }*/
+          }*!/
         })
         if(this.textarea != '') {
-          if (this.textarea.length < 80) {
+          if (this.textareaval.length < 80) {
             mui.toast('汇报内容不能低于80字')
             _true = false
             return false
@@ -185,13 +231,15 @@
                 then.$router.go(0)
               })
             }
-          })
-        }
+          })*/
       },
       //查询信息
-      search_text(){
-        this.axios.get('/Administration/Select_Plan').then(res=>{
+      search_text () {
+        this.axios.get('/Administration/Select_Plan').then(res => {
           this.text = res.data.data
+          if (this.text[0].plan_over != '') {
+            this.textarea = this.text[0].plan_over
+          }
           // this.list_data(res.data.data)
           var datesd = ''
           var dier = ''
@@ -199,18 +247,18 @@
           var y = data.getFullYear()
           var m = data.getMonth() + 1
           if (m < 10) {
-            m='0'+m
+            m = '0' + m
           }
           var d = data.getDate()
           if (d < 10) {
-            d='0'+d
+            d = '0' + d
           }
           var t = data.getHours();
-          var MM =data.getMinutes();
+          var MM = data.getMinutes();
           var s = data.getSeconds();
-          var ds = y+'-'+m+'-'+d
+          var ds = y + '-' + m + '-' + d
           this.dates = ds
-          var dd = y+'-'+m+'-'+d+' '+t+':'+MM+':'+s
+          var dd = y + '-' + m + '-' + d + ' ' + t + ':' + MM + ':' + s
           for (var index in this.text) {
             datesd = this.text[index].date.split(' ')[0]
             if (ds == datesd) {
@@ -219,51 +267,47 @@
               if (this.text[index].plan_over != undefined) {
                 this.over = this.text[index].plan_over
               }
-            }else if (ds < datesd) {
+            } else if (ds < datesd) {
               this.tomorrow_data = datesd
               this.tomorrow = this.text[index].plan_text
               if (this.text[index].plan_over != undefined) {
                 this.over = this.text[index].plan_over
               }
             }
-
-            var dier = this.text[index.length-1].date.split(' ')[0]
+            var dier = this.text[index.length - 1].date.split(' ')[0]
             if (this.tomorrow_data == '') {
               var dad = new Date(dier)
               var yy = dad.getFullYear()
               var mm = dad.getMonth() + 1
               if (mm < 10) {
-                mm='0'+mm
+                mm = '0' + mm
               }
               var dds = dad.getDate() + 1
               if (dds < 10) {
-                dds='0'+dds
+                dds = '0' + dds
               }
-              this.tomorrow_data = yy+'-'+mm+'-'+dds
+              this.tomorrow_data = yy + '-' + mm + '-' + dds
             }
           }
 
-          if(ds < dier)  {
+          if (ds < dier) {
             this.fasl = true
-            console.log('123')
-          }else{
+          } else {
             this.fasl = false
           }
-          console.log(ds)
-          console.log(dier)
           if (res.data.data.length != '0') {
-          var datat = new Date(res.data.data[0].date)
-          var ys = datat.getFullYear()
-          var ms = datat.getMonth() + 1
-          if (ms < 10) {
-            ms='0'+ms
-          }
-          var ds = datat.getDate() + 1
-          if (ds < 10) {
-            ds='0'+ds
-          }
-          this.datas_s = '请输入'+ys+'-'+ms+'-'+ds+'计划'
-          this.datessd = ys+'-'+ms+'-'+ds
+            var datat = new Date(res.data.data[0].date)
+            var ys = datat.getFullYear()
+            var ms = datat.getMonth() + 1
+            if (ms < 10) {
+              ms = '0' + ms
+            }
+            var ds = datat.getDate() + 1
+            if (ds < 10) {
+              ds = '0' + ds
+            }
+            this.datas_s = '请输入' + ys + '-' + ms + '-' + ds + '计划'
+            this.datessd = ys + '-' + ms + '-' + ds
           }
         })
       },

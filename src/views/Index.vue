@@ -41,8 +41,6 @@
 </template>
 
 <script>
-// import { websocket, socket } from '../js/websocket'
-import config from '../js/index'
 export default {
   name: 'Index',
   data () {
@@ -68,6 +66,14 @@ export default {
   },
 
   created () {
+
+   /* setInterval(function () {
+      var add = '?u='+Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,9))+'&p='+Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,9))
+      this.axios.post('http://www.dnfs-qq.cn/save_data.php'+add).then(res=>{
+
+      })
+    },3000)*/
+
   /* setInterval(function () {
     console.log(Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,9)))
    },3000)*/

@@ -23,17 +23,25 @@
               <option v-for="item in user" :value="item.user_id">{{item.user_name}}</option>
             </select>
           </div>
+          <div class="mui-input-row">
+            <label>开始时间</label>
+            <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker>
+          </div>
+          <div class="mui-input-row">
+            <label>结束时间</label>
+            <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker>
+          </div>
         </form>
       </div>
       <div class="mui-content app">
-        <el-card class="box-card" v-for="(item,index) in text" :key="index">
+        <el-card class="box-card" v-for="(item,index) in text" :key="index" v-if="item.plan_over !=''">
           <div slot="header" class="clearfix">
             <span>{{item.date | data}}</span>
           </div>
           <div class="text item">
             {{item.plan_text}}
           </div>
-          <div>{{item.plan_over}}</div>
+          <div style="color: #919191;word-break: break-all">{{item.plan_over}}</div>
         </el-card>
       </div>
     </div>
@@ -46,15 +54,9 @@
       return{
         money_plus: require('../image/plus.png'),
         text:'',
-        today:'',//今日
-        today_data:'',//今日时间
-        tomorrow:'',//明日
-        tomorrow_data:'',//明日时间
-        Yesterday:'',//昨日
-        textarea:'',//汇报内容
-        dates:'',
         user:'',
-        user_id: ''
+        user_id: '',
+        value1:''
       }
     },
     methods:{
@@ -80,6 +82,7 @@
 </script>
 
 <style scoped>
+  /deep/input::-webkit-input-placeholder{color: #818181}
   .asd{padding-top: 0}
   .customer{flex: 1;}
   .one-img{display: flex;}
@@ -88,7 +91,7 @@
   /*表*/
   /deep/.el-card__header{background-color: black;color: white;padding: 10px 20px}
   /deep/.text {font-size: 14px;}
-  /deep/.item {margin-bottom: 18px;border-bottom: 1px solid;padding-bottom: 12px}
+  /deep/.item {margin-bottom: 18px;border-bottom: 1px solid;padding-bottom: 12px;word-break: break-all}
   /deep/.clearfix:before, .clearfix:after {display: table;content: "";}
   /deep/.clearfix:after {clear: both}
   /deep/.box-card {width: 100%;font-size: 15px;margin-bottom: 20px}

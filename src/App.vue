@@ -18,6 +18,7 @@ export default {
     }
   },
   created () {
+
     try {
       document.body.removeChild(document.getElementById('loading'))
       setTimeout(function () {

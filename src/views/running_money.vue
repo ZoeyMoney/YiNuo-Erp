@@ -8,10 +8,25 @@
       </header>
       <login-loading v-show="imgUrl_loading"></login-loading>
       <!--菜单-->
-      <div class="one-noble">
-        <h2>现金流水</h2>
-        <p>administration</p>
+      <div class="mui-content one-img">
+        <div class="customer">
+          <h2>现金流水</h2>
+          <p>/administration</p>
+        </div>
+        <div class="mui-img">
+<!--          <router-link :to="{name:'accounts_payable'}"><img :src="money_plus" alt="增加"></router-link>-->
+          <div>下载</div>
+        </div>
       </div>
+     <!-- <div class="mui-content">
+        <div class="one-noble">
+          <h2>现金流水</h2>
+          <p>administration</p>
+        </div>
+        <div class="one-noble">
+          123
+        </div>
+      </div>-->
       <!--form-->
       <div class="mui-content app">
         <form class="mui-input-group">
@@ -456,7 +471,10 @@ export default {
 
 <style scoped>
 @import "../css/public.css";
-.one-noble{padding-left: 4%}
+.customer{flex: 1;}
+.one-img{display: flex;}
+.mui-img{width: 36px;padding-top: 11%;padding-right: 9px;white-space: nowrap}
+.mui-img a img{width: 100%;}
 input,div{font-size: 15px;}
 .mui-input-group{background-color: transparent}
 form div select{background: transparent;font-size: 15px!important;}

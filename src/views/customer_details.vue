@@ -473,8 +473,10 @@ export default {
       this.axios.get('/Customer/AddFollow' + add).then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-          if (res.data.data == '添加成功') {
-          mui.toast('发送成功')
+          if (res.data == '添加成功') {
+            mui.alert(res.data,function () {
+              then.$router.go(0)
+            })
           }
         }
       })
