@@ -37,7 +37,7 @@ export default {
       list: [
         { name: '工人录入', listImg: require('../image/bi.png'), href: 'workers_enter' },
         { name: '工人统计', listImg: require('../image/data.png'), href: 'list_workers' },
-        { name: '工地评论', listImg: require('../image/cheliang.png'), href: 'site_Inspection' },
+        { name: '工人评论', listImg: require('../image/cheliang.png'), href: 'Workers_comments' },
         { name: '其他', listImg: require('../image/cheliang.png'), href: 'site_Inspection' }
       ],
       iR: {
