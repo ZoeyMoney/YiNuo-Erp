@@ -35,7 +35,7 @@
             <div class="row-left">
               <div class="row-left-on">
                 <label>工种</label>
-                <el-cascader :options="options" :props="props" v-model="value" @change="handleChange" collapse-tags clearable></el-cascader>
+                <el-cascader :options="options" :props="props" v-model="value" @change="handleChange" clearable></el-cascader>
               </div>
             </div>
           </form>
