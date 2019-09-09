@@ -3,12 +3,12 @@
     <!--返回-->
     <header class="mui-bar mui-bar-nav">
       <router-link :to="{name:'site_statistics'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
-      <h1 class="mui-title">客户详细</h1>
+      <h1 class="mui-title">工地详细</h1>
       <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
     </header>
     <div class="mui-content">
       <div class="customer">
-        <h2>客户详细</h2>
+        <h2>工地详细</h2>
         <p>/The customer details</p>
       </div>
     </div>
@@ -20,11 +20,11 @@
         <div>{{divname}}</div>
       </div>
       <div class="all-hoh" style="padding-bottom:12px;font-size: 14px;">
-        <div class="all-name">工地名称：</div>
-        <div class="all-name">时间进度:</div>
+        <div class="all-name">工地名称&nbsp;&nbsp;</div>
+ 
         <div style="height: 300px;padding-right:13px;padding-bottom:30px;">
           <span class="font">
-            <span>总进度</span>&nbsp;&nbsp; 2018.9.15 — 2019-10.10
+            <span>时间进度</span>&nbsp;&nbsp; 2018.9.15 — 2019-10.10
           </span>
           <el-progress :text-inside="true" :stroke-width="24"  :percentage="99" status="success" class="jindu"></el-progress>
 
@@ -52,17 +52,50 @@
             </li>
           </ul>
 
-          <div style="float: right;margin-right: 13px;">
+          <div style="margin-right: 13px;">
             <el-button-group>
               <el-button icon="el-icon-plus" @click="increase" class="jia"></el-button>
             </el-button-group>
           </div>
         </div>
-       <div class="all-name2"><span>工地利润&nbsp;:&nbsp;</span>￥100000</div>
-        <el-collapse v-model="activeNames" @change="handleChange"  class="xiala">
+        <!-- 人工列表 -->
+       <div class="all-name2"><span>用工总数&nbsp;&nbsp;</span>100000</div>
+          <el-collapse v-model="activeName" accordion @change="handleChange"  class="xiala">
+          <el-collapse-item title="人工分类" name="1">
+            <div>
+             <table>
+                <tr class="biaotou">
+                  <th><span>工种</span></th>
+                  <th><span>人数</span></th>
+                
+                </tr>
+                <tr>
+                  <td>工程款</td>
+                  <td>9999</td>
+                  
+                </tr>
+                <tr>
+                  <td>设计费</td>
+                  <td>8888</td>
+                  
+                </tr>
+                <tr>
+                  <td>增项款</td>
+                  <td>66666</td>
+                  
+                </tr>
+              </table>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+
+<!-- 
+利潤列表 -->
+       <div class="all-name2"><span>工地利润&nbsp;&nbsp;</span>￥100000</div>
+        <el-collapse v-model="activeNames" accordion @change="handleChange"  class="xiala">
           
           </el-collapse-item>
-          <el-collapse-item title="已收款￥9999" name="2">
+          <el-collapse-item title="已收款￥9999" name="1">
             <div>
              <table>
                 <tr class="biaotou">
@@ -91,20 +124,65 @@
             </div>
            
       </el-collapse-item>
-     <el-collapse-item title="待收款￥9999" name="3">
-            <div>1</div>
-            <div>2</div>
-            <div>2</div>
+     <el-collapse-item title="待收款￥9999" name="2">
+          <div>
+             <table>
+                <tr class="biaotou">
+                  <th><span>款项名称</span></th>
+                  <th><span>金额</span></th>
+                  <th><span>日期</span></th>
+                  <th class="beizhu"><span>备注</span></th>
+                </tr>
+                <tr>
+                  <td>工程款</td>
+                  <td>9999</td>
+                  <td>2019-08-10</td>
+                  <td>花开也落花满天南岸按的撒水电按属地按属地</td>
+                </tr>
+                <tr>
+                  <td>设计费</td>
+                  <td>8888</td>
+                  <td>2019-08-10</td>
+                </tr>
+                <tr>
+                  <td>增项款</td>
+                  <td>66666</td>
+                  <td>2019-08-10</td>
+                </tr>
+              </table>
+            </div>
+           
       </el-collapse-item>
-      <el-collapse-item title="已支出￥88888 " name="4">
-            <div>2</div>
-            <div>2</div>
+      <el-collapse-item title="已支出￥88888 " name="3">
+           <div>
+             <table>
+                <tr class="biaotou">
+                  <th><span>款项名称</span></th>
+                  <th><span>金额</span></th>
+                  <th><span>日期</span></th>
+                  <th class="beizhu"><span>备注</span></th>
+                </tr>
+                <tr>
+                  <td>工程款</td>
+                  <td>9999</td>
+                  <td>2019-08-10</td>
+                  <td>花开也落花满天南岸按的撒水电按属地按属地</td>
+                </tr>
+                <tr>
+                  <td>设计费</td>
+                  <td>8888</td>
+                  <td>2019-08-10</td>
+                </tr>
+                <tr>
+                  <td>增项款</td>
+                  <td>66666</td>
+                  <td>2019-08-10</td>
+                </tr>
+              </table>
+            </div>
+           
       </el-collapse-item>
-      <el-collapse-item title="运营费￥66666" name="4">
-            <div>2</div>
-            <div>2</div>
-      </el-collapse-item>
-      <el-collapse-item title="人工费￥66666" name="4">
+       <el-collapse-item title="待支出￥66666" name="5">
              <table>
                 <tr>
                   <th>工种</th>
@@ -131,6 +209,11 @@
                 </tr>
               </table>
       </el-collapse-item>
+      <el-collapse-item title="运营费￥66666" name="4">
+            <div>2</div>
+            <div>2</div>
+      </el-collapse-item>
+     
         </el-collapse>
       </div>
     </div>
@@ -333,6 +416,8 @@ ul {
   }
   .all-name {
     margin-bottom: 12px;
+    font-weight: 700;
+    font-size: 15px
   }
   .all-hot div {
     flex: 1;
@@ -381,10 +466,11 @@ ul {
   .font {
     font-size: 13px;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 13px;
   }
   .font span {
     font-weight: 700;
+    font-size: 15px;
   }
   h6 {
     float: left;
@@ -428,7 +514,9 @@ ul {
      height: 30px;
      display: block;
      overflow: hidden;
-         white-space: nowrap;
+    white-space: nowrap;
+    word-break:keep-all;
+    text-overflow:ellipsis;
   }
   tbody {
     display: block;
@@ -493,7 +581,7 @@ th {
 }
 .all-name2 {
   font-size: 15px;
-  margin-bottom: 20px;
+margin-top: 20px;
 }
 .all-name2 span{
 font-weight: 700;
