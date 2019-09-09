@@ -96,7 +96,7 @@
           
           </el-collapse-item>
           <el-collapse-item title="已收款￥9999" name="1">
-            <div>
+            <div >
              <table>
                 <tr class="biaotou">
                   <th><span>款项名称</span></th>
@@ -510,7 +510,7 @@ ul {
   }
    table tr td:nth-child(4) {
      padding-left: 5px;
-     width: 140px;
+     width: 110px;
      height: 30px;
      display: block;
      overflow: hidden;
@@ -581,7 +581,7 @@ th {
 }
 .all-name2 {
   font-size: 15px;
-margin-top: 20px;
+margin: 20px 0px 10px 0px;
 }
 .all-name2 span{
 font-weight: 700;
@@ -595,5 +595,7 @@ height: 30px;
 
 padding-left: 5px;
 }
-
+.el-collapse-item__header{
+  height: 24px;
+}
 </style>

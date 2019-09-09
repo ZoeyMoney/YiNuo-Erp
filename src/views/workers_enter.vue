@@ -62,8 +62,15 @@ export default {
   },
   methods: {
     handleChange(id){
+     var id =id
+      if(id!=undefined){
       var str = id.join('-')
-      this.list_value = str
+      console.log(str)
+      }
+      
+      // this.list_value = str
+
+  
     },
     go () {
       var _this = this
@@ -124,7 +131,7 @@ export default {
     this.axios.get('/DaiShu/Sort/Select_sort?type=1').then(res=>{
       var value1 = res.data.data
       var datas = value1 => value1.map(({id,name,list_Sort})=>(list_Sort ? {
-        value : id,
+        // value : id,
         label : name,
         children:datas(list_Sort)
       }:{

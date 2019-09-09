@@ -185,6 +185,7 @@ export default {
       list_fund_name: [], // 设计费
       listRelevant: '', // 相关人下拉
       listRelevant_id: '', // 相关人ID
+         radio: '1', //单选框
       list_bank_card_person: [
         { text: '胡永生' },
         { text: '邱梅' }
@@ -522,6 +523,8 @@ select{font-size: 15px!important;}
 .form-btn{background-color: #EFEFF4!important;margin-top: 20px;padding-bottom: 0;margin-bottom: 20px}
 .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
 .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}
+
+
 /*table*/
 .all{display: flex;margin-bottom: 12px;margin-left: 15px}
 .saving,.all-money{font-weight: bold}
