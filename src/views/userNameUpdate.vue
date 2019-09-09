@@ -33,7 +33,7 @@
           </div>
           <div class="mui-input-row">
             <label>职务</label>
-            <select name="" v-model="Position" :class="{gred:Position=='',black:Position!=''}" @focus="forbid">
+            <select name="" v-model="Position" :class="{gred:Position=='',black:Position!=''}">
               <option value="">请选择</option>
               <option v-for="item in list_Position" :value="item.text">{{item.text}}</option>
             </select>
@@ -81,7 +81,7 @@ export default {
       list_department:[
         {text:'设计部门'},
         {text:'远控部门'},
-        {text:'网络部门'},
+        {text:'袋鼠帮帮部门'},
         {text:'工程部门'},
       ],
       Position:'',//职务
@@ -94,6 +94,7 @@ export default {
         {text:'财务部长'},
         {text:'品管部长'},
         {text:'人事部长'},
+        {text:'项目监理'},
       ],
       id_card:'',//身份证号
       // birthday:'',//生日
@@ -115,10 +116,10 @@ export default {
     }
   },
   methods:{
-    forbid () {
+    /*forbid () {
       // 禁止软键盘弹出
       document.activeElement.blur()
-    },
+    },*/
     //信息查询
     info(){
       this.axios.get('/User/Select_User?user_id='+sessionStorage.getItem('loginUserId')).then(res=>{
@@ -239,4 +240,10 @@ export default {
   /deep/.el-input__prefix{display: none}
   /deep/.el-input--prefix .el-input__inner{font-size: 15px}
   select{font-size: 15px}
+   input[type=datetime-local]{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline:none;border:none;}
+      select{-webkit-appearance: none;}
 </style>

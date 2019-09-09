@@ -30,7 +30,8 @@
               :maxlength="150"
               :minlength="50"
               v-model="textarea"
-              :show-word-limit="true"></el-input>
+              :show-word-limit="true"
+              :disabled="addfo"></el-input>
           </div>
         </el-card>
         <el-card class="box-card" v-if="text.length>0">
@@ -88,6 +89,7 @@
         dates: '',
         textareaval: '',
         fasl: false,
+        addfo:false,
         over: '',
         datas_s: '',
         datass: '',
@@ -139,8 +141,8 @@
         }*/
 
         if (this.text.length == '0') {
-          if (this.textareaval.length < '80') {
-            mui.toast('汇报内容不能低于80字')
+          if (this.textareaval.length < '50') {
+            mui.toast('汇报内容不能低于50字')
             _true = false
             return false
           }
@@ -153,9 +155,10 @@
           }
         })
         }else if (this.text.length != '0') {
+
             id = this.text[0].plan_id
-            if (this.textarea.length < '80') {
-              mui.toast('完成情况不能低于80字')
+            if (this.textarea.length < '30') {
+              mui.toast('完成情况不能低于30字')
               _true = false
               return false
             }
@@ -289,7 +292,21 @@
               this.tomorrow_data = yy + '-' + mm + '-' + dds
             }
           }
-
+          //判断是否大于今天如果大于今天则不能编写明天的完成情况
+          /*if (this.dates < datesd) {
+            this.addfo = true
+            console.log('123')
+          }else{
+            this.addfo = false
+            console.log('456')
+          }*/
+          /*console.log(dier)
+          console.log(this.dates)*/
+          if (this.dates < dier) {
+            this.addfo = true
+          }else{
+            this.addfo = false
+          }
           if (ds < dier) {
             this.fasl = true
           } else {

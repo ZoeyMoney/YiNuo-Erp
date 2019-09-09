@@ -28,7 +28,7 @@ export default {
       list: [
         { href: 'SettingName', test: '修改用户名' },
         { href: 'SettingPwd', test: '修改密码' },
-        { href: 'userNameUpdate',test:'个人中心'}
+        { href: 'userNameUpdate',test:'个人信息'}
       ]
     }
   },

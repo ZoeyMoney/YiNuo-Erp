@@ -26,8 +26,8 @@
         </div>
         <div class="all-hot">
           <div>已付金额：￥{{all_paid | negative}}</div>
-          <div>质保金额：￥{{no_paid | negative}}</div>
           <div>应付金额：￥{{enter_paid | negative}}</div>
+          <div>质保金额：￥{{no_paid | negative}}</div>
         </div>
         <div class="Comment">
           <p>注：金额显示红色,表示该金额未最终确定,请尽快与监理联系确认.时间显示为'待确认',表示为该款项付款时间待定,会计会根据工程完成时间及财务状况及时更新,请关注核对.</p>

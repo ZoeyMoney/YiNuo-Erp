@@ -13,22 +13,13 @@
           <h2>现金流水</h2>
           <p>/administration</p>
         </div>
-        <div class="mui-img">
-<!--          <router-link :to="{name:'accounts_payable'}"><img :src="money_plus" alt="增加"></router-link>-->
-          <div>下载</div>
-        </div>
       </div>
-     <!-- <div class="mui-content">
-        <div class="one-noble">
-          <h2>现金流水</h2>
-          <p>administration</p>
-        </div>
-        <div class="one-noble">
-          123
-        </div>
-      </div>-->
-      <!--form-->
       <div class="mui-content app">
+        <div class="dowlog">
+          <el-link type="primary"><a :href="link" class="cff">下载账单</a></el-link>
+
+          <el-link type="success" @click="recent">最近数据</el-link>
+        </div>
         <form class="mui-input-group">
         <div class="mui-input-row">
           <label>输入关键字</label>
@@ -112,13 +103,6 @@
         <div class="div-tr" v-for="item in list_moeys" v-if="al_projet">
           <div>{{item.bank_person}}</div>
           <div>{{item.bank_bank}}</div>
-          <!--<div>
-            <span v-if="item.customer_name && item.fund_name != '手续费'" :style="nameWidth">{{item.customer_name}}</span>
-            <span v-if="item.bank_deal_money" :style="nameWidth">转账</span>
-            <span v-if="item.bank_deal_money===0 && !item.customer_name && item.fund_details_money>0 && item.fund_name != '手续费'" :style="nameWidth">收入</span>
-            <span v-if="item.bank_deal_money===0 && !item.customer_name && item.fund_details_money<0 && item.fund_name != '手续费'" :style="nameWidth">支出</span>
-            <span v-if="item.fund_name ==='手续费'">手续费</span>
-          </div>-->
           <div>
             <span @click="person(item.fund_detail_transaction_id)"
                   :class="{money_green:item.fund_detail_transaction_money>0,
@@ -136,13 +120,6 @@
           <div class="div-tr" v-for="item in list_moey_two" v-if="al_projet_two">
             <div>{{item.bank_person}}</div>
             <div>{{item.bank_bank}}</div>
-            <!--<div>
-              <span v-if="item.customer_name && item.fund_name != '手续费'" :style="nameWidth">{{item.customer_name}}</span>
-              <span v-if="item.bank_deal_money" :style="nameWidth">转账</span>
-              <span v-if="item.bank_deal_money===0 && !item.customer_name && item.fund_details_money>0 && item.fund_name != '手续费'" :style="nameWidth">收入</span>
-              <span v-if="item.bank_deal_money===0 && !item.customer_name && item.fund_details_money<0 && item.fund_name != '手续费'" :style="nameWidth">支出</span>
-              <span v-if="item.fund_name ==='手续费'">手续费</span>
-            </div>-->
             <div>
             <span @click="person(item.fund_detail_transaction_id)"
                   :class="{money_green:item.fund_detail_transaction_money>0,
@@ -213,10 +190,12 @@ export default {
       fundNamesa_id: '',
       listFund_name_id: '',
       customerName_id: '',
+      link:'',//下载连接
       dataA: '',
       dataB: '',
       menuBankNumber: '',
       fund_details_id: '', // 传参id
+      sh_data:'',//前两天时间
       all_all: '',
       leftshi: {
         paddingLeft: '10px'
@@ -253,6 +232,7 @@ export default {
     this.imgUrl_loading = true
     // 获取前两天时间
     var sh_data = this.GetDateStr(-2)
+    this.sh_data = sh_data
     // 传给后台时间
     this.axios.get('/fund/select_detail' + '?DateStart=' + sh_data).then(res => {
       if (res.status === 200) {
@@ -305,8 +285,64 @@ export default {
       this.al_projet_two = true
       this.list_moey_two = window.transfer
     }
+    this.links()
   },
   methods: {
+    //下载
+    /*Download(){
+    //  传type =0
+      this.axios.get('/fund/select_detail?type=0').then(res=>{
+        if (res.status === 200) {
+          this.link = 'https://formattingclub.com/static/YiNuo/excel' + res.data.data
+          console.log(this.link)
+        }
+      })
+    },*/
+    //下载获取接口
+    links(){
+      this.axios.get('/fund/select_detail?type=0').then(res=>{
+        if (res.status === 200) {
+          this.link = 'https://formattingclub.com/static/YiNuo/excel' + res.data.data
+        }
+      })
+    },
+    //最近账单
+    recent(){
+    //  传 type=1
+      var add = ''
+      if (this.bankPerson_id != '') {
+        add+='&bank_person='+this.bankPerson_id
+      }
+      if (this.bankNumber_id != '') {
+        add+='&bank_number='+this.bankNumber_id
+      }
+      if (this.bankBank_id != '') {
+        '&bank_bank='+this.bankBank_id
+      }
+      if (this.fundNamesa_id != '') {
+        add+='&fund_name_type='+this.fundNamesa_id
+      }
+      if (this.listFund_name_id != '') {
+        add+='&fund_names='+this.listFund_name_id
+      }
+      if (this.customerName_id != '') {
+        add+='&Customer_id='+this.customerName_id
+      }
+      if (this.sh_data != '' && this.dataA =='') {
+        add+='&typeStart='+this.sh_data
+      }
+      if (this.dataA != '') {
+        add+='&typeStart='+this.dataA
+      }
+      if (this.dataB != '') {
+        add+='&typeEnd='+this.dataB
+      }
+      this.axios.get('/fund/select_detail?type=1'+add).then(res=>{
+        if (res.status === 200) {
+          this.package(res)
+        }
+      })
+    },
     // 查询
     search_fa () {
       this.al_projet_two = false
@@ -471,6 +507,9 @@ export default {
 
 <style scoped>
 @import "../css/public.css";
+.cff{color: #05acff}
+.dowlog{padding: 0 11px;margin-bottom: 11px}
+/deep/.el-link.el-link--success{margin-left: 39px}
 .customer{flex: 1;}
 .one-img{display: flex;}
 .mui-img{width: 36px;padding-top: 11%;padding-right: 9px;white-space: nowrap}

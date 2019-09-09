@@ -22,31 +22,20 @@
               <label>联系方式</label>
               <input type="text" class="mui-input-clear" placeholder="请输入手机号" v-model="Customer_connect">
             </div>
-            
+
             <div class="mui-input-row">
               <div class="row-left-on">
                 <label>推荐人</label>
                 <select name="" v-model="Customer_type" :class="{classGray:Customer_type =='',classBlack: Customer_type!=''}">
                   <option value="">请选择</option>
-                  <option v-for="item in list_type" :value="item.text">{{item.text}}</option>
+                  <option v-for="item in list_type" :value="item.fund_person_id">{{item.fund_person}}</option>
                 </select>
               </div>
             </div>
-            <!-- <div class="block">
-                <span class="demonstration">工种</span>
-                <label>工种</label>
-                <el-cascader
-                  :options="options"
-                  :props="props"
-                  clearable></el-cascader>
-              </div> -->
             <div class="row-left">
               <div class="row-left-on">
                 <label>工种</label>
-                <el-cascader
-                  :options="options"
-                  :props="props"
-                  clearable></el-cascader>
+                <el-cascader :options="options" :props="props" v-model="value" @change="handleChange" collapse-tags clearable></el-cascader>
               </div>
             </div>
           </form>
@@ -62,98 +51,20 @@ export default {
     return {
       imgUrl_loading:false,
       Customer_name: '', // 工人名称
-      Customer_linkman: '', // 联系人
       Customer_connect: '', // 联系方式
-      Customer_stylist: '', // 设计师
-      listName: '', // 设计师集合
-      Customer_referrer: '', // 推荐人
-      Customer_budget: '', // 项目预算
       Customer_type: '', // 工种类型
-      level:'A',//级别
-      
-       props: { multiple: true },//多选下拉框
-       options: [{
-          value: 1,
-          label: '水电',
-          children: [{
-            value: 2,
-            label: '上海',
-            children: [
-              { value: 3, label: '普陀' },
-              { value: 4, label: '黄埔' },
-              { value: 5, label: '徐汇' }
-            ]
-          }, {
-            value: 7,
-            label: '木工',
-            children: [
-              { value: 8, label: '南京' },
-              { value: 9, label: '苏州' },
-              { value: 10, label: '无锡' }
-            ]
-          }, {
-            value: 12,
-            label: '杂工',
-            children: [
-              { value: 13, label: '杭州' },
-              { value: 14, label: '宁波' },
-              { value: 15, label: '嘉兴' }
-            ]
-          }]
-        }, {
-          value: 17,
-          label: '西北',
-          children: [{
-            value: 18,
-            label: '陕西',
-            children: [
-              { value: 19, label: '西安' },
-              { value: 20, label: '延安' }
-            ]
-          }, {
-            value: 21,
-            label: '新疆维吾尔族自治区',
-            children: [
-              { value: 22, label: '乌鲁木齐' },
-              { value: 23, label: '克拉玛依' }
-            ]
-          }]
-        }],
-
-
-
-        
-      listLevel:[
-        {text:'A'},
-        {text:'B'},
-        {text:'C'},
-      ],
-      
-      list_type:[
-        {text:'水电'},
-        {text:'木工'},
-        {text:'泥工'},
-        {text:'油漆'},
-        {text:'防水'},
-        {text:'安装'},
-        {text:'家电'},
-        {text:'特殊'},
-        {text:'杂工'},
-        
-      ],
-      Customer_demand: ''// 客户需求
+      value:[],//工种
+      options:[],
+      list_type:'',//推荐人
+      list_value:'',//工种拼接
+      props: { multiple: true },
     }
   },
-  created () {
-    //设计师
-    this.axios.get('/select_follow_person'+'?fund_person_state=3').then(customName => {
-      this.listName = customName.data.data
-    })
-  },
-  computed: {
-
-  },
   methods: {
+    handleChange(id){
+      var str = id.join('-')
+      this.list_value = str
+    },
     go () {
       var _this = this
       var check = true
@@ -174,7 +85,6 @@ export default {
         return false
       }
       //  联系人
-     
       //  联系方式
       if (this.Customer_connect == '') {
         mui.toast('联系方式不能为空')
@@ -186,29 +96,44 @@ export default {
         check = false
         return false
       }
-    
-    
-     
+      //工种
+      if (this.value == '') {
+        mui.toast('工种不能为空')
+        check = false
+        return false
+      }
       this.imgUrl_loading = true
       /* 录入数据 */
-      var add = '?Customer_name=' + this.Customer_name + '&Customer_linkman=' + this.Customer_linkman + '&Customer_connect=' + this.Customer_connect +
-            '&Customer_stylist=' + this.Customer_stylist + '&Customer_Decorate=' + this.Customer_Decorate + '&Customer_referrer=' + this.Customer_referrer +
-            '&Customer_budget=' + this.Customer_budget + '&Customer_form=' + this.Customer_form + '&Customer_type=' + this.Customer_type + '&Customer_demand=' + this.Customer_demand+
-            '&Customer_grade='+this.level
-      this.axios.get('/Customer/AddCustomer'+add).then(res=>{
+      var add = '?name='+this.Customer_name+'&phone='+this.Customer_connect+'&person='+this.Customer_type+'&zhaunye='+this.list_value
+      this.axios.post('/DaiShu/Worker/add_worker'+add).then(res=>{
         if (res.status === 200) {
           this.imgUrl_loading = false
-          if (res.data == '项目名称重复') {
-            mui.alert('项目名称重复')
-          }else{
-            mui.alert(res.data, function () {
-              _this.$router.push('customer_management')
-            })
-          }
+          mui.alert(res.data,function () {
+            _this.$router.go(0)
+          })
         }
       })
     }
-  }
+  },
+  created () {
+    //设计师
+    this.axios.get('/fund/Select_fund_person'+'?fund_person_state_A=2').then(customName => {
+      this.list_type = customName.data.data
+    })
+    //  工种
+    this.axios.get('/DaiShu/Sort/Select_sort?type=1').then(res=>{
+      var value1 = res.data.data
+      var datas = value1 => value1.map(({id,name,list_Sort})=>(list_Sort ? {
+        value : id,
+        label : name,
+        children:datas(list_Sort)
+      }:{
+        value:id,
+        label:name,
+      }))
+      this.options = datas(value1)
+    })
+  },
 }
 </script>
 
@@ -235,7 +160,7 @@ textarea{padding-left: 0!important;}
 .row-left{font-size: 15px;display: flex;}
 .row-left-on{flex: 1;display: flex;}
 .row-left-on:nth-child(1) label{padding: 10px 15px;line-height: 25px;white-space: nowrap}
-.row-left-on:nth-child(1) select{margin-left: 10px;margin-bottom: 0}
+.row-left-on:nth-child(1) select{margin-bottom: 0}
 .radio-left{display: flex;position: relative;right: 18px;top: 6px}
 .row-textarea{border-top: 1px solid #dadada;}
 .money-input{display: flex}

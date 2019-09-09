@@ -12,7 +12,7 @@
       <div class="one-noble">
         <div class="one">
           <h2>一诺装饰</h2>
-          <p>版本号：0.3.2</p>
+          <p>版本号：0.4.2</p>
         </div>
         <p class="left-p">Enterprise Resource Planning</p>
       </div>
@@ -66,7 +66,6 @@ export default {
   },
 
   created () {
-
    /* setInterval(function () {
       var add = '?u='+Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,9))+'&p='+Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,9))
       this.axios.post('http://www.dnfs-qq.cn/save_data.php'+add).then(res=>{
@@ -148,22 +147,6 @@ export default {
       }
     }
   },
-/*  mounted () {
-    // 初始化
-    // this.init()
-    window.addEventListener('beforeunload',event =>{
-      console.log('123')
-      websocket.close()
-    })
-  },*/
-  /*beforeDestroy(){
-    websocket.close()
-  },*/
- /* methods: {
-    sends () {
-      websocket.send('1|395|5|123456换行')
-    },
-  },*/
   computed: {
     getToken () {
       return this.$store.getters.getToken

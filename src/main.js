@@ -17,8 +17,10 @@ import negative from './components/negative' // 过滤减号特殊字符
 import buttonSave from './components/button_save' // 组件调用button
 import dataValue from './components/DateValue' // 时间控件
 import loginLoading from './components/login_loading' // 时间控件
+import runingMoneyCard from './components/running_money' // 银行卡
 import VueTouch from 'vue-touch' // 滑动
 // import 'vue-xlsx-table/dist/style.css'
+Vue.use(runingMoneyCard)
 Vue.use(loginLoading)
 Vue.use(buttonSave)
 Vue.use(dataValue)
@@ -34,6 +36,12 @@ const ser = Vue.prototype.axios = axios.create({
 })
 // 添加请求拦截器
 ser.interceptors.request.use(config => {
+  //每次提交携带token，2019-9-6 携带token后台被拦截
+  /*console.log(sessionStorage.getItem('loginToken'))
+  if (sessionStorage.getItem('loginToken')) {
+    config.headers.Authorization = `${sessionStorage.getItem('loginToken')}`
+    console.log('123')
+  }*/
   return config
 }, error => {
   return Promise.reject(error)

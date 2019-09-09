@@ -17,6 +17,14 @@
           <input type="password" placeholder="请输入密码" v-model="pwd" autocomplete="off">
         </div>
       </form>
+<!--      确认框-->
+     <!-- <div class="meg" v-show="config">
+        <div class="msg">
+          <div class="font">提示</div>
+          <div class="msg-box">登录成功</div>
+          <div class="add" @click="add">确定</div>
+        </div>
+      </div>-->
       <div class="mui-button-row go-btn">
         <button type="button" @click="go">登录</button>
       </div>
@@ -31,7 +39,8 @@ export default {
       name: '',
       pwd: '',
       imgUrl_loading: false,
-      imgSrc: require('../image/2146070222.jpg')
+      imgSrc: require('../image/2146070222.jpg'),
+      config:false
     }
   },
   created () {
@@ -55,26 +64,44 @@ export default {
         }
         this.imgUrl_loading = true
         this.axios.post('/Login' + '?name=' + this.name + '&pwd=' + this.pwd).then(res => {
-          var ree = 'ws://formattingclub.com/YiNuoLogin/websocket/' + res.data.userid
           if (res.status === 200) {
             this.imgUrl_loading = false
+            this.config = true
+            /*//创建div
+            var div = document.createElement('div')
+            //给div加class
+            var divarr = document.createAttribute('class')
+            //class命名
+            divarr.value = 'test'
+            //给div创建点击绑定事件
+            div.setAttributeNode(divarr)
+            var style = document.createAttribute('style')
+            div.setAttributeNode(style)
+            div.style.width = '80%'
+            div.innerHTML = '12312332123123312'
+
+            document.getElementsByTagName('body').item(0).append(div)*/
             if (res.data.msg === '登录成功') {
-              mui.alert(res.data.msg, function () {
-                sessionStorage.setItem(config.KEY.CACHE_LOGIN_USER, _this.name)
-                sessionStorage.setItem(config.KEY.CACHE_LOGIN_ID, res.data.userid)
-                sessionStorage.setItem(config.KEY.CACHE_LOGIN_NAME,res.data.userNumber)
-                localStorage.data = JSON.stringify(res.data)
-                _this.$store.commit('isLogin', res.data.userid)
-                // _this.$router.push('index')
-                _this.$router.push({ name: 'index' })
-              })
+              // mui.alert(res.data.msg, function () {
+              sessionStorage.setItem(config.KEY.CACHE_LOGIN_USER, _this.name)
+              sessionStorage.setItem(config.KEY.CACHE_LOGIN_ID, res.data.userid)
+              sessionStorage.setItem(config.KEY.CACHE_LOGIN_NAME,res.data.userNumber)
+              sessionStorage.setItem(config.KEY.CACHE_LOGIN_TOKEN,res.data.token)
+              localStorage.data = JSON.stringify(res.data)
+              _this.$store.commit('isLogin', res.data.userid)
+              // _this.$router.push('index')
+              _this.$router.push({ name: 'index' })
+              // })
             } else {
               mui.alert('账号或密码错误')
             }
           }
         })
       }
-    }
+    },
+    /*add(){
+
+    }*/
   }
 }
 </script>
@@ -93,4 +120,14 @@ export default {
   .bcg-form .input-rot label{font-size: 15px;color: #464646;width: 20%;padding-left: 27px;}
   .bcg-form .input-rot input{width: 72%;margin-bottom: 0;-webkit-border-radius: 50px;-moz-border-radius: 50px;border-radius: 50px;background-color: transparent!important;border: 0;padding: 0 36px;color: #464646;}
   .go-btn button{width: 89%;line-height: 28px;-webkit-border-radius: 30px;-moz-border-radius: 30px;border-radius: 30px;background-color: rgba(112, 60, 24,0.4);border: 0;color: #464646;letter-spacing: 15px}
+   input[type=datetime-local]{-webkit-appearance:none;outline:none;border:none;}
+      select{-webkit-appearance: none;}
+
+  /*弹窗*/
+  .msg{width: 80%;margin: auto;text-align: center;background-color: white;position: relative;top: 35%;z-index: 1000;padding: 18px;
+    -webkit-border-radius: 18px;
+    -moz-border-radius: 18px;
+    border-radius: 18px;}
+  .meg{background-color: rgba(135, 135, 135, 0.31);position: absolute;left: 0;top: 0;right: 0;bottom: 0;z-index: 1000}
+
 </style>

@@ -23,6 +23,7 @@
         <form class="mui-input-group">
           <div class="mui-input-row row-label">
             <label>转出</label>
+<!--            <input type="text" v-model="bank_out" placeholder="请选择下列银行卡" disabled="disabled">-->
             <label>
               <select  v-model="bank_out_id" name="" id="enter" :class="{select:bank_out_id==='',selectBlack:bank_out_id!==''}" >
                 <option value="" selected="selected">请选择</option>
@@ -35,6 +36,7 @@
           </div>
           <div class="mui-input-row row-label">
             <label>转入</label>
+<!--            <input type="text" v-model="bank_enter" placeholder="请选择下列银行卡" disabled="disabled">-->
             <label>
               <select  v-model="bank_enter_id" id="out" :class="{select:bank_enter_id==='',selectBlack:bank_enter_id!==''}" >
                 <option value="" selected="selected">请选择</option>
@@ -66,48 +68,82 @@
           <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="go">Transfers</button>
         </div>
       </div>
-      <!--table-->
-      <div class="mui-content all">
-        <div class="saving">储蓄卡</div>
-        <div class="all-money">￥{{addMoney}}</div>
-      </div>
-      <table class="all-saving" border="0" cellspacing="" cellpadding="">
-        <tr>
-          <td style="width: 21%">开户行</td>
-          <td style="width: 15%">户主</td>
-          <td>余额</td>
-        </tr>
-        <tr v-for="item in chuxuka" @click="msgCu(item.bank_bank,item.bank_person,item.number)">
-          <td>{{item.bank_bank}}</td>
-          <td>{{item.bank_person}}</td>
-          <td>￥{{item.bank_money}}</td>
-        </tr>
-      </table>
-      <div class="mui-content all">
-        <div class="saving">信用卡</div>
-        <div class="all-money">￥{{xinMoney}}</div>
-      </div>
-      <table class="blaner" border="0" cellspacing="" cellpadding="">
-        <tr>
-          <td style="width: 21%">开户行</td>
-          <td style="width: 15%">户主</td>
-          <td>余额</td>
-          <td>额度</td>
-        </tr>
-        <tr v-for="item in xinyong" @click="msgCu(item.bank_bank,item.bank_person,item.number)">
-          <td>{{item.bank_bank}}</td>
-          <td>{{item.bank_person}}</td>
-          <td>￥{{item.bank_money}}</td>
-          <td>￥{{item.bank_limit}}</td>
-        </tr>
-      </table>
+        <!--table-->
+        <div class="mui-content all">
+          <div class="sc">B/C</div>
+          <div class="saving"> 储蓄卡</div>
+          <div class="all-money">￥{{addMoney}}</div>
+        </div>
+        <table border="0" class="tables">
+          <tr>
+            <th><span :style="lefta"></span></th>
+            <th><span>开户行</span></th>
+            <th><span>户主</span></th>
+            <th><span>余额</span></th>
+          </tr>
+          <tr v-for="item in chuxuka">
+            <td>
+              <span><img :src="jianshe" v-if="item.bank_bank == '建设银行'"></span>
+              <span><img :src="gonghang" v-if="item.bank_bank == '工商银行'"></span>
+              <span><img :src="xianjinmong" v-if="item.bank_bank == '现金'"></span>
+              <span><img :src="weixin" v-if="item.bank_bank == '微信'"></span>
+              <span><img :src="zhifubao" v-if="item.bank_bank == '支付宝'"></span>
+              <span><img :src="nongcun" v-if="item.bank_bank == '农村信用社'"></span>
+              <span><img :src="baoshang" v-if="item.bank_bank == '包商银行'"></span>
+              <span><img :src="zhongyuan" v-if="item.bank_bank == '中原银行'"></span>
+              <span><img :src="nongye" v-if="item.bank_bank == '农业银行'"></span>
+              <span><img :src="zhongguo" v-if="item.bank_bank == '中国银行'"></span>
+            </td>
+            <td><span @click="bankClick(item.bank_bank,item.bank_id)">{{item.bank_bank}}</span></td>
+            <td><span>{{item.bank_person}}</span></td>
+            <td><span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_money}}</span></td>
+          </tr>
+        </table>
+        <div class="mui-content all">
+          <div class="sc cc">C/C</div>
+          <div class="saving">信用卡</div>
+          <div class="all-money">￥{{xinMoney}}</div>
+        </div>
+        <table class="table-xin">
+          <tr>
+            <th><span :style="lefta"></span></th>
+            <th><span>开户行</span></th>
+            <th><span>户主</span></th>
+            <th><span>余额</span></th>
+            <th><span>额度</span></th>
+          </tr>
+          <tr v-for="item in xinyong">
+            <td>
+              <span><img :src="minsheng" v-if="item.bank_bank == '民生信用'"></span>
+              <span><img :src="jianshe" v-if="item.bank_bank == '建设信用'"></span>
+              <span><img :src="jiaotong" v-if="item.bank_bank == '交通信用'"></span>
+              <span><img :src="zhonghang" v-if="item.bank_bank == '中行信用'"></span>
+              <span><img :src="mayi" v-if="item.bank_bank == '蚂蚁花呗'"></span>
+              <span><img :src="huaxiayinhang" v-if="item.bank_bank == '华夏信用'"></span>
+              <span><img :src="pufa" v-if="item.bank_bank == '浦发信用'"></span>
+              <span><img :src="shanghai" v-if="item.bank_bank == '上海信用'"></span>
+              <span><img :src="zhaoshang" v-if="item.bank_bank == '招商信用'"></span>
+              <span><img :src="nongye" v-if="item.bank_bank == '农业信用'"></span>
+              <span><img :src="pingan" v-if="item.bank_bank == '平安信用'"></span>
+              <span><img :src="xingye" v-if="item.bank_bank == '兴业信用'"></span>
+              <span><img :src="gonghang" v-if="item.bank_bank == '工商信用'"></span>
+              <span><img :src="zhongyuan" v-if="item.bank_bank == '中原信用'"></span>
+            </td>
+            <td><span @click="bankClick(item.bank_bank,item.bank_id)">{{item.bank_bank}}</span></td>
+            <td><span>{{item.bank_person}}</span></td>
+            <td><span>￥{{item.bank_money}}</span></td>
+            <td><span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_limit}}</span></td>
+          </tr>
+        </table>
       </v-touch>
     </div>
 </template>
 
 <script>
+import Running_money from './running_money'
 export default {
   name: 'transfer_money',
+  components: { Running_money },
   data () {
     return {
       bank_id: 0,
@@ -115,8 +151,10 @@ export default {
       imgUrl_loading: false,
       bank_deal_money: '', // 金额
       bank_deal_rate: '', // 转账费率
-      bank_enter_id: '', // 转出
-      bank_out_id: '', // 转入
+      bank_enter:'',//银行卡name
+      bank_enter_id: '', // 转出id
+      bank_out:'',//银行卡name
+      bank_out_id: '', // 转入id
       chuxuka: '', // 储蓄卡
       xinyong: '', // 信用卡
       bank_money: '', // 余额
@@ -127,6 +165,32 @@ export default {
       cead: '', // 银行卡
       bank_limit: '', // 额度
       bank: '',
+      //银行卡
+      baoshang:require('../image/baoshang.png'),
+      baocun:require('../image/baocun.png'),
+      gonghang:require('../image/gonghang.png'),
+      huaxiayinhang:require('../image/huaxiayinhang.png'),
+      jianshe:require('../image/jianshe.png'),
+      jiaotong:require('../image/jiaotong.png'),
+      mayi:require('../image/mayi.png'),
+      minsheng:require('../image/minsheng.png'),
+      nongcun:require('../image/nongcun.png'),
+      nonghang:require('../image/nonghang.png'),
+      pingan:require('../image/pingan.png'),
+      pufa:require('../image/pufa.png'),
+      shanghai:require('../image/shanghai.png'),
+      weixin:require('../image/weixin.png'),
+      xingye:require('../image/xingye.png'),
+      zhaoshang:require('../image/zhaoshang.png'),
+      zhifubao:require('../image/zhifubao.png'),
+      zhonghang:require('../image/zhonghang.png'),
+      zhongyuan:require('../image/zhongyuan.png'),
+      xianjinmong:require('../image/xianjinmong.png'),
+      zhongguo:require('../image/zhonguo.png'),
+      nongye:require('../image/nongye.png'),
+      lefta: {
+        paddingLeft: '10px'
+      },
       listD: [
         { Tnumber: 0.6 },
         { Tnumber: 0.55 },
@@ -193,6 +257,16 @@ export default {
     }
   },
   methods: {
+    //银行卡传送
+    bankClick(name,id){
+      if (this.bank_out == '') {
+        this.bank_out = name
+        this.bank_out_id = id
+      }else {
+        this.bank_enter = name
+        this.bank_enter_id = id
+      }
+    },
     msgCu (id, person, number) {
       var add = '?' + '&bank_person=' + person + '&bank_bank=' + id
       if (number !== undefined) {
@@ -365,49 +439,27 @@ export default {
     background-color: transparent!important;
   }
   /*table*/
+  .all{display: flex;margin-bottom: 12px;margin-left: 15px}
+  .saving,.all-money{font-weight: bold}
+  .all-money{flex: 5;text-align: left;}
+  .sc{font-weight: 600;width: 9%}
+  .saving{width: 20%}
+  .tables,.table-xin{width:100%;font-size: 14px;text-align: left;white-space: nowrap;margin-bottom: 75px}
+  .tables tr th,.table-xin tr th{background-color: #dadada;line-height: 27px}
+  .tables tr th:nth-child(1){width: 12%;min-width: 40px}
+  .tables tr th:nth-child(2),table tr th:nth-child(3){min-width: 55px;width: 16%}
+  .tables tr th:nth-child(4){min-width: 30px;width: 45%}
+  .tables tr td:nth-child(1) span,.table-xin tr td:nth-child(1) span{display: block;overflow: hidden;width: 20px;text-overflow: ellipsis;margin-left: 15px;line-height: 13px}
+  .tables tr td:nth-child(1) span img,.table-xin tr td:nth-child(1) span img{width: 100%}
+  .tables tr,.table-xin tr{border-bottom: 1px solid #dadada;line-height: 28px}
+  /*table-xin*/
+  .table-xin tr th:nth-child(1){width: 12%}
+  .table-xin tr th:nth-child(2){width: 20%}
+  .table-xin tr th:nth-child(3){width: 15%}
+  .table-xin tr th:nth-child(4){width: 21%}
+  .table-xin tr th:nth-child(5){width: 22%}
 
-  .all {
-    display: flex;
-    margin-bottom: 12px;
-    padding-left: 10px;
-    margin-top: 20px;
-  }
 
-  .saving {
-    flex: 1;
-  }
-
-  .all-money {
-    flex: 4;
-    text-align: left;
-  }
-
-  .all-saving{
-    width: 100%;
-    font-size: 15px;
-  }
-  .blaner{width: 100%;white-space: nowrap}
-  .all-saving tr {
-    width: 25%!important;
-  }
-
-  .all-saving tr td{
-    padding-left: 11px;
-    white-space: nowrap;
-    border-bottom: 1px solid #dadada;
-    line-height: 28px
-  }
-  .all-saving tr td input,
-  .blaner tr td input {
-    height: 35px!important;
-    font-size: 14px;
-    padding: 0!important;
-    background-color: transparent!important;
-    border: 0!important;
-    border-bottom: 1px solid #454545!important;
-    margin-bottom: 0!important;
-  }
-  .blaner tr td{border-bottom: 1px solid #989898;line-height: 28px}
   /*第二个表单*/
   table {font-size: 15px;}
   table tr:nth-child(1){background-color: #DADADA;text-align: left;padding-left: 10px;line-height: 32px;}
