@@ -24,35 +24,35 @@
                 <label>类别选择</label>
               <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
                 <option value="">请选择</option>
-                <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
+                <option v-for="(item,i) in list_fund_name_type" :value="item.fund_name_type" :key="i">{{item.fund_name_type}}</option>
               </select>
             </div>
           <div class="mui-input-row">
             <label>类别名称</label>
             <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_fund_names" :value="item.fund_names">{{item.fund_names}}</option>
+              <option v-for="(item,i) in list_fund_names" :value="item.fund_names" :key="i">{{item.fund_names}}</option>
             </select>
           </div>
           <div class="mui-input-row" v-if="list_slime_all">
             <label>类别详情</label>
             <select name="" v-model="slim" @change="list_slim_name(slim)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_fund_name" :value="item.fund_name">{{item.fund_name}}</option>
+              <option v-for="(item,i) in list_fund_name" :value="item.fund_name" :key="i">{{item.fund_name}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>工地名称</label>
             <select name="" v-model="customer_name" @change="customer_name_list(customer_name)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_customer_name" :value="item.customer_name">{{item.customer_name}}</option>
+              <option v-for="(item,i) in list_customer_name" :value="item.fund_details_customer_id" :key="i">{{item.customer_name}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>相关人</label>
             <select name="" v-model="Related" @change="relatedSearch(Related)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_person" :value="item.fund_person_id">{{item.fund_person}}</option>
+              <option v-for="(item,i) in list_person" :value="item.fund_person_id" :key="i">{{item.fund_person}}</option>
             </select>
           </div>
           <div class="mui-input-row goOver">
@@ -71,7 +71,7 @@
             <th>相关人</th>
             <th>金额</th>
           </tr>
-          <tr v-for="item in listTable" @click="msg(item.fund_details_id)" :class="{clasred:item.dates <= datesdm}">
+          <tr v-for="(item,i) in listTable" :key="i" @click="msg(item.fund_details_id)" :class="{clasred:item.dates <= datesdm}">
             <td>
               <span v-if="item.dates" :style="paLft">{{item.dates}}</span>
               <span v-if="item.dates===undefined" :style="paLft">待定</span>
@@ -258,8 +258,18 @@ export default {
     },
     //  项目名称
     customer_name_list (id) {
+      var add = ''
+      if(this.fund_nameso!=''){
+        add+='&fund_name_type='+this.fund_nameso
+      }
+      if(this.fund_name !=''){
+        add+='&fund_name=' + this.fund_name
+      }
+      if(this.list_fund_namea!=''){
+        add+='&fund_names='+this.list_fund_namea
+      }
       this.customer_name_list_one = id
-      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_name=' + this.fund_name + '&fund_names=' + this.list_fund_namea + '&Customer_name=' + id).then(res => {
+      this.axios.get('/fund/select_fund_sum' + '?fund_type=0' + '&Customer_name=' + id).then(res => {
         this.package(res)
       })
     },
