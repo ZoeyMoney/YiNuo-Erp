@@ -48,7 +48,7 @@
             <label>款项详细</label>
             <select name="" v-model="slim" :class="{select:slim==='',selectBlack:slim!==''}" @change="list_fund_namea(slim)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
+              <option v-for="(item,i) in list_fund_name" :value="item.fund_name_id" :key="i">{{item.fund_name}}</option>
             </select>
           </div>
           <data-value v-model="dataValue1"></data-value>
@@ -75,7 +75,7 @@
             <label>手续费</label>
             <select name="" v-model="money_rate" :class="{select:money_rate==='',selectBlack:money_rate!==''}">
               <option value="">请选择</option>
-              <option v-for="item in list_money_rate" :value="item.text">{{item.text}}%</option>
+              <option v-for="(item,i) in list_money_rate" :value="item.text" :key="i">{{item.text}}%</option>
             </select>
           </div>
           <div class="mui-input-row">
@@ -103,7 +103,7 @@
             <th><span>户主</span></th>
             <th><span>余额</span></th>
           </tr>
-          <tr v-for="item in chuXu">
+          <tr v-for="(item,i) in chuXu" :key="i">
             <td>
               <span><img :src="jianshe" v-if="item.bank_bank == '建设银行'"></span>
               <span><img :src="gonghang" v-if="item.bank_bank == '工商银行'"></span>
@@ -134,7 +134,7 @@
             <th><span>余额</span></th>
             <th><span>额度</span></th>
           </tr>
-          <tr v-for="item in xinY">
+          <tr v-for="(item,i) in xinY" :key="i">
             <td>
               <span><img :src="minsheng" v-if="item.bank_bank == '民生信用'"></span>
               <span><img :src="jianshe" v-if="item.bank_bank == '建设信用'"></span>

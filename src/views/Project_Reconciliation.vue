@@ -237,6 +237,7 @@ export default {
       if (res.status === 200) {
         this.imgUrl_loading = false
         this.NewUserName = JSON.parse(localStorage.data).role
+      
         // console.log(this.NewUserName)
         for (var index in this.NewUserName) {
           this.projetName = res.data.list_fund_customer_name
@@ -257,6 +258,9 @@ export default {
               this.listSecond = res.data.list_fund_pre_out
               this.listPaid_for = res.data.list_fund_Already_enter
               this.listUncollected = res.data.list_fund_pre_enter
+            }
+            if(this.NewUserName[index].role_name !='总权限') {
+              this.all_model_money(res)
             }
           }
         }
@@ -382,23 +386,6 @@ export default {
       })
     },
     first_hos (tab) {
-      /* if (tab.index === '0') {
-          this.axios.get(url.selectSerch+'?fund_details_state=1').then(res=>{
-            this.listHos = res.data.data
-          })
-        }else if (tab.index === '1') {
-          this.axios.get(url.selectSerch+'?fund_details_state=0').then(res=>{
-            this.listSecond = res.data.data
-          })
-        }else if (tab.index === '2') {
-          this.axios.get(url.selectSerch+'?fund_details_state=1&fund_details_money=1').then(res=>{
-            this.listPaid_for = res.data.data
-          })
-        }else if (tab.index === '3') {
-          this.axios.get(url.selectSerch+'?fund_details_state=1&fund_details_money=0').then(res=>{
-            this.listUncollected = res.data.data
-          })
-        } */
     }
   }
 }
