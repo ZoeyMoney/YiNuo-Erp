@@ -1,6 +1,7 @@
+<!--
 <template>
     <div class="stop_sales">
-      <!--返回-->
+      &lt;!&ndash;返回&ndash;&gt;
       <header class="mui-bar mui-bar-nav">
         <router-link :to="{name:'money_management'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
         <h1 class="mui-title">暂支销账</h1>
@@ -8,9 +9,9 @@
       </header>
       <login-loading v-if="imgUrl_loading"></login-loading>
 
-<!--      <vue-xlsx-table @on-select-file="handleSelectedFile"></vue-xlsx-table>-->
-      <!--table-->
-      <!--<div class="mui-content">
+&lt;!&ndash;      <vue-xlsx-table @on-select-file="handleSelectedFile"></vue-xlsx-table>&ndash;&gt;
+      &lt;!&ndash;table&ndash;&gt;
+      &lt;!&ndash;<div class="mui-content">
         <input type="text" v-model="searchData" placeholder="请输入id或姓名">
         <ul>
           <li v-for="(item,index) in Newitems" :key="index">
@@ -26,8 +27,8 @@
             <el-table-column prop="address" label="地址"></el-table-column>
           </el-table>
         </template>&ndash;&gt;
-      </div>-->
-      <!--<div>
+      </div>&ndash;&gt;
+      &lt;!&ndash;<div>
         <h2>公告栏文字停顿滚动</h2>
         <div class="textBox">
           <transition name="slide">
@@ -35,7 +36,7 @@
           </transition>
         </div>
       </div>
-      <div class="cibtainer"></div>-->
+      <div class="cibtainer"></div>&ndash;&gt;
       <div class="mui-content">
         <button @click="send">发消息</button>
       </div>
@@ -183,3 +184,4 @@ export default {
 <style scoped>
 
 </style>
+-->

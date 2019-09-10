@@ -33,15 +33,15 @@
             <label>类别选择</label>
             <select name="" v-model="fund_detail_id" :class="{select:fund_detail_id==='',selectBlack:fund_detail_id!==''}" @change="fund_deId(fund_detail_id)">
               <option value="">请选择</option>
-              <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
+              <option v-for="(item,index) in list_fund_name_type" :value="item.fund_name_type" :key="index">{{item.fund_name_type}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>款项名称</label>
             <select name="" v-model="detailed" :class="{select:detailed==='',selectBlack:detailed!==''}" @change="list_fund_nameas(detailed)">
               <option value="" selected="selected" style="color: #6e6e6e">请选择</option>
-              <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
-              <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
+              <option v-for="(item,index) in list_fund_names" :value="item.fund_names" v-if="cotrProjet" :key="index">{{item.fund_names}}</option>
+              <option v-for="(item,index) in list_fund_names" :value="item.fund_name_id" v-if="idProjet" :key="index">{{item.fund_names}}</option>
             </select>
           </div>
           <div class="mui-input-row" v-if="category">
