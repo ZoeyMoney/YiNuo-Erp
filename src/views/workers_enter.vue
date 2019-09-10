@@ -35,7 +35,24 @@
             <div class="row-left">
               <div class="row-left-on">
                 <label>工种</label>
-                <el-cascader :options="options" :props="props" v-model="value" @change="handleChange" clearable></el-cascader>
+             <el-select v-model="value1" multiple placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+ <el-select v-model="value1" multiple placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+
+         
               </div>
             </div>
           </form>
@@ -57,7 +74,24 @@ export default {
       options:[],
       list_type:'',//推荐人
       list_value:'',//工种拼接
-      props: { multiple: true },
+     options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value1: [],
+        value2: []
     }
   },
   methods: {
@@ -128,18 +162,18 @@ export default {
       this.list_type = customName.data.data
     })
     //  工种
-    this.axios.get('/DaiShu/Sort/Select_sort?type=1').then(res=>{
-      var value1 = res.data.data
-      var datas = value1 => value1.map(({id,name,list_Sort})=>(list_Sort ? {
-        // value : id,
-        label : name,
-        children:datas(list_Sort)
-      }:{
-        value:id,
-        label:name,
-      }))
-      this.options = datas(value1)
-    })
+    // this.axios.get('/DaiShu/Sort/Select_sort?type=1').then(res=>{
+    //   var value1 = res.data.data
+    //   var datas = value1 => value1.map(({id,name,list_Sort})=>(list_Sort ? {
+    //     // value : id,
+    //     label : name,
+    //     children:datas(list_Sort)
+    //   }:{
+    //     value:id,
+    //     label:name,
+    //   }))
+    //   this.options = datas(value1)
+    // })
   },
 }
 </script>
