@@ -51,8 +51,6 @@
               :value="item.value">
             </el-option>
           </el-select>
-
-         
               </div>
             </div>
           </form>

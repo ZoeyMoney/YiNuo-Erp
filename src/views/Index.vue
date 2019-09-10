@@ -3,7 +3,6 @@
       <!-- 头部 -->
       <div>
         <header class="mui-bar mui-bar-nav header-top">
-          <h1 class="mui-title">一诺装饰</h1>
           <div class="username">{{userName}}</div>
           <router-link :to="{name:'Setting'}" class="imgUser"><img :src="imgUser" alt="user"></router-link>
         </header>
@@ -167,7 +166,7 @@ export default {
   .botton-top ul{padding-left: 26px;}
   .botton-top ul li{font-size: 15px;color: #848484;line-height: 20px;}
   .leftd{float: left!important;}
-  .username{float: left;padding-top: 12px;width: 90%;overflow: hidden;text-overflow: ellipsis;text-align: right}
-  .imgUser{width: 25px;display: block;float: right;padding-top: 12px}
+  .username{float: left;padding-top: 12px;width: 92%;overflow: hidden;text-overflow: ellipsis;text-align: right}
+  .imgUser{width: 20px;display: block;float: right;padding-top: 12px}
   .imgUser img{width: 100%}
 </style>
