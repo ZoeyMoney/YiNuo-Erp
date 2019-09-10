@@ -28,7 +28,7 @@
                 <label>推荐人</label>
                 <select name="" v-model="Customer_type" :class="{classGray:Customer_type =='',classBlack: Customer_type!=''}">
                   <option value="">请选择</option>
-                  <option v-for="item in list_type" :value="item.fund_person_id">{{item.fund_person}}</option>
+                  <option v-for="(item,index) in list_type" :value="item.fund_person_id" :key="index">{{item.fund_person}}</option>
                 </select>
               </div>
             </div>

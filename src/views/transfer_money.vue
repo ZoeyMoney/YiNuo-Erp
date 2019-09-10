@@ -23,29 +23,29 @@
         <form class="mui-input-group">
           <div class="mui-input-row row-label">
             <label>转出</label>
-<!--            <input type="text" v-model="bank_out" placeholder="请选择下列银行卡" disabled="disabled">-->
-            <label>
+           <input type="text" v-model="bank_out" placeholder="请选择下列银行卡" disabled="disabled">
+            <!-- <label>
               <select  v-model="bank_out_id" name="" id="enter" :class="{select:bank_out_id==='',selectBlack:bank_out_id!==''}" >
                 <option value="" selected="selected">请选择</option>
-                <option v-for="item in cead"  :value="item.bank_id">
+                <option v-for="(item,index) in cead" :value="item.bank_id" :key="index">
                   <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
                   <div>{{item.bank_bank}}</div>
                 </option>
               </select>
-            </label>
+            </label> -->
           </div>
           <div class="mui-input-row row-label">
             <label>转入</label>
-<!--            <input type="text" v-model="bank_enter" placeholder="请选择下列银行卡" disabled="disabled">-->
-            <label>
+           <input type="text" v-model="bank_enter" placeholder="请选择下列银行卡" disabled="disabled">
+            <!-- <label>
               <select  v-model="bank_enter_id" id="out" :class="{select:bank_enter_id==='',selectBlack:bank_enter_id!==''}" >
                 <option value="" selected="selected">请选择</option>
-                <option v-for="item in cead"  :value="item.bank_id">
+                <option v-for="(item,index) in cead" :value="item.bank_id" :key="index">
                   <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
                   <div>{{item.bank_bank}}</div>
                 </option>
               </select>
-            </label>
+            </label> -->
           </div>
           <data-value v-model="dataValue1"></data-value>
           <div class="mui-input-row">
@@ -56,7 +56,7 @@
             <label>转账费率</label>
             <select name="" id="rate" v-model="bank_deal_rate"  :class="{select:bank_deal_rate==='',selectBlack:bank_deal_rate!==''}" >
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in listD" :value="item.Tnumber">{{item.Tnumber}}%</option>
+              <option v-for="(item,index) in listD" :value="item.Tnumber" :key="index">{{item.Tnumber}}%</option>
             </select>
           </div>
           <div class="mui-input-row">
@@ -81,7 +81,7 @@
             <th><span>户主</span></th>
             <th><span>余额</span></th>
           </tr>
-          <tr v-for="item in chuxuka">
+          <tr v-for="(item,index) in chuxuka" :key="index">
             <td>
               <span><img :src="jianshe" v-if="item.bank_bank == '建设银行'"></span>
               <span><img :src="gonghang" v-if="item.bank_bank == '工商银行'"></span>
@@ -94,7 +94,7 @@
               <span><img :src="nongye" v-if="item.bank_bank == '农业银行'"></span>
               <span><img :src="zhongguo" v-if="item.bank_bank == '中国银行'"></span>
             </td>
-            <td><span @click="bankClick(item.bank_bank,item.bank_id)">{{item.bank_bank}}</span></td>
+            <td><span @click="bankClick(item.bank_bank,item.bank_id,item.bank_person)">{{item.bank_bank}}</span></td>
             <td><span>{{item.bank_person}}</span></td>
             <td><span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_money}}</span></td>
           </tr>
@@ -112,7 +112,7 @@
             <th><span>余额</span></th>
             <th><span>额度</span></th>
           </tr>
-          <tr v-for="item in xinyong">
+          <tr v-for="(item,index) in xinyong" :key="index">
             <td>
               <span><img :src="minsheng" v-if="item.bank_bank == '民生信用'"></span>
               <span><img :src="jianshe" v-if="item.bank_bank == '建设信用'"></span>
@@ -129,7 +129,7 @@
               <span><img :src="gonghang" v-if="item.bank_bank == '工商信用'"></span>
               <span><img :src="zhongyuan" v-if="item.bank_bank == '中原信用'"></span>
             </td>
-            <td><span @click="bankClick(item.bank_bank,item.bank_id)">{{item.bank_bank}}</span></td>
+            <td><span @click="bankClick(item.bank_bank,item.bank_id,item.bank_person)">{{item.bank_bank}}</span></td>
             <td><span>{{item.bank_person}}</span></td>
             <td><span>￥{{item.bank_money}}</span></td>
             <td><span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_limit}}</span></td>
@@ -164,6 +164,7 @@ export default {
       all_money: '',
       cead: '', // 银行卡
       bank_limit: '', // 额度
+      numerone:0,//判断偶数奇数
       bank: '',
       //银行卡
       baoshang:require('../image/baoshang.png'),
@@ -258,13 +259,15 @@ export default {
   },
   methods: {
     //银行卡传送
-    bankClick(name,id){
-      if (this.bank_out == '') {
-        this.bank_out = name
-        this.bank_out_id = id
-      }else {
-        this.bank_enter = name
+    bankClick(name,id,prosen){
+      this.numerone++
+      var ss = name+' ' + prosen
+      if(this.numerone %2== 0){
+        this.bank_enter = ss
         this.bank_enter_id = id
+      }else{
+       this.bank_out = ss
+      this.bank_out_id = id
       }
     },
     msgCu (id, person, number) {
