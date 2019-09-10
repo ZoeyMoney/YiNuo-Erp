@@ -45,15 +45,15 @@
         </div>
       </form>
       <button-save @click.native="go"></button-save>
-    <div class="customer_entry">
-      <!--头部-->
+   <!-- <div class="customer_entry">
+      &lt;!&ndash;头部&ndash;&gt;
       <header class="mui-bar mui-bar-nav header-top">
         <router-link :to="{name:'informaction'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
         <h1 class="mui-title">工人录入</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
       <login-loading v-show="imgUrl_loading"></login-loading>
-      <!--客户录入-->
+      &lt;!&ndash;客户录入&ndash;&gt;
       <div class="customer">
         <h2>工人录入</h2>
         <p>/Customer input</p>
@@ -101,7 +101,7 @@
             </div>
           </form>
         <button-save @click.native="go"></button-save>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>

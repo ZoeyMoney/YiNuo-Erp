@@ -18,11 +18,7 @@
       </div>
     </div>
     <!--收入记录-->
-    <v-touch
-      v-on:swipeleft="onSwipeLeft"
-      v-on:swiperight="onSwipeRight"
-      :swipe-options="{direction: 'horizontal'}"
-    >
+    <v-touch v-on:swipeleft="onSwipeLeft" v-on:swiperight="onSwipeRight" :swipe-options="{direction: 'horizontal'}">
       <div class="mui-content app">
         <form class="mui-input-group">
           <div class="mui-input-row site_projet" v-if="site_projet">
@@ -31,13 +27,7 @@
           </div>
           <div class="mui-input-row relevant_people" v-if="relevant_people">
             <label>相关人</label>
-            <input
-              type="text"
-              class="mui-input-clear"
-              v-model="listRelevant"
-              @click="relecantProsen"
-              placeholder="请选择相关人"
-            />
+            <input type="text" class="mui-input-clear" v-model="listRelevant" @click="relecantProsen" placeholder="请选择相关人"/>
           </div>
           <!-- <div class="mui-input-row">
             <label>类别选择</label>
@@ -58,33 +48,18 @@
               <div class="mui-input-row mui-radio mui-left  leftbutton">
                 <label>个人</label>
                 <input name="radio1" type="radio">
-              </div> 
+              </div>
               <div class="mui-input-row mui-radio mui-left rightbutton">
                 <label>公司</label>
                 <input name="radio1" type="radio">
-              </div> 
+              </div>
           </div>
           <div class="mui-input-row">
             <label>款项名称</label>
-            <select
-              name
-              v-model="detailed"
-              :class="{select:detailed==='',selectBlack:detailed!==''}"
-              @change="list_fund_nameas(detailed)"
-            >
+            <select name v-model="detailed" :class="{select:detailed==='',selectBlack:detailed!==''}" @change="list_fund_nameas(detailed)">
               <option value selected="selected" style="color: #6e6e6e">请选择</option>
-              <option
-                v-for="(item,index) in list_fund_names"
-                :value="item.fund_names"
-                v-if="cotrProjet"
-                :key="index"
-              >{{item.fund_names}}</option>
-              <option
-                v-for="(item,index) in list_fund_names"
-                :value="item.fund_name_id"
-                v-if="idProjet"
-                :key="index"
-              >{{item.fund_names}}</option>
+              <option v-for="(item,index) in list_fund_names" :value="item.fund_names" v-if="cotrProjet" :key="index">{{item.fund_names}}</option>
+              <option v-for="(item,index) in list_fund_names" :value="item.fund_name_id" v-if="idProjet" :key="index">{{item.fund_names}}</option>
             </select>
           </div>
           <div class="mui-input-row" v-if="category">
@@ -92,12 +67,8 @@
             <select name="" v-model="slim" :class="{select:slim==='',selectBlack:slim!==''}" @change="list_fund_namea(slim)">
               <option value="" selected="selected">请选择</option>
               <option v-for="(item,i) in list_fund_name" :value="item.fund_name_id" :key="i">{{item.fund_name}}</option>
-            <select
-              name
-              v-model="slim"
-              :class="{select:slim==='',selectBlack:slim!==''}"
-              @change="list_fund_namea(slim)"
-            >
+            </select>
+            <select name v-model="slim" :class="{select:slim==='',selectBlack:slim!==''}" @change="list_fund_namea(slim)">
               <option value selected="selected">请选择</option>
               <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
             </select>
@@ -127,11 +98,8 @@
             <select name="" v-model="money_rate" :class="{select:money_rate==='',selectBlack:money_rate!==''}">
               <option value="">请选择</option>
               <option v-for="(item,i) in list_money_rate" :value="item.text" :key="i">{{item.text}}%</option>
-            <select
-              name
-              v-model="money_rate"
-              :class="{select:money_rate==='',selectBlack:money_rate!==''}"
-            >
+            </select>
+            <select name v-model="money_rate" :class="{select:money_rate==='',selectBlack:money_rate!==''}">
               <option value>请选择</option>
               <option v-for="item in list_money_rate" :value="item.text">{{item.text}}%</option>
             </select>
@@ -156,63 +124,26 @@
         </div>
         <table border="0" class="tables">
           <tr>
-            <th>
-              <span :style="lefta"></span>
-            </th>
-            <th>
-              <span>开户行</span>
-            </th>
-            <th>
-              <span>户主</span>
-            </th>
-            <th>
-              <span>余额</span>
-            </th>
+            <th><span :style="lefta"></span></th>
+            <th><span>开户行</span></th>
+            <th><span>户主</span></th>
+            <th><span>余额</span></th>
           </tr>
           <tr v-for="(item,i) in chuXu" :key="i">
-            <td>
-              <span>
-                <img :src="jianshe" v-if="item.bank_bank == '建设银行'" />
-              </span>
-              <span>
-                <img :src="gonghang" v-if="item.bank_bank == '工商银行'" />
-              </span>
-              <span>
-                <img :src="xianjinmong" v-if="item.bank_bank == '现金'" />
-              </span>
-              <span>
-                <img :src="weixin" v-if="item.bank_bank == '微信'" />
-              </span>
-              <span>
-                <img :src="zhifubao" v-if="item.bank_bank == '支付宝'" />
-              </span>
-              <span>
-                <img :src="nongcun" v-if="item.bank_bank == '农村信用社'" />
-              </span>
-              <span>
-                <img :src="baoshang" v-if="item.bank_bank == '包商银行'" />
-              </span>
-              <span>
-                <img :src="zhongyuan" v-if="item.bank_bank == '中原银行'" />
-              </span>
-              <span>
-                <img :src="nongye" v-if="item.bank_bank == '农业银行'" />
-              </span>
-              <span>
-                <img :src="zhongguo" v-if="item.bank_bank == '中国银行'" />
-              </span>
+            <td><span><img :src="jianshe" v-if="item.bank_bank == '建设银行'" /></span>
+              <span><img :src="gonghang" v-if="item.bank_bank == '工商银行'" /></span>
+              <span><img :src="xianjinmong" v-if="item.bank_bank == '现金'" /></span>
+              <span><img :src="weixin" v-if="item.bank_bank == '微信'" /></span>
+              <span><img :src="zhifubao" v-if="item.bank_bank == '支付宝'" /></span>
+              <span><img :src="nongcun" v-if="item.bank_bank == '农村信用社'" /></span>
+              <span><img :src="baoshang" v-if="item.bank_bank == '包商银行'" /></span>
+              <span><img :src="zhongyuan" v-if="item.bank_bank == '中原银行'" /></span>
+              <span><img :src="nongye" v-if="item.bank_bank == '农业银行'" /></span>
+              <span><img :src="zhongguo" v-if="item.bank_bank == '中国银行'" /></span>
             </td>
-            <td>
-              <span
-                @click="bankClick(item.bank_bank,item.bank_id,item.bank_person)"
-              >{{item.bank_bank}}</span>
-            </td>
-            <td>
-              <span>{{item.bank_person}}</span>
-            </td>
-            <td>
-              <span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_money}}</span>
-            </td>
+            <td><span @click="bankClick(item.bank_bank,item.bank_id,item.bank_person)">{{item.bank_bank}}</span></td>
+            <td><span>{{item.bank_person}}</span></td>
+            <td><span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_money}}</span></td>
           </tr>
         </table>
         <div class="mui-content all">
@@ -221,82 +152,32 @@
           <div class="all-money">￥{{XinYongKa}}</div>
         </div>
         <table class="table-xin">
-          <tr>
-            <th>
-              <span :style="lefta"></span>
-            </th>
-            <th>
-              <span>开户行</span>
-            </th>
-            <th>
-              <span>户主</span>
-            </th>
-            <th>
-              <span>余额</span>
-            </th>
-            <th>
-              <span>额度</span>
-            </th>
+          <tr><th><span :style="lefta"></span></th>
+            <th><span>开户行</span></th>
+            <th><span>户主</span></th>
+            <th><span>余额</span></th>
+            <th><span>额度</span></th>
           </tr>
           <tr v-for="(item,i) in xinY" :key="i">
             <td>
-              <span>
-                <img :src="minsheng" v-if="item.bank_bank == '民生信用'" />
-              </span>
-              <span>
-                <img :src="jianshe" v-if="item.bank_bank == '建设信用'" />
-              </span>
-              <span>
-                <img :src="jiaotong" v-if="item.bank_bank == '交通信用'" />
-              </span>
-              <span>
-                <img :src="zhonghang" v-if="item.bank_bank == '中行信用'" />
-              </span>
-              <span>
-                <img :src="mayi" v-if="item.bank_bank == '蚂蚁花呗'" />
-              </span>
-              <span>
-                <img :src="huaxiayinhang" v-if="item.bank_bank == '华夏信用'" />
-              </span>
-              <span>
-                <img :src="pufa" v-if="item.bank_bank == '浦发信用'" />
-              </span>
-              <span>
-                <img :src="shanghai" v-if="item.bank_bank == '上海信用'" />
-              </span>
-              <span>
-                <img :src="zhaoshang" v-if="item.bank_bank == '招商信用'" />
-              </span>
-              <span>
-                <img :src="nongye" v-if="item.bank_bank == '农业信用'" />
-              </span>
-              <span>
-                <img :src="pingan" v-if="item.bank_bank == '平安信用'" />
-              </span>
-              <span>
-                <img :src="xingye" v-if="item.bank_bank == '兴业信用'" />
-              </span>
-              <span>
-                <img :src="gonghang" v-if="item.bank_bank == '工商信用'" />
-              </span>
-              <span>
-                <img :src="zhongyuan" v-if="item.bank_bank == '中原信用'" />
-              </span>
-            </td>
-            <td>
-              <span
-                @click="bankClick(item.bank_bank,item.bank_id,item.bank_person)"
-              >{{item.bank_bank}}</span>
-            </td>
-            <td>
-              <span>{{item.bank_person}}</span>
-            </td>
-            <td>
-              <span>￥{{item.bank_money}}</span>
-            </td>
-            <td>
-              <span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_limit}}</span>
-            </td>
+              <span><img :src="minsheng" v-if="item.bank_bank == '民生信用'" /></span>
+              <span><img :src="jianshe" v-if="item.bank_bank == '建设信用'" /></span>
+              <span><img :src="jiaotong" v-if="item.bank_bank == '交通信用'" /></span>
+              <span><img :src="zhonghang" v-if="item.bank_bank == '中行信用'" /></span>
+              <span><img :src="mayi" v-if="item.bank_bank == '蚂蚁花呗'" /></span>
+              <span><img :src="huaxiayinhang" v-if="item.bank_bank == '华夏信用'" /></span>
+              <span><img :src="pufa" v-if="item.bank_bank == '浦发信用'" /></span>
+              <span><img :src="shanghai" v-if="item.bank_bank == '上海信用'" /></span>
+              <span><img :src="zhaoshang" v-if="item.bank_bank == '招商信用'" /></span>
+              <span><img :src="nongye" v-if="item.bank_bank == '农业信用'" /></span>
+              <span><img :src="pingan" v-if="item.bank_bank == '平安信用'" /></span>
+              <span><img :src="xingye" v-if="item.bank_bank == '兴业信用'" /></span>
+              <span><img :src="gonghang" v-if="item.bank_bank == '工商信用'" /></span>
+              <span><img :src="zhongyuan" v-if="item.bank_bank == '中原信用'" /></span></td>
+            <td><span @click="bankClick(item.bank_bank,item.bank_id,item.bank_person)">{{item.bank_bank}}</span></td>
+            <td><span>{{item.bank_person}}</span></td>
+            <td><span>￥{{item.bank_money}}</span></td>
+            <td><span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_limit}}</span></td>
           </tr>
         </table>
       </div>
@@ -306,8 +187,8 @@
 
 <script>
 export default {
-  name: "income",
-  data() {
+  name: 'income',
+  data () {
     return {
       imgUrl_loading: false,
       category: true,
@@ -317,279 +198,253 @@ export default {
       site_projet: true, // 工地名称
       dataValue1: new Date().toString(),
       bank_id: 0, // id
-      sitePrihet: "",
-      mongey_bank_id: "", //银行卡id
-      mongey_bank: "", //银行卡name
+      sitePrihet: '',
+      mongey_bank_id: '', // 银行卡id
+      mongey_bank: '', // 银行卡name
       list_fund_name_type: [], // 个人公司
-      detailed: "", // 类别详细
+      detailed: '', // 类别详细
       list_fund_names: [], // 红包工资
-      slim: "", // 类别详细
+      slim: '', // 类别详细
       list_fund_name: [], // 设计费
-      listRelevant: "", // 相关人下拉
-      listRelevant_id: "", // 相关人ID
-      radio: "1", //单选框
-      list_bank_card_person: [{ text: "胡永生" }, { text: "邱梅" }],
+      listRelevant: '', // 相关人下拉
+      listRelevant_id: '', // 相关人ID
+      radio: '1', // 单选框
+      list_bank_card_person: [{ text: '胡永生' }, { text: '邱梅' }],
       // fund_person:'',//收款人
-      site: "", // 工地
-      money: "", // 金额
-      money_rate: "", // 手续费
+      site: '', // 工地
+      money: '', // 金额
+      money_rate: '', // 手续费
       list_money_rate: [{ text: 0.6 }, { text: 0.55 }, { text: 0.38 }],
-      money_get: "",
-      account: "", // 账户
-      clearBei: "", // 备注
-      checkbox: "", // 复选框
-      prosen_name: "", //户主
-      fund_detail_id: "", // 工程款
-      bank_card: "", // 银行卡
-      chuXu: "", // 储蓄卡
-      xinY: "", // 信用卡
-      chuXuKa: "", // 储蓄卡总额
-      XinYongKa: "", // 储蓄卡总额
-      allTotal: "", // 合计金额
-      list_fund_names: "", // 二级查询
-      list_fund_name: "", // 三级查询
-      test_id: "",
-      //银行卡
-      baoshang: require("../image/baoshang.png"),
-      baocun: require("../image/baocun.png"),
-      gonghang: require("../image/gonghang.png"),
-      huaxiayinhang: require("../image/huaxiayinhang.png"),
-      jianshe: require("../image/jianshe.png"),
-      jiaotong: require("../image/jiaotong.png"),
-      mayi: require("../image/mayi.png"),
-      minsheng: require("../image/minsheng.png"),
-      nongcun: require("../image/nongcun.png"),
-      nonghang: require("../image/nonghang.png"),
-      pingan: require("../image/pingan.png"),
-      pufa: require("../image/pufa.png"),
-      shanghai: require("../image/shanghai.png"),
-      weixin: require("../image/weixin.png"),
-      xingye: require("../image/xingye.png"),
-      zhaoshang: require("../image/zhaoshang.png"),
-      zhifubao: require("../image/zhifubao.png"),
-      zhonghang: require("../image/zhonghang.png"),
-      zhongyuan: require("../image/zhongyuan.png"),
-      xianjinmong: require("../image/xianjinmong.png"),
-      zhongguo: require("../image/zhonguo.png"),
-      nongye: require("../image/nongye.png"),
+      money_get: '',
+      account: '', // 账户
+      clearBei: '', // 备注
+      checkbox: '', // 复选框
+      prosen_name: '', // 户主
+      fund_detail_id: '', // 工程款
+      bank_card: '', // 银行卡
+      chuXu: '', // 储蓄卡
+      xinY: '', // 信用卡
+      chuXuKa: '', // 储蓄卡总额
+      XinYongKa: '', // 储蓄卡总额
+      allTotal: '', // 合计金额
+      list_fund_names: '', // 二级查询
+      list_fund_name: '', // 三级查询
+      test_id: '',
+      // 银行卡
+      baoshang: require('../image/baoshang.png'),
+      baocun: require('../image/baocun.png'),
+      gonghang: require('../image/gonghang.png'),
+      huaxiayinhang: require('../image/huaxiayinhang.png'),
+      jianshe: require('../image/jianshe.png'),
+      jiaotong: require('../image/jiaotong.png'),
+      mayi: require('../image/mayi.png'),
+      minsheng: require('../image/minsheng.png'),
+      nongcun: require('../image/nongcun.png'),
+      nonghang: require('../image/nonghang.png'),
+      pingan: require('../image/pingan.png'),
+      pufa: require('../image/pufa.png'),
+      shanghai: require('../image/shanghai.png'),
+      weixin: require('../image/weixin.png'),
+      xingye: require('../image/xingye.png'),
+      zhaoshang: require('../image/zhaoshang.png'),
+      zhifubao: require('../image/zhifubao.png'),
+      zhonghang: require('../image/zhonghang.png'),
+      zhongyuan: require('../image/zhongyuan.png'),
+      xianjinmong: require('../image/xianjinmong.png'),
+      zhongguo: require('../image/zhonguo.png'),
+      nongye: require('../image/nongye.png'),
       lefta: {
-        paddingLeft: "10px"
+        paddingLeft: '10px'
       }
-    };
+    }
   },
-  created() {
-    this.imgUrl_loading = true;
+  created () {
+    this.imgUrl_loading = true
     /* table */
-    this.axios
-      .get("/fund/Select_three_fund_name" + "?fund_type=0&fund_stale=0")
-      .then(res => {
+    this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0').then(res => {
         if (res.status === 200) {
-          this.imgUrl_loading = false;
-          this.list_fund_name_type = res.data.fund_name_type;
+          this.imgUrl_loading = false
+          this.list_fund_name_type = res.data.fund_name_type
         }
-      });
+      })
     /* 银行卡 */
-    this.axios.get("/fund/select_bank").then(res => {
-      this.bank_card = res.data;
-      var chu = [];
-      var xin = [];
-      var m = 0;
-      var y = 0;
-      var all = 0; // 合计储蓄卡信用卡总额
+    this.axios.get('/fund/select_bank').then(res => {
+      this.bank_card = res.data
+      var chu = []
+      var xin = []
+      var m = 0
+      var y = 0
+      var all = 0 // 合计储蓄卡信用卡总额
       for (var index in res.data) {
-        if (res.data[index].bank_type === "储蓄卡") {
-          m += res.data[index].bank_money; // 储蓄卡总额
-          chu.push(res.data[index]);
+        if (res.data[index].bank_type === '储蓄卡') {
+          m += res.data[index].bank_money // 储蓄卡总额
+          chu.push(res.data[index])
         } else {
-          if (res.data[index].bank_type === "信用卡") {
+          if (res.data[index].bank_type === '信用卡') {
             if (res.data[index].bank_money > 0) {
-              y += res.data[index].bank_money;
+              y += res.data[index].bank_money
             }
-            xin.push(res.data[index]);
+            xin.push(res.data[index])
           }
         }
       }
-      this.chuXu = chu;
-      this.xinY = xin;
-      this.chuXuKa = Math.floor(m * 100) / 100;
-      this.XinYongKa = Math.floor(y * 100) / 100;
-      all += this.chuXuKa + this.XinYongKa;
-      this.allTotal = Math.floor(all * 100) / 100;
-    });
-    this.site = window.test;
-    this.test_id = window.test_id;
-    this.listRelevant = window.fund_people;
-    this.listRelevant_id = window.fund_people_name;
+      this.chuXu = chu
+      this.xinY = xin
+      this.chuXuKa = Math.floor(m * 100) / 100
+      this.XinYongKa = Math.floor(y * 100) / 100
+      all += this.chuXuKa + this.XinYongKa
+      this.allTotal = Math.floor(all * 100) / 100
+    })
+    this.site = window.test
+    this.test_id = window.test_id
+    this.listRelevant = window.fund_people
+    this.listRelevant_id = window.fund_people_name
   },
   computed: {
     money_actual: {
-      get: function() {
-        if (this.money_rate === "" || this.money_rate === undefined) {
-          var a = this.money;
-          return a;
+      get: function () {
+        if (this.money_rate === '' || this.money_rate === undefined) {
+          var a = this.money
+          return a
         } else {
-          var a = this.money - (this.money * this.money_rate) / 100;
-          var b = Math.floor(a * 100) / 100;
-          this.money_get = b;
-          return b;
+          var a = this.money - (this.money * this.money_rate) / 100
+          var b = Math.floor(a * 100) / 100
+          this.money_get = b
+          return b
         }
       },
-      set: function(value) {
-        this.money_get = value;
+      set: function (value) {
+        this.money_get = value
       }
     }
   },
   methods: {
     // 一级查询
-    fund_deId(id) {
-      this.fund_nameso = id;
-      this.axios
-        .get(
-          "/fund/Select_three_fund_name" +
-            "?fund_type=0&fund_stale=0&fund_name_type=" +
-            this.fund_nameso
-        )
-        .then(res => {
-          this.list_fund_name_type = res.data.fund_name_type;
-          this.list_fund_names = res.data.fund_names;
-          this.list_fund_name = res.data.fund_name;
-          if (this.fund_detail_id === "个人") {
-            this.category = false;
-            this.site_projet = false;
-            this.relevant_people = true;
-          } else if (this.fund_detail_id === "公司") {
-            this.category = true;
-            this.cotrProjet = true;
-            this.idProjet = false;
-            this.relevant_people = true;
-            this.site_projet = true;
+    fund_deId (id) {
+      this.fund_nameso = id
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
+          this.list_fund_name_type = res.data.fund_name_type
+          this.list_fund_names = res.data.fund_names
+          this.list_fund_name = res.data.fund_name
+          if (this.fund_detail_id === '个人') {
+            this.category = false
+            this.site_projet = false
+            this.relevant_people = true
+          } else if (this.fund_detail_id === '公司') {
+            this.category = true
+            this.cotrProjet = true
+            this.idProjet = false
+            this.relevant_people = true
+            this.site_projet = true
           }
-        });
+        })
     },
     // 二级查询
-    list_fund_nameas(id) {
-      this.fund_name = id;
-      this.axios
-        .get(
-          "/fund/Select_three_fund_name" +
-            "?fund_type=0&fund_stale=0&fund_name_type=" +
-            this.fund_nameso +
-            "&fund_names=" +
-            id
-        )
-        .then(res => {
-          this.list_fund_name_type = res.data.fund_name_type;
-          this.list_fund_names = res.data.fund_names;
-          this.list_fund_name = res.data.fund_name;
-          if (this.detailed === "外借款") {
-            this.site_projet = false;
-            this.relevant_people = true;
-          } else if (this.detailed === "工程") {
-            this.relevant_people = true;
-            this.site_projet = true;
+    list_fund_nameas (id) {
+      this.fund_name = id
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+          this.list_fund_name_type = res.data.fund_name_type
+          this.list_fund_names = res.data.fund_names
+          this.list_fund_name = res.data.fund_name
+          if (this.detailed === '外借款') {
+            this.site_projet = false
+            this.relevant_people = true
+          } else if (this.detailed === '工程') {
+            this.relevant_people = true
+            this.site_projet = true
           }
-        });
+        })
     },
     // 三级查询
-    list_fund_namea(id) {
-      this.axios
-        .get(
-          "/fund/Select_three_fund_name" +
-            "?fund_type=0&fund_stale=0&fund_name_type=" +
-            this.fund_nameso +
-            "&fund_names=" +
-            this.fund_name +
-            "&fund_name" +
-            id
-        )
-        .then(res => {
-          this.list_fund_name_type = res.data.fund_name_type;
-          this.list_fund_names = res.data.fund_names;
-          this.list_fund_name = res.data.fund_name;
-        });
+    list_fund_namea (id) {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name + '&fund_name' + id).then(res => {
+          this.list_fund_name_type = res.data.fund_name_type
+          this.list_fund_names = res.data.fund_names
+          this.list_fund_name = res.data.fund_name
+        })
     },
     // 左滑动
-    onSwipeLeft: function() {
-      this.$router.push({ name: "expenditure" });
+    onSwipeLeft: function () {
+      this.$router.push({ name: 'expenditure' })
     },
     // 右滑动
-    onSwipeRight: function() {
-      this.$router.push({ name: "transfer_money" });
+    onSwipeRight: function () {
+      this.$router.push({ name: 'transfer_money' })
     },
     // 工地传参
-    siteChange() {
-      var expenditure = "income";
-      this.$router.push({ path: "siteList" });
-      window.expenditure = expenditure;
+    siteChange () {
+      var expenditure = 'income'
+      this.$router.push({ path: 'siteList' })
+      window.expenditure = expenditure
     },
     // 相关人传参
-    relecantProsen() {
-      var prosen = "income";
-      this.$router.push({ path: "relevant_people" });
-      window.prosen = prosen;
+    relecantProsen () {
+      var prosen = 'income'
+      this.$router.push({ path: 'relevant_people' })
+      window.prosen = prosen
     },
-    //银行卡传送
-    bankClick(name, id, prosen) {
-      var bank = name + " " + prosen;
-      this.mongey_bank = bank;
-      this.mongey_bank_id = id;
+    // 银行卡传送
+    bankClick (name, id, prosen) {
+      var bank = name + ' ' + prosen
+      this.mongey_bank = bank
+      this.mongey_bank_id = id
     },
-    msgCu(id, person, number) {
-      var add = "?" + "&bank_person=" + person + "&bank_bank=" + id;
+    msgCu (id, person, number) {
+      var add = '?' + '&bank_person=' + person + '&bank_bank=' + id
       if (number !== undefined) {
-        add += "&bank_number=" + number;
+        add += '&bank_number=' + number
       }
-      var transfer = "transfer";
-      this.axios.get("/fund/select_detail" + add).then(res => {
-        window.transfer = res.data.list_moey;
+      var transfer = 'transfer'
+      this.axios.get('/fund/select_detail' + add).then(res => {
+        window.transfer = res.data.list_moey
         this.$router.push({
-          path: "running_money",
+          path: 'running_money',
           query: { transfer: transfer }
-        });
+        })
         // console.log(res.data.list_moey)
-      });
+      })
     },
     // 添加
-    add() {
-      var then = this;
-      var check = true;
-      var nuber = /^\d+(\.\d+)?$/; // 验证数字
-      var add = "?";
-      if (this.fund_detail_id == "") {
-        mui.toast("类别选择不能为空");
-        check = false;
-        return false;
+    add () {
+      var then = this
+      var check = true
+      var nuber = /^\d+(\.\d+)?$/ // 验证数字
+      var add = '?'
+      if (this.fund_detail_id == '') {
+        mui.toast('类别选择不能为空')
+        check = false
+        return false
       }
       if (this.site !== undefined && this.test_id !== undefined) {
-        add += "customer_id=" + this.test_id;
+        add += 'customer_id=' + this.test_id
       }
       if (
         this.listRelevant !== undefined &&
         this.listRelevant_id !== undefined
       ) {
-        add += "&fund_person=" + this.listRelevant_id;
+        add += '&fund_person=' + this.listRelevant_id
       }
-      if (this.fund_detail_id === "个人") {
-        add += "fund_name=" + this.detailed;
-      } else if (this.fund_detail_id === "公司") {
-        add += "&fund_name=" + this.slim;
+      if (this.fund_detail_id === '个人') {
+        add += 'fund_name=' + this.detailed
+      } else if (this.fund_detail_id === '公司') {
+        add += '&fund_name=' + this.slim
       }
       /* 金额 */
-      if (this.money == "") {
-        mui.toast("金额不能为空");
-        check = false;
-        return false;
+      if (this.money == '') {
+        mui.toast('金额不能为空')
+        check = false
+        return false
       }
       if (!nuber.test(this.money)) {
-        mui.toast("金额只能为纯数字");
-        check = false;
-        return false;
+        mui.toast('金额只能为纯数字')
+        check = false
+        return false
       }
       // 转入
-      if (this.mongey_bank_id == "") {
-        mui.toast("转入账户不能为空");
-        check = false;
-        return false;
+      if (this.mongey_bank_id == '') {
+        mui.toast('转入账户不能为空')
+        check = false
+        return false
       }
       /* for (var index in this.bank_card) {
         if (this.bank_card[index].bank_id === this.mongey_bank_id) {
@@ -608,65 +463,55 @@ export default {
           }
         }
       } */
-      var dt = new Date(this.dataValue1);
-      var y = dt.getFullYear();
-      var m = dt.getMonth() + 1;
-      var d = dt.getDate();
-      var t = dt.getHours();
-      var MM = dt.getMinutes();
-      var s = dt.getSeconds();
-      var dd = `${y}-${m}-${d} ${t}:${MM}:${s}`;
-      this.imgUrl_loading = true;
-      var money_all = "";
-      if (this.money_get === "") {
-        money_all += this.money;
+      var dt = new Date(this.dataValue1)
+      var y = dt.getFullYear()
+      var m = dt.getMonth() + 1
+      var d = dt.getDate()
+      var t = dt.getHours()
+      var MM = dt.getMinutes()
+      var s = dt.getSeconds()
+      var dd = `${y}-${m}-${d} ${t}:${MM}:${s}`
+      this.imgUrl_loading = true
+      var money_all = ''
+      if (this.money_get === '') {
+        money_all += this.money
       } else {
-        money_all += this.money_get;
+        money_all += this.money_get
       }
-      add +=
-        "&money=" +
-        this.money +
-        "&fund_text=" +
-        this.clearBei +
-        "&bank_id=" +
-        this.mongey_bank_id +
-        "&shiji_money=" +
-        money_all +
-        "&date=" +
-        dd;
+      add += '&money=' + this.money + '&fund_text=' + this.clearBei + '&bank_id=' + this.mongey_bank_id + '&shiji_money=' + money_all + '&date=' + dd
       if (this.checkbox === true) {
-        this.axios.post("/fund/Add_out_enter" + add).then(res => {
-          var id = "";
+        this.axios.post('/fund/Add_out_enter' + add).then(res => {
+          var id = ''
           for (var index in this.listProjet) {
             if (this.listProjet[index].customer_id === this.site) {
-              id = this.listProjet[index].customer_name;
+              id = this.listProjet[index].customer_name
             }
           }
           if (res.status === 200) {
-            this.imgUrl_loading = false;
-            mui.alert(res.data.data, function() {
+            this.imgUrl_loading = false
+            mui.alert(res.data.data, function () {
               then.$router.push({
-                name: "income_receive",
+                name: 'income_receive',
                 query: { money: then.money_get }
-              });
-            });
+              })
+            })
           }
-        });
+        })
       } else {
-        this.axios.post("/fund/Add_out_enter" + add).then(res => {
+        this.axios.post('/fund/Add_out_enter' + add).then(res => {
           if (res.status === 200) {
-            this.imgUrl_loading = false;
-            if (res.data.data === "录入成功") {
-              mui.alert("录入成功", function() {
-                then.$router.go(0);
-              });
+            this.imgUrl_loading = false
+            if (res.data.data === '录入成功') {
+              mui.alert('录入成功', function () {
+                then.$router.go(0)
+              })
             }
           }
-        });
+        })
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -851,28 +696,10 @@ table tr th:nth-child(3) {
   width: 22%;
 }
 /*第二个表单*/
-table {
-  font-size: 15px;
-  width: 100%;
-}
-.rightbutton,
-.leftbutton{
-  display: inline-block;
-}
-.mui-checkbox.mui-left label, .mui-radio.mui-left label {
-    padding-right: 15px;
-    padding-left: 0px;
-}
-.mui-checkbox.mui-left label[data-v-699edbc3], .mui-radio.mui-left label[data-v-699edbc3] {
-    /* padding-right: 15px; */
-    padding-left: 0px;
-    margin-right: 27px;
-}
-.mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio] {
-    left: 34px!important;
-}
-.mui-checkbox.mui-left label[data-v-699edbc3], .mui-radio.mui-left label[data-v-699edbc3] {
-    width: 100%;
-    /* padding-right: 17px; */
-}
+table {font-size: 15px;width: 100%;}
+.rightbutton,.leftbutton{display: inline-block;}
+.mui-checkbox.mui-left label, .mui-radio.mui-left label {padding-right: 15px;padding-left: 0px;}
+.mui-checkbox.mui-left label[data-v-699edbc3], .mui-radio.mui-left label[data-v-699edbc3] { /* padding-right: 15px; */padding-left: 0px;margin-right: 27px;}
+.mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio] {left: 34px!important;}
+.mui-checkbox.mui-left label[data-v-699edbc3], .mui-radio.mui-left label[data-v-699edbc3] {width: 100%; /* padding-right: 17px; */}
 </style>
