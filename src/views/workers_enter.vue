@@ -45,6 +45,63 @@
         </div>
       </form>
       <button-save @click.native="go"></button-save>
+    <div class="customer_entry">
+      <!--头部-->
+      <header class="mui-bar mui-bar-nav header-top">
+        <router-link :to="{name:'informaction'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+        <h1 class="mui-title">工人录入</h1>
+        <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
+      </header>
+      <login-loading v-show="imgUrl_loading"></login-loading>
+      <!--客户录入-->
+      <div class="customer">
+        <h2>工人录入</h2>
+        <p>/Customer input</p>
+      </div>
+      <div class="mui-content app">
+          <form class="mui-input-group">
+              <div class="mui-input-row">
+                  <label>工人名称</label>
+                  <input type="text" class="mui-input-clear" placeholder="请输入工人名称" v-model="Customer_name">
+              </div>
+            <div class="mui-input-row">
+              <label>联系方式</label>
+              <input type="text" class="mui-input-clear" placeholder="请输入手机号" v-model="Customer_connect">
+            </div>
+
+            <div class="mui-input-row">
+              <div class="row-left-on">
+                <label>推荐人</label>
+                <select name="" v-model="Customer_type" :class="{classGray:Customer_type =='',classBlack: Customer_type!=''}">
+                  <option value="">请选择</option>
+                  <option v-for="(item,index) in list_type" :value="item.fund_person_id" :key="index">{{item.fund_person}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="row-left">
+              <div class="row-left-on">
+                <label>工种</label>
+             <el-select v-model="value1" multiple placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+ <el-select v-model="value1" multiple placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+              </div>
+            </div>
+          </form>
+        <button-save @click.native="go"></button-save>
+      </div>
     </div>
   </div>
 </template>
