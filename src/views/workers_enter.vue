@@ -36,10 +36,10 @@
           <div class="row-left-on">
             <label>工种</label>
             <el-select v-model="value1" placeholder="请选择" @change="optionsChange(value1)">
-              <el-option v-for="item in options" :key="item" :label="item.name" :value="item.id"></el-option>
+              <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
             <el-select v-model="value2" multiple placeholder="请选择" @change="valtwoChange(value2)">
-              <el-option v-for="item in list_list" :key="item" :label="item.name" :value="item.id"></el-option>
+              <el-option v-for="item in list_list" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </div>
         </div>
