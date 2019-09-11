@@ -148,22 +148,12 @@ export default {
         }
       }
     }
-    this.back()
   },
   computed: {
     getToken () {
       return this.$store.getters.getToken
     }
   },
-    methods:{
-      back(){
-          document.addEventListener('plusready',function () {
-              plus.key.addEventListener('backbutton',function () {
-                  window.history.go(-1)
-              },false)
-          })
-      }
-    },
 }
 </script>
 
