@@ -330,10 +330,6 @@ const router = new Router({
       name: 'NewUserName',
       component: resolve => require(['@/views/NewUserName'], resolve)
     }, {
-      path: '/stop_sales',
-      name: 'stop_sales',
-      component: resolve => require(['@/views/stop_sales'], resolve)
-    }, {
       path: '/receive_data',
       name: 'receive_data',
       component: resolve => require(['@/views/receive_data'], resolve)
@@ -349,10 +345,6 @@ const router = new Router({
       path: '/task_admins',
       name: 'task_admins',
       component: resolve => require(['@/views/task_admins'], resolve)
-    }, {
-      path: '/stop_sales_two',
-      name: 'stop_sales_two',
-      component: resolve => require(['@/views/stop_sales_two'], resolve)
     }, {
       path: '/informaction',
       name: 'informaction',
