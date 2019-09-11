@@ -20,12 +20,16 @@
     <!--form-->
     <div class="mui-content app">
       <form class="mui-input-group">
-        <div class="mui-input-row">
+        <div class="mui-input-row radio-left">
           <label>类别选择</label>
-          <select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
+          <!--<select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
             <option value="">请选择</option>
             <option v-for="(item,i) in list_fund_name_type" :value="item.fund_name_type" :key="i">{{item.fund_name_type}}</option>
-          </select>
+          </select>-->
+          <div class="mui-input-row mui-radio mui-left" v-for="(item,i) in list_fund_name_type" :key="i">
+            <label>{{item.fund_name_type}}</label>
+            <input name="radio1" type="radio" v-model="fund_nameo" :value="item.fund_name_type" @change="fund_namesa(fund_nameo)">
+          </div>
         </div>
         <div class="mui-input-row">
           <label>类别名称</label>
@@ -208,14 +212,8 @@ export default {
     this.datesdm = dd
   },
   methods: {
-    /* goto(){
-      this.$router.push({name:'money_management'})
-      // localStorage.clear()
-      localStorage.removeItem('shou')
-    }, */
     // 详情
     msg (id, prosen) {
-      // this.$router.push({ path: 'payable_entry', query: { id: id } })
       var payable_entry = {}
       for (var index in this.listTable) {
         if (id === this.listTable[index].fund_details_id) {
@@ -277,7 +275,7 @@ export default {
       if(this.list_fund_namea!=''){
         add+='&fund_names='+this.list_fund_namea
       }
-     
+
       this.axios.get('/fund/select_fund_sum' + '?fund_type=1' + '&Customer_name=' + id).then(res => {
         this.package(res)
       })
@@ -320,6 +318,9 @@ form{margin-bottom: 20px;}
 .goOver label{flex: 0.8;}
 .goOver .go-span{width: 20px;height: 2px;background-color: black;position: relative;top: 50%;right: 23px;}
 .goOver input{flex: 1;}
+  .radio-left{display: flex}
+  .mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 100%;padding-left: 0;margin-right: 27px}
+  .mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: 34px!important;}
 /*table*/
 table{width: 100%;text-align: left;font-size: 13px;overflow: auto}
 table tr {line-height: 29px;border-bottom: 1px solid #DADADA}

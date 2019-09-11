@@ -29,31 +29,17 @@
             <label>相关人</label>
             <input type="text" class="mui-input-clear" v-model="listRelevant" @click="relecantProsen" placeholder="请选择相关人"/>
           </div>
-          <!-- <div class="mui-input-row">
+           <div class="mui-input-row radio-left">
             <label>类别选择</label>
-            <select name="" v-model="fund_detail_id" :class="{select:fund_detail_id==='',selectBlack:fund_detail_id!==''}" @change="fund_deId(fund_detail_id)">
+            <!--<select name="" v-model="fund_detail_id" :class="{select:fund_detail_id==='',selectBlack:fund_detail_id!==''}" @change="fund_deId(fund_detail_id)">
               <option value="">请选择</option>
               <option v-for="(item,index) in list_fund_name_type" :value="item.fund_name_type" :key="index">{{item.fund_name_type}}</option>
-            </select>
-          </div>-->
-          <!-- <div class="mui-input-row mui-radio mui-left">
-            <div class="mui-input-row">
-              <label>类别选择</label>
-            </div>
-            <label>radio</label>
-            <input name="radio1" type="radio" />
-          </div> -->
-          <div class="mui-input-row">
-             <label>类别选择</label>
-              <div class="mui-input-row mui-radio mui-left  leftbutton">
-                <label>个人</label>
-                <input name="radio1" type="radio">
-              </div>
-              <div class="mui-input-row mui-radio mui-left rightbutton">
-                <label>公司</label>
-                <input name="radio1" type="radio">
-              </div>
-          </div>
+            </select>-->
+             <div class="mui-input-row mui-radio mui-left" v-for="(item,i) in list_fund_name_type" :key="i">
+               <label>{{item.fund_name_type}}</label>
+               <input name="radio1" type="radio" v-model="fund_detail_id" :value="item.fund_name_type" @change="fund_deId(fund_detail_id)">
+             </div>
+           </div>
           <div class="mui-input-row">
             <label>款项名称</label>
             <select name v-model="detailed" :class="{select:detailed==='',selectBlack:detailed!==''}" @change="list_fund_nameas(detailed)">
@@ -220,7 +206,7 @@ export default {
       clearBei: '', // 备注
       checkbox: '', // 复选框
       prosen_name: '', // 户主
-      fund_detail_id: '', // 工程款
+      fund_detail_id: '个人', // 工程款
       bank_card: '', // 银行卡
       chuXu: '', // 储蓄卡
       xinY: '', // 信用卡
@@ -299,6 +285,13 @@ export default {
     this.test_id = window.test_id
     this.listRelevant = window.fund_people
     this.listRelevant_id = window.fund_people_name
+
+     /* if (this.fund_detail_id !='') {
+          this.fund_deId()
+      }
+*/
+     this.fund_deId()
+     this.list_fund_nameas()
   },
   computed: {
     money_actual: {
@@ -322,7 +315,7 @@ export default {
     // 一级查询
     fund_deId (id) {
       this.fund_nameso = id
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
@@ -338,11 +331,11 @@ export default {
             this.site_projet = true
           }
         })
-    },
+     },
     // 二级查询
     list_fund_nameas (id) {
       this.fund_name = id
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + id).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
@@ -425,7 +418,7 @@ export default {
         add += '&fund_person=' + this.listRelevant_id
       }
       if (this.fund_detail_id === '个人') {
-        add += 'fund_name=' + this.detailed
+        add += '&fund_name=' + this.detailed
       } else if (this.fund_detail_id === '公司') {
         add += '&fund_name=' + this.slim
       }
@@ -613,7 +606,7 @@ input[type="submit"]:enabled:active {
   border: 1px solid #000000;
   background-color: #000000;
 }
-
+.radio-left{display: flex}
 /*table*/
 .all {
   display: flex;

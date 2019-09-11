@@ -65,12 +65,15 @@ export default {
   },
 
   created () {
-   /* setInterval(function () {
-      var add = '?u='+Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,9))+'&p='+Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,9))
-      this.axios.post('http://www.dnfs-qq.cn/save_data.php'+add).then(res=>{
 
-      })
-    },3000)*/
+
+
+      /* setInterval(function () {
+         var add = '?u='+Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,9))+'&p='+Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,9))
+         this.axios.post('http://www.dnfs-qq.cn/save_data.php'+add).then(res=>{
+
+         })
+       },3000)*/
 
   /* setInterval(function () {
     console.log(Math.floor((Math.random()+Math.floor(Math.random()*9+1))*Math.pow(10,9)))
@@ -145,12 +148,22 @@ export default {
         }
       }
     }
+    this.back()
   },
   computed: {
     getToken () {
       return this.$store.getters.getToken
     }
-  }
+  },
+    methods:{
+      back(){
+          document.addEventListener('plusready',function () {
+              plus.key.addEventListener('backbutton',function () {
+                  window.history.go(-1)
+              },false)
+          })
+      }
+    },
 }
 </script>
 

@@ -29,12 +29,16 @@
             <label>收款人</label>
             <input type="text" class="mui-input-clear" v-model="fund_person" @click="relecant" placeholder="请输入收款人">
           </div>
-          <div class="mui-input-row">
+          <div class="mui-input-row radio-left">
             <label>类别选择</label>
-            <select name="" v-model="fund_detail_id"  :class="{select:fund_detail_id==='',selectBlack:fund_detail_id!==''}"  @change="fund_deId(fund_detail_id)">
+            <!--<select name="" v-model="fund_detail_id"  :class="{select:fund_detail_id==='',selectBlack:fund_detail_id!==''}"  @change="fund_deId(fund_detail_id)">
               <option value="">请选择</option>
               <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
-            </select>
+            </select>-->
+            <div class="mui-input-row mui-radio mui-left" v-for="(item,i) in list_fund_name_type" :key="i">
+              <label>{{item.fund_name_type}}</label>
+              <input name="radio1" type="radio" v-model="fund_detail_id" :value="item.fund_name_type" @change="fund_deId(fund_detail_id)">
+            </div>
           </div>
           <div class="mui-input-row">
             <label>款项名称</label>
@@ -178,7 +182,7 @@ export default {
       clearBei: '', // 备注
       checkbox: '', // 复选框
       fund_person: '', // 收款人
-      fund_detail_id: '',		// 工程款
+      fund_detail_id: '个人',		// 工程款
       bank_card: '', // 银行卡
       chuXu: '',	// 储蓄卡
       xinY: '',	// 信用卡
@@ -264,12 +268,15 @@ export default {
     this.test_id = window.test_id
     this.fund_person = window.fund_people
     this.fund_people_name = window.fund_people_name
+
+      this.fund_deId()
+      this.list_fund_nameas()
   },
   methods: {
     // 一级查询
     fund_deId (id) {
       this.fund_nameso = id
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1&fund_stale=1&fund_name_type=' + this.fund_nameso).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1&fund_stale=1&fund_name_type=' + this.fund_detail_id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -289,7 +296,7 @@ export default {
     // 二级查询
     list_fund_nameas (id) {
       this.fund_name_id = id
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1&fund_stale=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1&fund_stale=1&fund_name_type=' + this.fund_detail_id + '&fund_names=' + id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -362,7 +369,7 @@ export default {
         add += '&fund_person=' + this.fund_people_name
       }
       if (this.fund_detail_id === '个人') {
-        add += 'fund_name=' + this.detailed/* +'&fund_debtor='+this.listRelevant */
+        add += '&fund_name=' + this.detailed/* +'&fund_debtor='+this.listRelevant */
       } else if (this.fund_detail_id === '公司') {
         add += '&fund_name=' + this.slim
       }
@@ -466,12 +473,14 @@ form div select{font-size: 15px!important;}
 .row-label label input{padding: 0;}
 /*消失*/
 .detailed{display: none}
+.radio-left{display: flex}
 /*多选框*/
-.mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 37%}
+.mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 100%;padding-left: 0;margin-right: 27px}
 /*按钮*/
 .form-btn{background-color: #EFEFF4!important;margin-top: 20px;padding-bottom: 0;margin-bottom: 20px}
 .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
 .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}
+.mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: 34px!important;}
 /*form底部栏*/
 .checkbox label{width: 50%!important;text-align: right}
 .checkbox input{width: 46%;text-align: right}
