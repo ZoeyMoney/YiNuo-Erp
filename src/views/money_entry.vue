@@ -87,7 +87,7 @@
               <input v-model="fund_type" @click="week" type="radio" value="周期付款">
             </div>
           </div>
-          <table border="0" class="table-all" id="table">
+          <!--<table border="0" class="table-all" id="table">
             <tr>
               <th>预收日期</th>
               <th>批次</th>
@@ -99,6 +99,20 @@
               <td><input type="text" id="fund_details_batch" v-model="item.fund_details_batch" placeholder="批次"></td>
               <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="￥"  :style="padLeft"></td>
               <td><input type="text" id="fund_details_text" v-model="item.fund_details_text" placeholder="备注"></td>
+            </tr>
+          </table>-->
+          <table class="tables" border="0" id="table">
+            <tr>
+              <th><span :style="paLft">预收日期</span></th>
+              <th><span>批次</span></th>
+              <th><span>金额</span></th>
+              <th><span>备注</span></th>
+            </tr>
+            <tr v-for="(item,i) in list" :key="i">
+              <td><span :style="paLft"><el-date-picker v-model="item.fund_details_date" :editable="false" id="fund_details_date" type="date" placeholder="选择日期"></el-date-picker></span></td>
+              <td><span><input type="text" v-model="item.fund_details_batch" placeholder="批次" id="fund_details_batch" :style="paR"></span></td>
+              <td><span><input type="text" v-model="item.fund_details_money" id="fund_details_money" placeholder="￥" :style="paR"></span></td>
+              <td><span><input type="text" v-model="item.fund_details_text" id="fund_details_text" placeholder="备注" :style="paR"></span></td>
             </tr>
           </table>
         </form>
@@ -182,12 +196,12 @@ export default {
       ],
       batch_index: 1,
       list_list: [],
-      padLeft: {
-        padding: '0'
-      },
-      paRight: {
-        paddingRight: '0'
-      }
+        paLft:{
+          paddingLeft:'15px'
+        },
+        paR:{
+          paddingLeft: "0"
+        }
     }
   },
   created () {
@@ -548,6 +562,7 @@ export default {
 <style scoped>
   @import "../css/public.css";
   select,input::-webkit-input-placeholder{color: #6e6e6e}
+  /deep/input::-webkit-input-placeholder{color: #818181}
   .selectBlack{color: black}
 .mui-input-group {background-color: transparent}
 /*单选框*/
@@ -557,10 +572,18 @@ export default {
 .input-radio div:nth-child(3){padding-right: 20px;}
 /*table表格*/
 select{background-color: transparent;font-size: 15px!important;}
-table{margin-bottom: 16px;width: 100%}
+/*table{margin-bottom: 16px;width: 100%}
 table tr td input[type=date]{width: 129px}
 .table-all tr th{line-height: 33px;background-color: #DADADA;text-align: left;padding: 0 16px;}
-.table-all tr{line-height: 30px;font-size: 14px;}
+.table-all tr{line-height: 30px;font-size: 14px;}*/
+  .tables{width: 100%;font-size: 15px;text-align: left}
+  .tables th{background-color: #dadada;line-height: 29px}
+  .tables th:nth-child(1){width: 30%}
+  .tables th:nth-child(2){width: 13%}
+  .tables th:nth-child(3){width: 20%}
+  .tables th:nth-child(4){width: 37%}
+  /deep/.el-date-editor.el-input, .el-date-editor.el-input__inner{width: 100%}
+  /deep/.el-input__icon{display: none}
 #btn-form,#btn-del{text-align: right;padding-right: 20px;color: #00679b;font-weight: bold}
 .data-time{display: none;}
 /*按钮*/

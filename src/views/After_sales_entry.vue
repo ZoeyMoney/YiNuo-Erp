@@ -58,11 +58,11 @@
         </div>
         <div class="mui-input-row">
           <label>质保截止</label>
-          <input type="date" v-model="Customer_Date">
+          <el-date-picker v-model="Customer_Date" type="date" placeholder="选择日期"></el-date-picker>
         </div>
         <div class="mui-input-row">
           <label>报修时间</label>
-          <input type="date" v-model="Customer_baoxiushijian">
+          <el-date-picker v-model="Customer_baoxiushijian" type="date" placeholder="选择日期"></el-date-picker>
         </div>
         <div class="mui-input-row">
           <label>状态</label>
@@ -70,7 +70,7 @@
         </div>
         <div class="mui-input-row">
           <label>预计完成</label>
-          <input type="date" class="mui-input-clear" v-model="Customer_yujiwanchengshijian">
+          <el-date-picker v-model="Customer_yujiwanchengshijian" type="date" placeholder="选择日期"></el-date-picker>
         </div>
         <div class="mui-input-row form-textarea row-textarea">
           <label>问题描述</label>
@@ -335,6 +335,7 @@ export default {
 <style scoped>
   @import "../css/public.css";
   /*表单*/
+  /deep/input::-webkit-input-placeholder{color: #818181}
   /*    x */
   .mui-icon-clear{display: none!important;}
   form div select{font-size: 15px!important;}
@@ -355,7 +356,7 @@ export default {
   .all_process tr td span input{font-size: 15px;padding: 0 17px}
   .increase{float:right;padding-right: 6px;font-weight: bold;color: #2979b4;font-size: 15px;letter-spacing: 5px}
   .button-del{padding: 7px 0}
-  /deep/.el-date-editor.el-input, .el-date-editor.el-input__inner{padding: 0 17px!important;width: 128px}
+  /deep/.el-date-editor.el-input, .el-date-editor.el-input__inner{width: 128px}
   /deep/.el-icon-date:before{content: ''}
   /deep/.el-icon-plus:before{font-size: 26px}
   /deep/.el-icon-minus:before{font-size: 25px;position: relative;top: 1px}
