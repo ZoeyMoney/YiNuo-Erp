@@ -16,8 +16,7 @@
       </div>
       <div class="mui-content app">
         <div class="dowlog">
-          <el-link type="primary"><a :href="link" class="cff">下载账单</a></el-link>
-
+          <el-link type="primary" @click="Download">下载账单</el-link>
           <el-link type="success" @click="recent">最近数据</el-link>
         </div>
         <form class="mui-input-group">
@@ -190,7 +189,6 @@ export default {
       fundNamesa_id: '',
       listFund_name_id: '',
       customerName_id: '',
-      link:'',//下载连接
       dataA: '',
       dataB: '',
       menuBankNumber: '',
@@ -285,24 +283,16 @@ export default {
       this.al_projet_two = true
       this.list_moey_two = window.transfer
     }
-    this.links()
   },
   methods: {
     //下载
-    /*Download(){
-    //  传type =0
-      this.axios.get('/fund/select_detail?type=0').then(res=>{
+    Download() {
+      //  传type =0
+      this.imgUrl_loading = true
+      this.axios.get('/fund/select_detail?type=0').then(res => {
         if (res.status === 200) {
-          this.link = 'https://formattingclub.com/static/YiNuo/excel' + res.data.data
-          console.log(this.link)
-        }
-      })
-    },*/
-    //下载获取接口
-    links(){
-      this.axios.get('/fund/select_detail?type=0').then(res=>{
-        if (res.status === 200) {
-          this.link = 'https://formattingclub.com/static/YiNuo/excel' + res.data.data
+          this.imgUrl_loading = false
+          location.href = 'https://formattingclub.com/static/YiNuo/excel' + res.data.data
         }
       })
     },
@@ -507,7 +497,6 @@ export default {
 
 <style scoped>
 @import "../css/public.css";
-.cff{color: #05acff}
 .dowlog{padding: 0 11px;margin-bottom: 11px}
 /deep/.el-link.el-link--success{margin-left: 39px}
 .customer{flex: 1;}

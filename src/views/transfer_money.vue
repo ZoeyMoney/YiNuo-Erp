@@ -131,8 +131,8 @@
             </td>
             <td><span @click="bankClick(item.bank_bank,item.bank_id,item.bank_person)">{{item.bank_bank}}</span></td>
             <td><span>{{item.bank_person}}</span></td>
-            <td><span>￥{{item.bank_money}}</span></td>
-            <td><span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_limit}}</span></td>
+            <td><span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_money}}</span></td>
+            <td><span>￥{{item.bank_limit}}</span></td>
           </tr>
         </table>
       </v-touch>

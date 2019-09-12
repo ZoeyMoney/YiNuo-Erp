@@ -162,8 +162,8 @@
               <span><img :src="zhongyuan" v-if="item.bank_bank == '中原信用'" /></span></td>
             <td><span @click="bankClick(item.bank_bank,item.bank_id,item.bank_person)">{{item.bank_bank}}</span></td>
             <td><span>{{item.bank_person}}</span></td>
-            <td><span>￥{{item.bank_money}}</span></td>
-            <td><span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_limit}}</span></td>
+            <td><span @click="msgCu(item.bank_bank,item.bank_person,item.number)">￥{{item.bank_money}}</span></td>
+            <td><span>￥{{item.bank_limit}}</span></td>
           </tr>
         </table>
       </div>
@@ -685,6 +685,7 @@ table tr th:nth-child(3) {
 .table-xin tr th:nth-child(4) {
   width: 21%;
 }
+
 .table-xin tr th:nth-child(5) {
   width: 22%;
 }

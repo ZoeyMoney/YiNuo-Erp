@@ -17,16 +17,11 @@
           <input type="password" placeholder="请输入密码" v-model="pwd" autocomplete="off">
         </div>
       </form>
-<!--      确认框-->
-     <!-- <div class="meg" v-show="config">
-        <div class="msg">
-          <div class="font">提示</div>
-          <div class="msg-box">登录成功</div>
-          <div class="add" @click="add">确定</div>
-        </div>
-      </div>-->
       <div class="mui-button-row go-btn">
         <button type="button" @click="go">登录</button>
+      </div>
+      <div class="pay">
+        <el-button @click="pay">支付</el-button>
       </div>
     </div>
 </template>
@@ -67,22 +62,7 @@ export default {
           if (res.status === 200) {
             this.imgUrl_loading = false
             this.config = true
-            /*//创建div
-            var div = document.createElement('div')
-            //给div加class
-            var divarr = document.createAttribute('class')
-            //class命名
-            divarr.value = 'test'
-            //给div创建点击绑定事件
-            div.setAttributeNode(divarr)
-            var style = document.createAttribute('style')
-            div.setAttributeNode(style)
-            div.style.width = '80%'
-            div.innerHTML = '12312332123123312'
-
-            document.getElementsByTagName('body').item(0).append(div)*/
             if (res.data.msg === '登录成功') {
-              // mui.alert(res.data.msg, function () {
               sessionStorage.setItem(config.KEY.CACHE_LOGIN_USER, _this.name)
               sessionStorage.setItem(config.KEY.CACHE_LOGIN_ID, res.data.userid)
               sessionStorage.setItem(config.KEY.CACHE_LOGIN_NAME,res.data.userNumber)
@@ -99,6 +79,13 @@ export default {
         })
       }
     },
+      pay(){
+        this.axios.post('/pay').then(res=>{
+            if (res.status===200){
+                location.href = res.data.mwebUrl
+            }
+        })
+      }
     /*add(){
 
     }*/
@@ -110,6 +97,7 @@ export default {
   @import "../css/public.css";
   input::-webkit-input-placeholder{color: #464646}
   /*.bcg{position: fixed;z-index: 1000;background: url("../image/507839882.png") no-repeat;background-size: cover;width: 100%;height: 100%;}*/
+  .pay{position: relative;top: 30%;text-align: center}
   .logo{position: relative;z-index: 1000;width: 100%;margin: 0 auto;top: 11%;text-align: center;}
   .logo .logo-bcg{width: 100%}
   .logo .logo-bcg img{width: 80px}

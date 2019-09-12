@@ -177,11 +177,7 @@ export default {
         this.imgUrl_loading = false
         if (this.shaix == '') {
           this.package(res)
-          var allMoney = 0
-          for (var index in this.listTable) {
-            allMoney += this.listTable[index].fund_details_money
-          }
-          this.allMoney = Math.floor(allMoney * 100) / 100
+            this.moneyAll()
         }
       }
       /* function sortnew (a,b) {  //反序
@@ -212,6 +208,14 @@ export default {
     this.datesdm = dd
   },
   methods: {
+      //  总金额
+      moneyAll(){
+          var allMoney = 0
+          for (var index in this.listTable) {
+              allMoney += this.listTable[index].fund_details_money
+          }
+          this.allMoney = Math.floor(allMoney * 100) / 100
+      },
     // 详情
     msg (id, prosen) {
       var payable_entry = {}
@@ -237,6 +241,7 @@ export default {
       this.fund_nameso = id
       this.axios.get('/fund/select_fund_sum' + '?fund_type=1&fund_name_type=' + this.fund_nameso).then(res => {
         this.package(res)
+          this.moneyAll()
         if (this.fund_nameo === '个人') {
           this.list_slime_all = false
         } else if (this.fund_nameo === '公司') {
@@ -253,6 +258,7 @@ export default {
       }
       this.axios.get('/fund/select_fund_sum' + '?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
         this.package(res)
+          this.moneyAll()
       })
     },
     // 类别详细
@@ -260,6 +266,7 @@ export default {
       this.list_fund_slim_id = id
       this.axios.get('/fund/select_fund_sum' + '?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' + id).then(res => {
         this.package(res)
+          this.moneyAll()
       })
     },
     //  项目名称
@@ -278,6 +285,7 @@ export default {
 
       this.axios.get('/fund/select_fund_sum' + '?fund_type=1' + '&Customer_name=' + id).then(res => {
         this.package(res)
+          this.moneyAll()
       })
     },
     // 相关人
@@ -285,6 +293,7 @@ export default {
       this.reald_person = id
       this.axios.get('/fund/select_fund_sum' + '?fund_type=1&fund_person_id=' + id).then(res => {
         this.package(res)
+          this.moneyAll()
       })
     },
     //  时间
@@ -292,12 +301,14 @@ export default {
       this.deteList = id
       this.axios.get('/fund/select_fund_sum' + '?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + id + '&dateB=' + this.dateB).then(res => {
         this.package(res)
+          this.moneyAll()
       })
     },
     date_list_two_change (id) {
       this.dateB = id
       this.axios.get('/fund/select_fund_sum' + '?fund_type=1&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + this.deteList + '&dateB=' + id).then(res => {
         this.package(res)
+          this.moneyAll()
       })
     }
   }

@@ -18,7 +18,7 @@
           <form class="mui-input-group">
               <div class="mui-input-row">
                   <label>工地各项</label>
-                <select name="" v-model="projetName">
+                <select name="" v-model="projetName" :class="{classGary:projetName=='',classBlack:projetName!=''}">
                   <option value="">请选择</option>
                   <option v-for="item in listName" :value="item.customer_name">{{item.customer_name}}</option>
                 </select>
@@ -33,7 +33,7 @@
             </div>
             <div class="mui-input-row">
               <label>设计师</label>
-              <select name="" v-model="psName">
+              <select name="" v-model="psName" :class="{classGary:psName=='',classBlack:psName!=''}">
                 <option value="">请选择</option>
                 <option v-for="item in ps" :value="item">{{item}}</option>
               </select>
@@ -69,14 +69,16 @@
             </div>
           <div class="mui-input-row">
             <label>工程监理</label>
-            <select name="">
-              <option value="">123</option>
+            <select name="" v-model="engineering" :class="{classGary:engineering=='',classBlack:engineering!=''}">
+              <option value="">请选择</option>
+              <option v-for="(item,i) in list_engineering" :value="item.text" :key="i">{{item.text}}</option>
             </select>
           </div>
           <div class="mui-input-row">
             <label>装修标准</label>
-            <select name="">
-              <option value="">123</option>
+            <select name="" v-model="standard" :class="{classGary:standard=='',classBlack:standard!=''}">
+              <option value="">请选择</option>
+              <option v-for="(item,i) in list_standard" :value="item.text" :key="i">{{item.text}}</option>
             </select>
           </div>
           <div class="mui-input-row">
@@ -123,6 +125,17 @@ export default {
       projetManager: '', // 项目经理
       projetText: '', // 项目备注
       className: '工装',
+        engineering:'',//工程数据
+        list_engineering:[//工程数据
+            {text:'项目经理'},
+            {text:'监理'},
+        ],
+        standard:'',//标准
+        list_standard:[
+            {text:'A'},
+            {text:'B'},
+            {text:'C'},
+        ],
       csName: [
         { text: '家装' },
         { text: '工装' }
@@ -162,8 +175,9 @@ export default {
 
 <style scoped>
   @import "../css/public.css";
+  .classGary{color: gray}
+  .classBlack{color: black}
   form select{font-size: 15px!important;}
-
   .mui-input-group {background-color: transparent;margin-bottom: 10px;}
   .mui-input-row select{background-color: #efeff4;}
 

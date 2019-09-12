@@ -29,18 +29,10 @@
                 </tr>
                 <tbody>
                 <tr v-for="(item,i) in num" :key="i">
-                    <td>
-                    <span>{{(i == 1)?yearDate : ''}}</span>
-                    {{item.nowData}}
-                    <i
-                        :class="(strDate === item.nowData)? 'circlered' : ''"
-                    ></i>
-                    </td>
+                    <td><span>{{(i == 1)?yearDate : ''}}</span>{{item.nowData}}<i :class="(strDate === item.nowData)? 'circlered' : ''"></i></td>
                     <td>￥{{item.income}}</td>
                     <td>￥{{item.expend}}</td>
-                    <td
-                    :class="(item.total < 0) ? 'red' : 'green'"
-                    >￥{{(item.total < 0)?(item.total+'').slice(1):item.total}}</td>
+                    <td :class="(item.total < 0) ? 'red' : 'green'">￥{{(item.total < 0)?(item.total+'').slice(1):item.total}}</td>
                     <td></td>
                 </tr>
                 </tbody>
