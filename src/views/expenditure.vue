@@ -182,7 +182,7 @@ export default {
       clearBei: '', // 备注
       checkbox: '', // 复选框
       fund_person: '', // 收款人
-      fund_detail_id: '个人',		// 工程款
+      fund_detail_id: '公司',		// 工程款
       bank_card: '', // 银行卡
       chuXu: '',	// 储蓄卡
       xinY: '',	// 信用卡
@@ -475,7 +475,7 @@ form div select{font-size: 15px!important;}
 .detailed{display: none}
 .radio-left{display: flex}
 /*多选框*/
-.mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 100%;padding-left: 0;margin-right: 27px}
+.mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 100%;padding-left: 0;margin-right: 27px;white-space: nowrap;}
 /*按钮*/
 .form-btn{background-color: #EFEFF4!important;margin-top: 20px;padding-bottom: 0;margin-bottom: 20px}
 .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}

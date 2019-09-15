@@ -6,8 +6,10 @@ import axios from 'axios'
 import Vuex from 'vuex'
 import Vueaxios from 'vue-axios'
 import state from './js/state'
-import element from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import element from 'element-ui'  //element
+import 'element-ui/lib/theme-chalk/index.css' //element css
+import './css/mui.min.css'  //mui css
+import './css/fonts/mui.ttf'  //mui-ico
 import date from './components/date' // 天小时分钟秒
 import data from './components/data' // 年月日
 import tosDate from './components/tosDate' // 年月日-1天
@@ -74,6 +76,7 @@ ser.interceptors.response.use((response) => {
         break
       case 101:
         mui.toast('请切换到http的新版本')
+        break
     }
   }
   return Promise.reject(error)

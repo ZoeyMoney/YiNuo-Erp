@@ -206,7 +206,7 @@ export default {
       clearBei: '', // 备注
       checkbox: '', // 复选框
       prosen_name: '', // 户主
-      fund_detail_id: '个人', // 工程款
+      fund_detail_id: '公司', // 工程款
       bank_card: '', // 银行卡
       chuXu: '', // 储蓄卡
       xinY: '', // 信用卡
@@ -693,7 +693,7 @@ table tr th:nth-child(3) {
 table {font-size: 15px;width: 100%;}
 .rightbutton,.leftbutton{display: inline-block;}
 .mui-checkbox.mui-left label, .mui-radio.mui-left label {padding-right: 15px;padding-left: 0px;}
-.mui-checkbox.mui-left label[data-v-699edbc3], .mui-radio.mui-left label[data-v-699edbc3] { /* padding-right: 15px; */padding-left: 0px;margin-right: 27px;}
 .mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio] {left: 34px!important;}
-.mui-checkbox.mui-left label[data-v-699edbc3], .mui-radio.mui-left label[data-v-699edbc3] {width: 100%; /* padding-right: 17px; */}
+/*.mui-checkbox.mui-left label[data-v-699edbc3], .mui-radio.mui-left label[data-v-699edbc3] {width: 100%;white-space: nowrap;padding-left: 0;margin-right: 27px;}*/
+.mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 100%;padding-left: 0;margin-right: 27px;white-space: nowrap;}
 </style>

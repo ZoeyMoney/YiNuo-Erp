@@ -14,11 +14,10 @@ export default {
   },
   data () {
     return {
-      isRouter:true
+      isRouter:true,
     }
   },
   created () {
-
     try {
       document.body.removeChild(document.getElementById('loading'))
       setTimeout(function () {
@@ -35,7 +34,7 @@ export default {
       this.$nextTick(function () {
         this.isRouter = true
       })
-    }
+    },
   }
 }
 </script>

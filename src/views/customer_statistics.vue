@@ -30,38 +30,14 @@
               <option v-for="(item,index) in listName" :value="item.fund_person">{{item.fund_person}}</option>
             </select>
           </div>
-          <!--<div class="mui-row row-flex">
+          <div class="mui-input-row">
             <label>设计阶段</label>
-            <select v-model="stage_name">
+            <select v-model="stage_name"  :class="{classGary:stage_name=='',classBlack:stage_name!=''}" @change="stage_nameClick">
               <option value="" selected="selected">请选择</option>
-              <option v-for="index in stageName" :value="index">{{index}}</option>
+              <option v-for="index in stageName" :value="index.text">{{index.text}}</option>
             </select>
-          </div>-->
+          </div>
         </div>
-        <!--table-->
-<!--        <p v-show="false">{{listtime | data}}</p>-->
-        <!--<template v-if="osd">
-          <el-table :data="list" style="width: 100%;color: black" height="65vh" @row-click="mername">
-            <el-table-column fixed label="工地名称" width="150">
-              <template slot-scope="scope">{{ scope.row.customer_name }}</template>
-            </el-table-column>
-            <el-table-column label="设计师" width="120">
-              <template slot-scope="scope">{{ scope.row.customer_stylist }}</template>
-            </el-table-column>
-            <el-table-column label="预算" width="120">
-              <template slot-scope="scope">￥{{ scope.row.customer_budget }}</template>
-            </el-table-column>
-            <el-table-column label="天数" width="120">
-              <template slot-scope="scope">￥{{ scope.row.customer_budget }}</template>
-            </el-table-column>
-&lt;!&ndash;            <el-table-column prop="stage_name" label="阶段" width="110"></el-table-column>&ndash;&gt;
-            &lt;!&ndash;<el-table-column :key="Math.random()" label="倒计时" width="120">
-              <span :style="listRad" v-if="time(list.stage_startdate,list.stage_stipulate) === '已逾期'">{{time(list.stage_startdate,list.stage_stipulate)}}</span>
-              <span :style="listStyle" v-else-if="time(list.stage_startdate,list.stage_stipulate) === '未开始'">{{time(list.stage_startdate,list.stage_stipulate)}}</span>
-              <span :style="listBlue" v-else-if="time(list.stage_startdate,list.stage_stipulate)">{{time(list.stage_startdate,list.stage_stipulate)}}</span>
-            </el-table-column>&ndash;&gt;
-          </el-table>
-        </template>-->
         <table border="0">
           <tr>
             <th><span :style="lefta">工地名称</span></th>
@@ -120,60 +96,22 @@ export default {
       lengths: '',
       add: '', // 钱总
       listtime: '', // 倒计时
+      all_list:'',//备份table数据
+      stageName:[
+        {text:'平面图'},
+        {text:'施工图'},
+        {text:'未量尺'},
+      ],
+      ooliust:[],
       /* table */
-      ostyle: {
-        fontSize: '12px',
-        borderBottom: '1px solid #dadada',
-        lineHeight: '30px'
-      },
       /* table的最后一个td */
-      listStyle: {
-        color: 'blue',
-        fontWeight: 'bold'
-      },
       listRad: {
         color: 'red',
         fontWeight: 'bold'
       },
-      listBlue: {
-        color: 'green',
-        fontWeight: 'bold'
-      },
-
-      projet: {
-        width: '93px',
-        paddingLeft: '10px'
-      },
       lefta: {
         paddingLeft: '10px'
       },
-      paLft: {
-        display: 'block',
-        padding: '0 10px',
-        whiteSpace: 'nowrap',
-        width: '138px'
-      },
-      hid: {
-        display: 'block',
-        width: '38px',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-      },
-      person: {
-        display: 'block',
-        width: '62px',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-      },
-      fund_name: {
-        display: 'block',
-        width: '74px',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-      }
     }
   },
   computed: {
@@ -198,6 +136,61 @@ export default {
       return newList
     }
   },
+  methods: {
+    // 设计师
+    styleClick () {
+      var then = this
+      var newList = []
+      then.lists.map(function (item) {
+        if (item.fund_person.search(then.customer_stylist) != -1) {
+          newList.push(item)
+        }
+      })
+      this.ooliust = newList
+      if (this.customer_stylist ==''){
+        this.list = this.all_list
+      }else{
+        this.list = newList
+      }
+    },
+    //阶段
+    stage_nameClick(){
+      var list = []
+      if(this.customer_stylist !=''){
+      for(var index in this.ooliust) {
+        if (this.stage_name == this.ooliust[index].follow_stage){
+          list.push(this.ooliust[index])
+        }
+      }
+      }else{
+        for(var index in this.all_list) {
+          if (this.stage_name == this.all_list[index].follow_stage){
+            list.push(this.all_list[index])
+          }
+        }
+      }
+        if (this.stage_name ==''){
+          this.list = this.ooliust
+        }else{
+          this.list = list
+        }
+
+
+    },
+    // 页面传参
+    mername (id) {
+      var lists = {}
+      for (var index in this.list) {
+        if (id == this.list[index].customer_id) {
+          lists = this.list[index]
+        }
+      }
+      localStorage.customer_statistics = JSON.stringify(lists)
+      this.$router.push({ name: 'customer_details', query: { lists } })
+      // console.log(list)
+      // this.$router.push({ path: 'customer_details', query: { id: id.customer_id } })
+    },
+  },
   created () {
     this.imgUrl_loading = true
     // table数据
@@ -205,6 +198,7 @@ export default {
       if (res.status === 200) {
         this.imgUrl_loading = false
         this.list = res.data
+        this.all_list = res.data
         var ids = []
         for (var index in this.list) {
           ids.push(this.list[index].customer_id)
@@ -221,58 +215,6 @@ export default {
       this.listtime = a
     }, 1000)
   },
-  methods: {
-    // 设计师
-    styleClick () {
-      var then = this
-      var newList = []
-      then.lists.map(function (item) {
-        if (item.fund_person.search(then.customer_stylist) != -1) {
-          newList.push(item)
-        }
-      })
-      this.list = newList
-    },
-    // 页面传参
-    mername (id) {
-      var lists = {}
-      for (var index in this.list) {
-        if (id == this.list[index].customer_id) {
-          lists = this.list[index]
-        }
-      }
-      localStorage.customer_statistics = JSON.stringify(lists)
-      this.$router.push({ name: 'customer_details', query: { lists } })
-      // console.log(list)
-      // this.$router.push({ path: 'customer_details', query: { id: id.customer_id } })
-    },
-    // 倒计时
-    time: function (date, day) {
-      if (date == null) {
-        return '未开始'
-      } else {
-        var startDate = new Date(date)
-        startDate.setDate(startDate.getDate() + day)
-        var m = startDate.getMonth() + 1
-        var end = startDate.getFullYear() + '-' + m + '-' + startDate.getDate() + '-' + startDate.getHours() + ':' +
-            startDate.getMinutes() + ':' + startDate.getSeconds()
-        var endDate = new Date(end)
-        var start = new Date()
-        var rightTime = endDate - start // 截止时间减去当前时间
-        if (rightTime > 0) { // 判断剩余倒计时时间如果大于0就执行倒计时否则就结束
-          var dd = Math.floor(rightTime / 1000 / 60 / 60 / 24)
-          var hh = Math.floor((rightTime / 1000 / 60 / 60) % 24)
-          var mm = Math.floor((rightTime / 1000 / 60) % 60)
-          var ss = Math.floor((rightTime / 1000) % 60)
-          var showTime = dd + ':' + hh + ':' + mm + ':' + ss
-        } else {
-          var showTime = '已逾期'
-        }
-        return showTime
-      }
-    }
-
-  }
 }
 </script>
 

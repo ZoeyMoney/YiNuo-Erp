@@ -20,51 +20,34 @@
       <!--类别-->
       <div class="mui-content app">
         <form class="mui-input-group">
-            <div class="mui-input-row radio-left">
-                <label>类别选择</label>
-              <!--<select name="" v-model="fund_nameo" @change="fund_namesa(fund_nameo)">
-                <option value="">请选择</option>
-                <option v-for="(item,i) in list_fund_name_type" :value="item.fund_name_type" :key="i">{{item.fund_name_type}}</option>
-              </select>-->
-              <div class="mui-input-row mui-radio mui-left" v-for="(item,i) in list_fund_name_type" :key="i">
-                <label>{{item.fund_name_type}}</label>
-                <input name="radio1" type="radio" v-model="fund_nameo" :value="item.fund_name_type" @change="fund_namesa(fund_nameo)">
+          <ul class="mui-table-view">
+            <li class="mui-table-view-cell mui-collapse">
+              <a class="mui-navigate-right search" href="#">筛选</a>
+              <div class="mui-collapse-content content">
+                <div class="mui-input-row">
+                  <label>类别名称</label>
+                  <select name="" v-model="list_fund_namea" @change="listProjetChange">
+                    <option value="" selected="selected">请选择</option>
+                    <option v-for="(item,i) in list_projet" :value="item" :key="i">{{item}}</option>
+                  </select>
+                </div>
+                <div class="mui-input-row">
+                  <label>相关人</label>
+                  <select name="" v-model="Related" @change="RelatedChange">
+                    <option value="" selected="selected">请选择</option>
+                    <option v-for="(item,i) in RelatedList" :value="item" :key="i">{{item}}</option>
+                  </select>
+                </div>
+                <div class="mui-input-row">
+                  <label>工地名称</label>
+                  <select name="" v-model="customer_name" @change="ProjetChange">
+                    <option value="" selected="selected">请选择</option>
+                    <option v-for="(item,i) in projetList" :value="item" :key="i">{{item}}</option>
+                  </select>
+                </div>
               </div>
-            </div>
-          <div class="mui-input-row">
-            <label>类别名称</label>
-            <select name="" v-model="list_fund_namea" @change="list_fund_nameas(list_fund_namea)">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="(item,i) in list_fund_names" :value="item.fund_names" :key="i">{{item.fund_names}}</option>
-            </select>
-          </div>
-          <div class="mui-input-row" v-if="list_slime_all">
-            <label>类别详情</label>
-            <select name="" v-model="slim" @change="list_slim_name(slim)">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="(item,i) in list_fund_name" :value="item.fund_name" :key="i">{{item.fund_name}}</option>
-            </select>
-          </div>
-          <div class="mui-input-row">
-            <label>工地名称</label>
-            <select name="" v-model="customer_name" @change="customer_name_list(customer_name)">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="(item,i) in list_customer_name" :value="item.fund_details_customer_id" :key="i">{{item.customer_name}}</option>
-            </select>
-          </div>
-          <div class="mui-input-row">
-            <label>相关人</label>
-            <select name="" v-model="Related" @change="relatedSearch(Related)">
-              <option value="" selected="selected">请选择</option>
-              <option v-for="(item,i) in list_person" :value="item.fund_person_id" :key="i">{{item.fund_person}}</option>
-            </select>
-          </div>
-          <div class="mui-input-row goOver">
-            <label>起始时间</label>
-            <input type="date" class="mui-input-clear" v-model="date_list" @change="dateList(date_list)">
-            <span class="go-span"></span>
-            <input type="date" class="mui-input-clear" v-model="date_list_two" @change="date_list_two_change(date_list_two)">
-          </div>
+            </li>
+          </ul>
         </form>
         <!--table-->
         <table border="0">
@@ -108,30 +91,23 @@ export default {
   data () {
     return {
       imgUrl_loading: false,
-      fund_nameso: '',
       fund_nameo: '', // 项目类别
       datesdm: '',
-      fund_name: '',
-      list_slime_all: true,
       customer_name: '', // 项目名称
+      projetList:'',//项目名称数据
       fund_names: '',
       listTable: '', // table
+      alllistTable:'',//备份数据列表
       Related: '', // 相关人
-      customer_name_list_one: '',
+      RelatedList:'',//相关人数据
       date_list_two: '',
-      deteList: '',
-      list_fund_names: '', // 类别选择
       list_fund_name: '',
       list_fund_namea: '',
-      list_person: '', // 相关人数组
+      list_projet:'', //类别名称数据
       shaix: '',
       date_list: '',
-      list_customer_name: '',
-      list_fund_name_type: '',
       allMoney: '',
       slim: '',
-      dateB: '',
-      list_fund_slim_id: '',
       money_plus: require('../image/plus.png'),
       paLft: {
         display: 'block',
@@ -177,35 +153,6 @@ export default {
       }
     }
   },
-  created () {
-    this.imgUrl_loading = true
-    /* table */
-    this.axios.get('/fund/select_fund_sum' + '?fund_type=0').then(res => {
-      if (res.status === 200) {
-        this.imgUrl_loading = false
-        this.package(res)
-          this.moneyAll()
-      }
-    })
-    /* this.shaix = JSON.parse(localStorage.shou)
-    this.axios.get('/fund/select_fund_sum'+'?fund_type=1&fund_person_id='+this.shaix).then(res=>{
-      this.package(res)
-    }) */
-    /* data */
-    var data = new Date()
-    var dt = new Date(data)
-    var y = dt.getFullYear()
-    var mm = dt.getMonth() + 1
-    var d = dt.getDate()
-    if (mm < 10) {
-      mm = '0' + mm
-    }
-    if (d < 10) {
-      d = '0' + d
-    }
-    var dd = y + '-' + mm + '-' + d
-    this.datesdm = dd
-  },
   methods: {
     //  总金额
       moneyAll(){
@@ -225,90 +172,109 @@ export default {
       localStorage.account_translation = JSON.stringify(account_translation)
       this.$router.push({ path: 'account_translation', query: { id: account_translation } })
     },
-    // 封装model
-    package (res) {
-      this.listTable = res.data.list_fund
-      this.list_fund_name_type = res.data.list_fund_name_type
-      this.list_fund_names = res.data.list_fund_names
-      this.list_customer_name = res.data.list_customer_name
-      this.list_fund_name = res.data.list_fund_name
-      this.list_person = res.data.list_fund_person
-    },
-    // 类别选择
-    fund_namesa (id) {
-      this.fund_nameso = id
-      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso).then(res => {
-        this.package(res)
-          this.moneyAll()
-        if (this.fund_nameo === '个人') {
-          this.list_slime_all = false
-        } else if (this.fund_nameo === '公司') {
-          this.list_slime_all = true
-        }
-      })
-    },
-    // 类别名称
-    list_fund_nameas (id) {
-      for (var index in this.list_fund_names) {
-        if (this.list_fund_names[index].fund_names === id) {
-          this.fund_name = this.list_fund_names[index].fund_name
+    //类别选择
+    listProjetChange(){
+      var newlist = []
+      if(this.list_fund_namea !=''){
+      for (var index in this.listTable){
+        if ( this.list_fund_namea == this.listTable[index].fund_name){
+          newlist.push(this.listTable[index])
         }
       }
-      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + id).then(res => {
-        this.package(res)
-          this.moneyAll()
-      })
-    },
-    // 类别详细
-    list_slim_name (id) {
-      this.list_fund_slim_id = id
-      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' + id).then(res => {
-        this.package(res)
-          this.moneyAll()
-      })
-    },
-    //  项目名称
-    customer_name_list (id) {
-      var add = ''
-      if(this.fund_nameso!=''){
-        add+='&fund_name_type='+this.fund_nameso
+      this.listTable = newlist
+        this.moneyAll() //总金额
+      }else{
+        this.listTable = this.alllistTable
       }
-      if(this.fund_name !=''){
-        add+='&fund_name=' + this.fund_name
+    },
+    //项目名称
+    ProjetChange(){
+      var projet = []
+      if(this.customer_name !=''){
+        for (var index in this.listTable) {
+          if (this.customer_name == this.listTable[index].customer_name) {
+            projet.push(this.listTable[index])
+          }
+        }
+        this.listTable = projet
+        this.moneyAll() //总金额
+      }else{
+        this.listTable = this.alllistTable
       }
-      if(this.list_fund_namea!=''){
-        add+='&fund_names='+this.list_fund_namea
+    },
+    //相关人
+    RelatedChange(){
+      var Related = []
+      if(this.Related !=''){
+        for (var index in this.listTable) {
+          if (this.Related == this.listTable[index].fund_person) {
+            Related.push(this.listTable[index])
+          }
+        }
+        this.listTable = Related
+        this.moneyAll() //总金额
+      }else{
+        this.listTable = this.alllistTable
       }
-      this.customer_name_list_one = id
-      this.axios.get('/fund/select_fund_sum' + '?fund_type=0' + '&Customer_name=' + id).then(res => {
-        this.package(res)
-          this.moneyAll()
-      })
     },
-    // 相关人
-    relatedSearch (id) {
-      this.reald_person = id
-      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_person_id=' + id).then(res => {
-        this.package(res)
-          this.moneyAll()
-      })
-    },
-    //  时间
-    dateList (id) {
-      this.deteList = id
-      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + id + '&dateB=' + this.dateB).then(res => {
-        this.package(res)
-          this.moneyAll()
-      })
-    },
-    date_list_two_change (id) {
-      this.dateB = id
-      this.axios.get('/fund/select_fund_sum' + '?fund_type=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.list_fund_namea + '&fund_name=' + this.fund_name + '&Customer_name=' + this.customer_name_list_one + '&dateA=' + this.deteList + '&dateB=' + id).then(res => {
-        this.package(res)
-          this.moneyAll()
+    tableData(){
+      /* table */
+      this.axios.get('/fund/select_fund_sum' + '?fund_type=0').then(res => {
+        if (res.status === 200) {
+          var newlist = [];  //类别名称有重复数据
+          var projet = []; //项目名称筛选有重复数据
+          var Related = [];//相关人有重复数据
+          var resArr,projetArr,RelatedArr;  //类别名称筛选过后无重复的数据
+          this.listTable = res.data.list_fund //数据筛选
+          this.alllistTable = res.data.list_fund  //备份数据
+          //金钱合计
+          if (this.list_fund_namea =='' && this.Related =='' && this.customer_name ==''){
+            this.moneyAll() //总合计
+          }
+          //循环筛选
+          for (var index in this.listTable){
+            newlist.push(this.listTable[index].fund_name)
+            projet.push(this.listTable[index].customer_name)
+            Related.push(this.listTable[index].fund_person)
+          }
+          //类别名称
+          resArr = newlist.filter(function (item, index, self) {
+            return self.indexOf(item) == index
+          })
+          //项目名称
+          projetArr = projet.filter(function (item, index, self) {
+            return self.indexOf(item) == index
+          })
+          //相关人
+          RelatedArr = Related.filter(function (item, index, self) {
+            return self.indexOf(item) == index
+          })
+          if (newlist !='' || projet!='' || Related!=''){
+            this.list_projet = resArr
+            this.projetList = projetArr
+            this.RelatedList = RelatedArr
+          }
+        }
       })
     }
-  }
+  },
+  created () {
+   this.tableData()
+    /* data */
+    var data = new Date()
+    var dt = new Date(data)
+    var y = dt.getFullYear()
+    var mm = dt.getMonth() + 1
+    var d = dt.getDate()
+    if (mm < 10) {
+      mm = '0' + mm
+    }
+    if (d < 10) {
+      d = '0' + d
+    }
+    var dd = y + '-' + mm + '-' + d
+    this.datesdm = dd
+  },
 }
 </script>
 
@@ -328,6 +294,11 @@ form{margin-bottom: 20px;}
   .radio-left{display: flex}
   .mui-checkbox.mui-left label, .mui-radio.mui-left label{width: 100%;padding-left: 0;margin-right: 27px}
   .mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: 34px!important;}
+  /*折叠地方*/
+  .search{font-size: 15px}
+  .mui-table-view-cell.mui-collapse .mui-collapse-content{padding: 0}
+  .mui-table-view,.mui-table-view-cell.mui-collapse .mui-collapse-content{background-color: transparent}
+
 table{width: 100%;text-align: left;font-size: 13px;overflow: auto}
 table th{text-align: left;background-color: #DADADA;line-height: 32px;}
 table tr{line-height: 29px;border-bottom: 1px solid #DADADA;white-space: nowrap}

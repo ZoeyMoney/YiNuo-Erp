@@ -291,6 +291,7 @@ export default {
       this.imgUrl_loading = true
       this.axios.get('/fund/select_detail?type=0').then(res => {
         if (res.status === 200) {
+          // console.log(res.data)
           this.imgUrl_loading = false
           location.href = 'https://formattingclub.com/static/YiNuo/excel' + res.data.data
         }

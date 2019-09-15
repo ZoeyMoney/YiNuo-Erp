@@ -34,10 +34,6 @@
             <input type="text" class="mui-input-clear" :value="dates" placeholder="无" disabled="disabled">
           </div>
           <div class="mui-input-row">
-            <label>卡号</label>
-            <input type="text" class="mui-input-clear" :value="bank_number" placeholder="无" disabled="disabled">
-          </div>
-          <div class="mui-input-row">
             <label>项目名称</label>
             <input type="text" class="mui-input-clear" :value="bank_projet" placeholder="无" disabled="disabled">
           </div>
@@ -85,14 +81,12 @@ export default {
       bank_bank: '', // 开户行
       bank_deal_money: '', // 交易金额
       dates: '', // 交易金额
-      bank_number: '', // 卡号
       fund_name: '', // 信用卡
       bank_projet: '', // 项目名称
       fund_details_batch: '', // 期款
       fund_name_type: '', // 款项类别
       fund_names: '', // 款项详情
       fund_type: '', // 款项详细
-      bank_type: '',
       balance: '', // 余额
       fund_person: '', // 债权人
       fund_debtor: '', // 相关人
@@ -117,9 +111,9 @@ export default {
     }
     // console.log(JSON.parse(localStorage.msg))
     this.dates = this.list.dates
-    if (this.list.bank_number != undefined) {
+   /* if (this.list.bank_number != undefined) {
       this.bank_number = this.list.bank_number.replace(reg, '$1 **** **** $2')
-    }
+    }*/
     this.bank_projet = this.list.customer_name
     this.fund_details_batch = this.list.fund_details_batch
     this.fund_name = this.list.fund_name

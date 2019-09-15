@@ -39,6 +39,7 @@ export default {
         { href: 'money_projet', ImgArr: require('../image/shouhou.png'), text: '项目录入' },
         { href: 'money_Responsible', ImgArr: require('../image/Responsible.png'), text: '责任人录入' },
         { href: 'Follow_up', ImgArr: require('../image/Responsible.png'), text: '跟进人录入' },
+        { href: 'Follow_people', ImgArr: require('../image/Responsible.png'), text: '相关人录入' },
         { href: 'profit_edit', ImgArr: require('../image/profit_edit.png'), text: '利润修改' },
         { href: 'receive_data', ImgArr: require('../image/yishou.png'), text: '已收数据' },
         { href: 'paid_data', ImgArr: require('../image/yifu.png'), text: '已付数据' }

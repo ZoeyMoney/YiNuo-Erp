@@ -377,6 +377,10 @@ const router = new Router({
       path: '/Workers_comments',
       name: 'Workers_comments',
       component:resolve=>require(['@/views/Workers_comments'],resolve)
+    }, {
+      path: '/Follow_people',
+      name: 'Follow_people',
+      component:resolve=>require(['@/views/Follow_people'],resolve)
     }
     /* {
       path:'/home',
