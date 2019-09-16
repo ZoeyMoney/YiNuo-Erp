@@ -92,22 +92,16 @@ export default {
     return {
       imgUrl_loading: false,
       fund_nameo: '', // 项目类别
-      datesdm: '',
+      datesdm: '',  //今天时间
       customer_name: '', // 项目名称
       projetList:'',//项目名称数据
-      fund_names: '',
       listTable: '', // table
       alllistTable:'',//备份数据列表
       Related: '', // 相关人
       RelatedList:'',//相关人数据
-      date_list_two: '',
-      list_fund_name: '',
-      list_fund_namea: '',
+      list_fund_namea: '',//类别名称
       list_projet:'', //类别名称数据
-      shaix: '',
-      date_list: '',
       allMoney: '',
-      slim: '',
       money_plus: require('../image/plus.png'),
       paLft: {
         display: 'block',
