@@ -55,8 +55,8 @@ export default {
         { href: 'Project_Reconciliation', ImgArr: require('../image/xiangmduiz.png'), text: '项目对账', projet: false },
         { href: 'money_sale', ImgArr: require('../image/souhou.png'), text: '售后信息', projet: false },
         { href: 'summary_entry', ImgArr: require('../image/Summary.png'), text: '数据录入', projet: false },
-        { href: 'informaction', ImgArr: require('../image/informaction.png'), text: '袋鼠帮帮', projet: true },
-        { href: 'log_admin', ImgArr: require('../image/621.png'), text: '工作日志', projet: true },
+        { href: 'informaction', ImgArr: require('../image/informaction.png'), text: '袋鼠帮帮', projet: false },
+        { href: 'log_admin', ImgArr: require('../image/621.png'), text: '工作日志', projet: false },
       ],
       userName:sessionStorage.getItem('loginUser'),//用户名
       imgUser:require('../image/user.png'),
@@ -100,7 +100,7 @@ export default {
             this.mgrid[index].projet = true
           }
         }
-      } else if (this.mgrid[index].text === '行政管理') {
+      } else if (this.mgrid[index].text === '行政管理' || this.mgrid[index].text === '工作日志') {
         for (var inde in this.NewUserName) {
           if (this.NewUserName[inde].jurisdiction === 'Administration:Administration') {
             this.mgrid[index].projet = true
@@ -123,6 +123,10 @@ export default {
           if (this.NewUserName[inde].jurisdiction === 'data:data') {
             this.mgrid[index].projet = true
           }
+        }
+      }else if (this.mgrid[index].text === '袋鼠帮帮'){
+        if (this.NewUserName[inde].jurisdiction === 'data:data') {
+          this.mgrid[index].projet = true
         }
       }
     }

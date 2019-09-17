@@ -223,11 +223,12 @@ export default {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         paddingLeft: '10px'
-      }
+      },
     }
   },
   created () {
     //  接收返回来的参数
+    this.NewUserNameServe = JSON.parse(localStorage.data).role
     /* this.userName = window.fund_people
         this.userName_id = window.fund_people_name */
     this.imgUrl_loading = true
@@ -237,7 +238,7 @@ export default {
       if (res.status === 200) {
         this.imgUrl_loading = false
         this.NewUserName = JSON.parse(localStorage.data).role
-      
+
         // console.log(this.NewUserName)
         for (var index in this.NewUserName) {
           this.projetName = res.data.list_fund_customer_name
@@ -284,29 +285,33 @@ export default {
     // 未处理进入应付详情
     nodeal (val) {
       var listVal = {}
-      if (JSON.parse(localStorage.data).role[0].role_name == '总权限') {
-        for (var index in this.listSecond) {
-          if (val == this.listSecond[index].fund_details_id) {
-            listVal = this.listSecond[index]
+      for(var index in this.NewUserNameServe){
+        if (this.NewUserNameServe[index].jurisdiction ==='fund:fund'){
+          for (var index in this.listSecond) {
+            if (val == this.listSecond[index].fund_details_id) {
+              listVal = this.listSecond[index]
+            }
           }
+          localStorage.msg = JSON.stringify(listVal)
+          this.$router.push({ path: 'payable_entry', query: { listVal: listVal } })
         }
       }
-      localStorage.payable_entry = JSON.stringify(listVal)
-      this.$router.push({ path: 'payable_entry', query: { listVal: listVal } })
     },
     // 已处理进入流水详情
     rinningClick (val) {
       var listVal = {}
-      if (JSON.parse(localStorage.data).role[0].role_name == '总权限') {
-        for (var index in this.yesFu) {
-          if (val == this.yesFu[index].fund_details_id) {
-            listVal = this.yesFu[index]
+      for(var index in this.NewUserNameServe){
+        if (this.NewUserNameServe[index].jurisdiction ==='fund:fund'){
+          for (var index in this.yesFu) {
+            if (val == this.yesFu[index].fund_details_id) {
+              listVal = this.yesFu[index]
+            }
           }
+          localStorage.msg = JSON.stringify(listVal)
+          window.quan = 'Project_Reconciliation'
+          this.$router.push({ path: 'running_details', query: { listVal: listVal } })
         }
       }
-      localStorage.msg = JSON.stringify(listVal)
-      // console.log(listVal)
-      this.$router.push({ path: 'running_details', query: { listVal: listVal } })
     },
     // 封装筛选总计所有金额
     all_model_money (res) {

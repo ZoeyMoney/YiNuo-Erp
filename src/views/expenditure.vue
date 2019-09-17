@@ -31,10 +31,6 @@
           </div>
           <div class="mui-input-row radio-left">
             <label>类别选择</label>
-            <!--<select name="" v-model="fund_detail_id"  :class="{select:fund_detail_id==='',selectBlack:fund_detail_id!==''}"  @change="fund_deId(fund_detail_id)">
-              <option value="">请选择</option>
-              <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
-            </select>-->
             <div class="mui-input-row mui-radio mui-left" v-for="(item,i) in list_fund_name_type" :key="i">
               <label>{{item.fund_name_type}}</label>
               <input name="radio1" type="radio" v-model="fund_detail_id" :value="item.fund_name_type" @change="fund_deId(fund_detail_id)">
@@ -44,8 +40,8 @@
             <label>款项名称</label>
             <select name="" v-model="detailed"  :class="{select:detailed==='',selectBlack:detailed!==''}"  @change="list_fund_nameas(detailed)">
               <option value="" selected="selected">请选择</option>
-              <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
-              <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
+              <option v-for="(item,i) in list_fund_names" :value="item.fund_names" v-if="cotrProjet" :key="i">{{item.fund_names}}</option>
+              <option v-for="(item,i) in list_fund_names" :value="item.fund_name_id" v-if="idProjet" :key="i">{{item.fund_names}}</option>
             </select>
           </div>
           <div class="mui-input-row" v-if="category">
@@ -284,6 +280,8 @@ export default {
           this.category = false
           this.site_projet = false
           this.relevant_people = true
+          this.idProjet = true
+          this.cotrProjet = false
         } else if (this.fund_detail_id === '公司') {
           this.category = true
           this.cotrProjet = true
@@ -338,14 +336,17 @@ export default {
     },
     //搜索
     msgCu (id, person, number) {
+      this.imgUrl_loading = true
       var add = '?' + '&bank_person=' + person + '&bank_bank=' + id
       if (number !== undefined) {
         add += '&bank_number=' + number
       }
       var transfer = 'transfer'
       this.axios.get('/fund/select_detail' + add).then(res => {
-        window.transfer = res.data.list_moey
-        this.$router.push({ path: 'running_money', query: { transfer: transfer } })
+        if (res.status === 200){
+          window.transfer = res.data.list_moey
+          this.$router.push({ path: 'running_money', query: { transfer: transfer } })
+        }
         // console.log(res.data.list_moey)
       })
     },

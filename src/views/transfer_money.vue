@@ -24,28 +24,10 @@
           <div class="mui-input-row row-label">
             <label>转出</label>
            <input type="text" v-model="bank_out" placeholder="请选择下列银行卡" disabled="disabled">
-            <!-- <label>
-              <select  v-model="bank_out_id" name="" id="enter" :class="{select:bank_out_id==='',selectBlack:bank_out_id!==''}" >
-                <option value="" selected="selected">请选择</option>
-                <option v-for="(item,index) in cead" :value="item.bank_id" :key="index">
-                  <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
-                  <div>{{item.bank_bank}}</div>
-                </option>
-              </select>
-            </label> -->
           </div>
           <div class="mui-input-row row-label">
             <label>转入</label>
            <input type="text" v-model="bank_enter" placeholder="请选择下列银行卡" disabled="disabled">
-            <!-- <label>
-              <select  v-model="bank_enter_id" id="out" :class="{select:bank_enter_id==='',selectBlack:bank_enter_id!==''}" >
-                <option value="" selected="selected">请选择</option>
-                <option v-for="(item,index) in cead" :value="item.bank_id" :key="index">
-                  <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
-                  <div>{{item.bank_bank}}</div>
-                </option>
-              </select>
-            </label> -->
           </div>
           <data-value v-model="dataValue1"></data-value>
           <div class="mui-input-row">
@@ -271,14 +253,18 @@ export default {
       }
     },
     msgCu (id, person, number) {
+      this.imgUrl_loading = true
       var add = '?' + '&bank_person=' + person + '&bank_bank=' + id
       if (number !== undefined) {
         add += '&bank_number=' + number
       }
       var transfer = 'transfer'
       this.axios.get('/fund/select_detail' + add).then(res => {
-        window.transfer = res.data.list_moey
-        this.$router.push({ path: 'running_money', query: { transfer: transfer } })
+        if (res.status === 200){
+          this.imgUrl_loading = false
+          window.transfer = res.data.list_moey
+          this.$router.push({ path: 'running_money', query: { transfer: transfer } })
+        }
         // console.log(res.data.list_moey)
       })
     },

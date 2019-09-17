@@ -55,7 +55,7 @@ export default {
         return false
       }
       var add = '?pwd=' + this.pwd + '&user_password=' + this.user_password + '&user_id=' + JSON.parse(localStorage.data).userid
-      this.axios.get('/User/update_user' + add).then(res => {
+      this.axios.post('/User/update_user' + add).then(res => {
         if (res.data.msg === '修改成功') {
           mui.alert('修改成功', function () {
             localStorage.clear()

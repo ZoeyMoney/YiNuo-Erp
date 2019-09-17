@@ -1,8 +1,9 @@
 <template>
     <div class="money_receivable">
       <!--返回-->
+<!--      :to="{name:'money_management'}"-->
       <header class="mui-bar mui-bar-nav">
-        <router-link :to="{name:'money_management'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+        <router-link to="" @click.native="hregGO" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
         <h1 class="mui-title">应收款汇总</h1>
         <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
@@ -86,6 +87,7 @@
 </template>
 
 <script>
+  import config from '../js/index'
 export default {
   name: 'money_receivable',
   data () {
@@ -101,7 +103,8 @@ export default {
       RelatedList:'',//相关人数据
       list_fund_namea: '',//类别名称
       list_projet:'', //类别名称数据
-      allMoney: '',
+      allMoney: '',//所有金额
+      backupData:'',//拉去旧数据
       money_plus: require('../image/plus.png'),
       paLft: {
         display: 'block',
@@ -150,124 +153,160 @@ export default {
   methods: {
     //  总金额
       moneyAll(){
-          var allMoney = 0
+          var allMoney = 0;
           for (var index in this.listTable) {
-              allMoney += this.listTable[index].fund_details_money
+              allMoney += this.listTable[index].fund_details_money;
           }
-          this.allMoney = Math.floor(allMoney * 100) / 100
+          this.allMoney = Math.floor(allMoney * 100) / 100;
       },
     msg (id) {
-      var account_translation = {}
+      var account_translation = {};
       for (var index in this.listTable) {
         if (id === this.listTable[index].fund_details_id) {
-          account_translation = this.listTable[index]
+          account_translation = this.listTable[index];
         }
       }
-      localStorage.account_translation = JSON.stringify(account_translation)
-      this.$router.push({ path: 'account_translation', query: { id: account_translation } })
+      localStorage.account_translation = JSON.stringify(account_translation);
+      this.$router.push({ path: 'account_translation', query: { id: account_translation } });
     },
     //类别选择
     listProjetChange(){
-      var newlist = []
+      var newlist = [];
+      sessionStorage.setItem(config.SEARCH.SEARCH_LIST_NAME,this.list_fund_namea);
+      this.$store.commit('yingshou',this.list_fund_namea);
       if(this.list_fund_namea !=''){
       for (var index in this.listTable){
         if ( this.list_fund_namea == this.listTable[index].fund_name){
-          newlist.push(this.listTable[index])
+          newlist.push(this.listTable[index]);
         }
       }
-      this.listTable = newlist
-        this.moneyAll() //总金额
+      this.listTable = newlist;
+      sessionStorage.setItem(config.LIST.LIST_PROJET,JSON.stringify(newlist));
+      this.$store.commit('list_backuo',JSON.stringify(newlist));
+        this.moneyAll(); //总金额
+        this.backupData = newlist;
       }else{
-        this.listTable = this.alllistTable
+        this.listTable = this.alllistTable;
       }
     },
     //项目名称
     ProjetChange(){
-      var projet = []
+      var projet = [];
+      sessionStorage.setItem(config.SEARCH.SEARCH_LIST_PROJET,this.customer_name);
+      this.$store.commit('projet',this.customer_name);
       if(this.customer_name !=''){
         for (var index in this.listTable) {
           if (this.customer_name == this.listTable[index].customer_name) {
-            projet.push(this.listTable[index])
+            projet.push(this.listTable[index]);
           }
         }
-        this.listTable = projet
-        this.moneyAll() //总金额
+        this.listTable = projet;
+        this.backupData = projet;
+        sessionStorage.setItem(config.LIST.LIST_PROJET,JSON.stringify(projet));
+        this.$store.commit('list_backuo',JSON.stringify(projet));
+        this.moneyAll(); //总金额;
       }else{
-        this.listTable = this.alllistTable
+        this.listTable = this.alllistTable;
       }
     },
     //相关人
     RelatedChange(){
-      var Related = []
+      var Related = [];
+      sessionStorage.setItem(config.SEARCH.SEARCH_LIST_PEOPLE,this.Related);
+      this.$store.commit('people',this.Related);
       if(this.Related !=''){
         for (var index in this.listTable) {
           if (this.Related == this.listTable[index].fund_person) {
-            Related.push(this.listTable[index])
+            Related.push(this.listTable[index]);
           }
         }
-        this.listTable = Related
-        this.moneyAll() //总金额
+        this.listTable = Related;
+        this.backupData = Related;
+        sessionStorage.setItem(config.LIST.LIST_PROJET,JSON.stringify(Related));
+        this.$store.commit('list_backuo',JSON.stringify(Related));
+        this.moneyAll(); //总金额
       }else{
-        this.listTable = this.alllistTable
+        this.listTable = this.alllistTable;
       }
     },
     tableData(){
       /* table */
+      this.imgUrl_loading = true;
       this.axios.get('/fund/select_fund_sum' + '?fund_type=0').then(res => {
         if (res.status === 200) {
+          this.imgUrl_loading = false;
           var newlist = [];  //类别名称有重复数据
           var projet = []; //项目名称筛选有重复数据
           var Related = [];//相关人有重复数据
           var resArr,projetArr,RelatedArr;  //类别名称筛选过后无重复的数据
-          this.listTable = res.data.list_fund //数据筛选
-          this.alllistTable = res.data.list_fund  //备份数据
+          if (sessionStorage.getItem(config.LIST.LIST_PROJET) !=null){
+            var list = sessionStorage.getItem(config.LIST.LIST_PROJET);
+            var obj = JSON.parse(list);
+            this.listTable = obj
+          }else{
+            this.listTable = res.data.list_fund; //数据筛选
+            this.alllistTable = res.data.list_fund;  //备份数据
+          }
           //金钱合计
           if (this.list_fund_namea =='' && this.Related =='' && this.customer_name ==''){
-            this.moneyAll() //总合计
+            this.moneyAll(); //总合计
           }
+
           //循环筛选
           for (var index in this.listTable){
-            newlist.push(this.listTable[index].fund_name)
-            projet.push(this.listTable[index].customer_name)
-            Related.push(this.listTable[index].fund_person)
+            newlist.push(this.listTable[index].fund_name);
+            projet.push(this.listTable[index].customer_name);
+            Related.push(this.listTable[index].fund_person);
           }
           //类别名称
           resArr = newlist.filter(function (item, index, self) {
-            return self.indexOf(item) == index
-          })
+            return self.indexOf(item) == index;
+          });
           //项目名称
           projetArr = projet.filter(function (item, index, self) {
-            return self.indexOf(item) == index
-          })
+            return self.indexOf(item) == index;
+          });
           //相关人
           RelatedArr = Related.filter(function (item, index, self) {
-            return self.indexOf(item) == index
-          })
+            return self.indexOf(item) == index;
+          });
           if (newlist !='' || projet!='' || Related!=''){
-            this.list_projet = resArr
-            this.projetList = projetArr
-            this.RelatedList = RelatedArr
+            this.list_projet = resArr;
+            this.projetList = projetArr;
+            this.RelatedList = RelatedArr;
           }
         }
       })
-    }
+    },
+  //  返回页面清除数据
+    hregGO(){
+      sessionStorage.removeItem(config.SEARCH.SEARCH_LIST_PROJET);
+      sessionStorage.removeItem(config.SEARCH.SEARCH_LIST_PEOPLE);
+      sessionStorage.removeItem(config.SEARCH.SEARCH_LIST_NAME);
+      sessionStorage.removeItem(config.LIST.LIST_PROJET);
+      this.$store.commit('people');
+      this.$store.commit('projet');
+      this.$store.commit('yingshou');
+      this.$store.commit('list_backuo');
+      this.$router.push({name:'money_management'});
+    },
   },
   created () {
-   this.tableData()
+   this.tableData();
     /* data */
-    var data = new Date()
-    var dt = new Date(data)
-    var y = dt.getFullYear()
-    var mm = dt.getMonth() + 1
-    var d = dt.getDate()
+    var data = new Date();
+    var dt = new Date(data);
+    var y = dt.getFullYear();
+    var mm = dt.getMonth() + 1;
+    var d = dt.getDate();
     if (mm < 10) {
-      mm = '0' + mm
+      mm = '0' + mm;
     }
     if (d < 10) {
-      d = '0' + d
+      d = '0' + d;
     }
-    var dd = y + '-' + mm + '-' + d
-    this.datesdm = dd
+    var dd = y + '-' + mm + '-' + d;
+    this.datesdm = dd;
   },
 }
 </script>

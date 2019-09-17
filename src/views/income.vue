@@ -31,10 +31,6 @@
           </div>
            <div class="mui-input-row radio-left">
             <label>类别选择</label>
-            <!--<select name="" v-model="fund_detail_id" :class="{select:fund_detail_id==='',selectBlack:fund_detail_id!==''}" @change="fund_deId(fund_detail_id)">
-              <option value="">请选择</option>
-              <option v-for="(item,index) in list_fund_name_type" :value="item.fund_name_type" :key="index">{{item.fund_name_type}}</option>
-            </select>-->
              <div class="mui-input-row mui-radio mui-left" v-for="(item,i) in list_fund_name_type" :key="i">
                <label>{{item.fund_name_type}}</label>
                <input name="radio1" type="radio" v-model="fund_detail_id" :value="item.fund_name_type" @change="fund_deId(fund_detail_id)">
@@ -54,10 +50,6 @@
               <option value="" selected="selected">请选择</option>
               <option v-for="(item,i) in list_fund_name" :value="item.fund_name_id" :key="i">{{item.fund_name}}</option>
             </select>
-            <select name v-model="slim" :class="{select:slim==='',selectBlack:slim!==''}" @change="list_fund_namea(slim)">
-              <option value selected="selected">请选择</option>
-              <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
-            </select>
           </div>
           <data-value v-model="dataValue1"></data-value>
           <div class="mui-input-row">
@@ -67,13 +59,6 @@
           <div class="mui-input-row row-label">
             <label>转入账户</label>
             <input type="text" :value="mongey_bank" placeholder="请选择下列银行卡" disabled="disabled" />
-            <!--<select v-model="mongey_bank_id" name="" id="card" :class="{select:mongey_bank_id==='',selectBlack:mongey_bank_id!==''}">
-                <option value="" selected="selected">请选择</option>
-                <option v-for="item in bank_card" :value="item.bank_id">
-                  <div>{{item.bank_person}}</div>&nbsp;&nbsp;&nbsp;
-                  <div>{{item.bank_bank}}</div>
-                </option>
-            </select>-->
           </div>
           <div class="mui-input-row">
             <label>金额</label>
@@ -286,10 +271,6 @@ export default {
     this.listRelevant = window.fund_people
     this.listRelevant_id = window.fund_people_name
 
-     /* if (this.fund_detail_id !='') {
-          this.fund_deId()
-      }
-*/
      this.fund_deId()
      this.list_fund_nameas()
   },
@@ -323,6 +304,8 @@ export default {
             this.category = false
             this.site_projet = false
             this.relevant_people = true
+            this.idProjet = true
+            this.cotrProjet = false
           } else if (this.fund_detail_id === '公司') {
             this.category = true
             this.cotrProjet = true
@@ -350,7 +333,7 @@ export default {
     },
     // 三级查询
     list_fund_namea (id) {
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_nameso + '&fund_names=' + this.fund_name + '&fund_name' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + this.fund_name + '&fund_name' + id).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
@@ -383,18 +366,18 @@ export default {
       this.mongey_bank_id = id
     },
     msgCu (id, person, number) {
+      this.imgUrl_loading = true
       var add = '?' + '&bank_person=' + person + '&bank_bank=' + id
       if (number !== undefined) {
         add += '&bank_number=' + number
       }
       var transfer = 'transfer'
       this.axios.get('/fund/select_detail' + add).then(res => {
-        window.transfer = res.data.list_moey
-        this.$router.push({
-          path: 'running_money',
-          query: { transfer: transfer }
-        })
-        // console.log(res.data.list_moey)
+        if (res.status ===  200){
+          this.imgUrl_loading = false
+          window.transfer = res.data.list_moey
+          this.$router.push({path: 'running_money', query: { transfer: transfer }})
+        }
       })
     },
     // 添加

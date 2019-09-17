@@ -49,8 +49,8 @@ export default {
         check = false
         return false
       }
-      var add = '?name=' + this.name
-      this.axios.get('' + add).then(res => {
+      var add = '?name=' + this.name +  '&user_id=' + JSON.parse(localStorage.data).userid
+      this.axios.get('/User/update_user' + add).then(res => {
         if (res.data.msg === '修改成功') {
           mui.alert('修改成功', function () {
             then.$router.push({ name: 'login' })

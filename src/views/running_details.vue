@@ -1,8 +1,9 @@
 <template>
     <div class="running_details">
       <!--返回-->
+<!--      :to="{name:'running_money'}"-->
       <header class="mui-bar mui-bar-nav">
-        <router-link :to="{name:'running_money'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+        <router-link to="" @click.native="hrefGo" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
         <h1 class="mui-title">现金流水详情</h1>
         <router-link :to="{name:'index'}" class=" mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
       </header>
@@ -91,44 +92,9 @@ export default {
       fund_person: '', // 债权人
       fund_debtor: '', // 相关人
       exit_money: true, // 退款
-      text: ''// 备注
-    }
-  },
-  created () {
-    var loc = location.href
-    var n1 = loc.length// 地址的总长度
-    var n2 = loc.indexOf('=')// 取得=号的位置
-    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
-    var reg = /^(\d{4})\d+(\d{4})$/ // 银行卡
-    this.fund_details_id = id
-    this.list = JSON.parse(localStorage.msg)
-    this.bank_person = this.list.bank_person
-    this.bank_bank = this.list.bank_bank
-    if (this.list.bank_deal_money === 0) {
-      this.bank_deal_money = this.list.fund_detail_transaction_money
-    } else if (this.list.fund_detail_transaction_money === 0) {
-      this.bank_deal_money = this.list.bank_deal_money
-    }
-    // console.log(JSON.parse(localStorage.msg))
-    this.dates = this.list.dates
-   /* if (this.list.bank_number != undefined) {
-      this.bank_number = this.list.bank_number.replace(reg, '$1 **** **** $2')
-    }*/
-    this.bank_projet = this.list.customer_name
-    this.fund_details_batch = this.list.fund_details_batch
-    this.fund_name = this.list.fund_name
-    this.fund_name_type = this.list.fund_name_type
-    this.fund_names = this.list.fund_names
-    this.fund_type = this.list.fund_details_text
-    this.balance = this.list.balance
-    this.fund_person = this.list.fund_person
-    this.fund_debtor = this.list.fund_debtor
-    this.text = this.list.fund_details_text
-    if (this.list.fund_name === '' || this.list.fund_name === undefined || this.list.fund_name === '手续费') {
-      this.exit_money = false
-    }
-    if (this.fund_name_type !== '') {
-      this.exit_money = true
+      text: '',// 备注
+      bank_type:'',//卡号类型
+      quan:''
     }
   },
   methods: {
@@ -165,11 +131,56 @@ export default {
         })
       }
     },
+    hrefGo(){
+      if (this.quan == 'Project_Reconciliation'){
+        this.$router.push({name:'Project_Reconciliation'})
+      }else if (this.quan == undefined){
+        this.$router.push({name:'running_money'})
+      }
+    },
     //  退款
     exitMoney () {
       this.$router.push({ name: 'exit_money' })
     }
-  }
+  },
+  created () {
+    var loc = location.href
+    var n1 = loc.length// 地址的总长度
+    var n2 = loc.indexOf('=')// 取得=号的位置
+    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
+    var reg = /^(\d{4})\d+(\d{4})$/ // 银行卡
+    this.fund_details_id = id
+    this.list = JSON.parse(localStorage.msg)
+    this.bank_person = this.list.bank_person
+    this.bank_bank = this.list.bank_bank
+    if (this.list.bank_deal_money === 0) {
+      this.bank_deal_money = this.list.fund_detail_transaction_money
+    } else if (this.list.fund_detail_transaction_money === 0) {
+      this.bank_deal_money = this.list.bank_deal_money
+    }
+    // console.log(JSON.parse(localStorage.msg))
+    this.dates = this.list.dates
+    /* if (this.list.bank_number != undefined) {
+       this.bank_number = this.list.bank_number.replace(reg, '$1 **** **** $2')
+     }*/
+    this.bank_projet = this.list.customer_name
+    this.fund_details_batch = this.list.fund_details_batch
+    this.fund_name = this.list.fund_name
+    this.fund_name_type = this.list.fund_name_type
+    this.fund_names = this.list.fund_names
+    this.fund_type = this.list.fund_details_text
+    this.balance = this.list.balance
+    this.fund_person = this.list.fund_person
+    this.fund_debtor = this.list.fund_debtor
+    this.text = this.list.fund_details_text
+    if (this.list.fund_name === '' || this.list.fund_name === undefined || this.list.fund_name === '手续费') {
+      this.exit_money = false
+    }
+    if (this.fund_name_type !== '') {
+      this.exit_money = true
+    }
+    this.quan = window.quan
+  },
 }
 </script>
 
