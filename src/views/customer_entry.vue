@@ -187,17 +187,6 @@ export default {
         check = false
         return false
       }
-      //  推荐人
-      if (this.Customer_referrer == '') {
-        mui.toast('推荐人不能为空')
-        check = false
-        return false
-      }
-      if (!nameReg.test(this.Customer_referrer)) {
-        mui.toast('推荐人格式错误')
-        check = false
-        return false
-      }
       //  项目预算
       if (this.Customer_budget == '') {
         mui.toast('项目预算不能为空')

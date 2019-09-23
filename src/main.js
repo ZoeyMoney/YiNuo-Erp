@@ -77,6 +77,8 @@ ser.interceptors.response.use((response) => {
       case 101:
         mui.toast('请切换到http的新版本')
         break
+      case 405:
+        mui.toast('接口出错')
     }
   }
   return Promise.reject(error)

@@ -20,15 +20,27 @@
         <form class="mui-input-group">
           <div class="mui-input-row site_projet" v-if="site_various">
             <label>工地名称</label>
-            <input type="text" v-model="customer_name" @click="siteChange" placeholder="请选择">
+<!--            <input type="text" v-model="customer_name" @click="siteChange" placeholder="请选择">-->
+            <input type="text" v-model="customer_name" placeholder="请输入工地名称" @keyup="siteWhite(customer_name)"/>
+            <ul class="mui-table-view" v-show="isshow">
+              <li class="mui-table-view-cell" v-for="(item,i) in site_projet_name_search" :key="i" @click="siteItem(item.customer_name,item.customer_id)">{{item.customer_name}}</li>
+            </ul>
           </div>
           <div class="mui-input-row">
             <label>债权人</label>
-            <input type="text" id="all" class="mui-input-clear" v-model="fund_person" @click="relecantProsen" placeholder="请输入债务人">
+<!--            <input type="text" id="all" class="mui-input-clear" v-model="fund_person" @click="relecantProsen" placeholder="请输入债务人">-->
+            <input type="text" v-model="fund_person" placeholder="请输入债权人" @keyup="listRelevantWhite(fund_person)"/>
+            <ul class="mui-table-view" v-show="releshow">
+              <li class="mui-table-view-cell" v-for="(item,i) in relelist" :key="i" @click="releItem(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
+            </ul>
           </div>
           <div class="mui-input-row">
             <label>经手人</label>
-            <input type="text" v-model="hand_man" placeholder="请输入经手人" :class="{select:hand_man==='',selectBlack:hand_man!==''}" @click="huanClick">
+<!--            <input type="text" v-model="hand_man" placeholder="请输入经手人" :class="{select:hand_man==='',selectBlack:hand_man!==''}" @click="huanClick">-->
+            <input type="text" v-model="hand_man" placeholder="请输入经手人" @keyup="huandKeyup(hand_man)">
+            <ul class="mui-table-view" v-show="huanShow">
+              <li class="mui-table-view-cell" v-for="(item,i) in huan_list_list" :key="i" @click="huanItem(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
+            </ul>
           </div>
           <div class="mui-input-row">
             <label>类别选择</label>
@@ -127,127 +139,6 @@
           <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">保存</button>
         </div>
       </div>
-      <!--<form class="mui-input-group">
-        <div class="mui-input-row">
-          <label>经手人</label>
-          <input type="text" v-model="hand_man" placeholder="请输入经手人" :class="{select:hand_man==='',selectBlack:hand_man!==''}" @click="huanClick">
-        </div>
-        <div class="mui-input-row">
-          <label>债权人</label>
-          <input type="text" id="all" class="mui-input-clear" v-model="fund_person" @click="relecantProsen" placeholder="请输入债务人">
-        </div>
-        <div class="mui-input-row">
-          <label>级别</label>
-          <select name="" v-model="level" :class="{select:level==='',selectBlack:level!==''}" >
-            <option value="">请选择</option>
-            <option v-for="item in list_lev" :value="item.text">{{item.text}}</option>
-          </select>
-        </div>
-        <div class="mui-input-row">
-          <label>情况</label>
-          <select name="" v-model="whether" :class="{select:whether==='',selectBlack:whether!==''}" >
-            <option value="">请选择</option>
-            <option v-for="item in list_whether" :value="item.text">{{item.text}}</option>
-          </select>
-        </div>
-        <div class="mui-input-row">
-          <label>类别选择</label>
-          <select name="" v-model="fund_detail_id" @change="fund_deId(fund_detail_id)">
-            <option value="">请选择</option>
-            <option v-for="item in list_fund_name_type" :value="item.fund_name_type">{{item.fund_name_type}}</option>
-          </select>
-        </div>
-        <div class="mui-input-row">
-          <label>类别名称</label>
-          <select name="" v-model="detailed" @change="list_fund_nameas(detailed)">
-            <option value="" selected="selected">请选择</option>
-            <option v-for="item in list_fund_names" :value="item.fund_names" v-if="cotrProjet">{{item.fund_names}}</option>
-            <option v-for="item in list_fund_names" :value="item.fund_name_id" v-if="idProjet">{{item.fund_names}}</option>
-          </select>
-        </div>
-        <div class="mui-input-row" v-if="category">
-          <label>类别详情</label>
-          <select name="" v-model="slim">
-            <option value="" selected="selected">请选择</option>
-            <option v-for="item in list_fund_name" :value="item.fund_name_id">{{item.fund_name}}</option>
-          </select>
-        </div>
-        <div class="mui-input-row relevant_people" v-if="relevant_people">
-          <label>相关人</label>
-          <input type="text" v-model="nameo" placeholder="请选择工地" @click="relecantProsen" :class="{select:nameo==='',selectBlack:nameo!==''}" >
-          &lt;!&ndash;<select name="" v-model="nameo">
-            <option value="" selected="selected">请选择</option>
-            <option v-for="item in list_bank_card_person" :value="item.text">{{item.text}}</option>
-          </select>&ndash;&gt;
-        </div>
-        <div class="mui-input-row site_projet" v-if="site_projet">
-          <label>工地名称</label>
-          <input type="text" v-model="site" placeholder="请选择工地"  @click="siteChange"  :class="{select:site==='',selectBlack:site!==''}">
-          &lt;!&ndash;<select name="" v-model="site">
-            <option value="">请选择</option>
-            <option v-for="item in projet" :value="item.customer_id">{{item.customer_name}}</option>
-          </select>&ndash;&gt;
-        </div>
-        <div class="mui-input-row">
-          <label>金额</label>
-          <input type="text" class="mui-input-clear" v-model="money" placeholder="请输入金额">
-        </div>
-        <div class="mui-input-row">
-          <label>备注</label>
-          <input type="text" class="mui-input-clear" v-model="fund_text" placeholder="请输入备注">
-        </div>
-        <div class="mui-input-row input-radio">
-          <div class="mui-input-row mui-left mui-radio">
-            <label>阶段付款</label>
-            <input v-model="fund_type" @click="stage_one" type="radio" value="阶段付款">
-          </div>
-          <div class="mui-input-row mui-left mui-radio">
-            <label>周期付款</label>
-            <input v-model="fund_type" @click="week" type="radio" value="周期付款">
-          </div>
-        </div>
-        <table border="0" class="table-all" id="table">
-          <tr>
-            <th>日期</th>
-            <th>金额</th>
-            <th>批次</th>
-            <th>备注</th>
-          </tr>
-          <tr v-for="item in list">
-            <td><input type="date" id="fund_details_date" v-model="item.fund_details_date"></td>
-            <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="金额"></td>
-            <td><input type="text" id="fund_details_batch" v-model="item.fund_details_batch" placeholder="批次"></td>
-            <td><input type="text" id="fund_details_text" v-model="item.fund_details_text" placeholder="备注"></td>
-          </tr>
-        </table>
-      </form>
-      <div class="mui-content data-time" id="data-time">
-        <form class="mui-input-group">
-          <div class="mui-input-row">
-            <label>还款时间</label>
-            <input type="date" id="data_huan" v-model="data_huan" class="mui-input-clear">
-          </div>
-          <div class="mui-input-row">
-            <label>还款周期</label>
-            <select name="" id="yue" v-model="yue">
-              <option value="">请选择</option>
-              <option value="按月">按月</option>
-              <option value="按年">按年</option>
-              <option value="按周">按周</option>
-            </select>
-          </div>
-          <div class="mui-input-row">
-            <label>还款期数</label>
-            <input type="text" class="mui-input-clear" v-model="qi" id="qi" placeholder="请填入期数">
-          </div>
-        </form>
-      </div>
-      <p id="btn-form" @click="formAdd">添加新一行</p>
-      <p id="btn-del" @click="del(user)">删除</p>
-      <div class="mui-input-row form-btn">
-        <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">保存</button>
-      </div>
-    </div>-->
   </div>
   </div>
 </template>
@@ -285,6 +176,16 @@ export default {
       level: '', // 级别
       whether: '', // 情况
       huan_man_id: '', // 经手人id
+      site_projet_name:'',//工地数据
+      site_projet_name_search:[],
+      relefor:'',//相关人数据
+      relelist:[],//相关人数据
+      releshow:false,//相关人列表
+      huand_list:'',
+      huan_list_list:'',//经受嗯数据
+      test_id: '',
+      isshow:false,
+      huanShow:false,
       list_lev: [
         { text: 'A' },
         { text: 'B' },
@@ -307,55 +208,8 @@ export default {
       }
     }
   },
-  created () {
-    // 接收数据
-    var loc = location.href
-    var n1 = loc.length// 地址的总长度
-    var n2 = loc.indexOf('=')// 取得=号的位置
-    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
-    this.fund_details_id = id
-    this.lista = id.split('=')
-    var lists = []
-    for (var index in this.lista) {
-      // var a1 = this.lista[index].indexOf('&')
-      var a2 = this.lista[index].slice(0)
-      lists.push(a2)
-    }
-    this.money = lists[0]
-    /* 项目名称 */
-    /* this.axios.get(url.list).then(res=>{
-        this.projet = res.data
-      }) */
-    /* table */
-    this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1').then(res => {
-      this.list_fund_name_type = res.data.fund_name_type
-    })
-    this.customer_name = window.test
-    this.customer_name_id = window.test_id
-    this.fund_person = window.fund_people
-    this.fund_person_id = window.fund_people_name
-    this.hand_man = window.fund_people_huan
-    this.huan_man_id = window.fund_people_huan_name
-  },
+
   methods: {
-    // 工地传参
-    siteChange () {
-      var expenditure = 'income_receive'
-      this.$router.push({ path: 'siteList' })
-      window.expenditure = expenditure
-    },
-    // 债权人
-    relecantProsen () {
-      var prosen = 'income_receive'
-      this.$router.push({ path: 'relevant_people' })
-      window.prosen = prosen
-    },
-    // 经手人
-    huanClick () {
-      var prosen = 'income_receive_huan'
-      this.$router.push({ path: 'relevant_people' })
-      window.prosen = prosen
-    },
     // 阶段付款每次点击+1批次
     formAdd () {
       this.batch_index++
@@ -398,6 +252,95 @@ export default {
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
       })
+    },
+    //工地传送
+    siteItem(val,id){
+      this.customer_name = val;
+      this.customer_name_id = id;
+      this.isshow = false;
+    },
+    //相关人传送
+    releItem(val,id){
+      this.fund_person = val;
+      this.fund_person_id = id;
+      this.releshow = false;
+    },
+    // 经手人传送
+    huanItem(val,id){
+      this.hand_man = val;
+      this.huan_man_id = id;
+      this.huanShow = false;
+    },
+    //工地
+    siteData(){
+      this.axios.get('/SelectAllCustomer' + '?Customer_A=1' + '&Customer_B=2' + '&Customer_C=3' + '&Customer_D=4').then(res => {
+        if (res.status ===200){
+          this.site_projet_name = res.data.data
+        }
+      })
+    },
+    //相关人 经手人
+    person_all(){
+      this.axios.get('/fund/Select_fund_person'+'?fund_person_state_A=1').then(res=>{
+        if (res.status ===200){
+          this.relefor = res.data.data
+          this.huand_list = res.data.data
+        }
+      })
+    },
+    //工地键盘监听
+    siteWhite(val){
+      if (val.length ==0){
+        this.isshow = false;
+      }else{
+        this.isshow = true;
+        var then =this
+        var citys = [];
+        if (this.site_projet_name !=''){
+          this.site_projet_name.map(function (item) {
+            if (item.customer_name.search(then.customer_name) != -1){
+              citys.push(item)
+            }
+          })
+          this.site_projet_name_search = citys
+        }
+      }
+    },
+    //相关人键盘监听
+    listRelevantWhite(val){
+      if (val.length ==0){
+        this.releshow = false;
+      }else{
+        this.releshow = true;
+        var then =this
+        var citys = [];
+        if (this.relefor !=''){
+          this.relefor.map(function (item) {
+            if (item.fund_person.search(then.fund_person) != -1){
+              citys.push(item)
+            }
+          })
+          this.relelist = citys
+        }
+      }
+    },
+    //经手人键盘监听
+    huandKeyup(val){
+      if (val.length ==0){
+        this.huanShow = false;
+      }else{
+        this.huanShow = true;
+        var then =this;
+        var citys = [];
+        if (this.huand_list !=''){
+          this.huand_list.map(function (item) {
+            if (item.fund_person.search(then.hand_man) != -1){
+              citys.push(item)
+            }
+          })
+          this.huan_list_list = citys
+        }
+      }
     },
     stage_one () {
       var otable = document.getElementById('table')
@@ -677,7 +620,41 @@ export default {
         }
       })
     }
-  }
+  },
+  created () {
+    //工地
+    this.siteData()
+    //相关人
+    this.person_all()
+    // 接收数据
+    var loc = location.href
+    var n1 = loc.length// 地址的总长度
+    var n2 = loc.indexOf('=')// 取得=号的位置
+    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
+    this.fund_details_id = id
+    this.lista = id.split('=')
+    var lists = []
+    for (var index in this.lista) {
+      // var a1 = this.lista[index].indexOf('&')
+      var a2 = this.lista[index].slice(0)
+      lists.push(a2)
+    }
+    this.money = lists[0]
+    /* 项目名称 */
+    /* this.axios.get(url.list).then(res=>{
+        this.projet = res.data
+      }) */
+    /* table */
+    this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1').then(res => {
+      this.list_fund_name_type = res.data.fund_name_type
+    })
+    /*this.customer_name = window.test
+    this.customer_name_id = window.test_id
+    this.fund_person = window.fund_people
+    this.fund_person_id = window.fund_people_name
+    this.hand_man = window.fund_people_huan
+    this.huan_man_id = window.fund_people_huan_name*/
+  },
 }
 </script>
 
@@ -697,6 +674,9 @@ export default {
   .table-all tr{line-height: 30px;font-size: 14px;}
   #btn-form,#btn-del{text-align: right;padding-right: 20px;color: #00679b;font-weight: bold}
   .data-time{display: none;}
+  /*工地选择*/
+  .mui-table-view{position: absolute;z-index: 1000;top: 38px;left: 0;right: 0;height: 345px;overflow: auto;font-size: 15px;line-height: 15px}
+  .mui-input-row{overflow: inherit;}
   /*按钮*/
   .mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: 16px!important;}
   .mui-checkbox.mui-left label, .mui-radio.mui-left label{padding-left: 45px;}

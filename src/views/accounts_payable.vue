@@ -19,15 +19,27 @@
         <form class="mui-input-group">
           <div class="mui-input-row site_projet" v-if="site_various">
             <label>工地名称</label>
-            <input type="text" v-model="customer_name" @click="siteChange" placeholder="请选择">
+<!--            <input type="text" v-model="customer_name" @click="siteChange" placeholder="请选择">-->
+            <input type="text" v-model="customer_name" placeholder="请输入工地名称" @keyup="siteWhite(customer_name)"/>
+            <ul class="mui-table-view" v-show="isshow">
+              <li class="mui-table-view-cell" v-for="(item,i) in site_projet_name_search" :key="i" @click="siteItem(item.customer_name,item.customer_id)">{{item.customer_name}}</li>
+            </ul>
           </div>
           <div class="mui-input-row">
             <label>债权人</label>
-            <input type="text" id="all" class="mui-input-clear" v-model="fund_person" @click="relecantProsen" placeholder="请输入债务人">
+<!--            <input type="text" id="all" class="mui-input-clear" v-model="fund_person" @click="relecantProsen" placeholder="请输入债务人">-->
+            <input type="text" v-model="fund_person" placeholder="请输入债权人" @keyup="listRelevantWhite(fund_person)"/>
+            <ul class="mui-table-view" v-show="releshow">
+              <li class="mui-table-view-cell" v-for="(item,i) in relelist" :key="i" @click="releItem(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
+            </ul>
           </div>
           <div class="mui-input-row">
             <label>经手人</label>
-            <input type="text" v-model="hand_man" placeholder="请输入经手人" :class="{select:hand_man==='',selectBlack:hand_man!==''}" @click="huanClick">
+<!--            <input type="text" v-model="hand_man" placeholder="请输入经手人" :class="{select:hand_man==='',selectBlack:hand_man!==''}">-->
+            <input type="text" v-model="hand_man" placeholder="请输入经手人" @keyup="huandKeyup(hand_man)">
+            <ul class="mui-table-view" v-show="huanShow">
+              <li class="mui-table-view-cell" v-for="(item,i) in huan_list_list" :key="i" @click="huanItem(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
+            </ul>
           </div>
           <div class="mui-input-row">
             <label>类别选择</label>
@@ -87,20 +99,6 @@
               <input v-model="fund_type" @click="week" type="radio" value="周期付款">
             </div>
           </div>
-          <!--<table border="0" class="table-all" id="table">
-            <tr>
-              <th>日期</th>
-              <th>批次</th>
-              <th :style="padLeft">金额</th>
-              <th>备注</th>
-            </tr>
-            <tr v-for="item in list">
-              <td><input type="date" id="fund_details_date" v-model="item.fund_details_date" :style="paRight"></td>
-              <td><input type="text" id="fund_details_batch" v-model="item.fund_details_batch" placeholder="批次"></td>
-              <td><input type="text" id="fund_details_money" v-model="item.fund_details_money" placeholder="￥" :style="padLeft"></td>
-              <td><input type="text" id="fund_details_text" v-model="item.fund_details_text" placeholder="备注"></td>
-            </tr>
-          </table>-->
           <table class="tables" border="0" id="table">
             <tr>
               <th><span :style="paLft">预收日期</span></th>
@@ -179,6 +177,16 @@ export default {
       level: '', // 级别
       whether: '', // 情况
       huan_man_id: '', // 经手人id
+      site_projet_name:'',//工地数据
+      site_projet_name_search:[],
+      relefor:'',//相关人数据
+      relelist:[],//相关人数据
+      releshow:false,//相关人列表
+      huand_list:'',
+      huan_list_list:'',//经受嗯数据
+      test_id: '',
+      isshow:false,
+      huanShow:false,
       list_lev: [
         { text: 'A' },
         { text: 'B' },
@@ -201,40 +209,7 @@ export default {
         }
     }
   },
-  watch: {
-
-  },
-  created () {
-    /* table */
-    this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1').then(res => {
-      this.list_fund_name_type = res.data.fund_name_type
-    })
-    this.customer_name = window.test
-    this.customer_name_id = window.test_id
-    this.fund_person = window.fund_people
-    this.fund_person_id = window.fund_people_name
-    this.hand_man = window.fund_people_huan
-    this.huan_man_id = window.fund_people_huan_name
-  },
   methods: {
-    // 工地传参
-    siteChange () {
-      var expenditure = 'accounts_payable'
-      this.$router.push({ path: 'siteList' })
-      window.expenditure = expenditure
-    },
-    // 债权人
-    relecantProsen () {
-      var prosen = 'accounts_payable'
-      this.$router.push({ path: 'relevant_people' })
-      window.prosen = prosen
-    },
-    // 经手人
-    huanClick () {
-      var prosen = 'accounts_payable_huan'
-      this.$router.push({ path: 'relevant_people' })
-      window.prosen = prosen
-    },
     // 阶段付款每次点击+1批次
     formAdd () {
       this.batch_index++
@@ -277,6 +252,95 @@ export default {
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
       })
+    },
+    //工地传送
+    siteItem(val,id){
+      this.customer_name = val;
+      this.customer_name_id = id;
+      this.isshow = false;
+    },
+    //相关人传送
+    releItem(val,id){
+      this.fund_person = val;
+      this.fund_person_id = id;
+      this.releshow = false;
+    },
+    // 经手人传送
+    huanItem(val,id){
+      this.hand_man = val;
+      this.huan_man_id = id;
+      this.huanShow = false;
+    },
+    //工地
+    siteData(){
+      this.axios.get('/SelectAllCustomer' + '?Customer_A=1' + '&Customer_B=2' + '&Customer_C=3' + '&Customer_D=4').then(res => {
+        if (res.status ===200){
+          this.site_projet_name = res.data.data
+        }
+      })
+    },
+    //相关人 经手人
+    person_all(){
+      this.axios.get('/fund/Select_fund_person'+'?fund_person_state_A=1').then(res=>{
+        if (res.status ===200){
+          this.relefor = res.data.data
+          this.huand_list = res.data.data
+        }
+      })
+    },
+    //工地键盘监听
+    siteWhite(val){
+      if (val.length ==0){
+        this.isshow = false;
+      }else{
+        this.isshow = true;
+        var then =this
+        var citys = [];
+        if (this.site_projet_name !=''){
+          this.site_projet_name.map(function (item) {
+            if (item.customer_name.search(then.customer_name) != -1){
+              citys.push(item)
+            }
+          })
+          this.site_projet_name_search = citys
+        }
+      }
+    },
+    //相关人键盘监听
+    listRelevantWhite(val){
+      if (val.length ==0){
+        this.releshow = false;
+      }else{
+        this.releshow = true;
+        var then =this
+        var citys = [];
+        if (this.relefor !=''){
+          this.relefor.map(function (item) {
+            if (item.fund_person.search(then.fund_person) != -1){
+              citys.push(item)
+            }
+          })
+          this.relelist = citys
+        }
+      }
+    },
+    //经手人键盘监听
+    huandKeyup(val){
+      if (val.length ==0){
+        this.huanShow = false;
+      }else{
+        this.huanShow = true;
+        var then =this;
+        var citys = [];
+        if (this.huand_list !=''){
+          this.huand_list.map(function (item) {
+            if (item.fund_person.search(then.hand_man) != -1){
+              citys.push(item)
+            }
+          })
+          this.huan_list_list = citys
+        }
+      }
     },
     stage_one () {
       var otable = document.getElementById('table')
@@ -558,7 +622,23 @@ export default {
         }
       })
     }
-  }
+  },
+  created () {
+    //工地
+    this.siteData()
+    //相关人
+    this.person_all()
+    /* table */
+    this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1').then(res => {
+      this.list_fund_name_type = res.data.fund_name_type
+    })
+    /*this.customer_name = window.test
+    this.customer_name_id = window.test_id
+    this.fund_person = window.fund_people
+    this.fund_person_id = window.fund_people_name
+    this.hand_man = window.fund_people_huan
+    this.huan_man_id = window.fund_people_huan_name*/
+  },
 }
 </script>
 
@@ -589,6 +669,10 @@ table tr td input[type=date]{width: 129px}
 /deep/.el-input__icon{display: none}
 .data-time{display: none;}
 #btn-form,#btn-del{text-align: right;padding-right: 20px;color: #00679b;font-weight: bold}
+
+/*工地选择*/
+.mui-table-view{position: absolute;z-index: 1000;top: 38px;left: 0;right: 0;height: 345px;overflow: auto;font-size: 15px;line-height: 15px}
+.mui-input-row{overflow: inherit;}
 /*按钮*/
 .mui-checkbox.mui-left input[type=checkbox], .mui-radio.mui-left input[type=radio]{left: 16px!important;}
 .mui-checkbox.mui-left label, .mui-radio.mui-left label{padding-left: 45px;}

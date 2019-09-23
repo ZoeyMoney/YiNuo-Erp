@@ -298,14 +298,6 @@ const router = new Router({
       name: 'userNameUpdate',
       component: resolve => require(['@/views/userNameUpdate'], resolve)
     }, {
-      path: '/siteList',
-      name: 'siteList',
-      component: resolve => require(['@/views/siteList'], resolve)
-    }, {
-      path: '/relevant_people',
-      name: 'relevant_people',
-      component: resolve => require(['@/views/relevant_people'], resolve)
-    }, {
       path: '/edit_bank',
       name: 'edit_bank',
       component: resolve => require(['@/views/edit_bank'], resolve)

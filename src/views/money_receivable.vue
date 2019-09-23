@@ -53,7 +53,7 @@
         <!--table-->
         <table border="0">
           <tr>
-            <th :style="lefta">日期</th>
+            <th :style="lefta">应收日期</th>
             <th>类别</th>
             <th>项目</th>
             <th>相关人</th>

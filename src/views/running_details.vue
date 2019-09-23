@@ -158,7 +158,7 @@ export default {
     } else if (this.list.fund_detail_transaction_money === 0) {
       this.bank_deal_money = this.list.bank_deal_money
     }
-    // console.log(JSON.parse(localStorage.msg))
+    console.log(JSON.parse(localStorage.msg))
     this.dates = this.list.dates
     /* if (this.list.bank_number != undefined) {
        this.bank_number = this.list.bank_number.replace(reg, '$1 **** **** $2')

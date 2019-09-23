@@ -216,7 +216,7 @@ export default {
       var add = '?user_id='+sessionStorage.getItem('loginUserId')+'&user_name='+this.name+'&user_IDNumber='+this.id_card+
         '&user_section='+this.department+ '&user_duty='+this.Position+'&user_school='+this.graduation+'&user_education='+this.Education+'&user_startdate='+dates+
         '&user_phone='+this.phone_number
-      this.axios.post('/User/update_user'+add).then(res=>{
+      this.axios.get('/User/update_user'+add).then(res=>{
         if (res.status === 200) {
           this.imgUrl_loading = false
           mui.alert('保存成功',function () {

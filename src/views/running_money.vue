@@ -194,6 +194,8 @@ export default {
       menuBankNumber: '',
       fund_details_id: '', // 传参id
       sh_data:'',//前两天时间
+      bank_person_l:'',//最近户主
+      bank_bank_l:'',//最近工商
       all_all: '',
       leftshi: {
         paddingLeft: '10px'
@@ -278,10 +280,25 @@ export default {
     this.list = id.split('=')
     this.all_all = this.list[0]
     //  接收收入支出转账银行卡信息
+    var bank_list = [] //银行卡
+    var person_list = [];  //户主
+    var nelist,person;
     if (this.all_all === 'transfer') {
       this.al_projet = false
       this.al_projet_two = true
       this.list_moey_two = window.transfer
+      for (var index in this.list_moey_two) {
+        bank_list.push(this.list_moey_two[index].bank_bank)
+        person_list.push(this.list_moey_two[index].bank_person)
+      }
+      nelist = bank_list.filter(function (item, index, self) {
+        return self.indexOf(item) == index;
+      })
+      person = person_list.filter(function (item, index, self) {
+        return self.indexOf(item) == index;
+      })
+      this.bank_person_l = nelist[0]
+      this.bank_bank_l = person[0]
     }
   },
   methods: {
@@ -327,6 +344,12 @@ export default {
       }
       if (this.dataB != '') {
         add+='&typeEnd='+this.dataB
+      }
+      if (this.bank_person_l != '') {
+        add+='&bank_person='+this.bank_person_l
+      }
+      if (this.bank_bank_l != '') {
+        add+='&bank_bank='+this.bank_bank_l
       }
       this.axios.get('/fund/select_detail?type=1'+add).then(res=>{
         if (res.status === 200) {

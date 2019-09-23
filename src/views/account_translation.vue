@@ -214,7 +214,7 @@ export default {
         this.axios.get('/fund/update_fund_details' + add).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
-            mui.alert(res.msg, function () {
+            mui.alert(res.data.msg, function () {
               then.$router.push({ name: 'money_receivable' })
             })
           } else {

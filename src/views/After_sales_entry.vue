@@ -16,11 +16,14 @@
       <form class="mui-input-group">
         <div class="mui-input-row">
           <label>工地名称</label>
-          <input type="text" placeholder="请选择工地名称" v-model="Customer_name" :class="{classGary:Customer_name==='',classBlack: Customer_name!==''}" @click="site">
+<!--          <input type="text" placeholder="请选择工地名称" v-model="Customer_name" :class="{classGary:Customer_name==='',classBlack: Customer_name!==''}" @click="site">-->
+          <input type="text" placeholder="请输入工地名称" v-model="Customer_name" @keyup="siteWhite(Customer_name)"/>
+          <ul class="mui-table-view" v-show="isshow">
+            <li class="mui-table-view-cell" v-for="(item,i) in site_projet_name_search" :key="i" @click="siteItem(item.customer_name,item.customer_id)">{{item.customer_name}}</li>
+          </ul>
         </div>
         <div class="mui-input-row">
           <label>对接人</label>
-<!--          <input type="text" class="mui-input-clear" placeholder="请输入联系人" v-model="AfterSale_person">-->
           <select name="" v-model="AfterSale_person" :class="{classGary:AfterSale_person==='',classBlack: AfterSale_person!==''}">
             <option value="">请选择</option>
             <option v-for="item in prosenList" :value="item.fund_person_id">{{item.fund_person}}</option>
@@ -129,6 +132,9 @@ export default {
       // Customer_baozhiqi:'',//保质期
       Customer_Date: '', // 项目时间
       Customer_baoxiushijian: '',
+      site_projet_name:'',//工地数据
+      site_projet_name_search:[],
+      isshow:false,
       Customer_yujiwanchengshijian: '', //
       Customer_form: '工装', // 家装或工装'=
       Customer_formList: [
@@ -154,60 +160,7 @@ export default {
       ]
     }
   },
-  created () {
-    // 对接人
-    this.prosenFunction()
 
-    this.Customer_name = window.test
-    this.Customer_name_id = window.test_id
-  },
-  computed: {
-    // 总金额
-    all_money () {
-      /* if (this.Customer_DecorateJia != '' && this.Customer_DecorateYi != '' && this.worker) {
-          var a = 0
-          a += parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
-          return a
-        }else if (this.Customer_DecorateJia != '' && this.Customer_DecorateYi != '') {
-          var b = 0
-          b += parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi)
-          return b
-        }else if (this.Customer_DecorateJia != '' && this.worker != '') {
-          var c = 0
-          c += parseFloat(this.Customer_DecorateJia) + parseFloat(this.worker)
-          return c
-        }else if (this.Customer_DecorateYi != '' && this.worker != '') {
-          var d = 0
-          d += parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
-          return d
-        } */
-      var a = parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
-      return a
-    },
-    //  状态
-    statusd () {
-      // 报修时见大于质保时间则在状态里面自动添加过保 小于等于债保
-      if (this.Customer_Date != '' && this.Customer_baoxiushijian != '') {
-        // 报修时间
-        var dates = new Date(this.Customer_baoxiushijian)
-        var ds = dates.getFullYear()
-        var ys = dates.getMonth() + 1
-        var ms = dates.getDate()
-        var dds = ds + '-' + ys + '-' + ms
-        // 质保时间
-        var date = new Date(this.Customer_Date)
-        var d = date.getFullYear()
-        var y = date.getMonth() + 1
-        var m = date.getDate()
-        var dd = d + '-' + y + '-' + m
-        if (dds > dd) {
-          return '已过保'
-        } else {
-          return '在保'
-        }
-      }
-    }
-  },
   methods: {
     // 对接人
     prosenFunction () {
@@ -276,6 +229,38 @@ export default {
       a = false
       return false
     },
+    //工地传送
+    siteItem(val,id){
+      this.Customer_name = val;
+      this.Customer_name_id = id;
+      this.isshow = false;
+    },
+    //工地
+    siteData(){
+      this.axios.get('/SelectAllCustomer' + '?Customer_A=1' + '&Customer_B=2' + '&Customer_C=3' + '&Customer_D=4').then(res => {
+        if (res.status ===200){
+          this.site_projet_name = res.data.data
+        }
+      })
+    },
+    //工地键盘监听
+    siteWhite(val){
+      if (val.length ==0){
+        this.isshow = false;
+      }else{
+        this.isshow = true;
+        var then =this
+        var citys = [];
+        if (this.site_projet_name !=''){
+          this.site_projet_name.map(function (item) {
+            if (item.customer_name.search(then.Customer_name) != -1){
+              citys.push(item)
+            }
+          })
+          this.site_projet_name_search = citys
+        }
+      }
+    },
     // 添加
     go () {
       var _this = this
@@ -328,7 +313,45 @@ export default {
         }
       })
     }
-  }
+  },
+  created () {
+    // 对接人
+    this.prosenFunction()
+    //工地
+    this.siteData()
+    /*this.Customer_name = window.test
+    this.Customer_name_id = window.test_id*/
+  },
+  computed: {
+    // 总金额
+    all_money () {
+      var a = parseFloat(this.Customer_DecorateJia) + parseFloat(this.Customer_DecorateYi) + parseFloat(this.worker)
+      return a
+    },
+    //  状态
+    statusd () {
+      // 报修时见大于质保时间则在状态里面自动添加过保 小于等于债保
+      if (this.Customer_Date != '' && this.Customer_baoxiushijian != '') {
+        // 报修时间
+        var dates = new Date(this.Customer_baoxiushijian)
+        var ds = dates.getFullYear()
+        var ys = dates.getMonth() + 1
+        var ms = dates.getDate()
+        var dds = ds + '-' + ys + '-' + ms
+        // 质保时间
+        var date = new Date(this.Customer_Date)
+        var d = date.getFullYear()
+        var y = date.getMonth() + 1
+        var m = date.getDate()
+        var dd = d + '-' + y + '-' + m
+        if (dds > dd) {
+          return '已过保'
+        } else {
+          return '在保'
+        }
+      }
+    }
+  },
 }
 </script>
 
@@ -382,6 +405,9 @@ export default {
   .money-input label{flex: 1;width: 30%}
   .money-input input{flex: 1.6;width: 40%}
   .span-money{display: block;line-height: 43px;font-size: 13px;width: 30%;}
+  /*工地选择*/
+  .mui-table-view{position: absolute;z-index: 1000;top: 38px;left: 0;right: 0;height: 345px;overflow: auto;font-size: 15px;line-height: 15px}
+  .mui-input-row{overflow: inherit;}
   /*按钮*/
   .mui-radio{overflow: visible}
   .mui-btn-blue, .mui-btn-primary, input[type=submit]{border: 1px solid #000000;background-color: #000000;}

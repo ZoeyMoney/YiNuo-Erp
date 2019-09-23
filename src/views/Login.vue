@@ -80,7 +80,7 @@ export default {
       }
     },
       pay(){
-        this.axios.post('/pay').then(res=>{
+        this.axios.post('pay/pay?oid=5').then(res=>{
             if (res.status===200){
                 location.href = res.data.mwebUrl
             }

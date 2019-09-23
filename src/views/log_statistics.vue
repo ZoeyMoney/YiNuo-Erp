@@ -40,7 +40,7 @@
             <span>{{item.date | data}}</span>
           </div>
           <div class="text item">
-            {{item.plan_text}}
+            {{reol(item.plan_text)}}
           </div>
           <div style="color: #919191;word-break: break-all" v-if="item.plan_over">{{item.plan_over}}</div>
           <div style="color: #919191;word-break: break-all" v-if="item.plan_over == undefined">待汇报</div>
@@ -64,7 +64,7 @@
         qianData:'',//昨天时间
         str:'',//开始时间
         ents:'',//结束时间
-        prosen_id:''//用户id
+        prosen_id:'',//用户id
       }
     },
     methods:{
@@ -142,8 +142,16 @@
       search_text(){
         this.axios.get('/Administration/Select_Plan?StartDate='+this.qianData).then(res=>{
           this.text = res.data.data
+          // var str = a.replace(/,|，|、/g, '\n')
+          /*for(var index in this.text){
+            console.log(this.text[index].plan_text.replace(/。/g, '\n'))
+          }*/
           this.user = res.data.user
         })
+      },
+    //  文章截取
+      reol(str){
+        return str.replace(/。/g, '\n')
       },
     //  今天时间
       datas(){
@@ -174,17 +182,19 @@
   .asd{padding-top: 0}
   .customer{flex: 1;}
   .one-img{display: flex;}
+  .item{white-space: pre-line}
   .mui-img{width: 36px;padding-top: 9%;padding-right: 9px;}
   .mui-img a img{width: 100%;}
   .clearfix span:nth-child(2){float: right}
   /*表*/
   /deep/.el-card__header{background-color: black;color: white;padding: 10px 20px}
   /deep/.text {font-size: 14px;}
-  /deep/.item {margin-bottom: 18px;border-bottom: 1px solid;padding-bottom: 12px;word-break: break-all}
+  /deep/.item {margin-bottom: 18px;border-bottom: 1px solid;word-break: break-all}
   /deep/.clearfix:before, .clearfix:after {display: table;content: "";}
   /deep/.clearfix:after {clear: both}
   /deep/.box-card {width: 100%;font-size: 15px;margin-bottom: 20px}
   /deep/.box-card:nth-child(2){margin-bottom: 20px}
+  /deep/.el-card__body{padding-left: 20px;padding-right: 20px;padding-top: 0}
   select{font-size: 15px}
   .gren{color: gray}
   .blak{color: black}

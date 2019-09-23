@@ -23,11 +23,19 @@
         <form class="mui-input-group">
           <div class="mui-input-row site_projet" v-if="site_projet">
             <label>工地名称</label>
-            <input type="text" v-model="site" @click="siteChange" placeholder="请选择">
+<!--            <input type="text" v-model="site" @click="siteChange" placeholder="请选择">-->
+            <input type="text" v-model="site" placeholder="请输入工地名称" @keyup="siteWhite(site)"/>
+            <ul class="mui-table-view" v-show="isshow">
+              <li class="mui-table-view-cell" v-for="(item,i) in site_projet_name_search" :key="i" @click="siteItem(item.customer_name,item.customer_id)">{{item.customer_name}}</li>
+            </ul>
           </div>
           <div class="mui-input-row">
             <label>收款人</label>
-            <input type="text" class="mui-input-clear" v-model="fund_person" @click="relecant" placeholder="请输入收款人">
+<!--            <input type="text" class="mui-input-clear" v-model="fund_person" @click="relecant" placeholder="请输入收款人">-->
+            <input type="text" v-model="fund_person" placeholder="请输入相关人" @keyup="listRelevantWhite(fund_person)"/>
+            <ul class="mui-table-view" v-show="releshow">
+              <li class="mui-table-view-cell" v-for="(item,i) in relelist" :key="i" @click="releItem(item.fund_person,item.fund_person_id)">{{item.fund_person}}</li>
+            </ul>
           </div>
           <div class="mui-input-row radio-left">
             <label>类别选择</label>
@@ -189,8 +197,13 @@ export default {
       list_fund_name_type: '', // 一级查询
       list_fund_names: '', // 二级查询
       list_fund_name: '', // 三级查询
+      site_projet_name:'',//工地数据
+      site_projet_name_search:[],
+      relefor:'',//相关人数据
+      relelist:[],//相关人数据
+      releshow:false,//相关人列表
       test_id: '',
-      fund_people_name: '', // id
+      isshow:false,
       //银行卡
       baoshang:require('../image/baoshang.png'),
       baocun:require('../image/baocun.png'),
@@ -223,51 +236,7 @@ export default {
       ]
     }
   },
-  created () {
-    this.imgUrl_loading = true
-    /* table */
-    this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1&fund_stale=1').then(res => {
-      if (res.status === 200) {
-        this.imgUrl_loading = false
-        this.list_fund_name_type = res.data.fund_name_type
-      }
-    })
-    /* 银行卡 */
-    this.axios.get('/fund/select_bank').then(res => {
-      this.bank_card = res.data
-      var chu = []
-      var xin = []
-      var m = 0
-      var y = 0
-      var all = 0// 合计储蓄卡信用卡总额
-      for (var index in res.data) {
-        if (res.data[index].bank_type === '储蓄卡') {
-          m += res.data[index].bank_money // 储蓄卡总额
-          chu.push(res.data[index])
-        } else {
-          if (res.data[index].bank_type === '信用卡') {
-            if (res.data[index].bank_money > 0) {
-              y += res.data[index].bank_money
-            }
-            xin.push(res.data[index])
-          }
-        }
-      }
-      this.chuXu = chu
-      this.xinY = xin
-      this.chuXuKa = Math.floor(m * 100) / 100
-      this.XinYongKa = Math.floor(y * 100) / 100
-      all += this.chuXuKa + this.XinYongKa
-      this.allTotal = Math.floor(all * 100) / 100
-    })
-    this.site = window.test
-    this.test_id = window.test_id
-    this.fund_person = window.fund_people
-    this.fund_people_name = window.fund_people_name
 
-      this.fund_deId()
-      this.list_fund_nameas()
-  },
   methods: {
     // 一级查询
     fund_deId (id) {
@@ -315,19 +284,6 @@ export default {
     onSwipeRight: function () {
       this.$router.push({ name: 'transfer_money' })
     },
-    // 工地传参
-    siteChange () {
-      var expenditure = 'expenditure'
-      this.$router.push({ path: 'siteList' })
-      window.expenditure = expenditure
-    },
-    // 相关人传参
-    relecant () {
-      // this.$router.push({path:'relevant_people'})
-      var expenditure = 'expenditure'
-      this.$router.push({ path: 'relevant_people' })
-      window.prosen = expenditure
-    },
     //银行卡传送
     bankClick(name,id,prosen){
       var bank = name + ' ' + prosen
@@ -350,7 +306,70 @@ export default {
         // console.log(res.data.list_moey)
       })
     },
-
+    //工地
+    siteData(){
+      this.axios.get('/SelectAllCustomer' + '?Customer_A=1' + '&Customer_B=2' + '&Customer_C=3' + '&Customer_D=4').then(res => {
+        if (res.status ===200){
+          this.site_projet_name = res.data.data
+        }
+      })
+    },
+    //相关人
+    person_all(){
+      this.axios.get('/fund/Select_fund_person'+'?fund_person_state_A=1').then(res=>{
+        if (res.status ===200){
+          this.relefor = res.data.data
+        }
+      })
+    },
+    //工地键盘监听
+    siteWhite(val){
+      if (val.length ==0){
+        this.isshow = false;
+      }else{
+        this.isshow = true;
+        var then =this
+        var citys = [];
+        if (this.site_projet_name !=''){
+          this.site_projet_name.map(function (item) {
+            if (item.customer_name.search(then.site) != -1){
+              citys.push(item)
+            }
+          })
+          this.site_projet_name_search = citys
+        }
+      }
+    },
+    //相关人键盘监听
+    listRelevantWhite(val){
+      if (val.length ==0){
+        this.releshow = false;
+      }else{
+        this.releshow = true;
+        var then =this
+        var citys = [];
+        if (this.relefor !=''){
+          this.relefor.map(function (item) {
+            if (item.fund_person.search(then.fund_person) != -1){
+              citys.push(item)
+            }
+          })
+          this.relelist = citys
+        }
+      }
+    },
+    //工地传送
+    siteItem(val,id){
+      this.site = val;
+      this.test_id = id;
+      this.isshow = false;
+    },
+    //相关人传送
+    releItem(val,id){
+      this.fund_person = val;
+      this.fund_people_name = id;
+      this.releshow = false;
+    },
     /* 保存 */
     add () {
       var then = this
@@ -452,7 +471,56 @@ export default {
         })
       }
     }
-  }
+  },
+  created () {
+    this.imgUrl_loading = true
+    //工地
+    this.siteData()
+    //相关人
+    this.person_all()
+    /* table */
+    this.axios.get('/fund/Select_three_fund_name' + '?fund_type=1&fund_stale=1').then(res => {
+      if (res.status === 200) {
+        this.imgUrl_loading = false
+        this.list_fund_name_type = res.data.fund_name_type
+      }
+    })
+    /* 银行卡 */
+    this.axios.get('/fund/select_bank').then(res => {
+      this.bank_card = res.data
+      var chu = []
+      var xin = []
+      var m = 0
+      var y = 0
+      var all = 0// 合计储蓄卡信用卡总额
+      for (var index in res.data) {
+        if (res.data[index].bank_type === '储蓄卡') {
+          m += res.data[index].bank_money // 储蓄卡总额
+          chu.push(res.data[index])
+        } else {
+          if (res.data[index].bank_type === '信用卡') {
+            if (res.data[index].bank_money > 0) {
+              y += res.data[index].bank_money
+            }
+            xin.push(res.data[index])
+          }
+        }
+      }
+      this.chuXu = chu
+      this.xinY = xin
+      this.chuXuKa = Math.floor(m * 100) / 100
+      this.XinYongKa = Math.floor(y * 100) / 100
+      all += this.chuXuKa + this.XinYongKa
+      this.allTotal = Math.floor(all * 100) / 100
+    })
+    /*this.site = window.test
+    this.test_id = window.test_id
+    this.fund_person = window.fund_people
+    this.fund_people_name = window.fund_people_name*/
+
+    this.fund_deId()
+    this.list_fund_nameas()
+  },
 }
 </script>
 
@@ -505,6 +573,9 @@ form div select{font-size: 15px!important;}
 .table-xin tr th:nth-child(3){width: 15%}
 .table-xin tr th:nth-child(4){width: 21%}
 .table-xin tr th:nth-child(5){width: 22%}
+/*工地选择*/
+.mui-table-view{position: absolute;z-index: 1000;top: 38px;left: 0;right: 0;height: 345px;overflow: auto;font-size: 15px;line-height: 15px}
+.mui-input-row{overflow: inherit;}
 
 /*第二个表单*/
 table{font-size: 15px;width: 100%;white-space: nowrap}

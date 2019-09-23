@@ -90,7 +90,6 @@
                     <span :style="paLft" v-show="item.fund_details_date">{{item.fund_details_date | NoYes}}</span>
                     <span :style="paLft" v-show="item.fund_details_date==undefined">待确认</span>
                   </td>
-<!--                  <td><span :style="paLft" v>{{item.fund_details_date | NoYes}}</span></td>-->
                 </tr>
               </table>
             </el-tab-pane>
