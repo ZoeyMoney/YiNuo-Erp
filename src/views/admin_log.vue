@@ -20,7 +20,6 @@
             <span>{{item.date}}</span>
           </div>
           <div class="text item">
-<!--            {{item.plan_text}}-->
             {{reol(item.plan_text)}}
           </div>
           <div class="text-input">
@@ -28,30 +27,20 @@
               type="textarea"
               :rows="5"
               placeholder="完成情况"
-              :maxlength="150"
-              :minlength="50"
-              v-model="textarea"
               :show-word-limit="true"
-              :disabled="addfo"></el-input>
+              v-model="textarea"
+              :disabled="addfo">
+            </el-input>
+            <span class="allnuber">字数：<b :class="{reds:ass,grends:asr}">{{goaddinfo}}
+              <i class="el-icon-close" v-show="info"></i>
+              <i class="el-icon-check" v-show="infos"></i></b></span>
           </div>
         </el-card>
         <el-card class="box-card" v-if="text.length>0">
           <div slot="header" class="clearfix">
             <span>{{datessd}}</span>
           </div>
-          <!--<div class="text item">
-            <el-input
-              type="textarea"
-              :rows="5"
-              :placeholder="datas_s"
-              :maxlength="150"
-              :minlength="50"
-              v-model="textareaval"
-              :show-word-limit="true"
-              :disabled="fasl"></el-input>
-          </div>-->
           <div class="text item" v-for="(item,i) in items" :key="i">
-<!--            <el-input v-model="item.text" placeholder="请输入内容"></el-input>-->
             <el-input
               type="textarea"
               :rows="2"
@@ -59,6 +48,10 @@
               v-model="item.text">
             </el-input>
           </div>
+          <span class="allnuber">字数：<b :class="{reds:all,grends:alls}">{{allnubel}}
+             <i class="el-icon-close" v-show="allinfo"></i>
+             <i class="el-icon-check" v-show="allinfos"></i>
+          </b></span>
           <el-link type="primary" @click="addGo">新增一行</el-link>
         </el-card>
         <el-card class="box-card" v-if="text.length ==0">
@@ -101,10 +94,18 @@
           {text:'1：'}
         ],
         cont:1,
+        info:true,//文字长度判断
+        infos:false,//文字长度
+        ass:true,
+        asr:false,
+        all:true,
+        alls:false,
         dates: '',
         textareaval: '',
         fasl: false,
         addfo:false,
+        allinfo:true,
+        allinfos:false,
         over: '',
         datas_s: '',
         datass: '',
@@ -190,7 +191,6 @@
               text+=this.items[index].text +'。'
             }
           }
-          console.log(text)
          var adds = '?plan_text=' + text
           this.axios.post('/Administration/Add_Plan' + adds).then(res => {
             if (res.status === 200) {
@@ -319,7 +319,7 @@
             console.log('456')
           }*/
           /*console.log(dier)
-          console.log(this.dates)*/
+          console.log(this.dates)*/ 
           if (this.dates < dier) {
             this.addfo = true
           }else{
@@ -365,6 +365,44 @@
       }
       this.datass = ys+'-'+ms+'-'+ds
     },
+    computed:{
+      allnubel(){
+        var all = 0;
+        for(var index in this.items){
+          all+=this.items[index].text.length;
+        }
+        if (all>=80){
+          this.all = false
+          this.alls = true
+          this.allinfo = false
+          this.allinfos = true
+        }else{
+          this.all = true
+          this.alls = false
+          this.allinfo = true
+          this.allinfos = false
+        }
+        return all;
+      },
+      goaddinfo(){
+        var asd = 0;
+        if (this.textarea !=undefined){
+          asd+=this.textarea.length
+        }
+        if (asd >= 30){
+          this.ass = false
+          this.asr = true
+          this.info = false
+          this.infos = true
+        }else{
+          this.ass = true
+          this.asr = false
+          this.info = true
+          this.infos = false
+        }
+        return asd
+      }
+    }
   }
 </script>
 
@@ -394,4 +432,7 @@
   .form-botton button{width: 80%;margin-top: 30px}
   .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;margin-left: 18px}
   /deep/.el-link.el-link--primary{float: right;margin-bottom: 10px}
+  .allnuber{font-size: 16px}
+  /deep/.reds,.ass{color: red;font-weight: 900}
+  /deep/.grends{color: green;font-weight: 900}
 </style>
