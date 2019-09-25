@@ -63,6 +63,7 @@ export default {
             this.imgUrl_loading = false
             this.config = true
             if (res.data.msg === '登录成功') {
+              mui.toast('登录成功')
               sessionStorage.setItem(config.KEY.CACHE_LOGIN_USER, _this.name)
               sessionStorage.setItem(config.KEY.CACHE_LOGIN_ID, res.data.userid)
               sessionStorage.setItem(config.KEY.CACHE_LOGIN_NAME,res.data.userNumber)
@@ -73,7 +74,7 @@ export default {
               _this.$router.push({ name: 'index' })
               // })
             } else {
-              mui.alert('账号或密码错误')
+              mui.toast('账号或密码错误')
             }
           }
         })

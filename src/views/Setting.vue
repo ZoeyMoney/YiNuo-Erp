@@ -39,12 +39,11 @@ export default {
       this.axios.get('/logout').then(res => {
         if (res.status === 200) {
           this.imgUrl_loading = false
-          mui.alert(res.data.msg, function () {
-            localStorage.clear()
-            sessionStorage.clear()
-            localStorage.removeItem('isLogin')
-            then.$router.push({ name: 'Login' })
-          })
+          mui.toast(res.data.msg)
+          localStorage.clear()
+          sessionStorage.clear()
+          localStorage.removeItem('isLogin')
+          then.$router.push({ name: 'Login' })
         }
       })
     },

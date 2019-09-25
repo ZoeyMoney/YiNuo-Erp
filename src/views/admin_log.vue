@@ -319,7 +319,7 @@
             console.log('456')
           }*/
           /*console.log(dier)
-          console.log(this.dates)*/ 
+          console.log(this.dates)*/
           if (this.dates < dier) {
             this.addfo = true
           }else{
