@@ -393,10 +393,7 @@ export default {
       if (this.site !== undefined && this.test_id !== undefined) {
         add += 'customer_id=' + this.test_id
       }
-      if (
-        this.listRelevant !== undefined &&
-        this.listRelevant_id !== undefined
-      ) {
+      if (this.listRelevant !=''){
         add += '&fund_person=' + this.listRelevant_id
       }
       if (this.fund_detail_id === '个人') {
@@ -446,7 +443,7 @@ export default {
       var MM = dt.getMinutes()
       var s = dt.getSeconds()
       var dd = `${y}-${m}-${d} ${t}:${MM}:${s}`
-      this.imgUrl_loading = true
+      // this.imgUrl_loading = true
       var money_all = ''
       if (this.money_get === '') {
         money_all += this.money
