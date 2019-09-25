@@ -41,6 +41,7 @@
           </div>
           <div class="text item">
             {{reol(item.plan_text)}}
+<!--            {{item.plan_text}}-->
           </div>
           <div style="color: #919191;word-break: break-all" v-if="item.plan_over">{{item.plan_over}}</div>
           <div style="color: #919191;word-break: break-all" v-if="item.plan_over == undefined">待汇报</div>
@@ -106,7 +107,6 @@
         if (this.ents != '') {
           add+='&EndDate='+this.ents
         }
-        console.log(add)
         this.axios.get('/Administration/Select_Plan'+add).then(res=>{
           this.text = res.data.data
           this.user = res.data.user
@@ -143,9 +143,10 @@
         this.axios.get('/Administration/Select_Plan?StartDate='+this.qianData).then(res=>{
           this.text = res.data.data
           // var str = a.replace(/,|，|、/g, '\n')
-          /*for(var index in this.text){
-            console.log(this.text[index].plan_text.replace(/。/g, '\n'))
-          }*/
+          for(var index in this.text){
+            // console.log(this.text[index].plan_text.replace(/\d+./g, '\n'))
+            // console.log(this.text[index].plan_text.split(/([0-9]|.)\r\n\r\n\s+/))
+          }
           this.user = res.data.user
         })
       },

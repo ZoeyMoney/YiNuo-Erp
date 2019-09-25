@@ -20,7 +20,8 @@
             <span>{{item.date}}</span>
           </div>
           <div class="text item">
-            {{item.plan_text}}
+<!--            {{item.plan_text}}-->
+            {{reol(item.plan_text)}}
           </div>
           <div class="text-input">
             <el-input
@@ -38,7 +39,7 @@
           <div slot="header" class="clearfix">
             <span>{{datessd}}</span>
           </div>
-          <div class="text item">
+          <!--<div class="text item">
             <el-input
               type="textarea"
               :rows="5"
@@ -48,7 +49,17 @@
               v-model="textareaval"
               :show-word-limit="true"
               :disabled="fasl"></el-input>
+          </div>-->
+          <div class="text item" v-for="(item,i) in items" :key="i">
+<!--            <el-input v-model="item.text" placeholder="请输入内容"></el-input>-->
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="请输入内容"
+              v-model="item.text">
+            </el-input>
           </div>
+          <el-link type="primary" @click="addGo">新增一行</el-link>
         </el-card>
         <el-card class="box-card" v-if="text.length ==0">
           <div slot="header" class="clearfix">
@@ -86,6 +97,10 @@
         tomorrow_dates: '',
         Yesterday: '',//昨日
         textarea: '',//汇报内容
+        items:[ // 日志
+          {text:'1：'}
+        ],
+        cont:1,
         dates: '',
         textareaval: '',
         fasl: false,
@@ -97,6 +112,13 @@
       }
     },
     methods: {
+      //新添加
+      addGo(){
+        this.cont++
+        var arr = {text:''}
+        arr.text = this.cont+'：'
+        this.items.push(arr)
+      },
       //工作提交
       add () {
         var _true = true
@@ -119,27 +141,6 @@
         var dd = y + '-' + m + '-' + d + ' ' + t + ':' + MM + ':' + s
         var datesd = ''
         var fa = false
-        /*if (this.textarea.length < 80) {
-          mui.toast('汇报内容不能低于80字')
-          _true = false
-          return false
-        }*/
-        /*for (var index in this.text) {
-          datesd = this.text[index].date.split(' ')[0]
-          if (ds == datesd) {
-            id = this.text[index].plan_id
-            fa = true
-          }
-        }
-        if (fa = true) {
-          for (var index in this.text) {
-            if (this.text[index].plan_over == undefined) {
-              id = this.text[index].plan_id
-              break
-            }
-          }
-        }*/
-
         if (this.text.length == '0') {
           if (this.textareaval.length < '50') {
             mui.toast('汇报内容不能低于50字')
@@ -155,8 +156,7 @@
           }
         })
         }else if (this.text.length != '0') {
-
-            id = this.text[0].plan_id
+          id = this.text[0].plan_id
             if (this.textarea.length < '30') {
               mui.toast('完成情况不能低于30字')
               _true = false
@@ -172,12 +172,26 @@
                 })
               }
             })
-          if (this.textareaval.length < '80') {
+          //判断每行长度相加是否为80字
+          var nub = 0
+          for (var index in this.items){
+            nub+= this.items[index].text.length
+          }
+          if (nub < 80){
             mui.toast('汇报内容不能低于80字')
             _true = false
             return false
           }
-          var adds = '?plan_text=' + this.textareaval
+          var text = ''
+          for (var index in this.items){
+            if (this.items[index].text.charAt(this.items[index].text.length-1) =='。' || this.items[index].text.charAt(this.items[index].text.length-1) =='.'){
+              text+=this.items[index].text
+            }else{
+              text+=this.items[index].text +'。'
+            }
+          }
+          console.log(text)
+         var adds = '?plan_text=' + text
           this.axios.post('/Administration/Add_Plan' + adds).then(res => {
             if (res.status === 200) {
               mui.alert('提交成功', function () {
@@ -240,6 +254,10 @@
       search_text () {
         this.axios.get('/Administration/Select_Plan').then(res => {
           this.text = res.data.data
+          for(var index in this.text){
+            // console.log(this.text[index].plan_text.replace(/\d+./g, '\n'))
+            // console.log(this.text[index].plan_text.split(/([0-9]|.)\r\n\r\n\s+/))
+          }
           if (this.text[0].plan_over != '') {
             this.textarea = this.text[0].plan_over
           }
@@ -328,6 +346,10 @@
           }
         })
       },
+      //  文章截取
+      reol(str){
+        return str.replace(/。/g, '\n')
+      },
     },
     created () {
       this.search_text()
@@ -357,12 +379,13 @@
   .textrate textarea{margin-bottom: 0}
   /deep/.el-card__header{background-color: black;color: white;padding: 10px 20px}
   /deep/.text {font-size: 14px;}
-  /deep/.item {margin-bottom: 18px;word-break: break-all}
+  /deep/.item {word-break: break-all}
   /deep/.clearfix:before, .clearfix:after {display: table;content: "";}
   /deep/.clearfix:after {clear: both}
   /deep/.box-card {width: 100%;margin-bottom: 20px}
   /deep/.box-card:nth-child(2){margin-bottom: 20px}
   .textrate .item div:nth-child(1){padding: 20px}
+  .item{white-space: pre-line}
   /*按钮*/
   .btn-add{float: left;text-align: center;width: 100%;margin-bottom: 30px;margin-top: 15px}
   /deep/.el-button--success{width: 80%}
@@ -370,5 +393,5 @@
   .form-botton{text-align: center}
   .form-botton button{width: 80%;margin-top: 30px}
   .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;margin-left: 18px}
-
+  /deep/.el-link.el-link--primary{float: right;margin-bottom: 10px}
 </style>

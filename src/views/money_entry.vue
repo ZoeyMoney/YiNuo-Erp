@@ -200,6 +200,7 @@ export default {
       this.list.push(s)
     },
     del (user) {
+      this.batch_index--
       if (this.list.length === 0) {
         mui.alert('没有可删除的了')
       } else {
