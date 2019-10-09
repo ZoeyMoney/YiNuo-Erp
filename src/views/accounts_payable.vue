@@ -101,7 +101,7 @@
           </div>
           <table class="tables" border="0" id="table">
             <tr>
-              <th><span :style="paLft">预收日期</span></th>
+              <th><span :style="paLft">应付日期</span></th>
               <th><span>批次</span></th>
               <th><span>金额</span></th>
               <th><span>备注</span></th>

@@ -9,7 +9,7 @@
       </header>
       <!--form-->
       <div class="mui-content">
-        <form class="mui-input-group">
+        <form class="mui-input-group"  ref="edit">
           <div class="mui-input-row">
             <label>户主</label>
             <input type="text" class="mui-input-clear" :value="bank_person" placeholder="无" disabled="disabled">
@@ -60,18 +60,22 @@
           </div>
           <div class="mui-input-row">
             <label>备注</label>
-            <input type="text" class="mui-input-clear" :value="text" placeholder="无" disabled="disabled">
+            <input type="text" class="mui-input-clear" :value="text" placeholder="无" :disabled="disabled">
           </div>
         </form>
         <div class="mui-input-row form-btn">
-          <button type="button" class="mui-btn mui-btn-blue" @click="dele">删除</button>
+          <button type="button" class="mui-btn mui-btn-blue" @click="dele" v-show="exit_money" >删除</button>
           <button type="button" class="mui-btn mui-btn-blue" @click="exitMoney" v-show="exit_money">退款</button>
+          <button type="button" class="mui-btn mui-btn-blue" @click="editMessage" v-show="exit_money">修改</button>
+          <button type="button" class="mui-btn mui-btn-blue" @click="preServe" v-show="liu">保存</button>
         </div>
       </div>
     </div>
 </template>
 
 <script>
+import { loadavg } from 'os'
+import { log } from 'util'
 export default {
   name: 'running_details',
   data () {
@@ -92,6 +96,8 @@ export default {
       fund_person: '', // 债权人
       fund_debtor: '', // 相关人
       exit_money: true, // 退款
+      liu:false, //保存
+      disabled:true,
       text: '',// 备注
       bank_type:'',//卡号类型
       quan:''
@@ -141,8 +147,20 @@ export default {
     //  退款
     exitMoney () {
       this.$router.push({ name: 'exit_money' })
+    },
+    //编辑
+    editMessage(){
+      console.log(this.$refs.edit);
+      console.log(this.$refs.edit.getElementsByTagName('input'));
+      this.disabled=false
+      this.exit_money=false
+      this.liu=!this.liu
+    },
+    preServe(){
+      console.log('1');
+      
     }
-  },
+      },
   created () {
     var loc = location.href
     var n1 = loc.length// 地址的总长度
@@ -185,7 +203,7 @@ export default {
 </script>
 
 <style scoped>
-  .form-btn button{width: 28% !important;margin: 16px}
+  .form-btn button{width: 24% !important;margin: 16px}
   .form-btn{background-color: #EFEFF4!important;margin-top: 0;}
   .mui-btn-blue, .mui-btn-black, input[type=submit]{border: 1px solid #000000;background-color: #000000;color: white;width: 22%;}
   .mui-btn-blue.mui-active:enabled, .mui-btn-blue:enabled:active, .mui-btn-primary.mui-active:enabled, .mui-btn-primary:enabled:active, input[type=submit].mui-active:enabled, input[type=submit]:enabled:active{border: 1px solid #000000;background-color: #000000;}

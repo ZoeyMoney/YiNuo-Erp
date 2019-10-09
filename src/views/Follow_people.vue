@@ -21,10 +21,14 @@
           <label>相关人</label>
           <input type="text" class="mui-input-clear" placeholder="请输项目名称" v-model="people_name">
         </div>
-        <div class="mui-input-row">
-          <label>类型</label>
-          <input type="text" class="mui-input-clear" placeholder="请输项目名称" v-model="people_list">
-        </div>
+         <div class="mui-input-row radio-left">
+            <label>类别选择</label>
+              <select name="" v-model="people_list">
+                <option value="1">个人</option>
+                <option value="2">公司</option>
+              </select>
+         </div>
+         
       </form>
       <div class="form-botton">
         <button type="button" class="mui-btn mui-btn-black" @click="add">保存</button>
@@ -40,7 +44,7 @@
       return{
         imgUrl_loading:false,
         people_name:'',//相关人
-        people_list:'',//相关人类型
+        people_list:2,//相关人类型
       }
     },
     methods:{
@@ -53,11 +57,11 @@
             check = false
             return false
           }
-          if (!nameReg.test(this.people)) {
-            mui.toast('相关人格式错误')
-            check = false
-            return false
-          }
+          this.axios.get('/Add_fund_person?fund_person=' + this.people_name +'&fund_person_state='+this.people_list).then(res => {
+              if (res.status === 200) {
+                   mui.toast('保存成功')
+              }
+           })
 
         }
     },
