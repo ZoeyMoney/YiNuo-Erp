@@ -40,7 +40,7 @@
             <label>类别选择</label>
              <div class="mui-input-row mui-radio mui-left" v-for="(item,i) in list_fund_name_type" :key="i">
                <label>{{item.fund_name_type}}</label>
-               <input name="radio1" type="radio" v-model="fund_detail_id" value="fund_detail_id_id" :value="item.fund_detail_id_id" @change="fund_deId(fund_detail_id_id)">
+               <input name="radio1" type="radio" v-model="fund_detail_id" :value="item.fund_name_type" @change="fund_deId(fund_detail_id)">
              </div>
            </div>
           <div class="mui-input-row">
@@ -170,7 +170,7 @@ export default {
       idProjet: true,
       relevant_people: true, // 相关人
       site_projet: '', // 工地名称
-      dataValue1: new Date().toString(),
+      dataValue1: '',
       bank_id: '', // id
       sitePrihet: '',
       mongey_bank_id: '', // 银行卡id
@@ -194,7 +194,8 @@ export default {
       clearBei: '', // 备注
       checkbox: '', // 复选框
       prosen_name: '', // 户主
-      fund_detail_id_id: '', // 工程款
+      fund_detail_id: '', // 工程款
+      fund_detail_ids: '', // 工程款
       bank_card: '', // 银行卡
       chuXu: '', // 储蓄卡
       xinY: '', // 信用卡
@@ -247,22 +248,20 @@ export default {
 
   methods: {
     // 一级查询
-    
+
     fund_deId (id) {
-      console.log(id)
-      console.log(this.fund_detail_id_id)
       this.fund_nameso = id
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id_id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
-          if (this.fund_detail_id_id === '个人') {
+          if (this.fund_detail_id === '个人') {
             this.category = false
             this.site_projet = false
             this.relevant_people = true
             this.idProjet = true
             this.cotrProjet = false
-          } else if (this.fund_detail_id_id === '公司') {
+          } else if (this.fund_detail_id === '公司') {
             this.category = true
             this.cotrProjet = true
             this.idProjet = false
@@ -274,7 +273,7 @@ export default {
     // 二级查询
     list_fund_nameas (id) {
       this.fund_name = id
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id_id + '&fund_names=' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + id).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
@@ -289,7 +288,7 @@ export default {
     },
     // 三级查询
     list_fund_namea (id) {
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id_id + '&fund_names=' + this.fund_name + '&fund_name' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + this.fund_name + '&fund_name' + id).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
@@ -303,7 +302,6 @@ export default {
     },
     //相关人传送
     releItem(val,id){
-      console.log(val,id)
       this.listRelevant = val;
       this.listRelevant_id = id;
       this.releshow = false;
@@ -391,27 +389,26 @@ export default {
     },
     // 添加
     add () {
-      console.log(this.fund_detail_id)
       var then = this
       var check = true
       var nuber = /^\d+(\.\d+)?$/ // 验证数字
       var add = '?'
       var listId = ''
-      if (this.fund_detail_id_id == '') {
+      if (this.fund_detail_id == '') {
         mui.toast('类别选择不能为空')
         check = false
         return false
       }
-  
+
       if (this.listRelevant !=''){
         add += '&fund_person=' + this.listRelevant_id
       }
-      if (this.fund_detail_id_id === '个人') {
+      if (this.fund_detail_id === '个人') {
         add += '&fund_name=' + this.detailed
-        
-      } else if (this.fund_detail_id_id === '公司') {
+
+      } else if (this.fund_detail_id === '公司') {
         add += '&fund_name=' + this.slim
-       
+
 
       }
       /* 金额 */
@@ -447,10 +444,10 @@ export default {
         money_all += this.money_get
       }
       //发送保存请求
-      add += '&fund_money=' + this.money + '&fund_text=' + this.clearBei + '&und_detail_transaction_bank_id='
-       + this.bank_id + '&fund_id='+this.fund_id+'&fund_date='+this.fund_date+
-       '&fund_detail_id=' +this.fund_detail_id+'&fund_detail_transaction_id='+this.fund_detail_transaction_id+
-       '&customer_id='+this.customer_id
+      add += '&fund_money=' + this.money + '&fund_text=' + this.clearBei + '&fund_detail_transaction_bank_id='
+       + this.bank_id + '&fund_id='+this.fund_id+'&fund_date='+dd+
+       '&fund_details_id=' +this.fund_detail_ids+'&fund_detail_transaction_id='+this.fund_detail_transaction_id+
+       '&fund_customer_id='+this.customer_id
       if (this.checkbox === true) {
         this.axios.post('fund/Update_money'+ add).then(res => {
           var id = ''
@@ -470,12 +467,12 @@ export default {
           }
         })
       } else {
-        this.axios.post('/fund/Add_out_enter' + add).then(res => {
+        this.axios.get('/fund/Update_money' + add).then(res => {
           if (res.status === 200) {
             this.imgUrl_loading = false
-            if (res.data.data === '录入成功') {
-              mui.alert('录入成功', function () {
-                then.$router.go(0)
+            if (res.data.data === '修改成功') {
+              mui.alert('修改成功', function () {
+                then.$router.push({name:'running_money'})
               })
             }
           }
@@ -491,37 +488,27 @@ var loc = location.href
     var reg = /^(\d{4})\d+(\d{4})$/ // 银行卡
     this.fund_details_id = id
     this.list = JSON.parse(localStorage.msg)
-    console.log(this.list.bank_id);
-    // console.log(this.fund_detail_id)
-    console.log(this.list)
-
-
      this.bank_id=this.list.bank_id
 this.mongey_bank= this.list.bank_person+this.list.bank_bank
     this.bank_bank = this.list.bank_bank
     if (this.list.bank_deal_money === 0) {
-      this.money = this.list.fund_detail_transaction_money 
+      this.money = this.list.fund_detail_transaction_money
     } else if (this.list.fund_detail_transaction_money === 0) {
-      this.money = this.list.bank_deal_money  
+      this.money = this.list.bank_deal_money
     }
-    console.log(JSON.parse(localStorage.msg))   
+    console.log(JSON.parse(localStorage.msg))
     this.dates = this.list.dates
     /* if (this.list.bank_number != undefined) {
        this.bank_number = this.list.bank_number.replace(reg, '$1 **** **** $2')
      }*/
-  console.log(this.list.fund_name_id);
-  console.log(this.list.fund_detail_id);
       this.fund_detail_id = this.list.fund_detail_id
-  console.log(this.fund_detail_id);
-    // this.fund_detail_id=this.list.fund_detail_id
+    this.fund_detail_ids = this.list.fund_detail_id
     this.customer_id=this.list.fund_detail_transaction_customer_id
-  console.log(this.customer_id);
-
-    this.fund_detail_id_id = this.list.fund_name_type //公司个人
-    console.log('123:'+this.fund_detail_id_id)      
+    this.listRelevant_id = this.list.fund_person_id
+    this.fund_detail_id = this.list.fund_name_type //公司个人
     this.fund_name_id=this.list.fund_name_id      //fund_detail_id
     this.dataValue1=this.list.dates               //时间
- //   this.fund_date=this.dataValue1               
+ //   this.fund_date=this.dataValue1
     this.site = this.list.customer_name        //项目名称
     this.fund_details_batch = this.list.fund_details_batch     //期款
     this.slim = this.list.fund_names   //款项名称
@@ -584,8 +571,8 @@ this.mongey_bank= this.list.bank_person+this.list.bank_bank
     this.fund_deId()
     this.list_fund_nameas()
   },
-  
-  
+
+
   computed: {
     money_actual: {
       get: function () {
