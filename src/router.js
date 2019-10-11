@@ -318,6 +318,10 @@ const router = new Router({
       name: 'exit_money',
       component: resolve => require(['@/views/exit_money'], resolve)
     }, {
+      path: '/edit_message',
+      name: 'edit_message',
+      component: resolve => require(['@/views/edit_message'], resolve)
+    }, {
       path: '/NewUserName',
       name: 'NewUserName',
       component: resolve => require(['@/views/NewUserName'], resolve)

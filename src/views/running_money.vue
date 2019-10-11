@@ -286,7 +286,7 @@ export default {
     if (this.all_all === 'transfer') {
       this.al_projet = false
       this.al_projet_two = true
-      this.list_moey_two = window.transfer
+      this.list_moey_two = window.transfer  
       for (var index in this.list_moey_two) {
         bank_list.push(this.list_moey_two[index].bank_bank)
         person_list.push(this.list_moey_two[index].bank_person)
@@ -563,6 +563,6 @@ form div select{background: transparent;font-size: 15px!important;}
 .goOver span{width: 67px;height: 1px;background-color: black;position: relative;right: 24px;top: 50%}
 .goOver label{width: 45%}
 /*底部*/
-footer{position: fixed;bottom: 0;display: flex;width: 100%;background-color: #a7a7a7;line-height: 30px;font-size: 14px;}
+footer{position: fixed;bottom: 0;display:flex;width: 100%;background-color: #a7a7a7;line-height: 30px;font-size: 14px;}
 footer div,footer em{flex: 1;}
 </style>

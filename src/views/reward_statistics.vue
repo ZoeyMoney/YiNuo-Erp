@@ -26,6 +26,7 @@
 <script>
 export default {
   name: 'reward_statistics',
+  
   data () {
     return {
       money_plus: require('../image/plus.png')

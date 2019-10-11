@@ -2,20 +2,20 @@
   <div class="income">
     <!--头部-->
     <header class="mui-bar mui-bar-nav">
-      <router-link :to="{name:'cash_flow'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
-      <h1 class="mui-title">收入</h1>
+      <router-link :to="{name:'running_details'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+      <h1 class="mui-title">修改</h1>
       <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
     </header>
     <login-loading v-show="imgUrl_loading"></login-loading>
-    <!--收入-->
+    收入
     <div class="mui-content one-img">
-      <div class="customer">
+      <!-- <div class="customer">
         <h2>收入</h2>
         <p>/Income</p>
       </div>
       <div class="mui-img">
         <div>￥{{allTotal}}</div>
-      </div>
+      </div> -->
     </div>
     <!--收入记录-->
     <v-touch v-on:swipeleft="onSwipeLeft" v-on:swiperight="onSwipeRight" :swipe-options="{direction: 'horizontal'}">
@@ -40,7 +40,7 @@
             <label>类别选择</label>
              <div class="mui-input-row mui-radio mui-left" v-for="(item,i) in list_fund_name_type" :key="i">
                <label>{{item.fund_name_type}}</label>
-               <input name="radio1" type="radio" v-model="fund_detail_id" :value="item.fund_name_type" @change="fund_deId(fund_detail_id)">
+               <input name="radio1" type="radio" v-model="fund_detail_id" value="fund_detail_id_id" :value="item.fund_detail_id_id" @change="fund_deId(fund_detail_id_id)">
              </div>
            </div>
           <div class="mui-input-row">
@@ -83,12 +83,12 @@
             <input type="text" class="mui-input-clear" v-model="money_actual" placeholder="请输入金额" />
           </div>
         </form>
-        <div class="mui-input-row mui-checkbox mui-left checkbox">
+        <!-- <div class="mui-input-row mui-checkbox mui-left checkbox">
           <label>转为应付</label>
           <input name="checkbox1" value="转为应付" type="checkbox" v-model="checkbox" />
-        </div>
+        </div> -->
         <div class="mui-input-row form-btn">
-          <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">Transfers</button>
+          <button type="button" id="btn" class="mui-btn mui-btn-blue" @click="add">保存</button>
         </div>
         <!--table-->
         <div class="mui-content all">
@@ -169,20 +169,20 @@ export default {
       cotrProjet: false,
       idProjet: true,
       relevant_people: true, // 相关人
-      site_projet: true, // 工地名称
+      site_projet: '', // 工地名称
       dataValue1: new Date().toString(),
-      bank_id: 0, // id
+      bank_id: '', // id
       sitePrihet: '',
       mongey_bank_id: '', // 银行卡id
       mongey_bank: '', // 银行卡name
-      list_fund_name_type: [], // 个人公司
+      list_fund_name_type: [''], // 个人公司
       detailed: '', // 类别详细
       list_fund_names: [], // 红包工资
       slim: '', // 类别详细
       list_fund_name: [], // 设计费
       listRelevant: '', // 相关人下拉
       listRelevant_id: '', // 相关人ID
-      radio: '1', // 单选框
+      radio:'1', // 单选框
       list_bank_card_person: [{ text: '胡永生' }, { text: '邱梅' }],
       // fund_person:'',//收款人
       site: '', // 工地
@@ -194,7 +194,7 @@ export default {
       clearBei: '', // 备注
       checkbox: '', // 复选框
       prosen_name: '', // 户主
-      fund_detail_id: '公司', // 工程款
+      fund_detail_id_id: '', // 工程款
       bank_card: '', // 银行卡
       chuXu: '', // 储蓄卡
       xinY: '', // 信用卡
@@ -209,6 +209,12 @@ export default {
       relelist:[],//相关人数据
       releshow:false,//相关人列表
       test_id: '',
+      fund_id:'',
+      list:'',
+      customer_id:'',
+      fund_detail_transaction_id:'',
+      fund_name_id:'',
+      fund_date:'',
       isshow:false,
       // 银行卡
       baoshang: require('../image/baoshang.png'),
@@ -241,19 +247,22 @@ export default {
 
   methods: {
     // 一级查询
+    
     fund_deId (id) {
+      console.log(id)
+      console.log(this.fund_detail_id_id)
       this.fund_nameso = id
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id_id).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
-          if (this.fund_detail_id === '个人') {
+          if (this.fund_detail_id_id === '个人') {
             this.category = false
             this.site_projet = false
             this.relevant_people = true
             this.idProjet = true
             this.cotrProjet = false
-          } else if (this.fund_detail_id === '公司') {
+          } else if (this.fund_detail_id_id === '公司') {
             this.category = true
             this.cotrProjet = true
             this.idProjet = false
@@ -265,7 +274,7 @@ export default {
     // 二级查询
     list_fund_nameas (id) {
       this.fund_name = id
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id_id + '&fund_names=' + id).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
@@ -280,7 +289,7 @@ export default {
     },
     // 三级查询
     list_fund_namea (id) {
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + this.fund_name + '&fund_name' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id_id + '&fund_names=' + this.fund_name + '&fund_name' + id).then(res => {
           this.list_fund_name_type = res.data.fund_name_type
           this.list_fund_names = res.data.fund_names
           this.list_fund_name = res.data.fund_name
@@ -294,6 +303,7 @@ export default {
     },
     //相关人传送
     releItem(val,id){
+      console.log(val,id)
       this.listRelevant = val;
       this.listRelevant_id = id;
       this.releshow = false;
@@ -309,7 +319,6 @@ export default {
     // 银行卡传送
     bankClick (name, id, prosen) {
       var bank = name + ' ' + prosen
-      
       this.mongey_bank = bank
       this.mongey_bank_id = id
     },
@@ -382,25 +391,28 @@ export default {
     },
     // 添加
     add () {
+      console.log(this.fund_detail_id)
       var then = this
       var check = true
       var nuber = /^\d+(\.\d+)?$/ // 验证数字
       var add = '?'
-      if (this.fund_detail_id == '') {
+      var listId = ''
+      if (this.fund_detail_id_id == '') {
         mui.toast('类别选择不能为空')
         check = false
         return false
       }
-      if (this.site !== undefined && this.test_id !== undefined) {
-        add += 'customer_id=' + this.test_id
-      }
+  
       if (this.listRelevant !=''){
         add += '&fund_person=' + this.listRelevant_id
       }
-      if (this.fund_detail_id === '个人') {
+      if (this.fund_detail_id_id === '个人') {
         add += '&fund_name=' + this.detailed
-      } else if (this.fund_detail_id === '公司') {
+        
+      } else if (this.fund_detail_id_id === '公司') {
         add += '&fund_name=' + this.slim
+       
+
       }
       /* 金额 */
       if (this.money == '') {
@@ -414,28 +426,11 @@ export default {
         return false
       }
       // 转入
-      if (this.mongey_bank_id == '') {
+      if (this.bank_id == '') {
         mui.toast('转入账户不能为空')
         check = false
         return false
       }
-      /* for (var index in this.bank_card) {
-        if (this.bank_card[index].bank_id === this.mongey_bank_id) {
-          if (this.money_actual > this.bank_card[index].bank_money) {
-            mui.toast('卡内余额不能大于交易余额')
-            check = false
-            return false
-          }else{
-            if (this.bank_card[index].limit === '0') {
-              if (this.money_actual > this.bank_card[index].bank_limit) {
-                mui.toast('金额不能大于储蓄卡余额或信用卡额度')
-                check = false
-                return false
-              }
-            }
-          }
-        }
-      } */
       var dt = new Date(this.dataValue1)
       var y = dt.getFullYear()
       var m = dt.getMonth() + 1
@@ -451,9 +446,13 @@ export default {
       } else {
         money_all += this.money_get
       }
-      add += '&money=' + this.money + '&fund_text=' + this.clearBei + '&bank_id=' + this.mongey_bank_id + '&shiji_money=' + money_all + '&date=' + dd
+      //发送保存请求
+      add += '&fund_money=' + this.money + '&fund_text=' + this.clearBei + '&und_detail_transaction_bank_id='
+       + this.bank_id + '&fund_id='+this.fund_id+'&fund_date='+this.fund_date+
+       '&fund_detail_id=' +this.fund_detail_id+'&fund_detail_transaction_id='+this.fund_detail_transaction_id+
+       '&customer_id='+this.customer_id
       if (this.checkbox === true) {
-        this.axios.post('/fund/Add_out_enter' + add).then(res => {
+        this.axios.post('fund/Update_money'+ add).then(res => {
           var id = ''
           for (var index in this.listProjet) {
             if (this.listProjet[index].customer_id === this.site) {
@@ -485,6 +484,62 @@ export default {
     }
   },
   created () {
+var loc = location.href
+    var n1 = loc.length// 地址的总长度
+    var n2 = loc.indexOf('=')// 取得=号的位置
+    var id = decodeURI(loc.substr(n2 + 1, n1 - n2))// 从=号后面的内容
+    var reg = /^(\d{4})\d+(\d{4})$/ // 银行卡
+    this.fund_details_id = id
+    this.list = JSON.parse(localStorage.msg)
+    console.log(this.list.bank_id);
+    // console.log(this.fund_detail_id)
+    console.log(this.list)
+
+
+     this.bank_id=this.list.bank_id
+this.mongey_bank= this.list.bank_person+this.list.bank_bank
+    this.bank_bank = this.list.bank_bank
+    if (this.list.bank_deal_money === 0) {
+      this.money = this.list.fund_detail_transaction_money 
+    } else if (this.list.fund_detail_transaction_money === 0) {
+      this.money = this.list.bank_deal_money  
+    }
+    console.log(JSON.parse(localStorage.msg))   
+    this.dates = this.list.dates
+    /* if (this.list.bank_number != undefined) {
+       this.bank_number = this.list.bank_number.replace(reg, '$1 **** **** $2')
+     }*/
+  console.log(this.list.fund_name_id);
+  console.log(this.list.fund_detail_id);
+      this.fund_detail_id = this.list.fund_detail_id
+  console.log(this.fund_detail_id);
+    // this.fund_detail_id=this.list.fund_detail_id
+    this.customer_id=this.list.fund_detail_transaction_customer_id
+  console.log(this.customer_id);
+
+    this.fund_detail_id_id = this.list.fund_name_type //公司个人
+    console.log('123:'+this.fund_detail_id_id)      
+    this.fund_name_id=this.list.fund_name_id      //fund_detail_id
+    this.dataValue1=this.list.dates               //时间
+ //   this.fund_date=this.dataValue1               
+    this.site = this.list.customer_name        //项目名称
+    this.fund_details_batch = this.list.fund_details_batch     //期款
+    this.slim = this.list.fund_names   //款项名称
+    this.detailed = this.list.fund_name //项目详情
+    this.fund_type = this.list.fund_details_text //备注
+    this.balance = this.list.balance   //余额
+    this.listRelevant = this.list.fund_person //相关人
+    this.fund_debtor = this.list.fund_debtor
+    this.clearBei = this.list.fund_details_text
+    this.fund_id=this.list.fund_id
+    this.fund_detail_transaction_id=this.list.fund_detail_transaction_id
+    if (this.list.fund_name === '' || this.list.fund_name === undefined || this.list.fund_name === '手续费') {
+      this.exit_money = false
+    }
+    this.quan = window.quan
+
+
+
     this.imgUrl_loading = true
     //工地
     this.siteData()
@@ -529,6 +584,8 @@ export default {
     this.fund_deId()
     this.list_fund_nameas()
   },
+  
+  
   computed: {
     money_actual: {
       get: function () {

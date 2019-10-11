@@ -2,7 +2,7 @@
   <div class="Follow_people">
     <!--返回-->
     <header class="mui-bar mui-bar-nav">
-      <router-link :to="{name:'money_projet'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
+      <router-link :to="{name:'summary_entry'}" class="mui-icon mui-icon-left-nav mui-pull-left"></router-link>
       <h1 class="mui-title">相关人录入</h1>
       <router-link :to="{name:'index'}" class="mui-icon mui-icon mui-icon-home mui-pull-right"></router-link>
     </header>
