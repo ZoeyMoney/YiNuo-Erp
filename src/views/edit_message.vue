@@ -45,10 +45,10 @@
            </div>
           <div class="mui-input-row">
             <label>款项名称</label>
-            <select name v-model="detailed" :class="{select:detailed==='',selectBlack:detailed!==''}" @change="list_fund_nameas(detailed)">
+            <select name="" v-model="detailed" :class="{select:detailed==='',selectBlack:detailed!==''}" @change="list_fund_nameas(detailed)">
               <option value selected="selected" style="color: #6e6e6e">请选择</option>
               <option v-for="(item,index) in list_fund_names" :value="item.fund_names" v-if="cotrProjet" :key="index">{{item.fund_names}}</option>
-              <option v-for="(item,index) in list_fund_names" :value="item.fund_name_id" v-if="idProjet" :key="index">{{item.fund_names}}</option>
+              <option v-for="(item,i) in list_fund_names" :value="item.fund_name_id" :key="i" v-if="idProjet">{{item.fund_names}}</option>
             </select>
           </div>
           <div class="mui-input-row" v-if="category">
@@ -217,6 +217,8 @@ export default {
       fund_name_id:'',
       fund_date:'',
       isshow:false,
+      fund_name:'',
+      fund_nameso:'',
       // 银行卡
       baoshang: require('../image/baoshang.png'),
       baocun: require('../image/baocun.png'),
@@ -252,47 +254,47 @@ export default {
     fund_deId (id) {
       this.fund_nameso = id
       this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id).then(res => {
-          this.list_fund_name_type = res.data.fund_name_type
-          this.list_fund_names = res.data.fund_names
-          this.list_fund_name = res.data.fund_name
-          if (this.fund_detail_id === '个人') {
-            this.category = false
-            this.site_projet = false
-            this.relevant_people = true
-            this.idProjet = true
-            this.cotrProjet = false
-          } else if (this.fund_detail_id === '公司') {
-            this.category = true
-            this.cotrProjet = true
-            this.idProjet = false
-            this.relevant_people = true
-            this.site_projet = true
-          }
-        })
+        this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_names = res.data.fund_names
+        this.list_fund_name = res.data.fund_name
+        if (this.fund_detail_id === '个人') {
+          this.category = false
+          this.site_projet = false
+          this.relevant_people = true
+          this.idProjet = true
+          this.cotrProjet = false
+        } else if (this.fund_detail_id === '公司') {
+          this.category = true
+          this.cotrProjet = true
+          this.idProjet = false
+          this.relevant_people = true
+          this.site_projet = true
+        }
+      })
      },
     // 二级查询
     list_fund_nameas (id) {
       this.fund_name = id
       this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + id).then(res => {
-          this.list_fund_name_type = res.data.fund_name_type
-          this.list_fund_names = res.data.fund_names
-          this.list_fund_name = res.data.fund_name
-          if (this.detailed === '外借款') {
-            this.site_projet = false
-            this.relevant_people = true
-          } else if (this.detailed === '工程') {
-            this.relevant_people = true
-            this.site_projet = true
-          }
-        })
+        this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_names = res.data.fund_names
+        this.list_fund_name = res.data.fund_name
+        if (this.detailed === '外借款') {
+          this.site_projet = false
+          this.relevant_people = true
+        } else if (this.detailed === '工程') {
+          this.relevant_people = true
+          this.site_projet = true
+        }
+      })
     },
     // 三级查询
     list_fund_namea (id) {
       this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + this.fund_name + '&fund_name' + id).then(res => {
-          this.list_fund_name_type = res.data.fund_name_type
-          this.list_fund_names = res.data.fund_names
-          this.list_fund_name = res.data.fund_name
-        })
+        this.list_fund_name_type = res.data.fund_name_type
+        this.list_fund_names = res.data.fund_names
+        this.list_fund_name = res.data.fund_name
+      })
     },
     //工地传送
     siteItem(val,id){
@@ -501,7 +503,6 @@ this.mongey_bank= this.list.bank_person+this.list.bank_bank
     /* if (this.list.bank_number != undefined) {
        this.bank_number = this.list.bank_number.replace(reg, '$1 **** **** $2')
      }*/
-      this.fund_detail_id = this.list.fund_detail_id
     this.fund_detail_ids = this.list.fund_detail_id
     this.customer_id=this.list.fund_detail_transaction_customer_id
     this.listRelevant_id = this.list.fund_person_id
@@ -511,8 +512,8 @@ this.mongey_bank= this.list.bank_person+this.list.bank_bank
  //   this.fund_date=this.dataValue1
     this.site = this.list.customer_name        //项目名称
     this.fund_details_batch = this.list.fund_details_batch     //期款
-    this.slim = this.list.fund_names   //款项名称
-    this.detailed = this.list.fund_name //项目详情
+    this.detailed = this.list.fund_name_id   //款项名称
+    this.slim = this.list.fund_name //项目详情
     this.fund_type = this.list.fund_details_text //备注
     this.balance = this.list.balance   //余额
     this.listRelevant = this.list.fund_person //相关人
@@ -567,7 +568,6 @@ this.mongey_bank= this.list.bank_person+this.list.bank_bank
       all += this.chuXuKa + this.XinYongKa
       this.allTotal = Math.floor(all * 100) / 100
     })
-
     this.fund_deId()
     this.list_fund_nameas()
   },
