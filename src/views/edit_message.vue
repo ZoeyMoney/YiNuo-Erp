@@ -253,7 +253,7 @@ export default {
 
     fund_deId (id) {
       this.fund_nameso = id
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_stale=0&fund_name_type=' + this.fund_detail_id).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -274,8 +274,10 @@ export default {
      },
     // 二级查询
     list_fund_nameas (id) {
-      this.fund_name = id
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + id).then(res => {
+     /* if (id != ''){
+        this.fund_name = id
+      }*/
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + this.fund_name).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -290,7 +292,7 @@ export default {
     },
     // 三级查询
     list_fund_namea (id) {
-      this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + this.fund_name + '&fund_name' + id).then(res => {
+      this.axios.get('/fund/Select_three_fund_name' + '?fund_stale=0&fund_name_type=' + this.fund_detail_id + '&fund_names=' + this.fund_name + '&fund_name=' + this.slim).then(res => {
         this.list_fund_name_type = res.data.fund_name_type
         this.list_fund_names = res.data.fund_names
         this.list_fund_name = res.data.fund_name
@@ -500,41 +502,29 @@ this.mongey_bank= this.list.bank_person+this.list.bank_bank
     }
     console.log(JSON.parse(localStorage.msg))
     this.dates = this.list.dates
-    /* if (this.list.bank_number != undefined) {
-       this.bank_number = this.list.bank_number.replace(reg, '$1 **** **** $2')
-     }*/
     this.fund_detail_ids = this.list.fund_detail_id
     this.customer_id=this.list.fund_detail_transaction_customer_id
     this.listRelevant_id = this.list.fund_person_id
     this.fund_detail_id = this.list.fund_name_type //公司个人
-    this.fund_name_id=this.list.fund_name_id      //fund_detail_id
     this.dataValue1=this.list.dates               //时间
  //   this.fund_date=this.dataValue1
     this.site = this.list.customer_name        //项目名称
     this.fund_details_batch = this.list.fund_details_batch     //期款
     this.detailed = this.list.fund_name_id   //款项名称
-    this.slim = this.list.fund_name //项目详情
-    this.fund_type = this.list.fund_details_text //备注
-    this.balance = this.list.balance   //余额
+    this.slim = this.list.fund_name_id //项目详情
+    this.fund_name = this.list.fund_names
     this.listRelevant = this.list.fund_person //相关人
-    this.fund_debtor = this.list.fund_debtor
     this.clearBei = this.list.fund_details_text
     this.fund_id=this.list.fund_id
     this.fund_detail_transaction_id=this.list.fund_detail_transaction_id
-    if (this.list.fund_name === '' || this.list.fund_name === undefined || this.list.fund_name === '手续费') {
-      this.exit_money = false
-    }
-    this.quan = window.quan
-
-
-
     this.imgUrl_loading = true
     //工地
     this.siteData()
     //相关人
     this.person_all()
     /* table */
-    this.axios.get('/fund/Select_three_fund_name' + '?fund_type=0&fund_stale=0').then(res => {
+
+    this.axios.get('/fund/Select_three_fund_name' + '?fund_stale=0').then(res => {
       if (res.status === 200) {
         this.imgUrl_loading = false
         this.list_fund_name_type = res.data.fund_name_type
@@ -570,6 +560,7 @@ this.mongey_bank= this.list.bank_person+this.list.bank_bank
     })
     this.fund_deId()
     this.list_fund_nameas()
+    this.list_fund_namea()
   },
 
 

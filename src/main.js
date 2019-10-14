@@ -36,6 +36,7 @@ const ser = Vue.prototype.axios = axios.create({
   crossDomain: true, // 设置cross跨域
   withCredentials: true // 设置cross跨域 并设置访问权限 允许跨域携带cookie信息
 })
+axios.defaults.withCredentials = true;
 // 添加请求拦截器
 ser.interceptors.request.use(config => {
   //每次提交携带token，2019-9-6 携带token后台被拦截
