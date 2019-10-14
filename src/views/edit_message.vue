@@ -38,7 +38,7 @@
           </div>
            <div class="mui-input-row radio-left">
             <label>类别选择</label>
-             <div class="mui-input-row mui-radio mui-left" v-for="(item,i) in list_fund_name_type" :key="i">
+             <div class="mui-input-row mui-radio mui-left" v-for="(item,i) in list_fund_name_type" :key="i" v-show="item.fund_name_type !='原始数据'">
                <label>{{item.fund_name_type}}</label>
                <input name="radio1" type="radio" v-model="fund_detail_id" :value="item.fund_name_type" @change="fund_deId(fund_detail_id)">
              </div>
@@ -510,7 +510,11 @@ this.mongey_bank= this.list.bank_person+this.list.bank_bank
  //   this.fund_date=this.dataValue1
     this.site = this.list.customer_name        //项目名称
     this.fund_details_batch = this.list.fund_details_batch     //期款
-    this.detailed = this.list.fund_name_id   //款项名称
+    if (this.fund_detail_id == '个人'){
+      this.detailed = this.list.fund_name_id   //款项名称
+    }else{
+      this.detailed = this.list.fund_names   //款项名称
+    }
     this.slim = this.list.fund_name_id //项目详情
     this.fund_name = this.list.fund_names
     this.listRelevant = this.list.fund_person //相关人
