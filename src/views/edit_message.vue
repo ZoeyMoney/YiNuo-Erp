@@ -398,22 +398,21 @@ export default {
       var nuber = /^\d+(\.\d+)?$/ // 验证数字
       var add = '?'
       var listId = ''
+      if(this.site !=''){
+        add+='customer_id='+this.test_id
+      }
+      if (this.listRelevant !=''){
+        add += '&fund_person=' + this.listRelevant_id
+      }
       if (this.fund_detail_id == '') {
         mui.toast('类别选择不能为空')
         check = false
         return false
       }
-
-      if (this.listRelevant !=''){
-        add += '&fund_person=' + this.listRelevant_id
-      }
       if (this.fund_detail_id === '个人') {
         add += '&fund_name=' + this.detailed
-
       } else if (this.fund_detail_id === '公司') {
         add += '&fund_name=' + this.slim
-
-
       }
       /* 金额 */
       if (this.money == '') {
@@ -510,6 +509,7 @@ this.mongey_bank= this.list.bank_person+this.list.bank_bank
  //   this.fund_date=this.dataValue1
     this.site = this.list.customer_name        //项目名称
     this.fund_details_batch = this.list.fund_details_batch     //期款
+    this.test_id = this.list.fund_detail_transaction_customer_id
     if (this.fund_detail_id == '个人'){
       this.detailed = this.list.fund_name_id   //款项名称
     }else{
