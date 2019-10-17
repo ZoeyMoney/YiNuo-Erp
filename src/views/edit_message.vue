@@ -300,8 +300,10 @@ export default {
     },
     //工地传送
     siteItem(val,id){
+			
       this.site = val;
       this.test_id = id;
+	  this.customer_id=id;
       this.isshow = false;
     },
     //相关人传送
@@ -366,6 +368,7 @@ export default {
         if (this.site_projet_name !=''){
           this.site_projet_name.map(function (item) {
             if (item.customer_name.search(then.site) != -1){
+			    console.log(item)
               citys.push(item)
             }
           })
@@ -398,31 +401,26 @@ export default {
       var nuber = /^\d+(\.\d+)?$/ // 验证数字
       var add = '?'
       var listId = ''
+      if(this.site !=''){
+        add+='fund_customer_id='+this.test_id
+      }
+      if (this.listRelevant !=''){
+        add += '&fund_person=' + this.listRelevant_id
+      }
+	  
       if (this.fund_detail_id == '') {
         mui.toast('类别选择不能为空')
         check = false
         return false
       }
-
-      if (this.listRelevant !=''){
-        add += '&fund_person=' + this.listRelevant_id
-      }
       if (this.fund_detail_id === '个人') {
         add += '&fund_name=' + this.detailed
-
       } else if (this.fund_detail_id === '公司') {
         add += '&fund_name=' + this.slim
-
-
       }
       /* 金额 */
       if (this.money == '') {
         mui.toast('金额不能为空')
-        check = false
-        return false
-      }
-      if (!nuber.test(this.money)) {
-        mui.toast('金额只能为纯数字')
         check = false
         return false
       }
@@ -450,10 +448,11 @@ export default {
       //发送保存请求
       add += '&fund_money=' + this.money + '&fund_text=' + this.clearBei + '&fund_detail_transaction_bank_id='
        + this.bank_id + '&fund_id='+this.fund_id+'&fund_date='+dd+
-       '&fund_details_id=' +this.fund_detail_ids+'&fund_detail_transaction_id='+this.fund_detail_transaction_id+
-       '&fund_customer_id='+this.customer_id
+       '&fund_details_id=' +this.fund_detail_ids+'&fund_detail_transaction_id='+this.fund_detail_transaction_id;
+	
+      
       if (this.checkbox === true) {
-        this.axios.post('fund/Update_money'+ add).then(res => {
+       this.axios.post('fund/Update_money'+ add).then(res => {
           var id = ''
           for (var index in this.listProjet) {
             if (this.listProjet[index].customer_id === this.site) {
@@ -510,6 +509,7 @@ this.mongey_bank= this.list.bank_person+this.list.bank_bank
  //   this.fund_date=this.dataValue1
     this.site = this.list.customer_name        //项目名称
     this.fund_details_batch = this.list.fund_details_batch     //期款
+    this.test_id = this.list.fund_detail_transaction_customer_id
     if (this.fund_detail_id == '个人'){
       this.detailed = this.list.fund_name_id   //款项名称
     }else{
