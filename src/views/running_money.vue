@@ -373,6 +373,7 @@ export default {
     },
     // 金额点击
     person (id) {
+			console.log("---------------"+id)
       var list = {}
       if (this.all_all === 'transfer') {
         for (var index in this.list_moey_two) {
