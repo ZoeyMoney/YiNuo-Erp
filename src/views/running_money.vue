@@ -103,11 +103,11 @@
           <div>{{item.bank_person}}</div>
           <div>{{item.bank_bank}}</div>
           <div>
-            <span @click="person(item.fund_detail_transaction_id)"
+            <span @click="person(0,item.fund_detail_transaction_id)"
                   :class="{money_green:item.fund_detail_transaction_money>0,
                money_red: item.fund_detail_transaction_money<0}"
                   v-if="item.fund_detail_transaction_money">￥{{item.fund_detail_transaction_money | negative}}</span>
-            <span @click="person(item.bank_deal_id)"
+            <span @click="person(1,item.bank_deal_id)"
                   :class="{money_green:item.bank_deal_money>0,
               money_red:item.bank_deal_money<0}"
                   v-if="item.bank_deal_money">￥{{item.bank_deal_money | negative}}</span>
@@ -120,11 +120,11 @@
             <div>{{item.bank_person}}</div>
             <div>{{item.bank_bank}}</div>
             <div>
-            <span @click="person(item.fund_detail_transaction_id)"
+            <span @click="person(0,item.fund_detail_transaction_id)"
                   :class="{money_green:item.fund_detail_transaction_money>0,
                money_red: item.fund_detail_transaction_money<0}"
                   v-if="item.fund_detail_transaction_money">￥{{item.fund_detail_transaction_money | negative}}</span>
-              <span @click="person(item.bank_deal_id)"
+              <span @click="person(1,item.bank_deal_id)"
                     :class="{money_green:item.bank_deal_money>0,
               money_red:item.bank_deal_money<0}"
                     v-if="item.bank_deal_money">￥{{item.bank_deal_money | negative}}</span>
@@ -372,17 +372,22 @@ export default {
       return y + '-' + m + '-' + d
     },
     // 金额点击
-    person (id) {
-			console.log("---------------"+id)
-			console.log(list_moey_two)
-			console.log(list_moey)
-			console.log(all_all)
+    person (type,id) {	
+      var list = {}
       if (this.all_all === 'transfer') {
-        for (var index in this.list_moey_two) {
-          if (id === this.list_moey_two[index].fund_detail_transaction_id || id === this.list_moey_two[index].bank_deal_id) {
-            list = this.list_moey_two[index]
-          }
-        }
+		  if(type===0){
+			  for(var index in this.list_moey_two){
+				  if(id===this.list_moey_two[index].fund_detail_transaction_id){
+					  list=this.list_moey_two[index]
+				  }
+			  }
+		  }else if(type===1){
+			  for(var index in this.list_moey_two){
+				  if(id===this.list_moey_two[index].bank_deal_id){
+					  list=this.list_moey_two[index]
+				  }
+			  }
+		  }
       } else {
         for (var index in this.list_moey) {
           if (id === this.list_moey[index].fund_detail_transaction_id || id === this.list_moey[index].bank_deal_id) {
