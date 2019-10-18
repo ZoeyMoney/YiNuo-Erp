@@ -374,7 +374,9 @@ export default {
     // 金额点击
     person (id) {
 			console.log("---------------"+id)
-      var list = {}
+			console.log(list_moey_two)
+			console.log(list_moey)
+			console.log(all_all)
       if (this.all_all === 'transfer') {
         for (var index in this.list_moey_two) {
           if (id === this.list_moey_two[index].fund_detail_transaction_id || id === this.list_moey_two[index].bank_deal_id) {
