@@ -377,31 +377,17 @@ const router = new Router({
       path: '/Follow_people',
       name: 'Follow_people',
       component:resolve=>require(['@/views/Follow_people'],resolve)
+    }, {
+      path: '/newStting',
+      name: 'newStting',
+      component:resolve=>require(['@/views/newStting'],resolve)
     }
-    /* {
-      path:'/home',
-      name:'home',
-      componentVue:Home,
-      children:[
-        {
-          path:''
-        }
-      ]
-    } */
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (about.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   componentVue: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    // }
   ]
 })
 export default router
 router.beforeEach((to, from, next) => {
-  // console.log(to)
-  if (to.fullPath != '/Login') {
+  if (to.fullPath != '/Login' || to.fullPath =='newStting') {
+    next();
     if (!sessionStorage.getItem(config.KEY.CACHE_LOGIN_USER)) {
       return next('/Login')
     }

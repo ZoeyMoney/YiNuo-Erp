@@ -501,6 +501,7 @@ this.mongey_bank= this.list.bank_person+this.list.bank_bank
     }
     console.log(JSON.parse(localStorage.msg))
     this.dates = this.list.dates
+
     this.fund_detail_ids = this.list.fund_detail_id
     this.customer_id=this.list.fund_detail_transaction_customer_id
     this.listRelevant_id = this.list.fund_person_id
