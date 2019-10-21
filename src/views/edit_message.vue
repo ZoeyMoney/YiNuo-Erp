@@ -300,8 +300,10 @@ export default {
     },
     //工地传送
     siteItem(val,id){
+			
       this.site = val;
       this.test_id = id;
+	  this.customer_id=id;
       this.isshow = false;
     },
     //相关人传送
@@ -366,6 +368,7 @@ export default {
         if (this.site_projet_name !=''){
           this.site_projet_name.map(function (item) {
             if (item.customer_name.search(then.site) != -1){
+			    console.log(item)
               citys.push(item)
             }
           })
@@ -399,11 +402,12 @@ export default {
       var add = '?'
       var listId = ''
       if(this.site !=''){
-        add+='customer_id='+this.test_id
+        add+='fund_customer_id='+this.test_id
       }
       if (this.listRelevant !=''){
         add += '&fund_person=' + this.listRelevant_id
       }
+	  
       if (this.fund_detail_id == '') {
         mui.toast('类别选择不能为空')
         check = false
@@ -417,11 +421,6 @@ export default {
       /* 金额 */
       if (this.money == '') {
         mui.toast('金额不能为空')
-        check = false
-        return false
-      }
-      if (!nuber.test(this.money)) {
-        mui.toast('金额只能为纯数字')
         check = false
         return false
       }
@@ -449,10 +448,11 @@ export default {
       //发送保存请求
       add += '&fund_money=' + this.money + '&fund_text=' + this.clearBei + '&fund_detail_transaction_bank_id='
        + this.bank_id + '&fund_id='+this.fund_id+'&fund_date='+dd+
-       '&fund_details_id=' +this.fund_detail_ids+'&fund_detail_transaction_id='+this.fund_detail_transaction_id+
-       '&fund_customer_id='+this.customer_id
+       '&fund_details_id=' +this.fund_detail_ids+'&fund_detail_transaction_id='+this.fund_detail_transaction_id;
+	
+      
       if (this.checkbox === true) {
-        this.axios.post('fund/Update_money'+ add).then(res => {
+       this.axios.post('fund/Update_money'+ add).then(res => {
           var id = ''
           for (var index in this.listProjet) {
             if (this.listProjet[index].customer_id === this.site) {
